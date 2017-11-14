@@ -2,7 +2,6 @@
 
 This is where we edit and share our files to each other.\
 There are four respositories:\
-IF YOUR RESPOSITORY IS NOT IN IT MAKE IT AND NAME IT AS FOLLOWS
 
 1. GameHub: Jack, Renat, Eric, and Ming. 
 2. BrightAndTide: Stacy and Moira
@@ -10,7 +9,8 @@ IF YOUR RESPOSITORY IS NOT IN IT MAKE IT AND NAME IT AS FOLLOWS
 4. ForestShadow: Philip and Jamie 
 
 Wherever your name is you will work in that respository.\
-So your partner(s) can see what you do, and at the same time you can edit it. 
+So your partner(s) can see what you do, and at the same time you can edit it.\
+There is an empty file in all of the directories just delete it.
 
 It would be useful to communicate what you have done by logging. \
 You should edit the README, there will be a section for it. Under section **LOG** you should put the date of the day you done work, your name, the work you have done and an additional message to who you are communication. 

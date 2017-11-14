@@ -1,7 +1,8 @@
 # PokemonTCG, shared Repo
 
 This is where we edit and share our files to each other.\
-There are four respositories:
+There are four respositories:\
+IF YOUR RESPOSITORY IS NOT IN IT MAKE IT AND NAME IT AS FOLLOWS
 
 1. GameHub: Jack, Renat, Eric, and Ming. 
 2. BrightAndTide: Stacy and Moira

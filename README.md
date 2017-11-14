@@ -4,8 +4,8 @@ This is where we edit and share our files to each other.\
 There are four respositories:\
 
 1. GameHub: Jack, Renat, Eric, and Ming. 
-2. BrightAndTide: Stacy and Moira
-3. RoaringHead: Lucien and Tom
+2. BrightTide: Stacy and Moira
+3. RoaringHeat: Lucien and Tom
 4. ForestShadow: Philip and Jamie 
 
 Wherever your name is you will work in that respository.\
@@ -22,7 +22,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 
 | Date | Name | What have you done? | To whom? : Additional message | 
 | ---- | ---- | ------------------- | ------------------ |
-| 14 November | Bright and Tide Team | Deciding which functions we need | To GameHub: Look in our docx file for the functions |
+| 14/11/17 | Bright Tide Team | Deciding which functions we need | To GameHub: Look in our docx file for the functions |
 | add txt | add txt |  add txt |   add txt |
 
  

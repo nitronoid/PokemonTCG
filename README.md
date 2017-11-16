@@ -23,6 +23,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | Date | Name | What have you done? | To whom? : Additional message | 
 | ---- | ---- | ------------------- | ------------------ |
 | 14/11/17 | Bright Tide Team | Deciding which functions we need | To GameHub: Look in our docx file for the functions |
+| 16/11/17 | Game Hub Team | Majority of UML structure finished | To other teams: please, give us a list of functions for the game hub |
 | add txt | add txt |  add txt |   add txt |
 
  

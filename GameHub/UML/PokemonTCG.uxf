@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <help_text>goTeam</help_text>
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>848</x>
+      <y>776</y>
+      <w>456</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>Game
+--
+-m_playerOne : Player
+-m_playerTwo : Player
+-m_currentPlayer : Player*
+-m_turn : unsigned
+--
++toDoFunc()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1032</x>
+      <y>448</y>
+      <w>280</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>Player
+--
+-m_active : BoardSlot
+-m_bench : std::array&lt;BoardSlot,5&gt;
+-m_prizeCards :std::array&lt;Card*,6&gt;
+-m_hand : std::vector&lt;Card*&gt;
+-m_deck : std::vector&lt;Card*&gt;
+-m_discardPile : std::vector&lt;Card*&gt;
+
+--
++playCard(const unsigned _index) : void
++attack(const unsigned _index) : void
++endTurn() : void
++retreat(const unsigned _replacement) : void
++getDummyGame() : DummyGame</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>600</x>
+      <y>504</y>
+      <w>424</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>BoardSlot
+--
+-m_pokemon : PokemonCard*
+-m_damage : int
+-m_conditions : std::unordered_set&lt;CONDITION&gt;
+-m_energy : std::vector&lt;EnergyCard*&gt;
+-m_tool : ToolCard*
+-m_basePokemons : std::vector&lt;PokemonCard*&gt;
+-m_turnPlayed : const unsigned
+--
++setDamage(const int _value) : void
++addCondition(const CONDITION _condition) : void
++removeCondition(const CONDITION _condition) : void
++removeAllConditions() : void
++attachCard(Card* const _card) : void
++detachCard(Card* const _card) : void
++setPokemon(PokemonCard* const _pokemon) : void
++</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>176</y>
+      <w>544</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>/Card/
+--
+-m_ID : unsigned
+-m_ability : Ability
+--
+#Card(const int)
++addAbility(AbilityFunc _newAbility, const PHASE _phase, const DURATION _duration) : void
++activateAbility(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>336</y>
+      <w>504</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>PokemonCard
+--
+-m_hp : const unsigned
+-m_attacks : std::vector&lt;AttackFunc&gt;
+-m_retreatCost : const unsigned
+-m_attackRequirements : std::vector&lt; std::vector&lt;TYPE&gt; &gt;
+-m_baseRequirement : PokemonCard*
+--
++PokemonCard(const PokemonCard&amp;)
++PokemonCard&amp; operator=(const PokemonCard&amp;)
++PokemonCard(const unsigned _id, const unsigned _hp, const unsigned _retreatCost, )
++addAttack(AttackFunc _newAttack, const std::vector&lt;TYPE&gt;&amp; _cost) : void
++attack(const Game&amp; _game, const size_t _index) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>576</x>
+      <y>360</y>
+      <w>208</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>StadiumCard
+--
++StadiumCard(const unsigned _id)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>264</y>
+      <w>328</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>390.0;10.0;390.0;60.0;10.0;60.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>96</x>
+      <y>536</y>
+      <w>456</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>EnergyCard
+--
+-m_amount : const unsigned
+-m_type : const TYPE
+--
++EnergyCard(const unsigned _id, const unsigned _amount, const TYPE&amp; _type)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>544</x>
+      <y>264</y>
+      <w>264</w>
+      <h>296</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>310.0;10.0;310.0;60.0;20.0;60.0;20.0;350.0;10.0;350.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>688</x>
+      <y>264</y>
+      <w>120</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>130.0;10.0;130.0;60.0;10.0;60.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>696</x>
+      <y>424</y>
+      <w>208</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>ToolCard
+--
++ToolCard(const unsigned _id)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>808</x>
+      <y>360</y>
+      <w>208</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>ItemCard
+--
++ItemCard(const unsigned _id)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1032</x>
+      <y>360</y>
+      <w>216</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>SupporterCard
+--
++SupporterCard(const unsigned _id)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>784</x>
+      <y>264</y>
+      <w>24</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>784</x>
+      <y>264</y>
+      <w>144</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;160.0;60.0;160.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>784</x>
+      <y>264</y>
+      <w>304</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;360.0;60.0;360.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>504</x>
+      <y>72</y>
+      <w>680</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>using AttackFunc = std::function&lt;void(const Game&amp;)&gt;
+using AbilityFunc = AttackFunc
+enum class TYPE {FIRE, WATER, GRASS, PSYCHIC, FIGHTING, STEEL, DRAGON, FAIRY, DARK, ELECTRIC, COLOURLESS}
+enum class CONDITION {SLEEP, BURN, POISON, CONFUSED, PARALYZED}
+enum class PHASE {DRAW, MAIN, ATTACK, NONE}
+enum class DURATION {SINGLE, MULTIPLE, PERMANENT}
+bg=#f4f38d</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>208</y>
+      <w>520</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Ability
+--
+-m_ability : AbilityFunc
+-m_abilityPhase : PHASE
+-m_abilityDuration : DURATION
+--
++Ability(AbilityFunc _newAbility, const PHASE _phase, const DURATION _duration) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>592</x>
+      <y>232</y>
+      <w>48</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>536</x>
+      <y>472</y>
+      <w>352</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>420.0;40.0;420.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>544</x>
+      <y>504</y>
+      <w>72</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;40.0;10.0;40.0;70.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1160</x>
+      <y>184</y>
+      <w>128</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>140.0;330.0;140.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>448</y>
+      <w>88</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1192</x>
+      <y>624</y>
+      <w>24</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;190.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>176</x>
+      <y>648</y>
+      <w>280</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>DummyGame
+--
+-m_gameCopy : Game
+-m_playerRef : Player&amp;
+--
++DummyGame(const Game&amp; _game)
++getPlayerRef() : Player&amp;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>616</y>
+      <w>696</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0;290.0;10.0;290.0;170.0;850.0;170.0;850.0;20.0</additional_attributes>
+  </element>
+</diagram>

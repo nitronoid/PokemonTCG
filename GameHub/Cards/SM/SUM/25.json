@@ -1,0 +1,23 @@
+{
+    "ID" : 25,
+    "Name" : "Torracat",
+    "HP" : 90,
+    "Type" : "R",
+    "Weakness" : "W",
+    "Resistance" : "",
+    "Retreat" : 2,
+    "Stage" : 1,
+    "Pre evolution" : "Litten",
+    "Attacks" : {
+        "Fury Swipes" : {
+            "func" : "furySwipes",
+            "baseDamage" : "0",
+            "energy" : "R"
+        },
+        "Flamethrower" : {
+            "func" : "flamethrower",
+            "baseDamage" : "90",
+            "energy" : "RC"
+        }
+    }
+}

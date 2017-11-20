@@ -1,0 +1,23 @@
+{
+    "ID" : 73,
+    "Name" : "Passimian",
+    "HP" : 110,
+    "Type" : "F",
+    "Weakness" : "P",
+    "Resistance" : "",
+    "Retreat" : 1,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Fling" : {
+            "func" : "fling",
+            "baseDamage" : "30",
+            "energy" : "F"
+        },
+        "Team Play" : {
+            "func" : "teamPlay",
+            "baseDamage" : "10",
+            "energy" : "CC"
+        }
+    }
+}

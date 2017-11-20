@@ -1,0 +1,23 @@
+{
+    "ID" : 23,
+    "Name" : "Torkoal",
+    "HP" : 70,
+    "Type" : "R",
+    "Weakness" : "W",
+    "Resistance" : "",
+    "Retreat" : 3,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Singe" : {
+            "func" : "singe",
+            "baseDamage" : "0",
+            "energy" : "R"
+        },
+        "Body Slam" : {
+            "func" : "bodySlam",
+            "baseDamage" : "50",
+            "energy" : "RC"
+        }
+    }
+}

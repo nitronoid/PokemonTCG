@@ -1,0 +1,23 @@
+{
+    "ID" : 67,
+    "Name" : "Makuhita",
+    "HP" : 80,
+    "Type" : "F",
+    "Weakness" : "P",
+    "Resistance" : "",
+    "Retreat" : 2,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Surprise Attack" : {
+            "func" : "surpriseAttack",
+            "baseDamage" : "20",
+            "energy" : "F"
+        },
+        "Strength" : {
+            "func" : "strength",
+            "baseDamage" : "40",
+            "energy" : "FC"
+        }
+    }
+}

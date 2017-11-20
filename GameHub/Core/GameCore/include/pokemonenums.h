@@ -1,0 +1,22 @@
+#ifndef POKEMONENUMS_H
+#define POKEMONENUMS_H
+
+namespace PTCG
+{
+enum class TYPE {
+  COLOURLESS,
+  FIGHTING,
+  LIGHTNING,
+  GRASS,
+  PSYCHIC,
+  METAL,
+  WATER,
+  DARKNESS,
+  FIRE,
+  DRAGON,
+  FAIRY,
+  ERROR
+};
+}
+
+#endif // POKEMONENUMS_H

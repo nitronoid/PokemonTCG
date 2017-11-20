@@ -1,0 +1,23 @@
+{
+    "ID" : 40,
+    "Name" : "Brionne",
+    "HP" : 90,
+    "Type" : "W",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 2,
+    "Stage" : 1,
+    "Pre evolution" : "Popplio",
+    "Attacks" : {
+        "Wave Splash" : {
+            "func" : "waveSplash",
+            "baseDamage" : "30",
+            "energy" : "WC"
+        },
+        "Disarming Voice" : {
+            "func" : "disarmingVoice",
+            "baseDamage" : "50",
+            "energy" : "WWC"
+        }
+    }
+}

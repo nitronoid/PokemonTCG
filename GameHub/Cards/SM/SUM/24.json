@@ -1,0 +1,23 @@
+{
+    "ID" : 24,
+    "Name" : "Litten",
+    "HP" : 70,
+    "Type" : "R",
+    "Weakness" : "W",
+    "Resistance" : "",
+    "Retreat" : 1,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Bite" : {
+            "func" : "bite",
+            "baseDamage" : "10",
+            "energy" : "R"
+        },
+        "Flare" : {
+            "func" : "flare",
+            "baseDamage" : "20",
+            "energy" : "RC"
+        }
+    }
+}

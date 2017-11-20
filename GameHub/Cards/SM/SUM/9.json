@@ -1,0 +1,23 @@
+{
+    "ID" : 9,
+    "Name" : "Rowlet",
+    "HP" : 60,
+    "Type" : "G",
+    "Weakness" : "F",
+    "Resistance" : "",
+    "Retreat" : 1,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Tackle" : {
+            "func" : "tackle",
+            "baseDamage" : "10",
+            "energy" : "C"
+        },
+        "Leafage" : {
+            "func" : "leafage",
+            "baseDamage" : "20",
+            "energy" : "GC"
+        }
+    }
+}

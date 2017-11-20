@@ -1,0 +1,23 @@
+{
+    "ID" : 26,
+    "Name" : "Incineroar",
+    "HP" : 160,
+    "Type" : "R",
+    "Weakness" : "W",
+    "Resistance" : "",
+    "Retreat" : 3,
+    "Stage" : 0,
+    "Pre evolution" : "Torracat",
+    "Attacks" : {
+        "Fire Fang" : {
+            "func" : "fireFang",
+            "baseDamage" : "30",
+            "energy" : "RC"
+        },
+        "Darkest Lariat" : {
+            "func" : "darkestLariat",
+            "baseDamage" : "0",
+            "energy" : "RRC"
+        }
+    }
+}

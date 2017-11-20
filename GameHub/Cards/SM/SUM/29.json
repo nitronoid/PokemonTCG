@@ -1,0 +1,23 @@
+{
+    "ID" : 29,
+    "Name" : "Golduck",
+    "HP" : 90,
+    "Type" : "W",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 0,
+    "Stage" : 1,
+    "Pre evolution" : "Psyduck",
+    "Attacks" : {
+        "Scratch" : {
+            "func" : "scratch",
+            "baseDamage" : "20",
+            "energy" : "C"
+        },
+        "Double Jet" : {
+            "func" : "doubleJet",
+            "baseDamage" : "60x",
+            "energy" : "W"
+        }
+    }
+}

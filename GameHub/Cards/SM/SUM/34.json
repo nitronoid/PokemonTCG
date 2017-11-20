@@ -1,0 +1,23 @@
+{
+    "ID" : 34,
+    "Name" : "Cloyster",
+    "HP" : 120,
+    "Type" : "W",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 3,
+    "Stage" : 1,
+    "Pre evolution" : "Shellder",
+    "Attacks" : {
+        "Headlock" : {
+            "func" : "headlock",
+            "baseDamage" : "30+",
+            "energy" : "WC"
+        },
+        "Guard Press" : {
+            "func" : "guardPress",
+            "baseDamage" : "80",
+            "energy" : "WWC"
+        }
+    }
+}

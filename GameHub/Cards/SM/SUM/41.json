@@ -1,0 +1,23 @@
+{
+    "ID" : 41,
+    "Name" : "Primarina",
+    "HP" : 150,
+    "Type" : "W",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 2,
+    "Stage" : 2,
+    "Pre evolution" : "Brionne",
+    "Attacks" : {
+        "Disarming Voice" : {
+            "func" : "disarmingVoice",
+            "baseDamage" : "30",
+            "energy" : "WC"
+        },
+        "Sparkling Aria" : {
+            "func" : "sparklingAria",
+            "baseDamage" : "100",
+            "energy" : "WWC"
+        }
+    }
+}

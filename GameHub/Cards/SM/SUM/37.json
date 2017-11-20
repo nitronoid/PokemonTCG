@@ -1,0 +1,18 @@
+{
+    "ID" : 37,
+    "Name" : "Wingull",
+    "HP" : 60,
+    "Type" : "W",
+    "Weakness" : "L",
+    "Resistance" : "F",
+    "Retreat" : 1,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Roost" : {
+            "func" : "roost",
+            "baseDamage" : "",
+            "energy" : "C"
+        }
+    }
+}

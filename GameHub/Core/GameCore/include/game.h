@@ -2,26 +2,25 @@
 #define HUB_H
 
 #include <iostream>
-#include <QByteArray>
-#include <QFile>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <pybind11/pybind11.h>
-#include <pybind11/functional.h>
-#include <pybind11/stl.h>
-#include <pybind11/embed.h>
+#include <unordered_set>
 #include "pokemoncard.h"
+#include "player.h"
+#include "cardpool.h"
 
 class Game
 {
-private:
-  PTCG::TYPE selectType(const char &_energy);
-
 public:
-  // Temporarily public for testing!
-  PokemonCard getCard(const unsigned id);
+  Game clone() const;
 
   void dealDamage(const int _damage);
+
+private:
+  Player m_playerOne {*this};
+  Player m_playerTwo {*this};
+  std::unordered_set<PTCG::TRAINER> m_playableCards;
+  Player* m_currentPlayer;
+  PTCG::PHASE m_turnPhase;
+  unsigned m_turnCount;
 
 };
 

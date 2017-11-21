@@ -17,6 +17,34 @@ enum class TYPE {
   FAIRY,
   ERROR
 };
+
+enum class CONDITION {
+  ASLEEP,
+  BURNED,
+  POISONED,
+  CONFUSED,
+  PARALYZED
+};
+
+enum class PHASE {
+  DRAW,
+  MAIN,
+  ATTACK,
+  NONE
+};
+
+enum class DURATION {
+  SINGLE,
+  MULTIPLE,
+  PERMANENT
+};
+
+enum class TRAINER {
+  ITEM,
+  TOOL,
+  SUPPORT,
+  STADIUM
+};
 }
 
 #endif // POKEMONENUMS_H

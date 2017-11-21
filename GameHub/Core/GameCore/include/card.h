@@ -1,20 +1,27 @@
 #ifndef CARD_H
 #define CARD_H
 
+#include "ability.h"
 #include <string>
 
-class Game;
+using AttackFunc = AbilityFunc;
+
 class Card
 {
 protected:
-  Card(const int _id, const std::string &_name) :
-    m_id(_id),
-    m_name(_name)
+  Card(const Card&) = default;
+  Card(const int _id, const std::string &_name, const Ability & _ability) :
+    m_ability(_ability),
+    m_name(_name),
+    m_id(_id)
   {}
 
+  void activateAbility(const Game &_game) const;
+
 private:
-  const int m_id;
+  const Ability m_ability;
   const std::string m_name;
+  const int m_id;
 };
 
 #endif // CARD_H

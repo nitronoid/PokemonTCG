@@ -5,12 +5,12 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>848</x>
-      <y>776</y>
+      <x>808</x>
+      <y>808</y>
       <w>456</w>
       <h>200</h>
     </coordinates>
-    <panel_attributes>Game
+    <panel_attributes>*Game*
 --
 -m_playerOne : Player
 -m_playerTwo : Player
@@ -23,20 +23,19 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1032</x>
-      <y>448</y>
+      <x>992</x>
+      <y>480</y>
       <w>280</w>
       <h>184</h>
     </coordinates>
-    <panel_attributes>Player
+    <panel_attributes>*Player*
 --
 -m_active : BoardSlot
--m_bench : std::array&lt;BoardSlot,5&gt;
--m_prizeCards :std::array&lt;Card*,6&gt;
--m_hand : std::vector&lt;Card*&gt;
--m_deck : std::vector&lt;Card*&gt;
--m_discardPile : std::vector&lt;Card*&gt;
-
+-m_bench : Bench
+-m_prizeCards : PrizeCards
+-m_hand : Hand
+-m_deck : Deck
+-m_discardPile : DiscardPile
 --
 +playCard(const unsigned _index) : void
 +attack(const unsigned _index) : void
@@ -48,12 +47,12 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>600</x>
-      <y>504</y>
+      <x>560</x>
+      <y>536</y>
       <w>424</w>
       <h>240</h>
     </coordinates>
-    <panel_attributes>BoardSlot
+    <panel_attributes>*BoardSlot*
 --
 -m_pokemon : PokemonCard*
 -m_damage : int
@@ -76,14 +75,15 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>624</x>
-      <y>176</y>
+      <x>584</x>
+      <y>208</y>
       <w>544</w>
-      <h>96</h>
+      <h>120</h>
     </coordinates>
-    <panel_attributes>/Card/
+    <panel_attributes>*/Card/*
 --
 -m_ID : unsigned
+-m_name : std::string
 -m_ability : Ability
 --
 #Card(const int)
@@ -94,18 +94,23 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>40</x>
-      <y>336</y>
+      <x>0</x>
+      <y>368</y>
       <w>504</w>
-      <h>184</h>
+      <h>248</h>
     </coordinates>
-    <panel_attributes>PokemonCard
+    <panel_attributes>*PokemonCard*
 --
 -m_hp : const unsigned
--m_attacks : std::vector&lt;AttackFunc&gt;
+-m_type : TYPE
+-m_weakness : TYPE
+-m_resistance :  TYPE
+-m_retreat : int
+-m_stage : int
+-m_preEvolution : std::string
+-m_attacks : std::unordered_map&lt;std::string, AttackFunc&gt;
 -m_retreatCost : const unsigned
--m_attackRequirements : std::vector&lt; std::vector&lt;TYPE&gt; &gt;
--m_baseRequirement : PokemonCard*
+-m_attackRequirements : std::unordered_map&lt;std::string, std::vector&lt;TYPE&gt; &gt;
 --
 +PokemonCard(const PokemonCard&amp;)
 +PokemonCard&amp; operator=(const PokemonCard&amp;)
@@ -117,12 +122,12 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>576</x>
-      <y>360</y>
+      <x>536</x>
+      <y>392</y>
       <w>208</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>StadiumCard
+    <panel_attributes>*StadiumCard*
 --
 +StadiumCard(const unsigned _id)</panel_attributes>
     <additional_attributes/>
@@ -130,23 +135,23 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>480</x>
-      <y>264</y>
+      <x>440</x>
+      <y>320</y>
       <w>328</w>
-      <h>88</h>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>390.0;10.0;390.0;60.0;10.0;60.0;10.0;90.0</additional_attributes>
+    <additional_attributes>390.0;10.0;390.0;30.0;10.0;30.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>96</x>
-      <y>536</y>
+      <x>56</x>
+      <y>632</y>
       <w>456</w>
       <h>72</h>
     </coordinates>
-    <panel_attributes>EnergyCard
+    <panel_attributes>*EnergyCard*
 --
 -m_amount : const unsigned
 -m_type : const TYPE
@@ -157,34 +162,34 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>544</x>
-      <y>264</y>
+      <x>504</x>
+      <y>320</y>
       <w>264</w>
-      <h>296</h>
+      <h>336</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>310.0;10.0;310.0;60.0;20.0;60.0;20.0;350.0;10.0;350.0</additional_attributes>
+    <additional_attributes>310.0;10.0;310.0;30.0;20.0;30.0;20.0;400.0;10.0;400.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>688</x>
-      <y>264</y>
+      <x>648</x>
+      <y>320</y>
       <w>120</w>
-      <h>112</h>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>130.0;10.0;130.0;60.0;10.0;60.0;10.0;120.0</additional_attributes>
+    <additional_attributes>130.0;10.0;130.0;30.0;10.0;30.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>696</x>
-      <y>424</y>
+      <x>656</x>
+      <y>456</y>
       <w>208</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>ToolCard
+    <panel_attributes>*ToolCard*
 --
 +ToolCard(const unsigned _id)</panel_attributes>
     <additional_attributes/>
@@ -192,12 +197,12 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>808</x>
-      <y>360</y>
+      <x>768</x>
+      <y>392</y>
       <w>208</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>ItemCard
+    <panel_attributes>*ItemCard*
 --
 +ItemCard(const unsigned _id)</panel_attributes>
     <additional_attributes/>
@@ -205,12 +210,12 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1032</x>
-      <y>360</y>
+      <x>912</x>
+      <y>336</y>
       <w>216</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>SupporterCard
+    <panel_attributes>*SupporterCard*
 --
 +SupporterCard(const unsigned _id)</panel_attributes>
     <additional_attributes/>
@@ -218,41 +223,41 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>784</x>
-      <y>264</y>
+      <x>744</x>
+      <y>320</y>
       <w>24</w>
-      <h>176</h>
+      <h>152</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;200.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>784</x>
-      <y>264</y>
+      <x>744</x>
+      <y>320</y>
       <w>144</w>
-      <h>112</h>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0;160.0;60.0;160.0;120.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;160.0;30.0;160.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>784</x>
-      <y>264</y>
-      <w>304</w>
-      <h>112</h>
+      <x>744</x>
+      <y>320</y>
+      <w>184</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0;360.0;60.0;360.0;120.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;210.0;30.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>504</x>
-      <y>72</y>
+      <x>464</x>
+      <y>104</y>
       <w>680</w>
       <h>88</h>
     </coordinates>
@@ -268,12 +273,12 @@ bg=#f4f38d</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>80</x>
-      <y>208</y>
+      <x>40</x>
+      <y>240</y>
       <w>520</w>
       <h>88</h>
     </coordinates>
-    <panel_attributes>Ability
+    <panel_attributes>*Ability*
 --
 -m_ability : AbilityFunc
 -m_abilityPhase : PHASE
@@ -285,8 +290,8 @@ bg=#f4f38d</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>592</x>
-      <y>232</y>
+      <x>552</x>
+      <y>264</y>
       <w>48</w>
       <h>24</h>
     </coordinates>
@@ -296,8 +301,8 @@ bg=#f4f38d</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>536</x>
-      <y>472</y>
+      <x>496</x>
+      <y>504</y>
       <w>352</w>
       <h>48</h>
     </coordinates>
@@ -307,30 +312,30 @@ bg=#f4f38d</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>544</x>
-      <y>504</y>
+      <x>504</x>
+      <y>536</y>
       <w>72</w>
-      <h>72</h>
+      <h>136</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;10.0;40.0;10.0;40.0;70.0;10.0;70.0</additional_attributes>
+    <additional_attributes>70.0;10.0;40.0;10.0;40.0;150.0;10.0;150.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1160</x>
-      <y>184</y>
-      <w>128</w>
-      <h>280</h>
+      <x>1120</x>
+      <y>216</y>
+      <w>464</w>
+      <h>392</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>140.0;330.0;140.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>510.0;470.0;560.0;470.0;560.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>960</x>
-      <y>448</y>
+      <x>920</x>
+      <y>480</y>
       <w>88</w>
       <h>72</h>
     </coordinates>
@@ -340,8 +345,8 @@ bg=#f4f38d</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1192</x>
-      <y>624</y>
+      <x>1152</x>
+      <y>656</y>
       <w>24</w>
       <h>168</h>
     </coordinates>
@@ -351,29 +356,179 @@ bg=#f4f38d</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>176</x>
-      <y>648</y>
-      <w>280</w>
-      <h>88</h>
+      <x>1312</x>
+      <y>512</y>
+      <w>216</w>
+      <h>48</h>
     </coordinates>
-    <panel_attributes>DummyGame
+    <panel_attributes>*Bench*
 --
--m_gameCopy : Game
--m_playerRef : Player&amp;
+-m_slots : std::array&lt;BoardSlot,5&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1312</x>
+      <y>576</y>
+      <w>216</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*PrizeCards*
 --
-+DummyGame(const Game&amp; _game)
-+getPlayerRef() : Player&amp;</panel_attributes>
+-m_cards :std::array&lt;Card*,6&gt;
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1312</x>
+      <y>672</y>
+      <w>216</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>*Hand*
+--
+-m_cards : std::vector&lt;Card*&gt;
+--
++view() : std::vector&lt;Card*&gt;&amp;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1312</x>
+      <y>768</y>
+      <w>216</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>*Deck*
+--
+-m_cards : std::vector&lt;Card*&gt;
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1312</x>
+      <y>848</y>
+      <w>216</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>*DiscardPile*
+--
+-m_cards : std::vector&lt;Card*&gt;
+
+
+
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>360</x>
-      <y>616</y>
-      <w>696</w>
-      <h>152</h>
+      <x>888</x>
+      <y>464</y>
+      <w>456</w>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;40.0;10.0;10.0;290.0;10.0;290.0;170.0;850.0;170.0;850.0;20.0</additional_attributes>
+    <additional_attributes>550.0;60.0;550.0;10.0;10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>216</y>
+      <w>464</w>
+      <h>496</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>510.0;600.0;560.0;600.0;560.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>216</y>
+      <w>464</w>
+      <h>584</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>510.0;710.0;560.0;710.0;560.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>216</y>
+      <w>464</w>
+      <h>664</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>510.0;810.0;560.0;810.0;560.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1264</x>
+      <y>536</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1264</x>
+      <y>536</y>
+      <w>64</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0;40.0;80.0;60.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1264</x>
+      <y>536</y>
+      <w>64</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0;40.0;200.0;60.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1264</x>
+      <y>536</y>
+      <w>64</w>
+      <h>272</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0;40.0;320.0;60.0;320.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1264</x>
+      <y>536</y>
+      <w>64</w>
+      <h>352</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0;40.0;420.0;60.0;420.0</additional_attributes>
   </element>
 </diagram>

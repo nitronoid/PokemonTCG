@@ -11,6 +11,6 @@ int main()
   // Simple test
   Game test;
   PokemonCard foo = test.getCard(9);
-  foo.attack(0,test);
+  foo.attack(1,test);
   return 0;
 }

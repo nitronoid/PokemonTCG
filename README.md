@@ -27,6 +27,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 20/11/2017 | Bright Tide Team | added cards 7 cards | Stacy add the rest of the cards (total 8) |
 | 20/11/17 | Game Hub Team |  Added the start of core game code with a simple example of loading a card from json and python, needs work on error protection, and parsing the rest of the properties/card types |   Continue to write the cards and report any required functions. |
 | 21/11/17 | Game Hub Team |  Added Trainer Card Example: Card 119 | Write Trainer Cards plz |
+| 21/11/17 | Game Hub Team |  Advanced the UML, split the componets of player into seperate objects for card groups. Also started to define the Game API. |  |
 | DATE ADD | TEAM ADD | COMMENTS ADD | FOR OTHERS |
 
  

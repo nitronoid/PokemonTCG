@@ -1,0 +1,18 @@
+{
+    "ID" : 33,
+    "Name" : "Shellder",
+    "HP" : 60,
+    "Type" : "W",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 2,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Tackle" : {
+            "func" : "tackle",
+            "baseDamage" : "10",
+            "energy" : "C"
+        }
+    }
+}

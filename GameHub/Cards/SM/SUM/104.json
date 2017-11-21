@@ -1,0 +1,23 @@
+{
+    "ID" : 104,
+    "Name" : "Herdier",
+    "HP" : 90,
+    "Type" : "C",
+    "Weakness" : "F",
+    "Resistance" : "",
+    "Retreat" : 1,
+    "Stage" : 1,
+    "Pre evolution" : "Lillipup",
+    "Attacks" : {
+        "Treasure Hunt" : {
+            "func" : "treasureHunt",
+            "baseDamage" : "",
+            "energy" : ""
+        },
+        "Bite" : {
+            "func" : "bite",
+            "baseDamage" : "50",
+            "energy" : "CCC"
+        }
+    }
+}

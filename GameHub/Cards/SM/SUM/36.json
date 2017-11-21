@@ -1,0 +1,23 @@
+{
+    "ID" : 36,
+    "Name" : "Corsola",
+    "HP" : 80,
+    "Type" : "W",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 1,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Call for Family" : {
+            "func" : "callForFamily",
+            "baseDamage" : "",
+            "energy" : "C"
+        },
+        "Surf" : {
+            "func" : "surf",
+            "baseDamage" : "60",
+            "energy" : "WCC"
+        }
+    }
+}

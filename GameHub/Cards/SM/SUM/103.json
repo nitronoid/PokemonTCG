@@ -1,0 +1,23 @@
+{
+    "ID" : 103,
+    "Name" : "Lillipup",
+    "HP" : 60,
+    "Type" : "C",
+    "Weakness" : "F",
+    "Resistance" : "",
+    "Retreat" : 1,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Work Up" : {
+            "func" : "workUp",
+            "baseDamage" : "",
+            "energy" : "C"
+        },
+        "Bite" : {
+            "func" : "bite",
+            "baseDamage" : "20",
+            "energy" : "CC"
+        }
+    }
+}

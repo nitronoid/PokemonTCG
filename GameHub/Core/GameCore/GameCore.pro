@@ -7,7 +7,7 @@ SOURCES += \
     src/game.cpp \
     src/player.cpp \
     src/card.cpp \
-    src/cardpool.cpp
+    src/cardfactory.cpp
 
 HEADERS += \
     include/card.h \
@@ -17,7 +17,7 @@ HEADERS += \
     include/player.h \
     include/trainercard.h \
     include/ability.h \
-    include/cardpool.h
+    include/cardfactory.h
 
 INCLUDEPATH+=$$PWD/include
 INCLUDEPATH+=../pybind11/include

@@ -2,5 +2,9 @@
     "ID" : 119,
     "Name" : "Great Ball",
     "Type" : "I",
-    "Ability" : "greatBall"
+    "Ability" : {
+        "func" : "greatBall",
+        "duration" : "S",
+        "phase" : "M"
+    }
 }

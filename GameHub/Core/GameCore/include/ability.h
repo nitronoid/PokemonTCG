@@ -12,6 +12,7 @@ class Ability
 public:
   Ability() = default;
   Ability(const Ability&) = default;
+  Ability& operator =(const Ability&) = default;
   Ability(const AbilityFunc _ability, const PTCG::PHASE _phase, const PTCG::DURATION _duration) :
     m_ability(_ability),
     m_ablityPhase(_phase),

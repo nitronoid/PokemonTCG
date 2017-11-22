@@ -16,6 +16,7 @@ protected:
     m_id(_id)
   {}
 
+public:
   void activateAbility(const Game &_game) const;
 
 private:

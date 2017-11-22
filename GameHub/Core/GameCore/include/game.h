@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include "pokemoncard.h"
 #include "player.h"
-#include "cardpool.h"
+#include "cardfactory.h"
 
 class Game
 {

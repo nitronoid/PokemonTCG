@@ -30,6 +30,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 21/11/17 | Game Hub Team |  Advanced the UML, split the componets of player into seperate objects for card groups. Also started to define the Game API. |  |
 | 21/11/17 | Game Hub Team |  Simplified card class heirarchy by condensing all trainer cards into one class with a type enum. Also added some useful functions. Started to provide a basic implementation for testing. Pokemon cards can now be fully loaded from json and python with the exception of abilities. | TODO: Add the card pool class to UML, finish the Game API. |
 | 22/11/17 | Game Hub Team |  Fixed card 119 implementation. | Other teams: look at this card (119) and use it to help write your own. |
+| 22/11/17 | Game Hub Team |  Pokemon cards and trainer cards can now be fully loaded through the card factory including abilities. Currently no error checking or energy cards. UML updated to reflect change in design regarding the player class. It is now abstract with two example descendants for AI and human player. Card 119 json was patched to reflect how abilities should be written. | Other teams: Look at the updated UML to start thinking about how your AI will integrate into the system. |
 
 
  

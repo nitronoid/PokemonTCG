@@ -16,7 +16,9 @@ protected:
     m_id(_id)
   {}
 
+
 public:
+  virtual ~Card(){}
   void activateAbility(const Game &_game) const;
 
 private:

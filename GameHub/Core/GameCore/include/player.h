@@ -11,6 +11,7 @@ public:
     m_parentGame(_parentGame)
   {}
 
+  virtual Player* clone() const = 0;
   void playCard(const unsigned _index);
   void attack(const unsigned _index);
   void endTurn() const;
@@ -18,10 +19,9 @@ public:
   void viewHand() const;
   void viewBench() const;
 
-
   Game getDummyGame() const;
 
-private:
+protected:
   bool m_canRetreat = true;
   Game& m_parentGame;
 };

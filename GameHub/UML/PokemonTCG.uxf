@@ -63,6 +63,7 @@
 /	  ) : vector&lt;Card*&gt;/
 
 /+turn() : void/
+/+clone() : Player*/
 
 </panel_attributes>
     <additional_attributes/>
@@ -693,7 +694,7 @@ PLAY
 /	  ) : vector&lt;Card*&gt;/
 
 /+turn() : void/
-
+/+clone() : Player*/
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -717,7 +718,7 @@ PLAY
 /	  ) : vector&lt;Card*&gt;/
 
 /+turn() : void/
-
+/+clone() : Player*/
 </panel_attributes>
     <additional_attributes/>
   </element>

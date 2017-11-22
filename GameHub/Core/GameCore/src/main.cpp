@@ -14,7 +14,7 @@ int main()
   Game test;
   CardFactory testPool("../../Cards/SM/SUM/", "../PythonBindings/");
   testPool.init();
-  std::unique_ptr<Card> foo(testPool.loadCard(119));
-  foo->activateAbility(test);
+  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(9)));
+  foo->attack("Tackle", test);
   return 0;
 }

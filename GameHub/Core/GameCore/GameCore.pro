@@ -17,7 +17,8 @@ HEADERS += \
     include/player.h \
     include/trainercard.h \
     include/ability.h \
-    include/cardfactory.h
+    include/cardfactory.h \
+    include/humanplayer.h
 
 INCLUDEPATH+=$$PWD/include
 INCLUDEPATH+=../pybind11/include

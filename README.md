@@ -29,5 +29,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 21/11/17 | Game Hub Team |  Added Trainer Card Example: Card 119 | Write Trainer Cards plz |
 | 21/11/17 | Game Hub Team |  Advanced the UML, split the componets of player into seperate objects for card groups. Also started to define the Game API. |  |
 | 21/11/17 | Game Hub Team |  Simplified card class heirarchy by condensing all trainer cards into one class with a type enum. Also added some useful functions. Started to provide a basic implementation for testing. Pokemon cards can now be fully loaded from json and python with the exception of abilities. | TODO: Add the card pool class to UML, finish the Game API. |
+| 22/11/17 | Game Hub Team |  Fixed card 119 implementation. | Other teams: look at this card (119) and use it to help write your own. |
+
 
  

@@ -2,23 +2,9 @@ cache()
 CONFIG += console c++17
 CONFIG -= app_bundle
 
-SOURCES += \
-    src/main.cpp \
-    src/game.cpp \
-    src/player.cpp \
-    src/card.cpp \
-    src/cardfactory.cpp
+SOURCES += $$files(../GameCore/src/*.cpp)
 
-HEADERS += \
-    include/card.h \
-    include/pokemoncard.h \
-    include/game.h \
-    include/pokemonenums.h \
-    include/player.h \
-    include/trainercard.h \
-    include/ability.h \
-    include/cardfactory.h \
-    include/humanplayer.h
+HEADERS += $$files(../GameCore/include/*.h)
 
 INCLUDEPATH+=$$PWD/include
 INCLUDEPATH+=../pybind11/include

@@ -34,8 +34,6 @@ public:
     m_stage(_stage)
   {}
 
-
-
   inline void attack(const std::string &_attackName, const Game& _game)
   {
     m_attacks[_attackName](_game);

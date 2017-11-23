@@ -16,10 +16,10 @@ public:
     void removeCondition(const PTCG::CONDITION _condition);
     void removeAllConditions();
     void attachCard(std::unique_ptr<Card> &&_card);
-    std::unique_ptr<Card> detachPokemon();
-    std::unique_ptr<Card> detachEnergy(const unsigned _index);
-    std::unique_ptr<Card> detachTool();
-    void setPokemon(PokemonCard* const _pokemon);
+    std::unique_ptr<PokemonCard> detachPokemon();
+    std::unique_ptr<EnergyCard> detachEnergy(const unsigned _index);
+    std::unique_ptr<TrainerCard> detachTool();
+    void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
 private:
     std::unique_ptr<PokemonCard> m_pokemon;
     int m_damage;

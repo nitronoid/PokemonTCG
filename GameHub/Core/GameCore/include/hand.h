@@ -12,7 +12,7 @@ public:
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
     const std::vector<std::unique_ptr<Card>>& view();
 private:
-    std::vector<std::unique_ptr<Card> m_cards;
+    std::vector<std::unique_ptr<Card>> m_cards;
 };
 
 #endif // HAND_H

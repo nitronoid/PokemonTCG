@@ -8,11 +8,11 @@ class PrizeCards : public CardPile
 {
 public:
     PrizeCards() = default;
-    virtual void put(std::unique_ptr<Card> &&_card) override;
+    virtual void put(std::unique_ptr<Card> &&) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
-    std::unique_ptr<Card> peek(const unsigned _index);
+    const std::array<std::unique_ptr<Card>, 6> &view();
 private:
-    std::array<std::unique_ptr<Card>,6> m_cards;
+    std::array<std::unique_ptr<Card>, 6> m_cards;
 };
 
 #endif // PRIZECARDS_H

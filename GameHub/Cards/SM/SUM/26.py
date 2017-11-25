@@ -4,5 +4,8 @@ def fireFang(h):
     h.dealDamage(30)
 
 
-def darkestLariat(h): 
-    h.dealDamage(0 #needs flip 2 coins *100 damage)
+def darkestLariat(h):
+    int heads=h.flipCoin(2) 
+    h.dealDamage(100,heads)
+
+

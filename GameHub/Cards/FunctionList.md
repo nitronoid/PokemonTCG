@@ -42,7 +42,7 @@ std::vector<std::unique_ptr<Card>> playerChoice(TARGET, LOCATION, CARDTYPE, int 
     - TARGET [SELF, ENEMY] - Who is choosing?
     - LOCATION [DECK, HAND, DISCARD.....] - Where to choose from?
     - _range - How many cards to choose from?
--    _choice - Card(s) you can AT MOST choose.
+    - _choice - Card(s) you can AT MOST choose.
 
 - Returns a list of cards the player chose.
 

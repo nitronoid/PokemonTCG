@@ -12,7 +12,7 @@
 ## Functions:
 ___________________________________________________________________________________________________________
 ``` c++
-**void dealDamage() variant:**
+void dealDamage() variant:
 ```
 1. void dealDamage(int _damageVal) - deals damage of value _damageVal.
 2. void dealDamageX(int _damageVal, int _mult) - deals _mult x _damageVal damage.
@@ -22,13 +22,13 @@ ________________________________________________________________________________
 > 3. needs to be separate as bench damage doesn't apply weakness/resistance.
 ___________________________________________________________________________________________________________
 ``` c++
-**int flipCoin(int _coinAmount): **
+int flipCoin(int _coinAmount): 
 ```
 - flips _coinAmount number of coins, returns number of heads.
 
 ___________________________________________________________________________________________________________
 ``` c++
-**void applyCondition(CONDITION, TARGET):** 
+void applyCondition(CONDITION, TARGET):
 ```
 -    CONDITION [...] - Condition to apply to the target, see PokeEnums in GameHub directory
 -    TARGET [SELF, ENEMY] - Opponent's active or Your own active.
@@ -37,7 +37,7 @@ ________________________________________________________________________________
 
 > I think returning a vector/array back into python might be iffy but we can work around it later
 ``` c++
-**std::vector<std::unique_ptr<Card>> playerChoice(TARGET, LOCATION, CARDTYPE, int _range, int _choice ):**
+std::vector<std::unique_ptr<Card>> playerChoice(TARGET, LOCATION, CARDTYPE, int _range, int _choice ):
 ```
     - TARGET [SELF, ENEMY] - Who is choosing?
     - LOCATION [DECK, HAND, DISCARD.....] - Where to choose from?
@@ -66,7 +66,7 @@ int searchPokeName(std::string _name,TARGET,LOCATION):
 
 ___________________________________________________________________________________________________________
 ``` c++
-**void moveCard(std::unique_ptr<Card> _card, ORIGIN, DESTINATION, bool _reveal ):**
+void moveCard(std::unique_ptr<Card> _card, ORIGIN, DESTINATION, bool _reveal ):
 ```
     - _card - the card you are moving.
     - ORIGIN (LOCATION but I want to make it less confusing) - Where is this card from?   
@@ -75,13 +75,13 @@ ________________________________________________________________________________
 
 ___________________________________________________________________________________________________________
 ``` c++
-**void shuffleDeck():**
+void shuffleDeck():
 ```
 - Shuffles deck. Technical explanation not needed here.
 
 ___________________________________________________________________________________________________________
 ``` c++
-**int discardCard(CARDTYPE, int _amount):**
+int discardCard(CARDTYPE, int _amount):
 ```
     - CARDTYPE - See PokeEnums for types of cards to discard.
     - _amount - Number of that type of card to discard
@@ -93,7 +93,7 @@ ________________________________________________________________________________
 
 ___________________________________________________________________________________________________________
 ``` c++
-**void futureDamage(TARGET, ORDER, int _amount):**
+void futureDamage(TARGET, ORDER, int _amount):
 ```
     - TARGET - If ENEMY, current enemy active takes more/less damage until ENEMY's next turn.
         - If SELF, your active takes more/less damage until YOUR next turn.
@@ -106,14 +106,14 @@ ________________________________________________________________________________
 
 ___________________________________________________________________________________________________________
 ``` c++
-**void blockDamage():**
+void blockDamage():
 ```
     > The call makes the current pokemon take 0 damage from any source until its owner's next turn.
     > It's weird to have a situational function just for this, we could think about
     > setting an additional status effect in CONDITION - PROTECT and have damage calc check for this flag
 ___________________________________________________________________________________________________________
 ``` c++
-**void heal() variant(?):**
+void heal() variant(?):
 
 void heal(int _amount):
 ```
@@ -123,19 +123,19 @@ void heal(int _amount):
 
 ___________________________________________________________________________________________________________
 ``` c++
-**void noRetreat(TARGET):**
+void noRetreat(TARGET):
 ```
     - TARGET - prevents TARGET's active pokemon from retreating (the discarding energy way). 
 
 ___________________________________________________________________________________________________________
 ``` c++
-**bool cardAttached() variant:**
+bool cardAttached() variant:
 ```
 1. energyAttached(TARGET,TYPE) - returns true if ENEMY/SELF has the specified energy attached.
 2. toolAttached(TARGET) - turns true if ENEMY/SELF has the specified tool attached.
 ___________________________________________________________________________________________________________
 ``` c++
-**bool matchPokeType(TARGET, LOCATION, TYPE):**
+bool matchPokeType(TARGET, LOCATION, TYPE):
 ```
     - We need this for applying resistance/weakness and other attack bonus damage or effects
     - TARGET - Whose card are you checking?
@@ -147,7 +147,7 @@ ________________________________________________________________________________
 
 ___________________________________________________________________________________________________________
 ``` c++
-**void view(LOCATION,TARGET):**
+void view(LOCATION,TARGET):
 ```
     - Allows user to view a card from a specified location of the board.
     - LOCATION - Where to view?
@@ -159,7 +159,7 @@ ________________________________________________________________________________
 
 ___________________________________________________________________________________________________________
 ``` c++
-**onPlayTrigger() variant:**
+onPlayTrigger() variant:
 ```
     - There are quite a lot of cases for abilities trigering when cards are played
 > Need to work on this after we finish implementing turn sequence

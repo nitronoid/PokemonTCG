@@ -43,8 +43,7 @@ std::vector<std::unique_ptr<Card>> playerChoice(TARGET, LOCATION, CARDTYPE, int 
     - LOCATION [DECK, HAND, DISCARD.....] - Where to choose from?
     - _range - How many cards to choose from?
     - _choice - Card(s) you can AT MOST choose.
-
-- Returns a list of cards the player chose.
+    - Returns a list of cards the player chose.
 
 >When searching a Pokemon card, we need more requirements such as: BASIC, HP<90
 >May want to seperate the functions when implementing them later.

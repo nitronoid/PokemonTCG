@@ -11,6 +11,9 @@ class BoardSlot
 {
 public:
     BoardSlot() = default;
+    BoardSlot(const BoardSlot &_original);
+    BoardSlot& operator=(const BoardSlot &_original) = delete;
+
     void setDamage(const int _value);
     void addCondition(const PTCG::CONDITION _condition);
     void removeCondition(const PTCG::CONDITION _condition);
@@ -20,14 +23,17 @@ public:
     std::unique_ptr<EnergyCard> detachEnergy(const unsigned _index);
     std::unique_ptr<TrainerCard> detachTool();
     void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
+    const std::unique_ptr<PokemonCard>& pokemon() const;
+    const std::vector<std::unique_ptr<EnergyCard>>& energy() const;
 private:
     std::unique_ptr<PokemonCard> m_pokemon;
-    int m_damage;
     std::unordered_set<PTCG::CONDITION> m_conditions;
-    std::vector<std::unique_ptr<EnergyCard>> m_energy;
     std::unique_ptr<TrainerCard> m_tool;
+    int m_damage = 0;
+    unsigned m_turnPlayed = 0;
+    std::vector<std::unique_ptr<EnergyCard>> m_energy;
     std::vector<std::unique_ptr<PokemonCard>> m_basePokemons;
-    const unsigned m_turnPlayed;
+
 };
 
 #endif // BOARDSLOT_H

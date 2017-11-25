@@ -1,6 +1,24 @@
 #include "boardslot.h"
 #include "typeinfo"
 
+BoardSlot::BoardSlot(const BoardSlot &_original) :
+  m_pokemon(new PokemonCard(*_original.m_pokemon)),
+  m_conditions(_original.m_conditions),
+  m_tool(new TrainerCard(*_original.m_tool)),
+  m_damage(_original.m_damage),
+  m_turnPlayed(_original.m_turnPlayed)
+{
+  for (const auto &eCard : _original.m_energy)
+  {
+    m_energy.emplace_back(new EnergyCard(*eCard));
+  }
+
+  for (const auto &pCard : _original.m_basePokemons)
+  {
+    m_basePokemons.emplace_back(new PokemonCard(*pCard));
+  }
+}
+
 void BoardSlot::setDamage(const int _value)
 {
     m_damage = _value;
@@ -60,3 +78,15 @@ void BoardSlot::setPokemon(std::unique_ptr<PokemonCard> &&_pokemon)
 {
     m_pokemon = std::move(_pokemon);
 }
+
+const std::unique_ptr<PokemonCard>& BoardSlot::pokemon() const
+{
+  return m_pokemon;
+}
+
+const std::vector<std::unique_ptr<EnergyCard>> &BoardSlot::energy() const
+{
+  return m_energy;
+}
+
+

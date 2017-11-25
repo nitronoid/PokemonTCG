@@ -9,6 +9,7 @@ class PokemonCard : public Card
 {
 public:
   PokemonCard(const PokemonCard&) = default;
+  PokemonCard& operator=(const PokemonCard&) = delete;
   PokemonCard(
       const int _id,
       const std::string &_name,
@@ -34,10 +35,17 @@ public:
     m_stage(_stage)
   {}
 
+  virtual Card* clone() override
+  {
+    return new PokemonCard(*this);
+  }
+
   inline void attack(const std::string &_attackName, const Game& _game)
   {
     m_attacks[_attackName](_game);
   }
+
+  inline unsigned retreatCost() { return m_retreatCost; }
 
 private:
   std::unordered_map<std::string, AttackFunc>              m_attacks;

@@ -45,6 +45,26 @@ enum class TRAINER {
   SUPPORT,
   STADIUM
 };
+
+enum class PLAYER {
+  SELF,
+  ENEMY
+};
+
+enum class PILE {
+  DECK,
+  HAND,
+  DISCARD,
+  BENCH,
+  PRIZE
+};
+
+enum class ACTION {
+  DRAW,
+  DISCARD,
+  PLAY
+};
+
 }
 
 #endif // POKEMONENUMS_H

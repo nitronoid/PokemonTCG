@@ -12,6 +12,11 @@ public:
     m_type(_type)
   {}
 
+  virtual Card* clone() override
+  {
+    return new TrainerCard(*this);
+  }
+
 private:
   PTCG::TRAINER m_type;
 

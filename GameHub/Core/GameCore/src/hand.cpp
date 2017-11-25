@@ -1,5 +1,13 @@
 #include "hand.h"
 
+Hand::Hand (const Hand &_original)
+{
+  for (const auto &card : _original.m_cards)
+  {
+    m_cards.emplace_back(card->clone());
+  }
+}
+
 const std::vector<std::unique_ptr<Card>>& Hand::view()
 {
     return m_cards;

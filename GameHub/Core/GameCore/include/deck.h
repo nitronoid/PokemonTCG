@@ -8,6 +8,9 @@ class Deck : public CardPile
 {
 public:
     Deck() = default;
+    Deck (const Deck&_original);
+    Deck& operator=(const Deck&) = delete;
+
     virtual void put(std::unique_ptr<Card> &&_card) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
     const std::vector<std::unique_ptr<Card>>& view();

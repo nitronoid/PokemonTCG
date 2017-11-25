@@ -10,3 +10,13 @@ Game Game::clone() const
   return *this;
 }
 
+void Game::play()
+{
+
+}
+
+void Game::endTurn()
+{
+  ++m_turnCount;
+  m_turnFinished = true;
+}

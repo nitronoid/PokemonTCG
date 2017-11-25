@@ -3,7 +3,7 @@
 
 #include "card.h"
 
-class EnergyCard:Card
+class EnergyCard : public Card
 {
 public:
     EnergyCard(const EnergyCard&) = default;
@@ -12,6 +12,12 @@ public:
       m_amount(_amount),
       m_type(_type)
     {}
+
+    virtual Card* clone() override
+    {
+      return new EnergyCard(*this);
+    }
+
 private:
     const unsigned m_amount;
     const PTCG::TYPE m_type;

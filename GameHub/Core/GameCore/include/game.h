@@ -12,20 +12,27 @@ class Game
 {
 public:
   Game() = default;
-  Game(const Game &_original)
-//    m_playerOne(_original.m_playerOne->clone()),
-//    m_playerTwo(_original.m_playerTwo->clone())
-  {}
+  Game(const Game &_original) :
+    m_playableCards(_original.m_playableCards),
+    m_turnPhase(_original.m_turnPhase),
+    m_turnCount(_original.m_turnCount)
+  {
+    for (size_t i = 0; i < m_players.size(); ++i)
+    {
+      if (_original.m_players[i]) m_players[i].reset( _original.m_players[i]->clone());
+    }
+  }
   Game clone() const;
   void dealDamage(const int _damage);
+  void endTurn();
+  void play();
 
 private:
-  std::unique_ptr<Player> m_playerOne;
-  std::unique_ptr<Player> m_playerTwo;
+  std::array<std::unique_ptr<Player>, 2> m_players;
   std::unordered_set<PTCG::TRAINER> m_playableCards;
-  std::unique_ptr<Player>* m_currentPlayer = &m_playerOne;
   PTCG::PHASE m_turnPhase;
   unsigned m_turnCount;
+  bool m_turnFinished;
 
 };
 

@@ -19,6 +19,8 @@ protected:
 
 public:
   virtual ~Card(){}
+
+  virtual Card* clone() = 0;
   void activateAbility(const Game &_game) const;
 
 private:

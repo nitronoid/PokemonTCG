@@ -1,5 +1,13 @@
 #include "deck.h"
 
+Deck::Deck (const Deck &_original)
+{
+  for (const auto &card : _original.m_cards)
+  {
+    m_cards.emplace_back(card->clone());
+  }
+}
+
 const std::vector<std::unique_ptr<Card>>& Deck::view()
 {
     return m_cards;

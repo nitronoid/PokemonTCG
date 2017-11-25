@@ -11,10 +11,17 @@ public:
     Player(_parentGame)
   {}
 
-  virtual Player* clone() const
-  {
-    return new HumanPlayer(*this);
-  }
+  virtual Player* clone() const override;
+
+  virtual std::vector<std::unique_ptr<Card>> chooseCard(
+      const PTCG::PLAYER _player,
+      const PTCG::PILE _origin,
+      const std::vector<std::unique_ptr<Card>> &_options,
+      const unsigned ammount,
+      const PTCG::ACTION _action) override;
+
+  virtual void turn() override;
+
 };
 
 

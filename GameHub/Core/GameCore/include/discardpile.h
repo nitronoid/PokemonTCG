@@ -8,6 +8,9 @@ class DiscardPile : public CardPile
 {
 public:
     DiscardPile() = default;
+    DiscardPile (const DiscardPile&_original);
+    DiscardPile& operator =(const DiscardPile &) = delete;
+
     virtual void put(std::unique_ptr<Card> &&_card) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
     const std::vector<std::unique_ptr<Card>>& view();

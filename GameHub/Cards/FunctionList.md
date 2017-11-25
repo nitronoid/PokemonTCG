@@ -18,7 +18,6 @@ ________________________________________________________________________________
 2. void dealDamageX(int _damageVal, int _mult) - deals _mult x _damageVal damage.
 3. void dealDamageBench(TARGET, std::array<int> _index, int _damageVal) - deals damage to seleccted benched pokemon
 
-```
 > We could only implement 2. and specify _mult = 1 by default for 1..
 > 3. needs to be separate as bench damage doesn't apply weakness/resistance.
 ___________________________________________________________________________________________________________

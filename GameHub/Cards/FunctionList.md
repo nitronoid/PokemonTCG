@@ -42,9 +42,8 @@ std::vector<std::unique_ptr<Card>> playerChoice(TARGET, LOCATION, CARDTYPE, int 
     - TARGET [SELF, ENEMY] - Who is choosing?
     - LOCATION [DECK, HAND, DISCARD.....] - Where to choose from?
     - _range - How many cards to choose from?
--    _choice - Card(s) you can AT MOST choose.
-
-- Returns a list of cards the player chose.
+    - _choice - Card(s) you can AT MOST choose.
+    - Returns a list of cards the player chose.
 
 >When searching a Pokemon card, we need more requirements such as: BASIC, HP<90
 >May want to seperate the functions when implementing them later.
@@ -108,9 +107,11 @@ ________________________________________________________________________________
 ``` c++
 void blockDamage():
 ```
-    > The call makes the current pokemon take 0 damage from any source until its owner's next turn.
-    > It's weird to have a situational function just for this, we could think about
-    > setting an additional status effect in CONDITION - PROTECT and have damage calc check for this flag
+> The call makes the current pokemon take 0 damage from any source until its owner's next turn.
+
+> It's weird to have a situational function just for this, we could think about
+
+> setting an additional status effect in CONDITION - PROTECT and have damage calc check for this flag
 ___________________________________________________________________________________________________________
 ``` c++
 void heal() variant(?):

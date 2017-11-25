@@ -108,7 +108,9 @@ ________________________________________________________________________________
 void blockDamage():
 ```
 > The call makes the current pokemon take 0 damage from any source until its owner's next turn.
+
 > It's weird to have a situational function just for this, we could think about
+
 > setting an additional status effect in CONDITION - PROTECT and have damage calc check for this flag
 ___________________________________________________________________________________________________________
 ``` c++

@@ -6,6 +6,8 @@
 ## Edit History : 
 - 24/11/2017 Eric: 
     "File Creation and first observation of cards created created by this date."
+- 25/11/2017 Jack:
+    "Create a notes file, detailing feedback about the current list, with some questions."
 - Add new logs here if you can be bothered to... future self/teammate.
 
 

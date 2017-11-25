@@ -61,6 +61,7 @@ ________________________________________________________________________________
 ``` c++
 int searchPokeName(std::string _name,TARGET,LOCATION):
 ```
+> Searches for the pokemon of the name "_name" in the specified player's BoardSlot.
 > Do this for other json data fields would be useful
 
 ___________________________________________________________________________________________________________

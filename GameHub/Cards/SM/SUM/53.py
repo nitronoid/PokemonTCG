@@ -7,5 +7,7 @@ def defenseCurl(h):
 def discharge(h):
     # discard all electricity energies on this monster
     # for each electricity card you DISCARD
-        dmg += 30
+    # on pokemon 
+    cards = h.playerChoice(SELF,)
+    dmg = len(cards) * 30
     h.dealDamage(dmg)

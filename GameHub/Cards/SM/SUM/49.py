@@ -1,7 +1,9 @@
 import poke
 
 def searchingLight(h):
-    # look at 1 of your face-down prize cards
+    cards = h.playerChoice(SELF,PRIZE, ANY, ?, 1)
+    for card in cards:
+        h.showCard()
 
 def electroBall(h):
     h.dealDamage(30)

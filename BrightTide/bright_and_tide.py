@@ -61,7 +61,7 @@ Cloyster
 Wingull
 
     Roost
-        # heal 30 & NO RETREAT THIS TURN
+        # heal 30 & NO RETREAT NEXT TURN
         heal(30)
 -----------------------------------------------------------
 Corsola

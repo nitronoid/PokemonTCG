@@ -7,7 +7,7 @@ class HumanPlayer : public Player
 {
 public:
   HumanPlayer(const HumanPlayer&) = default;
-  HumanPlayer(HumanPlayer& _parentGame) :
+  HumanPlayer(Game& _parentGame) :
     Player(_parentGame)
   {}
 
@@ -16,9 +16,10 @@ public:
   virtual std::vector<std::unique_ptr<Card>> chooseCard(
       const PTCG::PLAYER _player,
       const PTCG::PILE _origin,
+      const PTCG::ACTION _action,
       const std::vector<std::unique_ptr<Card>> &_options,
-      const unsigned ammount,
-      const PTCG::ACTION _action) override;
+      const unsigned ammount
+      ) override;
 
   virtual void turn() override;
 

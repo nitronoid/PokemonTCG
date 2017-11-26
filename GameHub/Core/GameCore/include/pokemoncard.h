@@ -11,7 +11,7 @@ public:
   PokemonCard(const PokemonCard&) = default;
   PokemonCard& operator=(const PokemonCard&) = delete;
   PokemonCard(
-      const int _id,
+      const unsigned _id,
       const std::string &_name,
       const Ability & _ability,
       std::unordered_map<std::string, AttackFunc> && _attacks,

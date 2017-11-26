@@ -10,7 +10,7 @@ class Card
 {
 protected:
   Card(const Card&) = default;
-  Card(const int _id, const std::string &_name, const Ability & _ability) :
+  Card(const unsigned _id, const std::string &_name, const Ability & _ability) :
     m_ability(_ability),
     m_name(_name),
     m_id(_id)
@@ -26,7 +26,7 @@ public:
 private:
   const Ability m_ability;
   const std::string m_name;
-  const int m_id;
+  const unsigned m_id;
 };
 
 #endif // CARD_H

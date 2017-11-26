@@ -62,7 +62,8 @@ enum class PILE {
 enum class ACTION {
   DRAW,
   DISCARD,
-  PLAY
+  PLAY,
+  VIEW
 };
 
 }

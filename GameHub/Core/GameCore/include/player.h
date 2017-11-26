@@ -24,9 +24,9 @@ public:
   virtual std::vector<std::unique_ptr<Card>> chooseCard(
       const PTCG::PLAYER _player,
       const PTCG::PILE _origin,
+      const PTCG::ACTION _action,
       const std::vector<std::unique_ptr<Card>> &_options,
-      const unsigned ammount,
-      const PTCG::ACTION _action
+      const unsigned ammount
                      ) = 0;
   virtual void turn() = 0;
 

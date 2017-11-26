@@ -1,0 +1,10 @@
+{
+    "ID" : 134,
+    "Name" : "Timer Ball",
+    "Type" : "I",
+    "Ability" : {
+        "func" : "timerBall",
+        "duration" : "S",
+        "phase" : "M"
+    }
+}

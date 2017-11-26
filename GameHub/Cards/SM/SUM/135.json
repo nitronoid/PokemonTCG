@@ -1,0 +1,10 @@
+{
+    "ID" : 135,
+    "Name" : "Ultra Ball",
+    "Type" : "I",
+    "Ability" : {
+        "func" : "ultraBall",
+        "duration" : "S",
+        "phase" : "M"
+    }
+}

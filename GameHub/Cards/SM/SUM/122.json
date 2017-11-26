@@ -1,0 +1,10 @@
+{
+    "ID" : 122,
+    "Name" : "Lillie",
+    "Type" : "S",
+    "Ability" : {
+        "func" : "lillie",
+        "duration" : "S",
+        "phase" : "M"
+    }
+}

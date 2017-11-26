@@ -1,0 +1,10 @@
+{
+    "ID" : 116,
+    "Name" : "Energy Retrieval",
+    "Type" : "I",
+    "Ability" : {
+        "func" : "energyRetrieval",
+        "duration" : "S",
+        "phase" : "M"
+    }
+}

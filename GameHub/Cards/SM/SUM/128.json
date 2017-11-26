@@ -1,0 +1,10 @@
+{
+    "ID" : 128,
+    "Name" : "Professor Kukui",
+    "Type" : "S",
+    "Ability" : {
+        "func" : "professorKukui",
+        "duration" : "S",
+        "phase" : "M"
+    }
+}

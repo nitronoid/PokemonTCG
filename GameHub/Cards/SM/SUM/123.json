@@ -1,0 +1,10 @@
+{
+    "ID" : 123,
+    "Name" : "Nest Ball",
+    "Type" : "I",
+    "Ability" : {
+        "func" : "nestBall",
+        "duration" : "S",
+        "phase" : "M"
+    }
+}

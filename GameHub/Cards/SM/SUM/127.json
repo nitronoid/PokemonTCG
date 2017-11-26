@@ -1,0 +1,10 @@
+{
+    "ID" : 127,
+    "Name" : "Potion",
+    "Type" : "I",
+    "Ability" : {
+        "func" : "potion",
+        "duration" : "S",
+        "phase" : "M"
+    }
+}

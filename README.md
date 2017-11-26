@@ -33,7 +33,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 22/11/17 | Game Hub Team |  Pokemon cards and trainer cards can now be fully loaded through the card factory including abilities. Currently no error checking or energy cards. UML updated to reflect change in design regarding the player class. It is now abstract with two example descendants for AI and human player. Card 119 json was patched to reflect how abilities should be written. | Other teams: Look at the updated UML to start thinking about how your AI will integrate into the system. |
 | 23/11/17 | Game Hub Team |  Started to implement the card pile classes and board slots. |  |
 | 24/11/17 | Game Hub Team |  Fleshing out player API and corresponding game functions required by it. | Game Hub Team: Update UML to reflect recent changes. Need to implement a non-copying swap for Board slots to be used by the retreat function, a specialisation in the std namespace should also be present. |
-| 26/11/17 | Bright Tide Team | added the item and supporter cards | | 
+| 26/11/17 | Bright Tide Team | added the item and supporter cards, edited python code | | 
 
 
 

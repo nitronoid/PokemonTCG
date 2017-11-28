@@ -11,7 +11,7 @@ def ultraBall(h):
     # range - Number of cards the player picks from (>1), defaults to the whole thing
     # return - The list of chosen cards
 
-    # void Game::moveCards(std::vector<int> cardIndices, PILE origin, PILE destination, bool reveal);
+    # void Game::moveCards(std::vector<int> cardIndices, PLAYER owner, PILE origin, PILE destination, bool reveal);
     # cardIndices - Indices of card in Origin
     # owner - The player who owns the cards to move
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)

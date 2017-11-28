@@ -1,0 +1,26 @@
+Added Board class/struct to hold players card piles. This was done to
+seperate out cards from the player class, as the player did not ever directly 
+access them. The game always requires access so it makes sense to use this structure.
+
+Added put and take functions to all card piles
+
+Modified the way players are stored in Game. There is now an array of two players and
+two boards. No pointer is required as we can access the current player as a function of 
+the current turn:    Player* player = m_players[m_currentTurn % 2];
+
+Removed attack and end turn functions from player. The turn will be ended implicitly
+at the end of the players turn function. This prevents multiple calls to attack. The turn
+function now returns a pair<bool, string>, where the bool indicates whether or not to
+attack and the string is the name of the attack if they do.
+
+A Board slot no longer has an active pokemon field or a basePokemon field, instead one array is used
+where the last element is the active pokemon. A stack may be used instead.
+
+The bench class now holds the active pokemon as the first index in the now 6 length array.
+It also has a helper function to access this, and also count the ammount of benched pokemon.
+
+BoardSlot now has functions energy, and active, where energy returns a multiset of 
+energy cards for easy lookup/comparisson with attack requirements. active returns a reference
+to the active pokemon. detachPokemon now returns a vector of pokemon. devolvePokemon
+only removes the top level pokemon.
+

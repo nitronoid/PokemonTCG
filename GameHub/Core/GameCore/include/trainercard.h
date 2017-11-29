@@ -7,7 +7,7 @@ class TrainerCard : public Card
 {
 public:
   TrainerCard(const TrainerCard&) = default;
-  TrainerCard(const unsigned _id, const std::string &_name, const Ability _ability, const PTCG::TRAINER _type) :
+  TrainerCard(const unsigned _id, const std::string &_name, const Ability _ability, const PTCG::CARD _type) :
     Card(_id, _name, _ability),
     m_type(_type)
   {}
@@ -16,9 +16,11 @@ public:
   {
     return new TrainerCard(*this);
   }
+  inline canPlay() { m_canPlay(); }
 
 private:
-  PTCG::TRAINER m_type;
+  PTCG::CARD m_type;
+  std::function<bool()> m_canPlay;
 
 };
 

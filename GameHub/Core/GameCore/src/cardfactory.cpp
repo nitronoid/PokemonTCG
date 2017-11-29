@@ -69,16 +69,16 @@ PTCG::PHASE selectPhase(const char _c)
   }
 }
 
-PTCG::TRAINER selectTrainerType(const char _c)
+PTCG::CARD selectTrainerType(const char _c)
 {
   switch (_c)
   {
-    case 'I':  return PTCG::TRAINER::ITEM;
-    case 'T':  return PTCG::TRAINER::TOOL;
-    case 'S':  return PTCG::TRAINER::SUPPORT;
-    case 'A':  return PTCG::TRAINER::STADIUM;
+    case 'I':  return PTCG::CARD::ITEM;
+    case 'T':  return PTCG::CARD::TOOL;
+    case 'S':  return PTCG::CARD::SUPPORT;
+    case 'A':  return PTCG::CARD::STADIUM;
 
-    default: return PTCG::TRAINER::SUPPORT;
+    default: return PTCG::CARD::SUPPORT;
   }
 }
 

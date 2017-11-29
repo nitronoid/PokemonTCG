@@ -39,7 +39,8 @@ enum class DURATION {
   PERMANENT
 };
 
-enum class TRAINER {
+enum class CARD {
+  POKEMON,
   ITEM,
   TOOL,
   SUPPORT,

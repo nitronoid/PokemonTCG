@@ -56,7 +56,7 @@ void BoardSlot::attachCard(std::unique_ptr<Card> &&_card)
     }
 }
 
-std::unique_ptr<PokemonCard> BoardSlot::detachPokemon()
+std::vector<std::unique_ptr<PokemonCard> > BoardSlot::detachPokemon()
 {
     return std::move(m_pokemon);
 }
@@ -84,7 +84,7 @@ const std::unique_ptr<PokemonCard>& BoardSlot::pokemon() const
   return m_pokemon;
 }
 
-const std::vector<std::unique_ptr<EnergyCard>> &BoardSlot::energy() const
+std::unordered_multiset<PTCG::TYPE> BoardSlot::energy() const
 {
   return m_energy;
 }

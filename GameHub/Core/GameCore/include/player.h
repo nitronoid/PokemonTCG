@@ -9,6 +9,7 @@
 #include "prizecards.h"
 #include <vector>
 #include <memory>
+#include <tuple>
 
 class Player
 {
@@ -20,7 +21,6 @@ public:
 
   virtual Player* clone() const = 0;
 
-public:
   virtual std::vector<std::unique_ptr<Card>> chooseCard(
       const PTCG::PLAYER _player,
       const PTCG::PILE _origin,
@@ -28,25 +28,18 @@ public:
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned ammount
                      ) = 0;
-  virtual void turn() = 0;
+  virtual std::pair<bool, std::string> turn() = 0;
 
 protected:
   void playCard(const unsigned _index);
-  void attack(const std::string &_name);
-  void endTurn() const;
   void retreat(const unsigned _replacement);
-  void viewHand() const;
-  void viewBench() const;
+  const std::vector<std::unique_ptr<Card>>& viewHand() const;
+  const std::vector<std::unique_ptr<Card>>& viewDiscard(const PTCG::PLAYER _owner = PTCG::PLAYER::SELF) const;
+  const std::array<std::unique_ptr<Card>, 6>& viewBoard(const PTCG::PLAYER _owner = PTCG::PLAYER::SELF) const;
 
   Game getDummyGame() const;
 
 private:
-  BoardSlot m_activePokemon;
-  Bench m_bench;
-  Hand m_hand;
-  Deck m_deck;
-  PrizeCards m_prizeCards;
-  DiscardPile m_discardPile;
   bool m_canRetreat = true;
   Game& m_parentGame;
 };

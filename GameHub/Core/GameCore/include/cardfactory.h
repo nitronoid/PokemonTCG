@@ -3,6 +3,7 @@
 
 #include "pokemoncard.h"
 #include "trainercard.h"
+#include "energycard.h"
 #include <QJsonObject>
 
 class CardFactory
@@ -19,6 +20,7 @@ public:
 private:
   PokemonCard* loadPokemonCard(const QJsonObject &_jsonCard) const;
   TrainerCard* loadTrainerCard(const QJsonObject &_jsonCard) const;
+  EnergyCard*  loadEnergyCard (const QJsonObject &_jsonCard) const;
 
   const std::string m_cardPath;
   const std::string m_pyLibPath;

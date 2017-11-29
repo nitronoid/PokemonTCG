@@ -14,7 +14,7 @@ std::vector<std::unique_ptr<Card>> HumanPlayer::chooseCard(const PTCG::PLAYER _p
   return std::vector<std::unique_ptr<Card>>{};
 }
 
-void HumanPlayer::turn()
+std::pair<bool, std::string> HumanPlayer::turn()
 {
 
 }

@@ -45,18 +45,24 @@ public:
     m_attacks[_attackName](_game);
   }
 
-  inline unsigned retreatCost() { return m_retreatCost; }
+  inline std::string preEvolution() const { return m_preEvolution; }
+  inline PTCG::TYPE  type()         const { return m_type; }
+  inline PTCG::TYPE  weakness()     const { return m_weakness; }
+  inline PTCG::TYPE  resistance()   const { return m_resistance; }
+  inline unsigned    hp()           const { return m_hp; }
+  inline unsigned    retreatCost()  const { return m_retreatCost; }
+  inline unsigned    stage()        const { return m_stage; }
 
 private:
   std::unordered_map<std::string, AttackFunc>              m_attacks;
   std::unordered_map<std::string, std::vector<PTCG::TYPE>> m_attackCost;
-  const std::string m_preEvolution;
-  const PTCG::TYPE  m_type;
-  const PTCG::TYPE  m_weakness;
-  const PTCG::TYPE  m_resistance;
-  const int         m_hp;
-  const unsigned    m_retreatCost;
-  const unsigned    m_stage;
+  std::string m_preEvolution;
+  PTCG::TYPE  m_type;
+  PTCG::TYPE  m_weakness;
+  PTCG::TYPE  m_resistance;
+  int         m_hp;
+  unsigned    m_retreatCost;
+  unsigned    m_stage;
 
 };
 

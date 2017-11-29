@@ -10,6 +10,7 @@ class Card
 {
 protected:
   Card(const Card&) = default;
+  Card& operator=(const Card&) = default;
   Card(const unsigned _id, const std::string &_name, const Ability & _ability) :
     m_ability(_ability),
     m_name(_name),
@@ -24,9 +25,9 @@ public:
   void activateAbility(const Game &_game) const;
 
 private:
-  const Ability m_ability;
-  const std::string m_name;
-  const unsigned m_id;
+  Ability m_ability;
+  std::string m_name;
+  unsigned m_id;
 };
 
 #endif // CARD_H

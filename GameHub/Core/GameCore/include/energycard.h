@@ -19,8 +19,8 @@ public:
     }
 
 private:
-    const unsigned m_amount;
-    const PTCG::TYPE m_type;
+    unsigned m_amount;
+    PTCG::TYPE m_type;
 };
 
 #endif // ENERGYCARD_H

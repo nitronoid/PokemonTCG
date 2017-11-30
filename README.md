@@ -35,6 +35,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 24/11/17 | Game Hub Team |  Fleshing out player API and corresponding game functions required by it. | Game Hub Team: Update UML to reflect recent changes. Need to implement a non-copying swap for Board slots to be used by the retreat function, a specialisation in the std namespace should also be present. |
 | 26/11/17 | Bright Tide Team | added the item and supporter cards, edited python code | | 
 | 29/11/17 | Game Hub Team | Wrote the headers for core game to match the new design, outlined by UML. | GameHub, TODO: Implement constructors for card pile classes and write implementations for all functions. Other Teams: Modify your python cards to implment a "canPlay" function, mostly for trainer cards, not neccessary for pokemon cards (probably). | 
+| 30/11/17 | Game Hub Team | Implemented functions for BoardSlot and Bench, minor changes reflected in uml. |  | 
 
 
 

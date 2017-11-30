@@ -24,10 +24,11 @@ public:
     void attachCard(std::unique_ptr<Card> &&_card);
     std::vector<std::unique_ptr<PokemonCard>> detachPokemon();
     std::unique_ptr<PokemonCard> devolvePokemon();
+    std::vector<std::unique_ptr<EnergyCard>> detachEnergy();
     std::unique_ptr<EnergyCard> detachEnergy(const unsigned _index);
     std::unique_ptr<TrainerCard> detachTool();
     void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
-    const std::unique_ptr<PokemonCard>& active() const;
+    const std::unique_ptr<PokemonCard> *active() const;
     std::unordered_multiset<PTCG::TYPE> energy() const;
 private:
     std::unordered_set<PTCG::CONDITION> m_conditions;

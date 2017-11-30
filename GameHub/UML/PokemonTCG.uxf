@@ -6,7 +6,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>472</x>
-      <y>1088</y>
+      <y>928</y>
       <w>352</w>
       <h>464</h>
     </coordinates>
@@ -54,7 +54,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>904</x>
-      <y>1160</y>
+      <y>1000</y>
       <w>352</w>
       <h>312</h>
     </coordinates>
@@ -89,7 +89,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>472</x>
-      <y>792</y>
+      <y>632</y>
       <w>352</w>
       <h>264</h>
     </coordinates>
@@ -110,7 +110,7 @@
 +devolvePokemon() : PokemonCard*
 +detachPokemon() : vector&lt;PokemonCard*&gt;
 +detachTool() : Card*
-+detachEnergy(const unsigned _index) : Card*
++detachEnergy(const unsigned _index) : vector&lt;Card*&gt;
 +setPokemon(PokemonCard* const _pokemon) : void
 +energy() : unordered_multiset&lt;TYPE&gt;
 +active() : PokemonCard*</panel_attributes>
@@ -120,7 +120,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>576</x>
-      <y>160</y>
+      <y>0</y>
       <w>544</w>
       <h>136</h>
     </coordinates>
@@ -140,7 +140,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>104</x>
-      <y>408</y>
+      <y>248</y>
       <w>504</w>
       <h>368</h>
     </coordinates>
@@ -179,7 +179,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>1112</x>
-      <y>408</y>
+      <y>248</y>
       <w>448</w>
       <h>96</h>
     </coordinates>
@@ -197,7 +197,7 @@
     <id>Relation</id>
     <coordinates>
       <x>352</x>
-      <y>288</y>
+      <y>128</y>
       <w>512</w>
       <h>136</h>
     </coordinates>
@@ -208,7 +208,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>632</x>
-      <y>408</y>
+      <y>248</y>
       <w>456</w>
       <h>96</h>
     </coordinates>
@@ -225,7 +225,7 @@
     <id>Relation</id>
     <coordinates>
       <x>840</x>
-      <y>288</y>
+      <y>128</y>
       <w>24</w>
       <h>136</h>
     </coordinates>
@@ -236,7 +236,7 @@
     <id>Relation</id>
     <coordinates>
       <x>840</x>
-      <y>288</y>
+      <y>128</y>
       <w>520</w>
       <h>136</h>
     </coordinates>
@@ -247,7 +247,7 @@
     <id>UMLNote</id>
     <coordinates>
       <x>1968</x>
-      <y>888</y>
+      <y>728</y>
       <w>328</w>
       <h>40</h>
     </coordinates>
@@ -260,7 +260,7 @@ bg=#f4f38d</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>160</y>
+      <y>0</y>
       <w>520</w>
       <h>152</h>
     </coordinates>
@@ -281,7 +281,7 @@ Ability&amp; operator=(const Ability&amp;)
     <id>Relation</id>
     <coordinates>
       <x>512</x>
-      <y>184</y>
+      <y>24</y>
       <w>80</w>
       <h>24</h>
     </coordinates>
@@ -292,7 +292,7 @@ Ability&amp; operator=(const Ability&amp;)
     <id>Relation</id>
     <coordinates>
       <x>344</x>
-      <y>768</y>
+      <y>608</y>
       <w>144</w>
       <h>152</h>
     </coordinates>
@@ -303,7 +303,7 @@ Ability&amp; operator=(const Ability&amp;)
     <id>Relation</id>
     <coordinates>
       <x>704</x>
-      <y>496</y>
+      <y>336</y>
       <w>24</w>
       <h>312</h>
     </coordinates>
@@ -314,7 +314,7 @@ Ability&amp; operator=(const Ability&amp;)
     <id>Relation</id>
     <coordinates>
       <x>1112</x>
-      <y>208</y>
+      <y>48</y>
       <w>808</w>
       <h>328</h>
     </coordinates>
@@ -325,7 +325,7 @@ Ability&amp; operator=(const Ability&amp;)
     <id>Relation</id>
     <coordinates>
       <x>816</x>
-      <y>856</y>
+      <y>696</y>
       <w>104</w>
       <h>24</h>
     </coordinates>
@@ -336,7 +336,7 @@ Ability&amp; operator=(const Ability&amp;)
     <id>Relation</id>
     <coordinates>
       <x>816</x>
-      <y>1104</y>
+      <y>944</y>
       <w>240</w>
       <h>72</h>
     </coordinates>
@@ -347,18 +347,18 @@ Ability&amp; operator=(const Ability&amp;)
     <id>UMLClass</id>
     <coordinates>
       <x>1232</x>
-      <y>696</y>
-      <w>256</w>
+      <y>536</y>
+      <w>312</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*Bench*
 --
 -m_slots : array&lt;BoardSlot,6&gt;
 --
-/+put(Card* const _card) : void/
-/+take(const unsigned _index) : Card*/
++put(Card* const _card, const unsigned _index) : void
++take(const unsigned _index) : vector&lt;Card*&gt;
 +active() : Card*
-+slotAt(const unsigned _index) : BoardSlot&amp;
++slotAt(const unsigned _index) : BoardSlot*
 +numBenched() : unsigned
 </panel_attributes>
     <additional_attributes/>
@@ -366,16 +366,16 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1504</x>
-      <y>696</y>
-      <w>280</w>
+      <x>1560</x>
+      <y>536</y>
+      <w>312</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*PrizeCards*
 --
 -m_cards : array&lt;Card*,6&gt;
 --
-/+put(Card* const _card) : void/
+/+put(Card* const _card, const unsigned _index) : void/
 /+take(const unsigned _index) : Card*/
 +view(const unsigned _index) : array&lt;Card*, 6&gt;</panel_attributes>
     <additional_attributes/>
@@ -383,16 +383,16 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1800</x>
-      <y>696</y>
-      <w>216</w>
+      <x>1888</x>
+      <y>536</y>
+      <w>312</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*Hand*
 --
 -m_cards : vector&lt;Card*&gt;
 --
-/+put(Card* const _card) : void/
+/+put(Card* const _card, const unsigned _index) : void/
 /+take(const unsigned _index) : Card*/
 +view() : const vector&lt;Card*&gt;&amp;</panel_attributes>
     <additional_attributes/>
@@ -400,16 +400,16 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2032</x>
-      <y>696</y>
-      <w>216</w>
+      <x>2216</x>
+      <y>536</y>
+      <w>312</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*Deck*
 --
 -m_cards : vector&lt;Card*&gt;
 --
-/+put(Card* const _card) : void/
+/+put(Card* const _card, const unsigned _index) : void/
 /+take(const unsigned _index) : Card*/
 +view() : const vector&lt;Card*&gt;&amp;
 +shuffle() : void
@@ -421,16 +421,16 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>2264</x>
-      <y>696</y>
-      <w>240</w>
+      <x>2544</x>
+      <y>536</y>
+      <w>312</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>*DiscardPile*
 --
 -m_cards : vector&lt;Card*&gt;
 --
-/+put(Card* const _card) : void/
+/+put(Card* const _card, const unsigned _index) : void/
 /+take(const unsigned _index) : Card*/
 +view() : const vector&lt;Card*&gt;&amp;</panel_attributes>
     <additional_attributes/>
@@ -439,7 +439,7 @@ Ability&amp; operator=(const Ability&amp;)
     <id>Relation</id>
     <coordinates>
       <x>776</x>
-      <y>720</y>
+      <y>560</y>
       <w>472</w>
       <h>88</h>
     </coordinates>
@@ -449,37 +449,37 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1184</x>
-      <y>808</y>
-      <w>1216</w>
+      <x>1176</x>
+      <y>648</y>
+      <w>1504</w>
       <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;50.0;1500.0;50.0;1500.0;10.0</additional_attributes>
+    <additional_attributes>10.0;50.0;1510.0;50.0;1860.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1184</x>
-      <y>808</y>
-      <w>184</w>
+      <x>1176</x>
+      <y>648</y>
+      <w>192</w>
       <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;50.0;210.0;50.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;50.0;220.0;50.0;220.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1784</x>
-      <y>520</y>
-      <w>232</w>
+      <x>1736</x>
+      <y>360</y>
+      <w>336</w>
       <h>72</h>
     </coordinates>
     <panel_attributes>*&lt;&lt;interface&gt;&gt;*
 /*CardPile*/
 --
-/+put(Card* const _card) : void/
+/+put(Card* const _card, const unsigned _index) : void/
 /+take(const unsigned _index) : Card*/</panel_attributes>
     <additional_attributes/>
   </element>
@@ -487,95 +487,84 @@ Ability&amp; operator=(const Ability&amp;)
     <id>Relation</id>
     <coordinates>
       <x>1616</x>
-      <y>808</y>
-      <w>24</w>
+      <y>648</y>
+      <w>80</w>
       <h>56</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>80.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1888</x>
-      <y>808</y>
-      <w>24</w>
+      <y>648</y>
+      <w>112</w>
       <h>56</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>120.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>2128</x>
-      <y>808</y>
-      <w>24</w>
+      <y>648</y>
+      <w>208</w>
       <h>56</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>240.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1344</x>
-      <y>624</y>
-      <w>568</w>
+      <x>1704</x>
+      <y>464</y>
+      <w>208</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>690.0;10.0;10.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>240.0;10.0;10.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1896</x>
-      <y>624</y>
-      <w>512</w>
+      <y>464</y>
+      <w>792</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;620.0;10.0;620.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;620.0;10.0;970.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>2128</x>
-      <y>624</y>
-      <w>24</w>
+      <y>464</y>
+      <w>208</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1616</x>
-      <y>624</y>
-      <w>24</w>
-      <h>88</h>
-    </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;240.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1888</x>
-      <y>584</y>
-      <w>24</w>
+      <y>424</y>
+      <w>112</w>
       <h>128</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;120.0;140.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>1656</x>
-      <y>888</y>
+      <y>728</y>
       <w>144</w>
       <h>96</h>
     </coordinates>
@@ -591,7 +580,7 @@ PERMANENT</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1336</x>
-      <y>888</y>
+      <y>728</y>
       <w>144</w>
       <h>112</h>
     </coordinates>
@@ -609,7 +598,7 @@ PARALYZED</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1496</x>
-      <y>888</y>
+      <y>728</y>
       <w>144</w>
       <h>96</h>
     </coordinates>
@@ -626,7 +615,7 @@ NONE</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1816</x>
-      <y>1024</y>
+      <y>864</y>
       <w>144</w>
       <h>184</h>
     </coordinates>
@@ -650,7 +639,7 @@ COLOURLESS</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1656</x>
-      <y>1024</y>
+      <y>864</y>
       <w>144</w>
       <h>64</h>
     </coordinates>
@@ -665,7 +654,7 @@ ENEMY</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1496</x>
-      <y>1024</y>
+      <y>864</y>
       <w>144</w>
       <h>80</h>
     </coordinates>
@@ -682,7 +671,7 @@ PLAY
     <id>UMLClass</id>
     <coordinates>
       <x>744</x>
-      <y>1600</y>
+      <y>1440</y>
       <w>288</w>
       <h>160</h>
     </coordinates>
@@ -705,7 +694,7 @@ PLAY
     <id>UMLClass</id>
     <coordinates>
       <x>1064</x>
-      <y>1600</y>
+      <y>1440</y>
       <w>288</w>
       <h>160</h>
     </coordinates>
@@ -727,7 +716,7 @@ PLAY
     <id>Relation</id>
     <coordinates>
       <x>880</x>
-      <y>1464</y>
+      <y>1304</y>
       <w>184</w>
       <h>152</h>
     </coordinates>
@@ -738,7 +727,7 @@ PLAY
     <id>Relation</id>
     <coordinates>
       <x>1040</x>
-      <y>1464</y>
+      <y>1304</y>
       <w>176</w>
       <h>152</h>
     </coordinates>
@@ -749,8 +738,8 @@ PLAY
     <id>UMLClass</id>
     <coordinates>
       <x>904</x>
-      <y>784</y>
-      <w>288</w>
+      <y>624</y>
+      <w>280</w>
       <h>144</h>
     </coordinates>
     <panel_attributes>*Board*
@@ -771,7 +760,7 @@ PLAY
     <id>Relation</id>
     <coordinates>
       <x>816</x>
-      <y>920</y>
+      <y>760</y>
       <w>240</w>
       <h>208</h>
     </coordinates>
@@ -782,7 +771,7 @@ PLAY
     <id>UMLClass</id>
     <coordinates>
       <x>8</x>
-      <y>1088</y>
+      <y>928</y>
       <w>400</w>
       <h>160</h>
     </coordinates>
@@ -804,7 +793,7 @@ PLAY
     <id>Relation</id>
     <coordinates>
       <x>400</x>
-      <y>1160</y>
+      <y>1000</y>
       <w>88</w>
       <h>24</h>
     </coordinates>
@@ -815,7 +804,7 @@ PLAY
     <id>UMLClass</id>
     <coordinates>
       <x>1336</x>
-      <y>1024</y>
+      <y>864</y>
       <w>144</w>
       <h>104</h>
     </coordinates>
@@ -834,7 +823,7 @@ PRIZE
     <id>UMLClass</id>
     <coordinates>
       <x>1816</x>
-      <y>888</y>
+      <y>728</y>
       <w>144</w>
       <h>104</h>
     </coordinates>

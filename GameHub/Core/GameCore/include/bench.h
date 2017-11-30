@@ -4,17 +4,20 @@
 #include "boardslot.h"
 #include "cardpile.h"
 
-class Bench : public CardPile
+class Bench
 {
 public:
     Bench() = default;
     Bench(const Bench&) = default;
     Bench& operator=(const Bench&) = delete;
+    Bench (const std::array<BoardSlot,6>& _slots):
+        m_slots(_slots)
+    {}
 
-    BoardSlot& slotAt(const unsigned _index);
-    std::unique_ptr<Card>& active();
-    virtual void put(std::unique_ptr<Card> &&_card) override;
-    virtual std::unique_ptr<Card> take(const unsigned _index) override;
+    BoardSlot *slotAt(const unsigned _index);
+    const std::unique_ptr<PokemonCard>* active();
+    void put(std::unique_ptr<Card> &&_card, const unsigned _index);
+    std::vector<std::unique_ptr<Card>> take(const unsigned _index);
 
     unsigned numBenched() const;
 

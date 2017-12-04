@@ -8,7 +8,7 @@ using AttackFunc = AbilityFunc;
 
 class Card
 {
-protected:
+public:
   Card(const Card&) = default;
   Card& operator=(const Card&) = default;
   Card(const unsigned _id, const std::string &_name, const Ability & _ability) :
@@ -17,10 +17,9 @@ protected:
     m_id(_id)
   {}
 
-
-public:
   virtual ~Card(){}
 
+  virtual bool canPlay() = 0;
   virtual Card* clone() = 0;
   void activateAbility(const Game &_game) const;
 

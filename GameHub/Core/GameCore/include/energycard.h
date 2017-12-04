@@ -13,6 +13,8 @@ public:
       m_type(_type)
     {}
 
+    virtual bool canPlay() override;
+
     virtual Card* clone() override
     {
       return new EnergyCard(*this);

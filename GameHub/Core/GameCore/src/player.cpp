@@ -38,14 +38,14 @@ void Player::retreat(const unsigned _replacement)
   }
 }
 
-void Player::viewHand() const
+Hand& Player::hand() const
 {
-
+    return m_hand;
 }
 
-void Player::viewBench() const
+Bench& Player::bench() const
 {
-
+    return m_bench;
 }
 
 Game Player::getDummyGame() const

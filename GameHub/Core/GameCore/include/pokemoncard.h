@@ -35,6 +35,8 @@ public:
     m_stage(_stage)
   {}
 
+  virtual bool canPlay() override;
+
   virtual Card* clone() override
   {
     return new PokemonCard(*this);

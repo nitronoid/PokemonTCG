@@ -8,12 +8,17 @@ Hand::Hand (const Hand &_original)
   }
 }
 
-const std::vector<std::unique_ptr<Card>>& Hand::view()
+std::vector<std::unique_ptr<Card>> Hand::view()
 {
-    return m_cards;
+    std::vector<std::unique_ptr<Card>> ret;
+    for (const auto & card : m_cards)
+    {
+        ret.emplace_back(card->clone());
+    }
+    return ret;
 }
 
-void Hand::put(std::unique_ptr<Card> &&_card)
+void Hand::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
     m_cards.emplace_back(std::move(_card));
 }

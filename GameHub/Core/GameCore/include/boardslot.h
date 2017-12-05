@@ -12,6 +12,7 @@
 
 class BoardSlot
 {
+using TypeMSet = std::unordered_multiset<PTCG::TYPE>;
 public:
     BoardSlot() = default;
     BoardSlot(const BoardSlot &_original);
@@ -29,14 +30,14 @@ public:
     std::unique_ptr<TrainerCard> detachTool();
     void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
     const std::unique_ptr<PokemonCard> *active() const;
-    std::unordered_multiset<PTCG::TYPE> energy() const;
+    TypeMSet energy() const;
 private:
     std::unordered_set<PTCG::CONDITION> m_conditions;
     std::unique_ptr<TrainerCard> m_tool;
     int m_damage = 0;
     unsigned m_turnPlayed = 0;
     std::vector<std::unique_ptr<EnergyCard>> m_energy;
-    std::stack<std::unique_ptr<PokemonCard>> m_pokemon;
+    std::vector<std::unique_ptr<PokemonCard>> m_pokemon;
 
 };
 

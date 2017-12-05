@@ -11,9 +11,9 @@ public:
     Hand (const Hand &_original);
     Hand& operator=(const Hand &) = delete;
 
-    virtual void put(std::unique_ptr<Card> &&_card) override;
+    virtual void put(std::unique_ptr<Card> &&_card, const unsigned _index) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
-    const std::vector<std::unique_ptr<Card>>& view();
+    std::vector<std::unique_ptr<Card>> view();
 private:
     std::vector<std::unique_ptr<Card>> m_cards;
 };

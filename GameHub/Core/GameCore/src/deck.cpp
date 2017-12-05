@@ -8,9 +8,14 @@ Deck::Deck (const Deck &_original)
   }
 }
 
-const std::vector<std::unique_ptr<Card>>& Deck::view()
+std::vector<std::unique_ptr<Card>> Deck::view()
 {
-    return m_cards;
+    std::vector<std::unique_ptr<Card>> ret;
+    for (const auto & card : m_cards)
+    {
+        ret.emplace_back(card->clone());
+    }
+    return ret;
 }
 
 void Deck::shuffle()
@@ -18,7 +23,7 @@ void Deck::shuffle()
 
 }
 
-void Deck::put(std::unique_ptr<Card> &&_card)
+void Deck::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
     m_cards.emplace_back(std::move(_card));
 }

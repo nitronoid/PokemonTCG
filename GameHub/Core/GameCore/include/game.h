@@ -13,17 +13,7 @@ class Game
 {
 public:
   Game() = default;
-  Game(const Game &_original) :
-    m_playableCards(_original.m_playableCards),
-    m_turnPhase(_original.m_turnPhase),
-    m_turnCount(_original.m_turnCount)
-  {
-    for (size_t i = 0; i < m_players.size(); ++i)
-    {
-      if (_original.m_players[i]) m_players[i].reset( _original.m_players[i]->clone());
-    }
-  }
-
+  Game(Game&&_original) = default;
   Game clone() const;
   void dealDamage(const int _damage);
   void start();
@@ -46,8 +36,9 @@ public:
       const int _amount,
       const int _range
       );
+
 private:
-  Game(const Game&) = default;
+  Game(const Game &_original);
   void attack(const std::string& _index);
 
 private:

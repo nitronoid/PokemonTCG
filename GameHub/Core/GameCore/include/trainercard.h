@@ -12,13 +12,11 @@ public:
     m_type(_type)
   {}
 
-  virtual bool canPlay() override;
-
   virtual Card* clone() override
   {
     return new TrainerCard(*this);
   }
-  inline canPlay() { m_canPlay(); }
+  inline virtual bool canPlay() override { return m_canPlay(); }
 
 private:
   PTCG::CARD m_type;

@@ -1,8 +1,8 @@
 #include "boardslot.h"
-#include "typeinfo"
+#include <typeinfo>
+#include <algorithm>
 
 BoardSlot::BoardSlot(const BoardSlot &_original) :
-    m_pokemon(new PokemonCard(*_original.m_pokemon)),
     m_conditions(_original.m_conditions),
     m_tool(new TrainerCard(*_original.m_tool)),
     m_damage(_original.m_damage),
@@ -13,9 +13,9 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
         m_energy.emplace_back(new EnergyCard(*eCard));
     }
 
-    for (const auto &pCard : _original.m_basePokemons)
+    for (const auto &pCard : _original.m_pokemon)
     {
-        m_basePokemons.emplace_back(new PokemonCard(*pCard));
+        m_pokemon.emplace_back(new PokemonCard(*pCard));
     }
 }
 
@@ -44,7 +44,7 @@ void BoardSlot::attachCard(std::unique_ptr<Card> &&_card)
     Card* raw = _card.release();
     if(auto ptr = dynamic_cast<PokemonCard*>(raw))
     {
-        m_pokemon.push(ptr);
+        m_pokemon.emplace_back(ptr);
     }
     else if(auto ptr = dynamic_cast<EnergyCard*>(raw))
     {
@@ -61,8 +61,9 @@ std::vector<std::unique_ptr<PokemonCard>> BoardSlot::detachPokemon()
     std::vector<std::unique_ptr<PokemonCard>> ret;
     while(!m_pokemon.empty())
     {
-        ret.emplace_back(m_pokemon.top().release());
-        m_pokemon.pop();
+        auto last = m_pokemon.end() - 1;
+        ret.emplace_back(last->release());
+        m_pokemon.erase(last);
     }
     return ret;
 }
@@ -70,8 +71,9 @@ std::vector<std::unique_ptr<PokemonCard>> BoardSlot::detachPokemon()
 std::unique_ptr<PokemonCard> BoardSlot::devolvePokemon()
 {
     if(m_pokemon.empty()) return nullptr;
-    std::unique_ptr<PokemonCard> ret(m_pokemon.top().release());
-    m_pokemon.pop();
+    auto last = m_pokemon.end() - 1;
+    std::unique_ptr<PokemonCard> ret(last->release());
+    m_pokemon.erase(last);
     return std::move(ret);
 }
 
@@ -101,17 +103,23 @@ std::unique_ptr<TrainerCard> BoardSlot::detachTool()
 
 void BoardSlot::setPokemon(std::unique_ptr<PokemonCard> &&_pokemon)
 {
-    m_pokemon.push(std::move(_pokemon));
+    m_pokemon.emplace_back(std::move(_pokemon));
 }
 
 const std::unique_ptr<PokemonCard>* BoardSlot::active() const
 {
-    return &m_pokemon.top();
+    return &m_pokemon[m_pokemon.size() - 1];
 }
 
-std::unordered_multiset<PTCG::TYPE> BoardSlot::energy() const
+BoardSlot::TypeMSet BoardSlot::energy() const
 {
-    return  std::unordered_multiset<PTCG::TYPE>(m_energy.begin(), m_energy.end());
+    BoardSlot::TypeMSet ret;
+    std::for_each(m_energy.begin(), m_energy.end(), [&ret](const auto & eCard)
+    {
+        ret.insert(eCard->type());
+    }
+    );
+    return ret;
 }
 
 

@@ -13,12 +13,14 @@ public:
       m_type(_type)
     {}
 
-    virtual bool canPlay() override;
+    virtual bool canPlay() override { return true; }
 
     virtual Card* clone() override
     {
       return new EnergyCard(*this);
     }
+
+    inline PTCG::TYPE type() const { return m_type; }
 
 private:
     unsigned m_amount;

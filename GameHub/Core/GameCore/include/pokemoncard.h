@@ -35,7 +35,8 @@ public:
     m_stage(_stage)
   {}
 
-  virtual bool canPlay() override;
+  // Fix this later
+  virtual bool canPlay() override { return true; }
 
   virtual Card* clone() override
   {

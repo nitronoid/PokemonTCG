@@ -6,30 +6,33 @@ BoardSlot* Bench::slotAt(const unsigned _index)
     return &m_slots[_index];
 }
 
-const std::unique_ptr<PokemonCard>* active()
+const std::unique_ptr<PokemonCard>* Bench::active()
 {
     return m_slots[0].active();
 }
 
 void Bench::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
-    if(_index<5) m_slots[_index] = std::move(_card);
+    if(_index<5)
+    {
+        m_slots[_index].attachCard(std::move(_card));
+    }
 }
 
 std::vector<std::unique_ptr<Card>> Bench::take(const unsigned _index)
 {
-    std::vector<std::unique_ptr<Card> ret;
+    std::vector<std::unique_ptr<Card>> ret;
     if(_index>5) return ret;
 
-    for(auto& pokemon : m_slots[index].detachPokemon())
+    for(auto& pokemon : m_slots[_index].detachPokemon())
     {
         ret.emplace_back(pokemon.release());
     }
-    for(auto& energy : m_slots[index].detachEnergy())
+    for(auto& energy : m_slots[_index].detachEnergy())
     {
         ret.emplace_back(energy.release());
     }
-    if(auto ptr = m_slots[index].detachTool())
+    if(auto ptr = m_slots[_index].detachTool())
     {
         ret.emplace_back(ptr.release());
     }

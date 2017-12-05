@@ -9,12 +9,17 @@ DiscardPile::DiscardPile (const DiscardPile &_original)
   }
 }
 
-const std::vector<std::unique_ptr<Card>>& DiscardPile::view()
+std::vector<std::unique_ptr<Card>> DiscardPile::view()
 {
-    return m_cards;
+    std::vector<std::unique_ptr<Card>> ret;
+    for (const auto & card : m_cards)
+    {
+        ret.emplace_back(card->clone());
+    }
+    return ret;
 }
 
-void DiscardPile::put(std::unique_ptr<Card> &&_card)
+void DiscardPile::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
     m_cards.emplace_back(std::move(_card));
 }

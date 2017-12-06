@@ -19,7 +19,7 @@ public:
 
 private:
     std::vector<std::unique_ptr<Card>> m_cards;
-    std::random_device m_seed;
+    
 };
 
 #endif // DECK_H

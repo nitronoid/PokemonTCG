@@ -22,7 +22,8 @@ std::vector<std::unique_ptr<Card>> Deck::view()
 
 void Deck::shuffle()
 {
-    static std::mt19937_64 gen(m_seed);
+    static std::random_device seed;
+    static std::mt19937_64 gen(seed());
     std::shuffle(m_cards.begin(),m_cards.end(),gen);
 }
 

@@ -5,7 +5,7 @@
 #include "pokemonenums.h"
 
 class Game;
-using AbilityFunc = std::function<void(const Game&)>;
+using AbilityFunc = std::function<void(Game*)>;
 
 class Ability
 {
@@ -19,9 +19,9 @@ public:
     m_abilityDuration(_duration)
   {}
 
-  inline void use(const Game& _game) const { m_ability(_game); }
+  inline void use(Game& _game) const { m_ability(&_game); }
 private:
-  AbilityFunc m_ability { AbilityFunc() };
+  AbilityFunc m_ability;
   PTCG::PHASE m_ablityPhase = PTCG::PHASE::NONE;
   PTCG::DURATION m_abilityDuration = PTCG::DURATION::PERMANENT;
 };

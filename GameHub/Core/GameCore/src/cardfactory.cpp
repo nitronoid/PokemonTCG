@@ -103,24 +103,10 @@ int intify(const QJsonValue _jStr)
   return _jStr.toInt();
 }
 
-PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
+Ability loadAbility(const QJsonObject  &_jsonCard)
 {
   // Import this cards attacks
   auto module = pybind11::module::import(std::to_string(intify(_jsonCard["ID"])).c_str());
-
-  // Add each attack to the map
-  std::unordered_map<std::string, AttackFunc> attacks;
-  std::unordered_map<std::string, std::vector<PTCG::TYPE>> attackCosts;
-  auto jAttackObj = _jsonCard["Attacks"].toObject();
-  for(const auto& attackName : jAttackObj.keys())
-  {
-    // Load the attack
-    auto attackObj = jAttackObj[attackName].toObject();
-    auto pyfunc = module.attr(stringify(attackObj["func"]).c_str());
-    attacks[attackName.toStdString()] = pyfunc.cast<AttackFunc>();
-    attackCosts[attackName.toStdString()] = getEnergyList(stringify(attackObj["energy"]));
-  }
-
   Ability cardAbility;
   if (_jsonCard.contains("Ability"))
   {
@@ -129,13 +115,33 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
     auto ability = pyfunc.cast<AbilityFunc>();
     cardAbility = Ability(ability, selectPhase(stringify(jAbility["phase"])[0]), selectDuration(stringify(jAbility["duration"])[0]));
   }
+  return cardAbility;
+}
+
+PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
+{
+  // Import this cards attacks
+  auto module = pybind11::module::import(std::to_string(intify(_jsonCard["ID"])).c_str());
+
+  // Add each attack to the map
+  std::vector<Attack> attacks;
+  auto jAttackObj = _jsonCard["Attacks"].toObject();
+  for(const auto& attackName : jAttackObj.keys())
+  {
+    // Load the attack
+    auto attackObj = jAttackObj[attackName].toObject();
+    auto pyfunc = module.attr(stringify(attackObj["func"]).c_str());
+    Attack newAttack(pyfunc.cast<AttackFunc>(),
+                     attackName.toStdString(),
+                     getEnergyList(stringify(attackObj["energy"])));
+    attacks.push_back(newAttack);
+  }
 
   return new PokemonCard(
       intify(_jsonCard["ID"]),
       stringify(_jsonCard["Name"]),
-      cardAbility,
+      loadAbility(_jsonCard),
       std::move(attacks),
-      std::move(attackCosts),
       selectType(stringify(_jsonCard["Type"])[0]),
       selectType(stringify(_jsonCard["Weakness"])[0]),
       selectType(stringify(_jsonCard["Resistance"])[0]),
@@ -147,16 +153,24 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
 
 TrainerCard* CardFactory::loadTrainerCard(const QJsonObject &_jsonCard) const
 {
-  // Import this cards attacks
-  auto module = pybind11::module::import(std::to_string(intify(_jsonCard["ID"])).c_str());
-  auto jAbility = _jsonCard["Ability"].toObject();
-  auto pyfunc = module.attr(stringify(jAbility["func"]).c_str());
-  auto ability = pyfunc.cast<AbilityFunc>();
+  // Import this cards ability
   return new TrainerCard(
         intify(_jsonCard["ID"]),
         stringify(_jsonCard["Name"]),
-        Ability(ability, selectPhase(stringify(jAbility["phase"])[0]), selectDuration(stringify(jAbility["duration"])[0])),
+        loadAbility(_jsonCard),
         selectTrainerType(stringify(_jsonCard["Type"])[0])
+        );
+}
+
+EnergyCard*  CardFactory::loadEnergyCard(const QJsonObject &_jsonCard) const
+{
+  // Import this cards ability
+  return new EnergyCard(
+        intify(_jsonCard["ID"]),
+        stringify(_jsonCard["Name"]),
+        loadAbility(_jsonCard),
+        intify(_jsonCard["Ammount"]),
+        selectType(stringify(_jsonCard["Type"])[0])
         );
 }
 

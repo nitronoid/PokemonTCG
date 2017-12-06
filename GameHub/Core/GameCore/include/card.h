@@ -4,8 +4,6 @@
 #include "ability.h"
 #include <string>
 
-using AttackFunc = AbilityFunc;
-
 class Card
 {
 public:
@@ -21,7 +19,7 @@ public:
 
   virtual bool canPlay() = 0;
   virtual Card* clone() = 0;
-  void activateAbility(const Game &_game) const;
+  void activateAbility(Game &_game) const;
 
 private:
   Ability m_ability;

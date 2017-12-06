@@ -5,7 +5,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>413</x>
+      <x>469</x>
       <y>812</y>
       <w>308</w>
       <h>406</h>
@@ -53,7 +53,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>791</x>
+      <x>847</x>
       <y>875</y>
       <w>315</w>
       <h>273</h>
@@ -88,7 +88,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>413</x>
+      <x>469</x>
       <y>553</y>
       <w>308</w>
       <h>231</h>
@@ -119,7 +119,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>504</x>
+      <x>560</x>
       <y>0</y>
       <w>476</w>
       <h>119</h>
@@ -140,7 +140,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>91</x>
+      <x>147</x>
       <y>210</y>
       <w>441</w>
       <h>329</h>
@@ -172,7 +172,7 @@
       const unsigned _retreatCost,
       const unsigned _stage
       )
-+attack(const Game&amp; _game, const string &amp;_name) : void
++attack(Game&amp; _game, const string &amp;_name) : void
 /+clone() : Card*/
 /+canPlay() : bool/</panel_attributes>
     <additional_attributes/>
@@ -180,7 +180,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>973</x>
+      <x>1029</x>
       <y>210</y>
       <w>392</w>
       <h>91</h>
@@ -198,7 +198,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>308</x>
+      <x>364</x>
       <y>112</y>
       <w>448</w>
       <h>112</h>
@@ -209,7 +209,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>553</x>
+      <x>609</x>
       <y>210</y>
       <w>399</w>
       <h>91</h>
@@ -227,7 +227,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>735</x>
+      <x>791</x>
       <y>112</y>
       <w>21</w>
       <h>112</h>
@@ -238,7 +238,7 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>735</x>
+      <x>791</x>
       <y>112</y>
       <w>455</w>
       <h>112</h>
@@ -249,12 +249,12 @@
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1722</x>
+      <x>1778</x>
       <y>637</y>
       <w>287</w>
       <h>35</h>
     </coordinates>
-    <panel_attributes>using AttackFunc = std::function&lt;void(const Game&amp;)&gt;;
+    <panel_attributes>using AttackFunc = std::function&lt;void(Game*)&gt;;
 using AbilityFunc = AttackFunc;
 bg=#f4f38d</panel_attributes>
     <additional_attributes/>
@@ -262,7 +262,7 @@ bg=#f4f38d</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
+      <x>56</x>
       <y>0</y>
       <w>455</w>
       <h>133</h>
@@ -277,13 +277,13 @@ Ability()
 Ability(const Ability&amp;)
 Ability&amp; operator=(const Ability&amp;)
 +Ability(AbilityFunc _newAbility, const PHASE _phase, const DURATION _duration) : void
-+use(const Game &amp;_game) : void</panel_attributes>
++use(Game &amp;_game) : void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>448</x>
+      <x>504</x>
       <y>21</y>
       <w>70</w>
       <h>21</h>
@@ -294,7 +294,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>301</x>
+      <x>357</x>
       <y>532</y>
       <w>126</w>
       <h>133</h>
@@ -305,7 +305,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>616</x>
+      <x>672</x>
       <y>294</y>
       <w>21</w>
       <h>273</h>
@@ -316,7 +316,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>973</x>
+      <x>1029</x>
       <y>42</y>
       <w>707</w>
       <h>287</h>
@@ -327,7 +327,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>714</x>
+      <x>770</x>
       <y>609</y>
       <w>91</w>
       <h>21</h>
@@ -338,7 +338,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>714</x>
+      <x>770</x>
       <y>826</y>
       <w>210</w>
       <h>63</h>
@@ -349,7 +349,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>777</x>
+      <x>833</x>
       <y>385</y>
       <w>273</w>
       <h>105</h>
@@ -369,7 +369,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1085</x>
+      <x>1141</x>
       <y>469</y>
       <w>273</w>
       <h>105</h>
@@ -386,7 +386,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1372</x>
+      <x>1428</x>
       <y>469</y>
       <w>273</w>
       <h>105</h>
@@ -403,7 +403,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1659</x>
+      <x>1715</x>
       <y>469</y>
       <w>273</w>
       <h>105</h>
@@ -424,7 +424,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1946</x>
+      <x>2002</x>
       <y>469</y>
       <w>273</w>
       <h>105</h>
@@ -441,7 +441,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>679</x>
+      <x>735</x>
       <y>420</y>
       <w>112</w>
       <h>147</h>
@@ -452,7 +452,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1029</x>
+      <x>1085</x>
       <y>567</y>
       <w>1064</w>
       <h>49</h>
@@ -463,7 +463,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>910</x>
+      <x>966</x>
       <y>483</y>
       <w>21</w>
       <h>77</h>
@@ -474,7 +474,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1519</x>
+      <x>1575</x>
       <y>315</y>
       <w>294</w>
       <h>63</h>
@@ -489,7 +489,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1211</x>
+      <x>1267</x>
       <y>567</y>
       <w>21</w>
       <h>49</h>
@@ -500,7 +500,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1498</x>
+      <x>1554</x>
       <y>567</y>
       <w>21</w>
       <h>49</h>
@@ -511,7 +511,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1785</x>
+      <x>1841</x>
       <y>567</y>
       <w>21</w>
       <h>49</h>
@@ -522,7 +522,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1211</x>
+      <x>1267</x>
       <y>406</y>
       <w>182</w>
       <h>77</h>
@@ -533,7 +533,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1379</x>
+      <x>1435</x>
       <y>406</y>
       <w>714</w>
       <h>77</h>
@@ -544,7 +544,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1785</x>
+      <x>1841</x>
       <y>406</y>
       <w>21</w>
       <h>77</h>
@@ -555,7 +555,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1652</x>
+      <x>1708</x>
       <y>371</y>
       <w>21</w>
       <h>56</h>
@@ -566,7 +566,7 @@ Ability&amp; operator=(const Ability&amp;)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1449</x>
+      <x>1505</x>
       <y>637</y>
       <w>126</w>
       <h>84</h>
@@ -582,7 +582,7 @@ PERMANENT</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1169</x>
+      <x>1225</x>
       <y>637</y>
       <w>126</w>
       <h>98</h>
@@ -600,7 +600,7 @@ PARALYZED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1309</x>
+      <x>1365</x>
       <y>637</y>
       <w>126</w>
       <h>84</h>
@@ -617,7 +617,7 @@ NONE</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1589</x>
+      <x>1645</x>
       <y>756</y>
       <w>126</w>
       <h>161</h>
@@ -641,7 +641,7 @@ COLOURLESS</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1449</x>
+      <x>1505</x>
       <y>756</y>
       <w>126</w>
       <h>56</h>
@@ -656,7 +656,7 @@ ENEMY</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1309</x>
+      <x>1365</x>
       <y>756</y>
       <w>126</w>
       <h>70</h>
@@ -673,7 +673,7 @@ PLAY
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>679</x>
+      <x>735</x>
       <y>1253</y>
       <w>252</w>
       <h>140</h>
@@ -696,7 +696,7 @@ PLAY
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>959</x>
+      <x>1015</x>
       <y>1253</y>
       <w>252</w>
       <h>140</h>
@@ -718,7 +718,7 @@ PLAY
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>798</x>
+      <x>854</x>
       <y>1141</y>
       <w>154</w>
       <h>126</h>
@@ -729,7 +729,7 @@ PLAY
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>931</x>
+      <x>987</x>
       <y>1141</y>
       <w>161</w>
       <h>126</h>
@@ -740,7 +740,7 @@ PLAY
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>791</x>
+      <x>847</x>
       <y>546</y>
       <w>245</w>
       <h>126</h>
@@ -762,7 +762,7 @@ PLAY
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>714</x>
+      <x>770</x>
       <y>665</y>
       <w>210</w>
       <h>182</h>
@@ -773,7 +773,7 @@ PLAY
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>7</x>
+      <x>63</x>
       <y>812</y>
       <w>350</w>
       <h>140</h>
@@ -795,7 +795,7 @@ PLAY
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>350</x>
+      <x>406</x>
       <y>875</y>
       <w>77</w>
       <h>21</h>
@@ -806,7 +806,7 @@ PLAY
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1169</x>
+      <x>1225</x>
       <y>756</y>
       <w>126</w>
       <h>91</h>
@@ -825,7 +825,7 @@ PRIZE
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1589</x>
+      <x>1645</x>
       <y>637</y>
       <w>126</w>
       <h>91</h>
@@ -843,7 +843,7 @@ STADIUM</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1498</x>
+      <x>1554</x>
       <y>406</y>
       <w>21</w>
       <h>77</h>

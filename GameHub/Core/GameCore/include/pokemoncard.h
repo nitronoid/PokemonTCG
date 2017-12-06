@@ -2,8 +2,8 @@
 #define POKEMONCARD_H
 
 #include "card.h"
+#include "attack.h"
 #include <vector>
-#include <unordered_map>
 
 class PokemonCard : public Card
 {
@@ -14,8 +14,7 @@ public:
       const unsigned _id,
       const std::string &_name,
       const Ability & _ability,
-      std::unordered_map<std::string, AttackFunc> && _attacks,
-      std::unordered_map<std::string, std::vector<PTCG::TYPE>> && _costs,
+      std::vector<Attack> && _attacks,
       const PTCG::TYPE _type,
       const PTCG::TYPE _weakness,
       const PTCG::TYPE _resistance,
@@ -26,7 +25,6 @@ public:
 
     Card(_id, _name, _ability),
     m_attacks(_attacks),
-    m_attackCost(_costs),
     m_type(_type),
     m_weakness(_weakness),
     m_resistance(_resistance),
@@ -43,9 +41,9 @@ public:
     return new PokemonCard(*this);
   }
 
-  inline void attack(const std::string &_attackName, const Game& _game)
+  inline void attack(const unsigned &_attackIndex, Game& _game)
   {
-    m_attacks[_attackName](_game);
+    m_attacks[_attackIndex].attack(_game);
   }
 
   inline std::string preEvolution() const { return m_preEvolution; }
@@ -57,8 +55,7 @@ public:
   inline unsigned    stage()        const { return m_stage; }
 
 private:
-  std::unordered_map<std::string, AttackFunc>              m_attacks;
-  std::unordered_map<std::string, std::vector<PTCG::TYPE>> m_attackCost;
+  std::vector<Attack> m_attacks;
   std::string m_preEvolution;
   PTCG::TYPE  m_type;
   PTCG::TYPE  m_weakness;

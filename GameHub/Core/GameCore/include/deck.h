@@ -14,7 +14,9 @@ public:
 
     virtual void put(std::unique_ptr<Card> &&_card, const unsigned _index) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
+    std::unique_ptr<Card> takeTop();
     std::vector<std::unique_ptr<Card>> view();
+    inline bool empty() const { return m_cards.empty(); }
     void shuffle();
 
 private:

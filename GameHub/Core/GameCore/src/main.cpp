@@ -12,6 +12,7 @@ int main()
 {
   // Simple test
   Game test;
+  test.start();
   CardFactory testPool("../../Cards/SM/SUM/", "../PythonBindings/");
   testPool.init();
   std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(9)));

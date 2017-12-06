@@ -29,7 +29,7 @@ public:
     std::unique_ptr<EnergyCard> detachEnergy(const unsigned _index);
     std::unique_ptr<TrainerCard> detachTool();
     void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
-    const std::unique_ptr<PokemonCard> *active() const;
+    PokemonCard* active() const;
     TypeMSet energy() const;
 private:
     std::unordered_set<PTCG::CONDITION> m_conditions;

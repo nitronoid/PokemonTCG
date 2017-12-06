@@ -6,7 +6,7 @@ BoardSlot* Bench::slotAt(const unsigned _index)
     return &m_slots[_index];
 }
 
-const std::unique_ptr<PokemonCard>* Bench::active()
+PokemonCard* Bench::active()
 {
     return m_slots[0].active();
 }

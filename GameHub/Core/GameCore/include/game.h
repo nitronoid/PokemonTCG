@@ -1,7 +1,6 @@
 #ifndef HUB_H
 #define HUB_H
 
-#include <iostream>
 #include <memory>
 #include <unordered_set>
 #include "pokemoncard.h"
@@ -20,6 +19,7 @@ public:
   bool canPlay(const std::unique_ptr<Card>& _card);
   bool playCard(const unsigned _index);
   void nextTurn();
+  bool drawCard(Board& _board);
   void moveCards(
       const std::vector<int> _cardIndices,
       const PTCG::PLAYER _owner,
@@ -39,7 +39,7 @@ public:
 
 private:
   Game(const Game &_original);
-  void attack(const std::string& _index);
+  void attack(PokemonCard* _pokemon, const unsigned _index);
 
 private:
   std::array<std::unique_ptr<Player>, 2> m_players;
@@ -49,6 +49,7 @@ private:
   unsigned m_turnCount = 0;
   bool m_turnFinished = false;
   bool m_rulesBroken = false;
+  bool m_gameFinished = false;
 
 };
 

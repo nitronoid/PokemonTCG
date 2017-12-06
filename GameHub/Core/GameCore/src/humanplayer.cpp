@@ -15,7 +15,7 @@ std::vector<std::unique_ptr<Card>> HumanPlayer::chooseCard(
   return std::vector<std::unique_ptr<Card>>{};
 }
 
-std::pair<bool, std::string> HumanPlayer::turn()
+std::pair<bool, unsigned> HumanPlayer::turn()
 {
 
 }

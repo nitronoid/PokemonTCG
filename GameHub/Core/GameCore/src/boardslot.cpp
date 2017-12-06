@@ -106,9 +106,9 @@ void BoardSlot::setPokemon(std::unique_ptr<PokemonCard> &&_pokemon)
     m_pokemon.emplace_back(std::move(_pokemon));
 }
 
-const std::unique_ptr<PokemonCard>* BoardSlot::active() const
+PokemonCard *BoardSlot::active() const
 {
-    return &m_pokemon[m_pokemon.size() - 1];
+    return m_pokemon[m_pokemon.size() - 1].get();
 }
 
 BoardSlot::TypeMSet BoardSlot::energy() const

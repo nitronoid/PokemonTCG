@@ -40,3 +40,10 @@ std::unique_ptr<Card> Deck::take(const unsigned _index)
     m_cards.erase(m_cards.begin() + _index);
     return temp;
 }
+
+std::unique_ptr<Card> Deck::takeTop()
+{
+  return take(m_cards.size() - 1);
+}
+
+

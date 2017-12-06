@@ -21,7 +21,7 @@ public:
       const unsigned ammount
       ) override;
 
-  virtual std::pair<bool, std::string> turn() override;
+  virtual std::pair<bool, unsigned> turn() override;
 
 };
 

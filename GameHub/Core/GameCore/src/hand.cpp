@@ -20,7 +20,12 @@ std::vector<std::unique_ptr<Card>> Hand::view()
 
 void Hand::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
-    m_cards.emplace_back(std::move(_card));
+    m_cards.insert(m_cards.begin() + _index, std::move(_card));
+}
+
+void Hand::putLast(std::unique_ptr<Card> &&_card)
+{
+    m_cards.push_back(std::move(_card));
 }
 
 std::unique_ptr<Card> Hand::take(const unsigned _index)

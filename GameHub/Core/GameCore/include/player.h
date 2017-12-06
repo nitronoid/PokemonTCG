@@ -28,7 +28,7 @@ public:
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned ammount
                      ) = 0;
-  virtual std::pair<bool, std::string> turn() = 0;
+  virtual std::pair<bool, unsigned> turn() = 0;
 
 protected:
   void playCard(const unsigned _index);

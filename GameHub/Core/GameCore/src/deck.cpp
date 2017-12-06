@@ -23,13 +23,13 @@ std::vector<std::unique_ptr<Card>> Deck::view()
 void Deck::shuffle()
 {
     static std::mt19937_64 gen(m_seed);
-
+    std::shuffle(m_cards.begin(),m_cards.end(),gen);
 }
 
 void Deck::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
     m_cards.emplace_back(std::move(_card));
-    std::shuffle(m_cards.begin(),m_cards.end(),gen);
+    
 }
 
 std::unique_ptr<Card> Deck::take(const unsigned _index)

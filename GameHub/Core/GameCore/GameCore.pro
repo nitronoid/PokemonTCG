@@ -1,5 +1,5 @@
 cache()
-CONFIG += console c++17
+CONFIG += console c++14
 CONFIG -= app_bundle
 
 SOURCES += $$files(../GameCore/src/*.cpp)
@@ -9,8 +9,6 @@ HEADERS += $$files(../GameCore/include/*.h) \
 
 INCLUDEPATH+=$$PWD/include
 INCLUDEPATH+=../pybind11/include
-
-QMAKE_CXXFLAGS += -std=c++1z
 
 linux {
     LIBS += -L /usr/local/lib/python2.7 -lpython2.7

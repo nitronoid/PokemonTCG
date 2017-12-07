@@ -1,5 +1,5 @@
 cache()
-CONFIG += console c++17
+CONFIG += console c++14
 CONFIG -= app_bundle
 
 SOURCES += \
@@ -18,8 +18,6 @@ QMAKE_CXXFLAGS+=$$system(python-config --cflags)
 QMAKE_LFLAGS+=$$system(python-config --ldflags)
 
 CONFIG += no_keywords # Python redefines some qt keywords
-
-QMAKE_CXXFLAGS += -std=c++1z
 
 linux {
     LIBS += -L /usr/local/lib/python2.7 -lpython2.7

@@ -1,5 +1,5 @@
 #include "deck.h"
-
+#include <algorithm>
 
 
 Deck::Deck (const Deck &_original)

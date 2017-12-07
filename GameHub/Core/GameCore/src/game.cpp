@@ -38,8 +38,9 @@ void Game::nextTurn()
   if (drawCard(currentBoard))
   {
     // Execute the players turn function
-    auto [doAttack, attackID] = currentPlayer->turn();
-    if (doAttack) attack(currentBoard.m_bench.active(), attackID);
+    auto attackDecision = currentPlayer->turn();
+    if (attackDecision.first)
+        attack(currentBoard.m_bench.active(), attackDecision.second);
     std::cout<<m_turnCount<<'\n';
     ++m_turnCount;
   }

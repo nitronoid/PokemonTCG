@@ -38,6 +38,7 @@ PTCG::TYPE selectType(const char _energy)
 std::vector<PTCG::TYPE> getEnergyList(const std::string _energyString)
 {
   std::vector<PTCG::TYPE> energyList;
+  energyList.reserve(_energyString.size());
   for (const auto& c : _energyString)
   {
     energyList.push_back(selectType(c));
@@ -126,7 +127,9 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
   // Add each attack to the map
   std::vector<Attack> attacks;
   auto jAttackObj = _jsonCard["Attacks"].toObject();
-  for(const auto& attackName : jAttackObj.keys())
+  auto names = jAttackObj.keys();
+  attacks.reserve(static_cast<size_t>(names.size()));
+  for(const auto& attackName : names)
   {
     // Load the attack
     auto attackObj = jAttackObj[attackName].toObject();
@@ -138,7 +141,7 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
   }
 
   return new PokemonCard(
-      intify(_jsonCard["ID"]),
+      static_cast<unsigned>(intify(_jsonCard["ID"])),
       stringify(_jsonCard["Name"]),
       loadAbility(_jsonCard),
       std::move(attacks),
@@ -146,8 +149,8 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
       selectType(stringify(_jsonCard["Weakness"])[0]),
       selectType(stringify(_jsonCard["Resistance"])[0]),
       intify(_jsonCard["HP"]),
-      intify(_jsonCard["Retreat"]),
-      intify(_jsonCard["Stage"])
+      static_cast<unsigned>(intify(_jsonCard["Retreat"])),
+      static_cast<unsigned>(intify(_jsonCard["Stage"]))
       );
 }
 
@@ -155,10 +158,10 @@ TrainerCard* CardFactory::loadTrainerCard(const QJsonObject &_jsonCard) const
 {
   // Import this cards ability
   return new TrainerCard(
-        intify(_jsonCard["ID"]),
+        static_cast<unsigned>(intify(_jsonCard["ID"])),
         stringify(_jsonCard["Name"]),
         loadAbility(_jsonCard),
-        selectTrainerType(stringify(_jsonCard["Type"])[0])
+        selectTrainerType(stringify(_jsonCard["Trainer"])[0])
         );
 }
 
@@ -166,10 +169,10 @@ EnergyCard*  CardFactory::loadEnergyCard(const QJsonObject &_jsonCard) const
 {
   // Import this cards ability
   return new EnergyCard(
-        intify(_jsonCard["ID"]),
+        static_cast<unsigned>(intify(_jsonCard["ID"])),
         stringify(_jsonCard["Name"]),
         loadAbility(_jsonCard),
-        intify(_jsonCard["Ammount"]),
+        static_cast<unsigned>(intify(_jsonCard["Ammount"])),
         selectType(stringify(_jsonCard["Type"])[0])
         );
 }
@@ -183,14 +186,14 @@ Card* CardFactory::loadCard(const unsigned _id) const
   {
     return loadPokemonCard(jsonCard);
   }
-  else if (jsonCard.contains("Ability"))
+  else if (jsonCard.contains("Trainer"))
   {
     return loadTrainerCard(jsonCard);
   }
-//  else if (jsonCard.contains("Type"))
-//  {
-
-//  }
+  else if (jsonCard.contains("Type"))
+  {
+    return  loadEnergyCard(jsonCard);
+  }
   return nullptr;
 }
 

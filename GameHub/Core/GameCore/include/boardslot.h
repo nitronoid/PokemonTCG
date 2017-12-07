@@ -31,6 +31,10 @@ public:
     void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
     PokemonCard* active() const;
     TypeMSet energy() const;
+    inline size_t numPokemon() const { return m_pokemon.size(); }
+    inline size_t numEnergy() const { return m_energy.size(); }
+    inline size_t numTool() const { return m_tool ? 1 : 0; }
+    inline size_t numCards() const { return numPokemon() + numEnergy() + numTool(); }
 private:
     std::unordered_set<PTCG::CONDITION> m_conditions;
     std::unique_ptr<TrainerCard> m_tool;

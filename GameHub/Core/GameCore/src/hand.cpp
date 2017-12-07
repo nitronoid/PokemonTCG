@@ -2,6 +2,7 @@
 
 Hand::Hand (const Hand &_original)
 {
+  m_cards.reserve(_original.m_cards.size());
   for (const auto &card : _original.m_cards)
   {
     m_cards.emplace_back(card->clone());
@@ -11,6 +12,7 @@ Hand::Hand (const Hand &_original)
 std::vector<std::unique_ptr<Card>> Hand::view()
 {
     std::vector<std::unique_ptr<Card>> ret;
+    ret.reserve(m_cards.size());
     for (const auto & card : m_cards)
     {
         ret.emplace_back(card->clone());

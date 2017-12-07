@@ -4,6 +4,7 @@
 
 Deck::Deck (const Deck &_original)
 {
+  m_cards.reserve(_original.m_cards.size());
   for (const auto &card : _original.m_cards)
   {
     m_cards.emplace_back(card->clone());
@@ -13,6 +14,7 @@ Deck::Deck (const Deck &_original)
 std::vector<std::unique_ptr<Card>> Deck::view()
 {
     std::vector<std::unique_ptr<Card>> ret;
+    ret.reserve(m_cards.size());
     for (const auto & card : m_cards)
     {
         ret.emplace_back(card->clone());
@@ -29,7 +31,7 @@ void Deck::shuffle()
 
 void Deck::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
-    m_cards.emplace_back(std::move(_card));
+    m_cards.push_back(std::move(_card));
     
 }
 

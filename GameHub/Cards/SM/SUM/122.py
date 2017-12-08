@@ -18,7 +18,8 @@ def lillie(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    cards = h.playerChoice(SELF, DECK, ANY, 6)
+    if(canPlay()):
+        cards = h.playerChoice(SELF, DECK, ANY, 6)
 
-    for card in cards:
-        h.moveCard(card, DECK, HAND, False)
+        for card in cards:
+            h.moveCard(card, DECK, HAND, False)

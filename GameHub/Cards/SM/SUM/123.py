@@ -18,8 +18,9 @@ def nestBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 	
-    cards = h.playerChoice(SELF, DECK, BASIC_POKEMON, 1)
+    if(canPlay()):
+        cards = h.playerChoice(SELF, DECK, BASIC_POKEMON, 1)
 
-    for card in cards:
-        h.moveCard(card, DECK, BENCH, False)
-    h.shuffleDeck()
+        for card in cards:
+            h.moveCard(card, DECK, BENCH, False)
+        h.shuffleDeck()

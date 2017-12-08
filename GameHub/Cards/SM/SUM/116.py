@@ -18,7 +18,8 @@ def energyRetrieval(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    cards = h.playerChoice(SELF, HAND, ENERGY, 2)
+    if(canPlay()): 
+        cards = h.playerChoice(SELF, HAND, ENERGY, 2)
 
-    for card in cards:
-        h.moveCard(card, DISCARD, HAND, False)
+        for card in cards:
+            h.moveCard(card, DISCARD, HAND, False)

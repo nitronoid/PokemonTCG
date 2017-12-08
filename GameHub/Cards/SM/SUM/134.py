@@ -18,10 +18,11 @@ def timerBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    cards = h.playerChoice(SELF, DECK, EVOLUTION_POKEMON, 1)
+    if(canPlay()):
+        cards = h.playerChoice(SELF, DECK, EVOLUTION_POKEMON, 1)
 
-    # flip coin twice
-    if(flipCoint(1)):
-        for card in cards:
-            h.moveCard(card, DECK, HAND, False)
-    h.shuffleDeck()
+        # flip coin twice
+        if(flipCoint(1)):
+            for card in cards:
+                h.moveCard(card, DECK, HAND, False)
+        h.shuffleDeck()

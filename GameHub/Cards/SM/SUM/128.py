@@ -18,10 +18,11 @@ def professorKukui(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    cards = h.playerChoice(SELF, DECK, ANY, 2)
+    if(canPlay()):
+        cards = h.playerChoice(SELF, DECK, ANY, 2)
 
-    for card in cards:
-        h.moveCard(card, DECK, HAND, False)
+        for card in cards:
+            h.moveCard(card, DECK, HAND, False)
     
-    # your Pokémon's attacks do 20 more damage to your opponent's Active Pokémon (before applying Weakness and Resistance).	
-    dmg += 20 
+        # your Pokémon's attacks do 20 more damage to your opponent's Active Pokémon (before applying Weakness and Resistance).	
+        dmg += 20 

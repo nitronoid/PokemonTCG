@@ -2,7 +2,7 @@
     "ID" : 36,
     "Name" : "Corsola",
     "HP" : 80,
-    "Type" : "W",
+    "Trainer" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 1,

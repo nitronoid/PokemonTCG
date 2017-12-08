@@ -2,7 +2,7 @@
     "ID" : 50,
     "Name" : "Lanturn",
     "HP" : 110,
-    "Type" : "L",
+    "Trainer" : "L",
     "Weakness" : "F",
     "Resistance" : "M-20",
     "Retreat" : 2,

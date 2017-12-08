@@ -19,7 +19,8 @@ def potion(h):
     # reveal - whether the enemy sees the card (True/False)
 
     # select card 
-    cards = h.playerChoice(SELF, DECK, ANY, 1)
+    if(canPlay()):
+        cards = h.playerChoice(SELF, DECK, ANY, 1)
 
-    for card in cards:
-        h.heal(30)
+        for card in cards:
+            h.heal(30)

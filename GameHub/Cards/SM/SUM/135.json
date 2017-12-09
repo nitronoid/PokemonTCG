@@ -1,7 +1,7 @@
 {
     "ID" : 135,
     "Name" : "Ultra Ball",
-    "Type" : "I",
+    "Trainer" : "I",
     "Ability" : {
         "func" : "ultraBall",
         "duration" : "S",

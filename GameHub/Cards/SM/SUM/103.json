@@ -2,7 +2,7 @@
     "ID" : 103,
     "Name" : "Lillipup",
     "HP" : 60,
-    "Type" : "C",
+    "Trainer" : "C",
     "Weakness" : "F",
     "Resistance" : "",
     "Retreat" : 1,

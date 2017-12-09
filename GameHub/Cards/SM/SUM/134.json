@@ -1,7 +1,7 @@
 {
     "ID" : 134,
     "Name" : "Timer Ball",
-    "Type" : "I",
+    "Trainer" : "I",
     "Ability" : {
         "func" : "timerBall",
         "duration" : "S",

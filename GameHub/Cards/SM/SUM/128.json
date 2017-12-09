@@ -1,7 +1,7 @@
 {
     "ID" : 128,
     "Name" : "Professor Kukui",
-    "Type" : "S",
+    "Trainer" : "S",
     "Ability" : {
         "func" : "professorKukui",
         "duration" : "S",

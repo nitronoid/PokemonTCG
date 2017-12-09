@@ -2,7 +2,7 @@
     "ID" : 37,
     "Name" : "Wingull",
     "HP" : 60,
-    "Type" : "W",
+    "Trainer" : "W",
     "Weakness" : "L",
     "Resistance" : "F",
     "Retreat" : 1,

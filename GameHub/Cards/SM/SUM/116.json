@@ -1,7 +1,7 @@
 {
     "ID" : 116,
     "Name" : "Energy Retrieval",
-    "Type" : "I",
+    "Trainer" : "I",
     "Ability" : {
         "func" : "energyRetrieval",
         "duration" : "S",

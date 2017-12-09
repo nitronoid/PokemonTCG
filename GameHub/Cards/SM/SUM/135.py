@@ -18,13 +18,14 @@ def ultraBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    discardChoice = h.playerChoice(SELF, SELF, HAND, ANY, DISCARD, 2)
-
-    if len(discardChoice) == 2 :
-        h.moveCards(discardChoice, SELF, HAND, DISCARD, False)
-        pokeCard = h.playerChoice(SELF, SELF, DECK, POKEMON, DRAW, 1)
-        h.moveCards(pokeCard, SELF, DECK, HAND, True)
-        h.shuffleDeck()
+    if(canPlay()):
+        discardChoice = h.playerChoice(SELF, SELF, HAND, ALL, DISCARD, 2)
+        
+        if len(discardChoice) == 2 :
+            h.moveCards(discardChoice, SELF, HAND, DISCARD, False)
+            pokeCard = h.playerChoice(SELF, SELF, DECK, POKEMON, DRAW, 1)
+            h.moveCards(pokeCard, SELF, DECK, HAND, True)
+            h.shuffleDeck()
 
 
     

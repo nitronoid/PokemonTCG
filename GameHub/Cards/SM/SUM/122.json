@@ -1,7 +1,7 @@
 {
     "ID" : 122,
     "Name" : "Lillie",
-    "Type" : "S",
+    "Trainer" : "S",
     "Ability" : {
         "func" : "lillie",
         "duration" : "S",

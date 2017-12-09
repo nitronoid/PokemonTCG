@@ -2,7 +2,7 @@
     "ID" : 33,
     "Name" : "Shellder",
     "HP" : 60,
-    "Type" : "W",
+    "Trainer" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 2,

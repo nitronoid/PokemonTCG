@@ -2,7 +2,7 @@
     "ID" : 34,
     "Name" : "Cloyster",
     "HP" : 120,
-    "Type" : "W",
+    "Trainer" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 3,

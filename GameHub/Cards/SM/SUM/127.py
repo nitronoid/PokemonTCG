@@ -1,21 +1,26 @@
 import poke
 
 def potion(h):
-    #int Game::playerChoice(Player, Location, CardType,int Range = Location.size,int Choice = 1);
-    # Player - Player who makes the choice (SELF/ENEMY)
-    # Location - Search location (DECK/HAND/DISCARD/BENCH/PRIZE)
-    # Range - Number of cards the player picks from (>1)
-    # Choice - Number of cards play should draw AT MOST! (>0)
+    # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
+    # thinker - Player who makes the choice (SELF/ENEMY)
+    # owner - The player who owns the cards to choose from
+    # origin - Search location (DECK/HAND/DISCARD/BENCH/PRIZE)
+    # cardType - The cards to select (POKEMON/SUPPORTER/ENERGY.....ALL)
+    # action - what to do with the selection
+    # amount - Number of cards play should draw AT MOST! (>0)
+    # range - Number of cards the player picks from (>1), defaults to the whole thing
     # return - The list of chosen cards
 
-    # select card 
-    cards = h.playerChoice(SELF, DECK, ANY, ?, 1)
-
-    #void Game::moveCard(int card, Origin, Destination, bool reveal);
-    # card - Index of card in Origin
-    # Origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
-    # Destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
+    # void Game::moveCards(std::vector<int> cardIndices, PLAYER owner, PILE origin, PILE destination, bool reveal);
+    # cardIndices - Indices of card in Origin
+    # owner - The player who owns the cards to move
+    # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
+    # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    for card in cards:
-        h.heal(30)
+    # select card 
+    if(canPlay()):
+        cards = h.playerChoice(SELF, DECK, ANY, 1)
+
+        for card in cards:
+            h.heal(30)

@@ -23,7 +23,15 @@ void Game::start()
 
 void Game::setupGame()
 {
-
+  for (size_t i = 0; i < 2; ++i)
+  {
+    auto& player = m_players[i];
+    Board& board = m_boards[i];
+    for (int j = 0; j < 6; ++j)
+      board.m_hand.putLast(board.m_deck.takeTop());
+    auto choice = player->chooseCard(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, board.m_hand.view(), 1);
+    board.m_bench.put(board.m_hand.take(choice[0]), 0);
+  }
 }
 
 bool Game::drawCard(Board& _board)

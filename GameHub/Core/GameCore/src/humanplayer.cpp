@@ -1,31 +1,51 @@
 #include "humanplayer.h"
-#include <time.h>
+#include <ctime>
+#include <cstdlib>
 #include <random>
+#include <algorithm>
 
 Player* HumanPlayer::clone() const
 {
   return new HumanPlayer(*this);
 }
 
-std::vector<std::unique_ptr<Card>> HumanPlayer::chooseCard(
+std::vector<size_t> HumanPlayer::chooseCard(
     const PTCG::PLAYER _player,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,
     const std::vector<std::unique_ptr<Card>> &_options,
     const unsigned ammount)
 {
-  std::vector<std::unique_ptr<Card>> foo(static_cast<size_t>(ammount));
-  return foo;
+  std::vector<size_t> badChoice(
+        0,
+        std::min(static_cast<unsigned>(_options.size() - 1), ammount)
+        );
+  return badChoice;
+}
+
+bool randomBool()
+{
+    static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
+    return gen();
 }
 
 std::pair<bool, unsigned> HumanPlayer::turn()
 {
-  srand((unsigned)time(NULL));
-  playCard((int)rand%(int)(viewHand().size()));
-  bool temp= ((int)rand()%2 == 0 ? true : false);
-  unsigned choice=0;
-  do{
-    choice=(unsigned)(rand()%counter);
-  }while(viewBench().at(choice) != nullptr);
-  return std::pair<bool, unsigned> {temp,choice};
+  // Random engine
+  static std::random_device seed;
+  static std::mt19937_64 eng(seed());
+
+  // Play random card from hand
+  std::uniform_int_distribution<unsigned> hgen(0, static_cast<unsigned>(viewHand().size() - 1));
+  playCard(hgen(eng));
+
+  // Should we attack?
+  bool doAttack = randomBool();
+
+  // Play random card from hand
+  unsigned attackNum = viewBench().at(0)->active()->attackNum();
+  std::uniform_int_distribution<unsigned> agen(0, attackNum);
+
+  // Return the decision
+  return std::pair<bool, unsigned> {doAttack, agen(eng)};
 }

@@ -24,10 +24,10 @@ public:
       ) :
 
     Card(_id, _name, _ability),
-    m_attacks(_attacks),
     m_type(_type),
     m_weakness(_weakness),
     m_resistance(_resistance),
+    m_attacks(_attacks),
     m_hp(_hp),
     m_retreatCost(_retreatCost),
     m_stage(_stage)
@@ -50,16 +50,19 @@ public:
   inline PTCG::TYPE  type()         const { return m_type; }
   inline PTCG::TYPE  weakness()     const { return m_weakness; }
   inline PTCG::TYPE  resistance()   const { return m_resistance; }
-  inline unsigned    hp()           const { return m_hp; }
+  inline int         hp()           const { return m_hp; }
   inline unsigned    retreatCost()  const { return m_retreatCost; }
   inline unsigned    stage()        const { return m_stage; }
 
+  // Purely for testing
+  inline unsigned    attackNum()    const { return m_attacks.size(); }
+
 private:
-  std::vector<Attack> m_attacks;
-  std::string m_preEvolution;
   PTCG::TYPE  m_type;
   PTCG::TYPE  m_weakness;
   PTCG::TYPE  m_resistance;
+  std::vector<Attack> m_attacks;
+  std::string m_preEvolution;  //ADD TO CONSTRUCTOR
   int         m_hp;
   unsigned    m_retreatCost;
   unsigned    m_stage;

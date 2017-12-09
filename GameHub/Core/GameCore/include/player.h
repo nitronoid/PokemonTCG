@@ -19,9 +19,11 @@ public:
     m_parentGame(_parentGame)
   {}
 
+  virtual ~Player();
+
   virtual Player* clone() const = 0;
 
-  virtual std::vector<std::unique_ptr<Card>> chooseCard(
+  virtual std::vector<size_t> chooseCard(
       const PTCG::PLAYER _player,
       const PTCG::PILE _origin,
       const PTCG::ACTION _action,

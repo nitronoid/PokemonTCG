@@ -14,10 +14,16 @@ Game::Game(const Game &_original) :
 
 void Game::start()
 {
+  setupGame();
   while(!m_gameFinished)
   {
     nextTurn();
   }
+}
+
+void Game::setupGame()
+{
+
 }
 
 bool Game::drawCard(Board& _board)

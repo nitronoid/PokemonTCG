@@ -18,7 +18,6 @@ public:
   void start();
   bool canPlay(const std::unique_ptr<Card>& _card);
   bool playCard(const unsigned _index);
-  void nextTurn();
   bool drawCard(Board& _board);
   void moveCards(
       const std::vector<int> _cardIndices,
@@ -39,6 +38,10 @@ public:
 
 private:
   Game(const Game &_original);
+
+  void nextTurn();
+  void setupGame();
+
   void attack(PokemonCard* _pokemon, const unsigned _index);
 
 private:

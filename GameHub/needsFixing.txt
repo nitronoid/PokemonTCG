@@ -1,0 +1,9 @@
+game.cpp -> line 32 segfault
+humanplayer.cpp -> chooseCard()
+SHOULD RETURN A POINTER
+CHECK IF NULLPTR AND DO THE REST IF NOT
+or even change to chooseCards() return vec<Card>
+or have both and first return a single ptr
+deck.cpp -> takeTop() and deck.cpp -> take()
+add a check for m_cards.size == 0
+otherwise segfaulting

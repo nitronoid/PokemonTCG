@@ -28,7 +28,11 @@ void Game::setupGame()
     auto& player = m_players[i];
     Board& board = m_boards[i];
     for (int j = 0; j < 6; ++j)
-      board.m_hand.putLast(board.m_deck.takeTop());
+      if(!drawCard(board))
+        {
+          std::cout<<"Could not draw cards from deck of Player "<<i+1<<", deck file might be empty or corrupted."<<'\n';
+          return;
+        }
     auto choice = player->chooseCard(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, board.m_hand.view(), 1);
     board.m_bench.put(board.m_hand.take(choice[0]), 0);
   }

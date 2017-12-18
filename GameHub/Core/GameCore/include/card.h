@@ -3,6 +3,7 @@
 
 #include "ability.h"
 #include <string>
+#include <iostream>
 
 class Card
 {

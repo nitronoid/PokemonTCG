@@ -1,7 +1,6 @@
 #include "deck.h"
 #include <algorithm>
 
-
 Deck::Deck (const Deck &_original)
 {
   m_cards.reserve(_original.m_cards.size());
@@ -45,6 +44,7 @@ std::unique_ptr<Card> Deck::take(const unsigned _index)
 
 std::unique_ptr<Card> Deck::takeTop()
 {
+  std::cout<<"Taking card from top of deck."<<'\n';
   return take(m_cards.size() - 1);
 }
 

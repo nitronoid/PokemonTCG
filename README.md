@@ -37,7 +37,8 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 29/11/17 | Game Hub Team | Wrote the headers for core game to match the new design, outlined by UML. | GameHub, TODO: Implement constructors for card pile classes and write implementations for all functions. Other Teams: Modify your python cards to implment a "canPlay" function, mostly for trainer cards, not neccessary for pokemon cards (probably). | 
 | 30/11/17 | Game Hub Team | Implemented functions for BoardSlot and Bench, minor changes reflected in uml. |  | 
 | 04/12/17 | Game Hub Team | TODO: Make view functions return copies rather than ref's. |  | 
-| 08/12/2017 | Bright Tide Team | added canPlay function, added energy cards, edited cards | | 
+| 08/12/2017 | Bright Tide Team | added canPlay function, added energy cards, edited cards | |
+| 18/12/2017 | Game Hub Team | Testing and fixing bugs for game setup. Implementing Text output. | TODO: Implement importDeckList function in Card Factory with a testing deck list for game setup.|
 
 
 

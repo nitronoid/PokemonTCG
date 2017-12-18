@@ -1,5 +1,7 @@
 import poke
-
+def canPlay():
+    # checks if deck is not empty && checks if the type of pokemon is in the deck
+    # if both return TRUE
 def nestBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -18,11 +20,7 @@ def nestBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    def canPlay():
-        # checks if deck is not empty && checks if the type of pokemon is in the deck
-        # if both return TRUE
-	
-    if(canPlay()==True):
+    if(h.canPlay()==True):
         cards = h.playerChoice(SELF, DECK, BASIC_POKEMON, 1)
 
         for card in cards:

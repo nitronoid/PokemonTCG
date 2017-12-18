@@ -1,5 +1,6 @@
 import poke
-
+def canPlay():
+    #if the draw pile has more than 3 cards return true 
 def hau(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -18,9 +19,7 @@ def hau(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    def canPlay():
-        #if the draw pile has more than 3 cards return true 
-    if(canPlay() == True):
+    if(h.canPlay() == True):
         cards = h.playerChoice(SELF, DECK, ANY, 3)
 
         for card in cards:

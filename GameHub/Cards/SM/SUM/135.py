@@ -1,5 +1,7 @@
 import poke
-
+def canPlay():
+    # checks if the amount of cards in your hand is bigger than 2 
+    # return true if yes else return false 
 def ultraBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -18,17 +20,14 @@ def ultraBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    def canPlay():
-        # checks if the amount of cards in your hand is bigger than 2 
-        # return true if yes else return false 
-    if(canPlay()):
+    if(h.canPlay()==True):
         discardChoice = h.playerChoice(SELF, SELF, HAND, ALL, DISCARD, 2)
         
         if len(discardChoice) == 2 :
             h.moveCards(discardChoice, SELF, HAND, DISCARD, False)
             pokeCard = h.playerChoice(SELF, SELF, DECK, POKEMON, DRAW, 1)
             h.moveCards(pokeCard, SELF, DECK, HAND, True)
-            h.shuffleDeck()
+        h.shuffleDeck()
 
 
     

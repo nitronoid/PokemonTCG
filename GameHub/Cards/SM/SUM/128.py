@@ -18,6 +18,8 @@ def professorKukui(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
+    def canPlay(): 
+        # if deck has more than two cards 
     if(canPlay()):
         cards = h.playerChoice(SELF, DECK, ANY, 2)
 

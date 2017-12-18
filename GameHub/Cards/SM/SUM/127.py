@@ -18,6 +18,8 @@ def potion(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
+    def canPlay():
+        # checks if there is pokemon on bench && active
     # select card 
     if(canPlay()):
         cards = h.playerChoice(SELF, DECK, ANY, 1)

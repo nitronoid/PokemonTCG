@@ -17,8 +17,12 @@ def nestBall(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
+
+    def canPlay():
+        # checks if deck is not empty && checks if the type of pokemon is in the deck
+        # if both return TRUE
 	
-    if(canPlay()):
+    if(canPlay()==True):
         cards = h.playerChoice(SELF, DECK, BASIC_POKEMON, 1)
 
         for card in cards:

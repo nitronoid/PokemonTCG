@@ -18,7 +18,9 @@ def hau(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    if(canPlay()):
+    def canPlay():
+        #if the draw pile has more than 3 cards return true 
+    if(canPlay() == True):
         cards = h.playerChoice(SELF, DECK, ANY, 3)
 
         for card in cards:

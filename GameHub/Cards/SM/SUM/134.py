@@ -17,7 +17,9 @@ def timerBall(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
-
+    
+    #Difficult 
+    
     if(canPlay()):
         cards = h.playerChoice(SELF, DECK, EVOLUTION_POKEMON, 1)
 

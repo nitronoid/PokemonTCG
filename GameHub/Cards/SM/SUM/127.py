@@ -1,5 +1,6 @@
 import poke
-
+def canPlay():
+    # checks if there is pokemon on bench && active
 def potion(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -19,7 +20,7 @@ def potion(h):
     # reveal - whether the enemy sees the card (True/False)
 
     # select card 
-    if(canPlay()):
+    if(h.canPlay()==True):
         cards = h.playerChoice(SELF, DECK, ANY, 1)
 
         for card in cards:

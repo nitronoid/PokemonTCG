@@ -1,4 +1,8 @@
 import poke
+def canPlay(): 
+#First check if there is more than two cards in discard pile, Second if there is more than two energy cards in a discard pile return true if not return false 
+#checks the length of the discard pile if more than two return TRUE &&
+#checks if type of card > 2 in it too 
 
 def energyRetrieval(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -18,7 +22,7 @@ def energyRetrieval(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    if(canPlay()): 
+    if(h.canPlay() == True):
         cards = h.playerChoice(SELF, HAND, ENERGY, 2)
 
         for card in cards:

@@ -2,14 +2,13 @@ import poke
 def canPlay(h):
     # checks if there is pokemon on bench && active && needs healing
     benchCard = h.viewBench(SELF)
-    activeCard = h.activeCard
-    health = False
-    for card in activeCard:
+    result = False
+    for card in benchCard:
         if(h.fullHealth() == False):
-            health = False 
+            result = True
         else:
-            health = True 
-    return len(benchCard) > 0 && len(activeCard) > 0 && health == False
+            result = False
+    return health 
 def potion(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)

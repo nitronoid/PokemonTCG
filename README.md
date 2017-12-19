@@ -39,6 +39,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 04/12/17 | Game Hub Team | TODO: Make view functions return copies rather than ref's. |  | 
 | 08/12/2017 | Bright Tide Team | added canPlay function, added energy cards, edited cards | |
 | 18/12/2017 | Game Hub Team | Testing and fixing bugs for game setup. Implementing Text output. | TODO: Implement importDeckList function in Card Factory with a testing deck list for game setup.|
+| 19/12/2017 | Game Hub Team | Added some text output for card movement, need to implement view board in game and player| | 
 
 
 

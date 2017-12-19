@@ -42,7 +42,7 @@ bool Game::drawCard(Board& _board)
 {
   if (_board.m_deck.empty()) return false;
   auto topCard = _board.m_deck.takeTop();
-  _board.m_hand.putLast(std::move(topCard));
+  _board.m_hand.put(std::move(topCard));
   return true;
 }
 
@@ -81,3 +81,8 @@ Game Game::clone() const
   return *this;
 }
 
+std::vector<std::unique_ptr<Card>> Game::viewBoard(const int &_player, const PTCG::PILE _target)
+{
+  //TODO FOR ERIC
+  return std::vector<std::unique_ptr<Card>>{};
+}

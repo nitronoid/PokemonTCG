@@ -19,7 +19,7 @@ std::array<std::unique_ptr<Card>, 6> PrizeCards::view()
     return ret;
 }
 
-void PrizeCards::put(std::unique_ptr<Card> &&, const unsigned _index)
+void PrizeCards::put(std::unique_ptr<Card> &&)
 {
     //dont do anything
 }

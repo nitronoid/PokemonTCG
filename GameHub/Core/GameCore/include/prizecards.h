@@ -11,7 +11,7 @@ public:
     PrizeCards (const PrizeCards &_original);
     PrizeCards& operator=(const PrizeCards&) = delete;
 
-    virtual void put(std::unique_ptr<Card> &&, const unsigned _index) override;
+    virtual void put(std::unique_ptr<Card> &&) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
     std::array<std::unique_ptr<Card>, 6> view();
 

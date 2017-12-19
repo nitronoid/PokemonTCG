@@ -36,6 +36,8 @@ public:
       const int _range
       );
 
+  std::vector<std::unique_ptr<Card>> viewBoard(const int &_player, const PTCG::PILE _target);
+
 private:
   Game(const Game &_original);
 

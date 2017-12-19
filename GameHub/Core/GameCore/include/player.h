@@ -2,11 +2,7 @@
 #define PLAYER_H
 
 #include "card.h"
-#include "bench.h"
-#include "hand.h"
-#include "deck.h"
-#include "discardpile.h"
-#include "prizecards.h"
+#include "board.h"
 #include <vector>
 #include <memory>
 #include <tuple>

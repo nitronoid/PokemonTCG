@@ -12,7 +12,7 @@ public:
     Deck (const Deck&_original);
     Deck& operator=(const Deck&) = default;
 
-    virtual void put(std::unique_ptr<Card> &&_card, const unsigned _index) override;
+    virtual void put(std::unique_ptr<Card> &&_card) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
     std::unique_ptr<Card> takeTop();
     std::vector<std::unique_ptr<Card>> view();

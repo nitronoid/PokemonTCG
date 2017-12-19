@@ -8,7 +8,7 @@ class CardPile
 {
 public:
     virtual ~CardPile(){}
-    virtual void put(std::unique_ptr<Card> &&_card, const unsigned _index)=0;
+    virtual void put(std::unique_ptr<Card> &&_card)=0;
     virtual std::unique_ptr<Card> take(const unsigned _index)=0;
 };
 

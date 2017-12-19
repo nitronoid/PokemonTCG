@@ -25,13 +25,14 @@ void Deck::shuffle()
 {
     static std::random_device seed;
     static std::mt19937_64 gen(seed());
+    std::cout<<"Deck Shuffled."<<'\n';
     std::shuffle(m_cards.begin(),m_cards.end(),gen);
 }
 
-void Deck::put(std::unique_ptr<Card> &&_card, const unsigned _index)
+void Deck::put(std::unique_ptr<Card> &&_card)
 {
     m_cards.push_back(std::move(_card));
-    
+    std::cout<<_card->getName()<<" has been put into the deck."<<'\n';
 }
 
 std::unique_ptr<Card> Deck::take(const unsigned _index)

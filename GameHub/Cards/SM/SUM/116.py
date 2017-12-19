@@ -8,7 +8,7 @@ def canPlay(h):
         amountOfTypeCards = 0
         if(card == ENERGY):
             amountOfTypeCards += 1
-    return amountOfTypeCards >= 2 && len(h.viewDiscard(SELF)) >= 2 
+    return amountOfTypeCards >= 2 and len(h.viewDiscard(SELF)) >= 2 
             
 def energyRetrieval(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);

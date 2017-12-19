@@ -7,7 +7,7 @@ def canPlay():
     for card in deckCards:
         if(card == POKEMON):
             result = True
-    return len(deckCards) > 0 && result == True 
+    return result 
 def nestBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)

@@ -2,6 +2,12 @@ import poke
 def canPlay():
     # checks if deck is not empty && checks if the type of pokemon is in the deck
     # if both return TRUE
+    deckCards = h.viewDeck(SELF)
+    result = False
+    for card in deckCards:
+        if(card == POKEMON):
+            result = True
+    return len(deckCards) > 0 && result == True 
 def nestBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -20,9 +26,6 @@ def nestBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    if(h.canPlay()==True):
-        cards = h.playerChoice(SELF, DECK, BASIC_POKEMON, 1)
-
-        for card in cards:
-            h.moveCard(card, DECK, BENCH, False)
-        h.shuffleDeck()
+    cards = h.playerChoice(SELF, SELF, DECK, BASIC_POKEMON, DRAW, 1)
+    h.moveCard(card, SELF, DECK, BENCH, False)
+    h.shuffleDeck()

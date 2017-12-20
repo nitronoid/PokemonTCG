@@ -4,9 +4,9 @@ def canPlay(h):
 #checks the length of the discard pile if more than two return TRUE &&
 #checks if type of card > 2 in it too 
     cards = h.viewDiscard(SELF)
+    amountOfTypeCards = 0
     for card in cards:
-        amountOfTypeCards = 0
-        if(card == ENERGY):
+        if(card.type() == ENERGY):
             amountOfTypeCards += 1
     return amountOfTypeCards >= 2 and len(h.viewDiscard(SELF)) >= 2 
             

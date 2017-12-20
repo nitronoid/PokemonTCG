@@ -23,5 +23,5 @@ def professorKukui(h):
     cards = h.playerChoice(SELF, SELF, DECK, ALL, DRAW, 2)
     h.moveCard(cards, SELF, DECK, HAND, False)
     
-        # your Pokémon's attacks do 20 more damage to your opponent's Active Pokémon (before applying Weakness and Resistance).	
-        dmg += 20 
+    # your Pokémon's attacks do 20 more damage to your opponent's Active Pokémon (before applying Weakness and Resistance).	
+    h.attackBonus(20)

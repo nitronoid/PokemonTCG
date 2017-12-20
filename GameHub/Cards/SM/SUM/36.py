@@ -17,9 +17,8 @@ def callForFamily(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
-    cards = h.playerChoice(SELF, DECK, BASIC_POKEMOM, 2)
-    for card in cards:
-        h.moveCard(card, DECK, BENCH, False)
+    cards = h.playerChoice(SELF, SELF, DECK, BASIC_POKEMOM, DRAW, 2)
+    h.moveCard(cards, SELF, DECK, BENCH, False)
     h.shuffleDeck()
 
 def surf(h):

@@ -2,6 +2,7 @@ import poke
 
 def peckBugs(h):
     dmg = 10
-    if (opponent == earth)
-        dmg += 30
-    h.dealDamage(dmg)
+    for i in h.viewBench(ENEMY):
+        if(i.type() == GRASS):
+            dmg += 30
+        h.dealDamage(dmg)

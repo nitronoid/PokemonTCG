@@ -26,6 +26,6 @@ def discharge(h):
     # discard all electricity energies on this monster
     # for each electricity card you DISCARD
     # on pokemon 
-    cards = h.playerChoice(SELF,)
-    dmg = len(cards) * 30
+    h.discardAllEnergy()
+    dmg = len(h.discardAllEnergy()) * 30
     h.dealDamage(dmg)

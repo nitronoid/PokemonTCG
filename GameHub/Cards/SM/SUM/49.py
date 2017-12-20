@@ -17,9 +17,8 @@ def searchingLight(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
-    cards = h.playerChoice(SELF,PRIZE, ANY, 1)
-    for card in cards:
-        h.showCard()
+    cards = h.playerChoice(SELF, SELF, PRIZE, ALL, 1)
+    h.showCard(cards)
 
 def electroBall(h):
     h.dealDamage(30)

@@ -13,8 +13,13 @@ class Game
 public:
   Game() = default;
   Game(Game&&_original) = default;
+
   Game clone() const;
+  void init(const CardFactory &_factory, const std::string &_deckA, const std::string &_deckB);
+
   void dealDamage(const int _damage);
+  int flipCoin(const unsigned _num);
+
   void start();
   bool canPlay(const std::unique_ptr<Card>& _card);
   bool playCard(const unsigned _index);

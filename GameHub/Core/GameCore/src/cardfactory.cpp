@@ -6,6 +6,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
+#include <QJsonArray>
 
 void CardFactory::init()
 {
@@ -13,6 +14,39 @@ void CardFactory::init()
   auto sys = pybind11::module::import("sys");
   sys.attr("path").attr("append")(m_pyLibPath);
   sys.attr("path").attr("append")(m_cardPath);
+}
+
+void getJsonDoc(QJsonObject* io_jsonCard, const std::string &_path)
+{
+  QFile file(QString::fromStdString(_path));
+  file.open(QIODevice::ReadOnly | QIODevice::Text);
+  QByteArray rawData = file.readAll();
+  // Parse document
+  QJsonDocument doc(QJsonDocument::fromJson(rawData));
+  // Get JSON object
+  *io_jsonCard = doc.object();
+}
+
+std::string stringify(const QJsonValue _jStr)
+{
+  return _jStr.toString().toStdString();
+}
+
+int intify(const QJsonValue _jStr)
+{
+  return _jStr.toInt();
+}
+
+std::vector<std::unique_ptr<Card>> CardFactory::loadDeck(const std::string &_path) const
+{
+  std::vector<std::unique_ptr<Card>> deck;
+  QJsonObject jDeck;
+  getJsonDoc(&jDeck, m_cardPath + _path);
+  for (const auto cardID : jDeck["Deck"].toArray())
+  {
+    deck.emplace_back(loadCard(intify(cardID)));
+  }
+  return deck;
 }
 
 PTCG::TYPE selectType(const char _energy)
@@ -83,26 +117,6 @@ PTCG::CARD selectTrainerType(const char _c)
   }
 }
 
-void getJsonCard(QJsonObject* io_jsonCard, const std::string &_path)
-{
-  QFile file(QString::fromStdString(_path));
-  file.open(QIODevice::ReadOnly | QIODevice::Text);
-  QByteArray rawData = file.readAll();
-  // Parse document
-  QJsonDocument doc(QJsonDocument::fromJson(rawData));
-  // Get JSON object
-  *io_jsonCard = doc.object();
-}
-
-std::string stringify(const QJsonValue _jStr)
-{
-  return _jStr.toString().toStdString();
-}
-
-int intify(const QJsonValue _jStr)
-{
-  return _jStr.toInt();
-}
 
 Ability loadAbility(const QJsonObject  &_jsonCard)
 {
@@ -181,7 +195,7 @@ Card* CardFactory::loadCard(const unsigned _id) const
 {
   // Load the json card
   QJsonObject jsonCard;
-  getJsonCard(&jsonCard, m_cardPath + std::to_string(_id) + ".json");
+  getJsonDoc(&jsonCard, m_cardPath + std::to_string(_id) + ".json");
   if (jsonCard.contains("HP"))
   {
     return loadPokemonCard(jsonCard);

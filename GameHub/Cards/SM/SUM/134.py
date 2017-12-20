@@ -1,6 +1,6 @@
 import poke
 def canPlay():
-     #Difficult Flip 2 coins. For each heads, search your deck for an Evolution Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.
+     return True
 def timerBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -19,11 +19,11 @@ def timerBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
     
-    #Difficult 
-    cards = h.playerChoice(SELF, DECK, EVOLUTION_POKEMON, 1)
-
     # flip coin twice
-    if(flipCoint(1)):
-        for card in cards:
-            h.moveCard(card, DECK, HAND, False)
+    if(flipCoin(2)==1):
+        cards = h.playerChoice(SELF, SELF, DECK, EVOLUTION_POKEMON, 1)
+        h.moveCard(cards, SELF, DECK, HAND, True)
+    elif(flipCoin(2)==2):
+        cards = h.playerChoice(SELF, SELF, DECK, EVOLUTION_POKEMON, 2)
+        h.moveCard(cards, SELF, DECK, HAND, True)
     h.shuffleDeck()

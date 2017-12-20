@@ -10,6 +10,16 @@ Deck::Deck (const Deck &_original)
   }
 }
 
+void Deck::init(std::vector<std::unique_ptr<Card>> &&_cards)
+{
+  m_cards.reserve(_cards.size());
+  for(const auto& card : _cards)
+  {
+    m_cards.emplace_back(card->clone());
+  }
+  //m_cards = _cards;
+}
+
 std::vector<std::unique_ptr<Card>> Deck::view() const
 {
     std::vector<std::unique_ptr<Card>> ret;

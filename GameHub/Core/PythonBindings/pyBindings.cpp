@@ -12,6 +12,7 @@ PYBIND11_MODULE(poke, m) {
 
     py::class_<Game>(m, "Game")
         .def(py::init<>())
-        .def("dealDamage", &Game::dealDamage);
+        .def("dealDamage", &Game::dealDamage)
+        .def("flipCoin", &Game::flipCoin);
 
 }

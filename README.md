@@ -43,7 +43,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 19/12/2017 | Game Hub Team | Added some text output for card movement, need to implement view board in game and player| | 
 | 19/12/2017 | Bright Tide | modified cards again, based on template, still need modifying, did final deck list | GameHub: Check the functions queries under 18/19 of December in dockx file (Bright Tide)| 
 | 20/12/17 | Game Hub Team | Implemented view() for cardpiles and bench for Game and container classes, doing Player later. Also edited cardType to return the cardType for querying in abilities/attacks. | |
-
+| 20/12/17 | Bright Tide | modified cards based on gameHub implementation | GameHub: Check if it is implemented right (some cards are waiting for your functions to be implemented) |
 
 
 

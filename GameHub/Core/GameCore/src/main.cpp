@@ -16,7 +16,7 @@ int main()
   testPool.init();
   std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(9)));
   foo->attack(0, test);
-
+  test.init(testPool, "test_deck.json", "test_deck.json");
   test.start();
 
   return 0;

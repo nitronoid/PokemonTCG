@@ -1,7 +1,8 @@
 import poke
 
 def defenseCurl(h):
-    if(flipCoin(1))
+    if(h.flipCoin(1)):
+        print "Need to heal"
         # prevent all damage done next turn (heal the amount that pokemon attacks)
 
 def discharge(h):

@@ -16,7 +16,7 @@ public:
 
     BoardSlot *slotAt(const unsigned _index);
     PokemonCard *active();
-    std::unique_ptr<BoardSlot> view(const unsigned &_index) const;
+    std::array<std::unique_ptr<BoardSlot>,6> view() const;
     void put(std::unique_ptr<Card> &&_card, const unsigned _index);
     std::vector<std::unique_ptr<Card>> take(const unsigned _index);
     unsigned numBenched() const;

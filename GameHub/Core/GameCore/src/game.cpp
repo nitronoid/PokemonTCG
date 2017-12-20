@@ -81,19 +81,15 @@ Game Game::clone() const
   return *this;
 }
 
-std::vector<std::unique_ptr<Card>> Game::viewBoard(const unsigned &_player, const PTCG::PILE _target) const
+std::vector<std::unique_ptr<Card>> Game::viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
 {
+  int player = static_cast<int>(_player);
   //TODO FOR ERIC
-  if(_player==0||_player>2)
-  {
-    std::cout<<"Accessing unknown player board."<<'\n';
-    return std::vector<std::unique_ptr<Card>>{};
-  }
   switch(_target)
   {
     case PTCG::PILE::HAND:
       {
-        return m_boards[_player-1].m_hand.view();
+        return m_boards[player].m_hand.view();
         break;
       }
     case PTCG::PILE::BENCH:
@@ -104,17 +100,17 @@ std::vector<std::unique_ptr<Card>> Game::viewBoard(const unsigned &_player, cons
       }
     case PTCG::PILE::DISCARD:
       {
-        return m_boards[_player-1].m_discardPile.view();
+        return m_boards[player].m_discardPile.view();
         break;
       }
     case PTCG::PILE::DECK:
       {
-        return m_boards[_player-1].m_deck.view();
+        return m_boards[player].m_deck.view();
         break;
       }
     case PTCG::PILE::PRIZE:
       {
-        return m_boards[_player-1].m_prizeCards.view();
+        return m_boards[player].m_prizeCards.view();
         break;
       }
 
@@ -123,17 +119,9 @@ std::vector<std::unique_ptr<Card>> Game::viewBoard(const unsigned &_player, cons
 
 }
 
-std::unique_ptr<BoardSlot> Game::viewBench(const unsigned &_player, const unsigned &_index) const
+std::array<std::unique_ptr<BoardSlot>, 6> Game::viewBench(const PTCG::PLAYER &_player) const
 {
-  if(_player==0||_player>2)
-    {
-      std::cout<<"Accessing unknown player"<<'\n';
-      return std::unique_ptr<BoardSlot>{};
-    }
-  if(_index==0||_index>6)
-    {
-      std::cout<<"Accessing unknown player bench."<<'\n';
-      return std::unique_ptr<BoardSlot>{};
-    }
-  return m_boards[_player-1].m_bench.view(_index);
+
+  int player = static_cast<int>(_player);
+  return m_boards[player].m_bench.view();
 }

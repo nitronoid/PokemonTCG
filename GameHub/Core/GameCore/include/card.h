@@ -20,9 +20,10 @@ public:
 
   virtual bool canPlay() = 0;
   virtual Card* clone() = 0;
-  void activateAbility(Game &_game) const;
-  std::string getName() const{return m_name;}
   virtual PTCG::CARD cardType() const = 0;
+  void activateAbility(Game &_game) const;
+  inline std::string getName() const{return m_name;}
+  inline unsigned getID()const{return m_id;}
 
 private:
   Ability m_ability;

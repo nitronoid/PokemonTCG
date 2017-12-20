@@ -30,10 +30,12 @@ public:
     void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
     PokemonCard* active() const;
     TypeMSet energy() const;
+
     std::unique_ptr<BoardSlot> clone() const
     {
       return std::make_unique<BoardSlot>(*this);
     }
+
     inline size_t numPokemon() const { return m_pokemon.size(); }
     inline size_t numEnergy() const { return m_energy.size(); }
     inline size_t numTool() const { return m_tool ? 1 : 0; }

@@ -15,6 +15,7 @@ std::vector<std::unique_ptr<Card>> PrizeCards::view() const
     ret.reserve(6);
     for (size_t i = 0; i < m_cards.size(); ++i)
     {
+        std::cout<<"Card ID: "<<m_cards[i]->getID()<<" Card Name: "<<m_cards[i]->getName()<<'\n';
         ret[i].reset(m_cards[i]->clone());
     }
     return ret;

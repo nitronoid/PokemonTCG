@@ -1,5 +1,5 @@
-#ifndef HUB_H
-#define HUB_H
+#ifndef GAME_H
+#define GAME_H
 
 #include <memory>
 #include <unordered_set>
@@ -36,16 +36,16 @@ public:
       const int _range
       );
 
-  std::vector<std::unique_ptr<Card>> viewBoard(const unsigned &_player, const PTCG::PILE _target) const;
-  std::unique_ptr<BoardSlot> viewBench(const unsigned &_player, const unsigned &_index) const;
+  std::vector<std::unique_ptr<Card>> viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+  std::array<std::unique_ptr<BoardSlot>,6> viewBench(const PTCG::PLAYER &_player) const;
 private:
   Game(const Game &_original);
 
   void nextTurn();
   void setupGame();
-
   void attack(PokemonCard* _pokemon, const unsigned _index);
 
+  inline unsigned getTurnCount()const{return m_turnCount;}
 private:
   std::array<std::unique_ptr<Player>, 2> m_players;
   std::array<Board, 2> m_boards;
@@ -58,4 +58,4 @@ private:
 
 };
 
-#endif // HUB_H
+#endif // GAME_H

@@ -94,7 +94,7 @@ Game Game::clone() const
 
 std::vector<std::unique_ptr<Card>> Game::viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
 {
-  int player = static_cast<int>(_player);
+  int player = (m_turnCount+static_cast<int>(_player))%2;
   //TODO FOR ERIC
   switch(_target)
   {
@@ -133,6 +133,6 @@ std::vector<std::unique_ptr<Card>> Game::viewBoard(const PTCG::PLAYER &_player, 
 std::array<std::unique_ptr<BoardSlot>, 6> Game::viewBench(const PTCG::PLAYER &_player) const
 {
 
-  int player = static_cast<int>(_player);
+  int player = (m_turnCount+static_cast<int>(_player))%2;
   return m_boards[player].m_bench.view();
 }

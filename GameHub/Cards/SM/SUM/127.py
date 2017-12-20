@@ -8,7 +8,7 @@ def canPlay(h):
             result = True
         else:
             result = False
-    return health 
+    return result
 def potion(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)

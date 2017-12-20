@@ -4,6 +4,6 @@ def disarmingVoice(h):
     h.dealDamage(30)
     h.applyCondition(CONFUSED,ACTIVE,ENEMY)
 
-def waterGun(h):
+def sparklingAria(h):
     h.dealDamage(100)
     h.heal(30)

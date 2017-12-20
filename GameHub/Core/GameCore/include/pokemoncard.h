@@ -15,7 +15,6 @@ public:
       const std::string &_name,
       const Ability & _ability,
       std::vector<Attack> && _attacks,
-      const PTCG::CARD _cardType,
       const PTCG::TYPE _type,
       const PTCG::TYPE _weakness,
       const PTCG::TYPE _resistance,
@@ -25,7 +24,6 @@ public:
       ) :
 
     Card(_id, _name, _ability),
-    m_cardType(_cardType),
     m_type(_type),
     m_weakness(_weakness),
     m_resistance(_resistance),
@@ -48,8 +46,8 @@ public:
     m_attacks[_attackIndex].attack(_game);
   }
 
+  virtual PTCG::CARD cardType()     const override { return PTCG::CARD::POKEMON; }
   inline std::string preEvolution() const { return m_preEvolution; }
-  inline PTCG::CARD  cardType()     const { return m_cardType; }
   inline PTCG::TYPE  type()         const { return m_type; }
   inline PTCG::TYPE  weakness()     const { return m_weakness; }
   inline PTCG::TYPE  resistance()   const { return m_resistance; }
@@ -61,7 +59,6 @@ public:
   inline unsigned    attackNum()    const { return m_attacks.size(); }
 
 private:
-  PTCG::CARD  m_cardType;
   PTCG::TYPE  m_type;
   PTCG::TYPE  m_weakness;
   PTCG::TYPE  m_resistance;

@@ -22,6 +22,7 @@ public:
   virtual Card* clone() = 0;
   void activateAbility(Game &_game) const;
   std::string getName() const{return m_name;}
+  virtual PTCG::CARD cardType() const = 0;
 
 private:
   Ability m_ability;

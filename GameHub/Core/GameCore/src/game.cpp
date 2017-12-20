@@ -81,8 +81,59 @@ Game Game::clone() const
   return *this;
 }
 
-std::vector<std::unique_ptr<Card>> Game::viewBoard(const int &_player, const PTCG::PILE _target)
+std::vector<std::unique_ptr<Card>> Game::viewBoard(const unsigned &_player, const PTCG::PILE _target) const
 {
   //TODO FOR ERIC
-  return std::vector<std::unique_ptr<Card>>{};
+  if(_player==0||_player>2)
+  {
+    std::cout<<"Accessing unknown player board."<<'\n';
+    return std::vector<std::unique_ptr<Card>>{};
+  }
+  switch(_target)
+  {
+    case PTCG::PILE::HAND:
+      {
+        return m_boards[_player-1].m_hand.view();
+        break;
+      }
+    case PTCG::PILE::BENCH:
+      {
+        std::cout<<"Sorry, viewing bench must be done with viewBench() function."<<'\n';
+        return std::vector<std::unique_ptr<Card>>{};
+        break;
+      }
+    case PTCG::PILE::DISCARD:
+      {
+        return m_boards[_player-1].m_discardPile.view();
+        break;
+      }
+    case PTCG::PILE::DECK:
+      {
+        return m_boards[_player-1].m_deck.view();
+        break;
+      }
+    case PTCG::PILE::PRIZE:
+      {
+        return m_boards[_player-1].m_prizeCards.view();
+        break;
+      }
+
+    default:return std::vector<std::unique_ptr<Card>>{};break;
+  }
+
+}
+
+std::unique_ptr<BoardSlot> Game::viewBench(const unsigned &_player, const unsigned &_index) const
+{
+  if(_player==0||_player>2)
+    {
+      std::cout<<"Accessing unknown player"<<'\n';
+      return std::unique_ptr<BoardSlot>{};
+    }
+  if(_index==0||_index>6)
+    {
+      std::cout<<"Accessing unknown player bench."<<'\n';
+      return std::unique_ptr<BoardSlot>{};
+    }
+  return m_boards[_player-1].m_bench.view(_index);
 }

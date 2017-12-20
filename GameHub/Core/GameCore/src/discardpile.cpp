@@ -10,7 +10,7 @@ DiscardPile::DiscardPile (const DiscardPile &_original)
   }
 }
 
-std::vector<std::unique_ptr<Card>> DiscardPile::view()
+std::vector<std::unique_ptr<Card>> DiscardPile::view() const
 {
   std::vector<std::unique_ptr<Card>> ret;
   ret.reserve(m_cards.size());

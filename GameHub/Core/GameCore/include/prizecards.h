@@ -1,7 +1,7 @@
 #ifndef PRIZECARDS_H
 #define PRIZECARDS_H
 
-#include <array>
+#include <vector>
 #include "cardpile.h"
 
 class PrizeCards : public CardPile
@@ -13,10 +13,10 @@ public:
 
     virtual void put(std::unique_ptr<Card> &&) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
-    std::array<std::unique_ptr<Card>, 6> view();
+    std::vector<std::unique_ptr<Card>> view() const;
 
 private:
-    std::array<std::unique_ptr<Card>, 6> m_cards;
+    std::vector<std::unique_ptr<Card>> m_cards;
 };
 
 #endif // PRIZECARDS_H

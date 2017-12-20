@@ -10,7 +10,7 @@ Deck::Deck (const Deck &_original)
   }
 }
 
-std::vector<std::unique_ptr<Card>> Deck::view()
+std::vector<std::unique_ptr<Card>> Deck::view() const
 {
     std::vector<std::unique_ptr<Card>> ret;
     ret.reserve(m_cards.size());

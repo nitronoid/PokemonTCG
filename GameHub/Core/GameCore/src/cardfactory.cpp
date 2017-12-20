@@ -145,6 +145,7 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
       stringify(_jsonCard["Name"]),
       loadAbility(_jsonCard),
       std::move(attacks),
+      PTCG::CARD::POKEMON,
       selectType(stringify(_jsonCard["Type"])[0]),
       selectType(stringify(_jsonCard["Weakness"])[0]),
       selectType(stringify(_jsonCard["Resistance"])[0]),
@@ -173,6 +174,7 @@ EnergyCard*  CardFactory::loadEnergyCard(const QJsonObject &_jsonCard) const
         stringify(_jsonCard["Name"]),
         loadAbility(_jsonCard),
         static_cast<unsigned>(intify(_jsonCard["Ammount"])),
+        PTCG::CARD::ENERGY,
         selectType(stringify(_jsonCard["Type"])[0])
         );
 }

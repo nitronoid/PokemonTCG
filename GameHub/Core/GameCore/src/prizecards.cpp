@@ -9,9 +9,10 @@ PrizeCards::PrizeCards (const PrizeCards &_original)
   }
 }
 
-std::array<std::unique_ptr<Card>, 6> PrizeCards::view()
+std::vector<std::unique_ptr<Card>> PrizeCards::view() const
 {
-    std::array<std::unique_ptr<Card>, 6> ret;
+    std::vector<std::unique_ptr<Card>> ret;
+    ret.reserve(6);
     for (size_t i = 0; i < m_cards.size(); ++i)
     {
         ret[i].reset(m_cards[i]->clone());

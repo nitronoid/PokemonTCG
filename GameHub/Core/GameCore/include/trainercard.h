@@ -17,7 +17,7 @@ public:
     return new TrainerCard(*this);
   }
   inline virtual bool canPlay() override { return m_canPlay(); }
-
+  inline PTCG::CARD cardType() const { return m_type; }
 private:
   PTCG::CARD m_type;
   std::function<bool()> m_canPlay;

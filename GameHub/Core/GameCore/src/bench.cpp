@@ -11,6 +11,11 @@ PokemonCard* Bench::active()
   return m_slots[0].active();
 }
 
+std::unique_ptr<BoardSlot> Bench::view(const unsigned &_index) const
+{
+  return m_slots[_index-1].clone();
+}
+
 void Bench::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
   if(_index<5)

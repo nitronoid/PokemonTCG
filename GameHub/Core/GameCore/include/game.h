@@ -36,8 +36,8 @@ public:
       const int _range
       );
 
-  std::vector<std::unique_ptr<Card>> viewBoard(const int &_player, const PTCG::PILE _target);
-
+  std::vector<std::unique_ptr<Card>> viewBoard(const unsigned &_player, const PTCG::PILE _target) const;
+  std::unique_ptr<BoardSlot> viewBench(const unsigned &_player, const unsigned &_index) const;
 private:
   Game(const Game &_original);
 

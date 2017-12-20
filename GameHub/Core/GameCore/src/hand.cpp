@@ -9,7 +9,7 @@ Hand::Hand (const Hand &_original)
   }
 }
 
-std::vector<std::unique_ptr<Card>> Hand::view()
+std::vector<std::unique_ptr<Card>> Hand::view()const
 {
     std::vector<std::unique_ptr<Card>> ret;
     ret.reserve(m_cards.size());

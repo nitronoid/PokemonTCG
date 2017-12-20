@@ -21,6 +21,7 @@ def doubleJet(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
     
-    cards = h.playerChoice(SELF,HAND,WATER_ENERGY,2)
+    cards = h.playerChoice(SELF, SELF , HAND, WATER_ENERGY, 2)
+    h.moveCards(cards, SELF, HAND, DISCARD, False)
     dmg = len(cards)*60
     h.dealDamage(dmg)

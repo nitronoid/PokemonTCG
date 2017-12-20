@@ -22,9 +22,8 @@ def treasureHunt(h):
     # monster during your turn, you may put an item card from your discard pile into your hand
 
     #if played to evolve a pokemon then: 
-    cards = h.playerChoice(SELF, DISCARD, ITEM, 1)
-    for card in cards:
-        h.moveCard(card, DISCARD, HAND, False)
+    cards = h.playerChoice(SELF, SELF, DISCARD, ITEM, DRAW, 1)
+    h.moveCard(cards, SELF, DISCARD, HAND, False)
 
 def bite(h):
     h.dealDamage(50)

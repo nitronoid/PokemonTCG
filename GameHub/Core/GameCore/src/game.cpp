@@ -12,6 +12,12 @@ Game::Game(const Game &_original) :
   }
 }
 
+void Game::init(const CardFactory &_factory, const std::string &_deckA, const std::string &_deckB)
+{
+  m_boards[0].m_deck.init(_factory.loadDeck(_deckA));
+  m_boards[1].m_deck.init(_factory.loadDeck(_deckB));
+}
+
 void Game::start()
 {
   setupGame();
@@ -74,6 +80,11 @@ void Game::attack(PokemonCard* _pokemon, const unsigned _index)
 void Game::dealDamage(const int _damage)
 {
   std::cout<<"Attack did: "<<_damage<<" damage!\n";
+}
+
+int Game::flipCoin(const unsigned _num)
+{
+  return 0;
 }
 
 Game Game::clone() const

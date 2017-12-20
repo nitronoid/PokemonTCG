@@ -5,6 +5,7 @@
 #include "trainercard.h"
 #include "energycard.h"
 #include <QJsonObject>
+#include <memory>
 
 class CardFactory
 {
@@ -15,6 +16,7 @@ public:
   {}
 
   void init();
+  std::vector<std::unique_ptr<Card>> loadDeck(const std::string &_path) const;
   Card* loadCard(const unsigned _id) const;
 
 private:

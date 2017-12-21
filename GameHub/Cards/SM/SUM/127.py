@@ -3,11 +3,11 @@ def canPlay(h):
     # checks if there is pokemon on bench && active && needs healing
     benchCard = h.viewBench(SELF)
     resultActive = False 
-    if(h.viewBoard[0].damage!=0):
+    if(h.viewBoard(SELF)[0].damage!=0):
         resultActive = True
     result = False
     for card in benchCard:
-        for i in h.viewBoard():
+        for i in h.viewBoard(SELF):
             if(i.damage() != 0):
                 result = True
             else:
@@ -32,6 +32,6 @@ def potion(h):
     # reveal - whether the enemy sees the card (True/False)
 
     # select card 
-    cards = h.playerChoice(SELF, SELF, DECK, ALL, 1)
+    cards = h.playerChoice(SELF, SELF, DECK, ALL, SELECT, 1)
     for card in cards:
         h.heal(30)

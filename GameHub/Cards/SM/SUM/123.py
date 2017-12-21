@@ -5,7 +5,7 @@ def canPlay():
     deckCards = h.viewDeck(SELF)
     result = False
     for card in deckCards:
-        if(card == POKEMON):
+        if(card.type() == POKEMON):
             result = True
     return result 
 def nestBall(h):

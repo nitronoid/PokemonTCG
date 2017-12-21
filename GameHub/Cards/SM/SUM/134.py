@@ -21,9 +21,9 @@ def timerBall(h):
     
     # flip coin twice
     if(flipCoin(2)==1):
-        cards = h.playerChoice(SELF, SELF, DECK, EVOLUTION_POKEMON, 1)
+        cards = h.playerChoice(SELF, SELF, DECK, EVOLUTION_POKEMON, DRAW, 1)
         h.moveCard(cards, SELF, DECK, HAND, True)
     elif(flipCoin(2)==2):
-        cards = h.playerChoice(SELF, SELF, DECK, EVOLUTION_POKEMON, 2)
+        cards = h.playerChoice(SELF, SELF, DECK, EVOLUTION_POKEMON, DRAW, 2)
         h.moveCard(cards, SELF, DECK, HAND, True)
     h.shuffleDeck()

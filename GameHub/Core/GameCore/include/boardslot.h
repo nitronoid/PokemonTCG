@@ -44,6 +44,11 @@ private:
     std::unordered_set<PTCG::CONDITION> m_conditions;
     std::unique_ptr<TrainerCard> m_tool;
     int m_damage = 0;
+    int m_damageBefore = 0; // before - before applying weakness or resistance
+    int m_damageAfter = 0;  // after - see comment above and think
+    int m_attackBonusBefore = 0;
+    int m_attackBonusAfter = 0;
+
     unsigned m_turnPlayed = 0;
     std::vector<std::unique_ptr<EnergyCard>> m_energy;
     std::vector<std::unique_ptr<PokemonCard>> m_pokemon;

@@ -8,19 +8,25 @@ public:
     DamageCalculator() = default;
     DamageCalculator(CalculateDamage &) = default;
 
-    void applyDamage() const {return m_totalDamage;}
-    int applyBonusDamage() {return m_noBonus;}
-    int calculateDamage(const unsigned _id, const unsigned _damage);
-    int dealRawDamage(const unsigned _id, const unsigned _damage);
+    void applyDamage() const;
+    //factor in weakness, bonus damages for active, factoring only bonus for benched
+    void generalDamage(const unsigned &_id, const unsigned &damage) const;
+    //factor only base damage, simulates "Put x Damage Counters onto xxxx Pokemon."
+    void rawDamage(const unsigned &_id, const unsigned &_damage) const;
+
+    void increasePoison(const int _damage);
+    void increaseBurn(const _damage);
+    void increaseConfuse(const _damage);
 
 private:
-
-    enum class ORDER {BEFORE, AFTER};
-    int applyWeakRes();
-    int applyBonusDamage();
+    int applyWeakRes()const;
+    int applyBonusDamage(const unsigned &_id, const PTCG::ORDER &_order)const;
 
     int m_weaknessMult = 2;
     int m_resistance = 20;
+    int m_poisonDamage = 10;
+    int m_burnDamage = 20;
+    int m_confuseDamage = 30;
 
 
 

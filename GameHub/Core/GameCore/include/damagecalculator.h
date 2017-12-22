@@ -1,22 +1,28 @@
 #ifndef DAMAGECALCULATOR_H
 #define DAMAGECALCULATOR_H
-#include "boardslot.h"
+#include "bench.h"
 
 class DamageCalculator
 {
 public:
-    int GetTotal() const {return m_totalDamage;}
-    int GetTotalNoBonus() const {return m_noBonus;}
-    int CalculateDamage(std::unique_ptr<BoardSlot> _refSlot, const unsigned _id, bool _includeWeakRes);
-private:
-    int CalcDmgWeakRes();
-    int CalcDmgNoWeakRes();
+    DamageCalculator() = default;
+    DamageCalculator(CalculateDamage &) = default;
 
-    int m_noBonus = 0;
-    int m_withBonus = 0;
-    int m_totalDamage = 0;
-    int m_noWeakRes = 0; // before applying weakness or resistance
-    int m_withWeakRes = 0;  // after
+    void applyDamage() const {return m_totalDamage;}
+    int applyBonusDamage() {return m_noBonus;}
+    int calculateDamage(const unsigned _id, const unsigned _damage);
+    int dealRawDamage(const unsigned _id, const unsigned _damage);
+
+private:
+
+    enum class ORDER {BEFORE, AFTER};
+    int applyWeakRes();
+    int applyBonusDamage();
+
+    int m_weaknessMult = 2;
+    int m_resistance = 20;
+
+
 
 
 

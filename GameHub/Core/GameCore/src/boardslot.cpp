@@ -5,7 +5,7 @@
 BoardSlot::BoardSlot(const BoardSlot &_original) :
   m_conditions(_original.m_conditions),
   m_tool(new TrainerCard(*_original.m_tool)),
-  m_damage(_original.m_damage),
+  m_damageTaken(_original.m_damageTaken),
   m_turnPlayed(_original.m_turnPlayed)
 {
   m_energy.reserve(_original.m_energy.size());
@@ -23,7 +23,7 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
 
 void BoardSlot::setDamage(const int _value)
 {
-  m_damage = _value;
+  m_damageTaken = _value;
 }
 
 void BoardSlot::addCondition(const PTCG::CONDITION _condition)

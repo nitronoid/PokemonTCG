@@ -5,7 +5,7 @@ int DamageCalculator::CalculateDamage(std::unique_ptr<BoardSlot> _refSlot, const
     if(_id > 5)
     {
         std::cout<<"ERROR: CalculateDamage cannot be called because slot index is out of range."<<'\n';
-        return -1024;
+        return 0;
     }
     else
     {

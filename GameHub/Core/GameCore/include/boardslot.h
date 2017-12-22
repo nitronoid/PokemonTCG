@@ -17,6 +17,8 @@ public:
     BoardSlot(const BoardSlot &_original);
     BoardSlot& operator=(const BoardSlot &_original) = delete;
 
+    int GetDamage() {return m_damage;}
+    int GetBonus() {return m_bonusDamage;}
     void setDamage(const int _value);
     void addCondition(const PTCG::CONDITION _condition);
     void removeCondition(const PTCG::CONDITION _condition);
@@ -44,10 +46,7 @@ private:
     std::unordered_set<PTCG::CONDITION> m_conditions;
     std::unique_ptr<TrainerCard> m_tool;
     int m_damage = 0;
-    int m_damageBefore = 0; // before - before applying weakness or resistance
-    int m_damageAfter = 0;  // after - see comment above and think
-    int m_attackBonusBefore = 0;
-    int m_attackBonusAfter = 0;
+    int m_bonusDamage = 0;
 
     unsigned m_turnPlayed = 0;
     std::vector<std::unique_ptr<EnergyCard>> m_energy;

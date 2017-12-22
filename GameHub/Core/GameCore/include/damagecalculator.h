@@ -2,17 +2,31 @@
 #define DAMAGECALCULATOR_H
 #include "boardslot.h"
 
-class damageCalculator
+class DamageCalculator
 {
 public:
-    float GetTotal() const {return m_totalDamage;}
-    float GetTotalNoBonus() const {return m_noBonus;}
-    float UpdateDamage(std::unique_ptr<BoardSlot> _refSlot);
+    int GetTotal() const {return m_totalDamage;}
+    int GetTotalNoBonus() const {return m_noBonus;}
+    int CalculateDamage(std::unique_ptr<BoardSlot> _refSlot, const unsigned _id, bool _includeWeakRes);
 private:
-    void Calculate();
-    //std::unique_ptr<BoardSlot> m_refSlot;
-    float m_noBonus;
-    float m_totalDamage;
+    int CalcDmgWeakRes();
+    int CalcDmgNoWeakRes();
+
+    int m_noBonus = 0;
+    int m_withBonus = 0;
+    int m_totalDamage = 0;
+    int m_noWeakRes = 0; // before applying weakness or resistance
+    int m_withWeakRes = 0;  // after
+
+
+
+//    BASE + NULL         + WEAKNESS/RES   + NULL
+//    BASE + BONUS        + WEAKNESS/RES   + NULL
+//    BASE + WEAKNESS/RES + NULL           + NULL
+//    BASE + WEAKNESS/RES + BONUS          + NULL
+//    BASE + BONUS        + WEAKNESS/RES   + BONUS
+//    BASE + BONUS        + NULL           + BONUS
+//    BASE + NULL         + NULL           + NULL
 }
 
 #endif // DAMAGECALCULATOR_H

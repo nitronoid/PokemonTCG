@@ -17,14 +17,14 @@ public:
     BoardSlot(const BoardSlot &_original);
     BoardSlot& operator=(const BoardSlot &_original) = delete;
 
-    inline unsigned getDamage() const {return m_damageTaken;}
+    inline int getDamage() const {return m_damageTaken;}
     inline int getBonusBefore() const {return m_bonusDamageBefore;}
     inline int getBonusAfter() const {return m_bonusDamageAfter;}
     inline int getReductionBefore() const {return m_damageReductionBefore;}
     inline int getReductionAfter() const {return m_damageReductionAfter;}
 
     void takeDamage(const int _damage);
-    void setDamage(const unsigned _value);
+    void setDamage(const int _value);
     void addCondition(const PTCG::CONDITION _condition);
     void removeCondition(const PTCG::CONDITION _condition);
     void removeAllConditions();
@@ -50,7 +50,7 @@ public:
 private:
     std::unordered_set<PTCG::CONDITION> m_conditions;
     std::unique_ptr<TrainerCard> m_tool;
-    unsigned m_damageTaken = 0;
+    int m_damageTaken = 0;
     int m_bonusDamageBefore = 0;
     int m_bonusDamageAfter = 0;
     int m_damageReductionBefore = 0;

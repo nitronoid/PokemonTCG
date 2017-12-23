@@ -24,10 +24,10 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
 void BoardSlot::takeDamage(const int _damage)
 {
   std::cout<<"Taking "<<_damage<<" damage."<<'\n';
-  m_damageTaken+=_damage;
+  m_damageTaken += _damage;
 }
 
-void BoardSlot::setDamage(const unsigned _value)
+void BoardSlot::setDamage(const int _value)
 {
   std::cout<<"Damage taken set to: "<<_value<<'\n';
   m_damageTaken = _value;
@@ -35,35 +35,16 @@ void BoardSlot::setDamage(const unsigned _value)
 
 void BoardSlot::addCondition(const PTCG::CONDITION _condition)
 {
-  if(_condition==PTCG::CONDITION::ASLEEP ||
-     _condition==PTCG::CONDITION::CONFUSED ||
-     _condition==PTCG::CONDITION::PARALYZED )
-    {
-      std::unordered_set<PTCG::CONDITION>::const_iterator sleep = m_conditions.find(PTCG::CONDITION::ASLEEP);
-      std::unordered_set<PTCG::CONDITION>::const_iterator confuse = m_conditions.find(PTCG::CONDITION::CONFUSED);
-      std::unordered_set<PTCG::CONDITION>::const_iterator para = m_conditions.find(PTCG::CONDITION::PARALYZED);
-
-      if(sleep!=m_conditions.end())
-        {
-          m_conditions.insert(sleep,_condition);
-          return;
-        }
-      else if(confuse!=m_conditions.end())
-        {
-          m_conditions.insert(confuse,_condition);
-          return;
-        }
-      else if(para!=m_conditions.end())
-        {
-          m_conditions.insert(para,_condition);
-          return;
-        }
-      else
-        {
-          m_conditions.insert(_condition);
-          return;
-        }
-    }
+  using cnd = PTCG::CONDITION;
+  if(_condition == cnd::ASLEEP    ||
+     _condition == cnd::CONFUSED  ||
+     _condition == cnd::PARALYZED
+     )
+  {
+    m_conditions.erase(cnd::ASLEEP);
+    m_conditions.erase(cnd::CONFUSED);
+    m_conditions.erase(cnd::PARALYZED);
+  }
   m_conditions.insert(_condition);
 }
 

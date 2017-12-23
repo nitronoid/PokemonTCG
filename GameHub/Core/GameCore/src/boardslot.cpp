@@ -24,10 +24,10 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
 void BoardSlot::takeDamage(const int _damage)
 {
   std::cout<<"Taking "<<_damage<<" damage."<<'\n';
-  m_damageTaken+=_damage;
+  m_damageTaken += _damage;
 }
 
-void BoardSlot::setDamage(const unsigned _value)
+void BoardSlot::setDamage(const int _value)
 {
   std::cout<<"Damage taken set to: "<<_value<<'\n';
   m_damageTaken = _value;
@@ -41,12 +41,9 @@ void BoardSlot::addCondition(const PTCG::CONDITION _condition)
      _condition == cnd::PARALYZED
      )
   {
-    if(m_conditions.count(cnd::ASLEEP)) m_conditions.erase(cnd::ASLEEP);
-
-    if(m_conditions.count(cnd::CONFUSED)) m_conditions.erase(cnd::CONFUSED);
-
-    if(m_conditions.count(cnd::PARALYZED)) m_conditions.erase(cnd::PARALYZED);
-
+    m_conditions.erase(cnd::ASLEEP);
+    m_conditions.erase(cnd::CONFUSED);
+    m_conditions.erase(cnd::PARALYZED);
   }
   m_conditions.insert(_condition);
 }

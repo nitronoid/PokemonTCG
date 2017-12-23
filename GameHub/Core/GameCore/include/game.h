@@ -7,7 +7,7 @@
 #include "humanplayer.h"
 #include "cardfactory.h"
 #include "board.h"
-#include "damagecalculator.h"
+#include "damagehandler.h"
 
 class Game
 {
@@ -18,8 +18,8 @@ public:
   Game clone() const;
   void init(const CardFactory &_factory, const std::string &_deckA, const std::string &_deckB);
 
-  void dealDamage(const unsigned _id = 0, const unsigned _damage = 0);
-  int flipCoin(const unsigned _num);
+  void dealDamage(const unsigned _damage = 0,const unsigned _id = 0);
+  unsigned flipCoin(const unsigned _num);
 
   void start();
   bool canPlay(const std::unique_ptr<Card>& _card);
@@ -43,7 +43,11 @@ public:
       );
 
   std::vector<std::unique_ptr<Card>> viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+  std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player) const;
+  std::vector<std::unique_ptr<Card>> viewDeck(const PTCG::PLAYER &_player) const;
+  std::vector<std::unique_ptr<Card>> viewDiscard(const PTCG::PLAYER &_player) const;
   std::array<std::unique_ptr<BoardSlot>,6> viewBench(const PTCG::PLAYER &_player) const;
+  std::vector<std::unique_ptr<Card>> viewHand(const PTCG::PLAYER &_player) const;
 private:
   Game(const Game &_original);
 

@@ -27,7 +27,7 @@ void BoardSlot::takeDamage(const int _damage)
   m_damageTaken+=_damage;
 }
 
-void BoardSlot::setDamage(const int _value)
+void BoardSlot::setDamage(const unsigned _value)
 {
   std::cout<<"Damage taken set to: "<<_value<<'\n';
   m_damageTaken = _value;

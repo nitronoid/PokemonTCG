@@ -1,6 +1,21 @@
-#include "damagecalculator.h"
+#include "damagehandler.h"
 
-void DamageCalculator::generalDamage(std::unique_ptr<std::array<Bench,2>> &_bench,
+bool DamageHandler::heal(std::unique_ptr<Bench> &_bench,
+                         const unsigned &_benchIndex,
+                         const unsigned &_value)
+{
+  if(_bench->view().at(_benchIndex)->getDamage()>0)
+  {
+      //lazy implementation, decrease damage taken = healing
+      _bench->view().at(_benchIndex)->takeDamage(-_value);
+      return true;
+  }
+  std::cout<<"Full Health, this does nothing"<<'\n';
+  return false;
+
+}
+
+void DamageHandler::generalDamage(std::unique_ptr<std::array<Bench,2>> &_bench,
                                      const unsigned &_turnCount,
                                      const unsigned &_defenderIndex,
                                      const unsigned &_damage)
@@ -66,22 +81,18 @@ void DamageCalculator::generalDamage(std::unique_ptr<std::array<Bench,2>> &_benc
 
 }
 
-
-void DamageCalculator::rawDamage(std::unique_ptr<std::array<Bench,2> > &_bench,
-                                 const unsigned &_turnCount,
-                                 const unsigned &_defenderIndex,
-                                 const unsigned &_damage)
+void DamageHandler::rawDamage(std::unique_ptr<Bench> &_bench,
+                           const unsigned &_defenderIndex,
+                           const unsigned &_damage)
 {
-  _bench.get()->at(getDefender(_turnCount)).view().at(_defenderIndex)->takeDamage(_damage);
+  std::cout<<"Taking "<<_damage<<" damage from effects."<<'\n';
+   _bench->view().at(_defenderIndex)->takeDamage(_damage);
 }
 
-
-
-int DamageCalculator::applyWeakRes(std::unique_ptr<std::array<Bench,2>> &_bench,
+int DamageHandler::applyWeakRes(std::unique_ptr<std::array<Bench,2>> &_bench,
                                    const unsigned &_turnCount)
 {
-  //PokemonCard attacker = _bench.get()->at(getAttacker(_turnCount)).view().at(0).active();
-  //PokemonCard defender = _bench.get()->at(getDefender(_turnCount)).view().at(0).active();
+
 
   if(_bench.get()->at(getAttacker(_turnCount)).view().at(0)->active()->weakness() ==
      _bench.get()->at(getDefender(_turnCount)).view().at(0)->active()->weakness())
@@ -97,7 +108,7 @@ int DamageCalculator::applyWeakRes(std::unique_ptr<std::array<Bench,2>> &_bench,
 }
 
 
-int DamageCalculator::applyBonusDamage(std::unique_ptr<std::array<Bench, 2> > &_bench,
+int DamageHandler::applyBonusDamage(std::unique_ptr<std::array<Bench, 2> > &_bench,
                                        const unsigned &_turnCount,
                                        const unsigned &_defenderIndex,
                                        const PTCG::ORDER &_order)
@@ -130,17 +141,17 @@ int DamageCalculator::applyBonusDamage(std::unique_ptr<std::array<Bench, 2> > &_
 }
 
 
-void DamageCalculator::increaseBurn(const int _damage)
+void DamageHandler::increaseBurn(const int _damage)
 {
   m_burnDamage+=_damage;
 }
 
-void DamageCalculator::increaseConfuse(const int _damage)
+void DamageHandler::increaseConfuse(const int _damage)
 {
   m_confuseDamage+=_damage;
 }
 
-void DamageCalculator::increasePoison(const int _damage)
+void DamageHandler::increasePoison(const int _damage)
 {
   m_poisonDamage+=_damage;
 }

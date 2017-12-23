@@ -9,14 +9,13 @@ PrizeCards::PrizeCards (const PrizeCards &_original)
   }
 }
 
-std::vector<std::unique_ptr<Card>> PrizeCards::view() const
+std::array<std::unique_ptr<Card>,6> PrizeCards::view() const
 {
-    std::vector<std::unique_ptr<Card>> ret;
-    ret.reserve(6);
+    std::array<std::unique_ptr<Card>,6> ret;
     for (size_t i = 0; i < m_cards.size(); ++i)
     {
-        std::cout<<"Card ID: "<<m_cards[i]->getID()<<" Card Name: "<<m_cards[i]->getName()<<'\n';
-        ret[i].reset(m_cards[i]->clone());
+        std::cout<<"Card ID: "<<m_cards.at(i)->getID()<<" Card Name: "<<m_cards.at(i)->getName()<<'\n';
+        ret.at(i).reset(m_cards.at(i)->clone());
     }
     return ret;
 }

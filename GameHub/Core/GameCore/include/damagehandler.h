@@ -1,13 +1,17 @@
-#ifndef DAMAGECALCULATOR_H
-#define DAMAGECALCULATOR_H
+#ifndef DAMAGEHANDLER_H
+#define DAMAGEHANDLER_H
 #include "bench.h"
 
-class DamageCalculator
+class DamageHandler
 {
 public:
 
-    DamageCalculator()=default;
-    DamageCalculator& operator =(const DamageCalculator &_original) = delete;
+    DamageHandler()=default;
+    DamageHandler& operator =(const DamageHandler &_original) = delete;
+
+    bool heal(std::unique_ptr<Bench> &_bench,
+              const unsigned &_benchIndex,
+              const unsigned &_value);
 
     //factor in weakness, bonus damages for active, factoring only bonus for benched
     void generalDamage(std::unique_ptr<std::array<Bench,2>> &_bench,
@@ -15,9 +19,8 @@ public:
                        const unsigned &_defenderIndex,
                        const unsigned &_damage);
 
-    //factor only base damage, simulates "Put x Damage Counters onto xxxx Pokemon."
-    void rawDamage(std::unique_ptr<std::array<Bench,2>> &_bench,
-                   const unsigned &_turnCount,
+    //factor only base damage, simulates "Put x Damage Counters onto xxxx Pokemon from special conditions, attacks."
+    void rawDamage(std::unique_ptr<Bench> &_bench,
                    const unsigned &_defenderIndex,
                    const unsigned &_damage);
 
@@ -60,4 +63,4 @@ private:
 //    BASE + NULL         + NULL           + NULL
 };
 
-#endif // DAMAGECALCULATOR_H
+#endif // DAMAGEHANDLER_H

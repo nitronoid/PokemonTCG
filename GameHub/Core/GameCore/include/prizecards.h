@@ -13,10 +13,10 @@ public:
 
     virtual void put(std::unique_ptr<Card> &&) override;
     virtual std::unique_ptr<Card> take(const unsigned _index) override;
-    std::vector<std::unique_ptr<Card>> view() const;
+    std::array<std::unique_ptr<Card>,6> view() const;
 
 private:
-    std::vector<std::unique_ptr<Card>> m_cards;
+    std::array<std::unique_ptr<Card>,6> m_cards;
 };
 
 #endif // PRIZECARDS_H

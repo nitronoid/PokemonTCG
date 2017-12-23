@@ -21,13 +21,13 @@ Game Player::getDummyGame() const
 
 std::vector<std::unique_ptr<Card>> Player::viewHand() const
 {
-  return m_parentGame.viewBoard(PTCG::PLAYER::SELF,PTCG::PILE::HAND);
+  return m_parentGame.viewHand(PTCG::PLAYER::SELF);
 }
 
 std::vector<std::unique_ptr<Card>> Player::viewDiscard(const PTCG::PLAYER &_owner) const
 {
   //TODO FOR ERIC
-  return m_parentGame.viewBoard(_owner,PTCG::PILE::DISCARD);
+  return m_parentGame.viewDiscard(_owner);
 }
 
 std::array<std::unique_ptr<BoardSlot>, 6> Player::viewBench(const PTCG::PLAYER &_owner) const

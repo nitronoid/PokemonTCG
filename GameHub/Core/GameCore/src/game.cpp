@@ -77,14 +77,24 @@ void Game::attack(PokemonCard* _pokemon, const unsigned _index)
   _pokemon->attack(_index, *this);
 }
 
-void Game::dealDamage(const unsigned _id,const unsigned _damage)
+void Game::dealDamage(const unsigned _damage, const unsigned _id)
 {
   std::cout<<"Attack did: "<<_damage<<" damage!\n";
 }
 
-int Game::flipCoin(const unsigned _num)
+unsigned Game::flipCoin(const unsigned _num)
 {
-  return 0;
+  static unsigned ret = 0;
+  static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
+  for(unsigned i  = 0; i<_num;++i)
+  {
+      if(gen())
+      {
+          ++ret;
+      }
+  }
+  std::cout<<"Flipping coin...."<<ret<<" heads, "<<_num-ret<<" tails."<<'\n';
+  return ret;
 }
 
 Game Game::clone() const
@@ -92,42 +102,22 @@ Game Game::clone() const
   return *this;
 }
 
-std::vector<std::unique_ptr<Card>> Game::viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
+std::array<std::unique_ptr<Card>,6> Game::viewPrize(const PTCG::PLAYER &_player) const
 {
   int player = (m_turnCount+static_cast<int>(_player))%2;
-  //TODO FOR ERIC
-  switch(_target)
-  {
-    case PTCG::PILE::HAND:
-      {
-        return m_boards[player].m_hand.view();
-        break;
-      }
-    case PTCG::PILE::BENCH:
-      {
-        std::cout<<"Sorry, viewing bench must be done with viewBench() function."<<'\n';
-        return std::vector<std::unique_ptr<Card>>{};
-        break;
-      }
-    case PTCG::PILE::DISCARD:
-      {
-        return m_boards[player].m_discardPile.view();
-        break;
-      }
-    case PTCG::PILE::DECK:
-      {
-        return m_boards[player].m_deck.view();
-        break;
-      }
-    case PTCG::PILE::PRIZE:
-      {
-        return m_boards[player].m_prizeCards.view();
-        break;
-      }
+  return m_boards[player].m_prizeCards.view();
+}
 
-    default:return std::vector<std::unique_ptr<Card>>{};break;
-  }
+std::vector<std::unique_ptr<Card>> Game::viewDeck(const PTCG::PLAYER &_player) const
+{
+  int player = (m_turnCount+static_cast<int>(_player))%2;
+  return m_boards[player].m_deck.view();
+}
 
+std::vector<std::unique_ptr<Card>> Game::viewDiscard(const PTCG::PLAYER &_player) const
+{
+  int player = (m_turnCount+static_cast<int>(_player))%2;
+  return m_boards[player].m_discardPile.view();
 }
 
 std::array<std::unique_ptr<BoardSlot>, 6> Game::viewBench(const PTCG::PLAYER &_player) const
@@ -137,8 +127,11 @@ std::array<std::unique_ptr<BoardSlot>, 6> Game::viewBench(const PTCG::PLAYER &_p
   return m_boards[player].m_bench.view();
 }
 
-
-
+std::vector<std::unique_ptr<Card>> Game::viewHand(const PTCG::PLAYER &_player) const
+{
+  int player = (m_turnCount+static_cast<int>(_player))%2;
+  return m_boards[player].m_hand.view();
+}
 
 
 

@@ -7,6 +7,7 @@
 #include "humanplayer.h"
 #include "cardfactory.h"
 #include "board.h"
+#include "damagecalculator.h"
 
 class Game
 {
@@ -17,7 +18,7 @@ public:
   Game clone() const;
   void init(const CardFactory &_factory, const std::string &_deckA, const std::string &_deckB);
 
-  void dealDamage(const int _damage);
+  void dealDamage(const unsigned _id = 0, const unsigned _damage = 0);
   int flipCoin(const unsigned _num);
 
   void start();
@@ -51,7 +52,11 @@ private:
   void attack(PokemonCard* _pokemon, const unsigned _index);
 
   inline unsigned getTurnCount()const{return m_turnCount;}
+
+
 private:
+
+
   std::array<std::unique_ptr<Player>, 2> m_players;
   std::array<Board, 2> m_boards;
   std::unordered_set<PTCG::CARD> m_playableCards;
@@ -60,6 +65,7 @@ private:
   bool m_turnFinished = false;
   bool m_rulesBroken = false;
   bool m_gameFinished = false;
+
 
 };
 

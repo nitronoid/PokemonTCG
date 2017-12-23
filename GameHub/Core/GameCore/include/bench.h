@@ -9,7 +9,7 @@ class Bench
 public:
     Bench() = default;
     Bench(const Bench&) = default;
-    Bench& operator=(const Bench&) = delete;
+    Bench& operator=(const Bench&) = default;
     Bench (const std::array<BoardSlot,6>& _slots):
         m_slots(_slots)
     {}

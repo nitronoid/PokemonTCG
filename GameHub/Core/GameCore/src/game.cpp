@@ -77,7 +77,7 @@ void Game::attack(PokemonCard* _pokemon, const unsigned _index)
   _pokemon->attack(_index, *this);
 }
 
-void Game::dealDamage(const int _damage)
+void Game::dealDamage(const unsigned _id,const unsigned _damage)
 {
   std::cout<<"Attack did: "<<_damage<<" damage!\n";
 }
@@ -136,3 +136,9 @@ std::array<std::unique_ptr<BoardSlot>, 6> Game::viewBench(const PTCG::PLAYER &_p
   int player = (m_turnCount+static_cast<int>(_player))%2;
   return m_boards[player].m_bench.view();
 }
+
+
+
+
+
+

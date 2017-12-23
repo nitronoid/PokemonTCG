@@ -21,8 +21,15 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
   }
 }
 
+void BoardSlot::takeDamage(const int _damage)
+{
+  std::cout<<"Taking "<<_damage<<" damage."<<'\n';
+  m_damageTaken+=_damage;
+}
+
 void BoardSlot::setDamage(const int _value)
 {
+  std::cout<<"Damage taken set to: "<<_value<<'\n';
   m_damageTaken = _value;
 }
 

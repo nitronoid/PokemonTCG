@@ -82,6 +82,74 @@ void Game::dealDamage(const unsigned _damage, const unsigned _id)
   std::cout<<"Attack did: "<<_damage<<" damage!\n";
 }
 
+void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
+{
+  int index = (m_turnCount+static_cast<int>(_target))%2;
+  switch (_condition) {
+    case PTCG::CONDITION::ASLEEP:
+      {
+        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
+        return;
+        break;
+      }
+    case PTCG::CONDITION::BURNED:
+      {
+        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
+        return;
+        break;
+      }
+    case PTCG::CONDITION::CONFUSED:
+      {
+        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
+        return;
+        break;
+      }
+    case PTCG::CONDITION::PARALYZED:
+      {
+        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
+        return;
+        break;
+      }
+    case PTCG::CONDITION::POISONED:
+      {
+        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
+        return;
+        break;
+      }
+    default: return; break;
+    }
+  return;
+}
+
+void Game::poison()
+{
+  m_damageHandler.rawDamage(m_boards.at(m_turnCount % 2).m_bench,0,m_damageHandler.getPoison());
+
+}
+
+void Game::burn()
+{
+  m_damageHandler.rawDamage(m_boards.at(m_turnCount % 2).m_bench,0,m_damageHandler.getBurn());
+  if(flipCoin(1)==1)
+    {
+      m_boards.at(m_turnCount % 2).m_bench.view().at(0)->removeCondition(PTCG::CONDITION::BURNED);
+    }
+}
+
+void Game::paralysis()
+{
+  //TODO AFTER GAME LOOP
+}
+
+void Game::confuse()
+{
+  //TODO AFTER GAMELOOP
+}
+void Game::sleep()
+{
+  //TODO AFTER LOOP
+}
+
 unsigned Game::flipCoin(const unsigned _num)
 {
   static unsigned ret = 0;

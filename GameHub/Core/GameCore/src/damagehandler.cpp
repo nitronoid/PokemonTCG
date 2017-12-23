@@ -1,13 +1,13 @@
 #include "damagehandler.h"
 
-bool DamageHandler::heal(std::unique_ptr<Bench> &_bench,
+bool DamageHandler::heal(Bench &_bench,
                          const unsigned &_benchIndex,
                          const unsigned &_value)
 {
-  if(_bench->view().at(_benchIndex)->getDamage()>0)
+  if(_bench.view().at(_benchIndex)->getDamage()>0)
   {
       //lazy implementation, decrease damage taken = healing
-      _bench->view().at(_benchIndex)->takeDamage(-_value);
+      _bench.view().at(_benchIndex)->takeDamage(-_value);
       return true;
   }
   std::cout<<"Full Health, this does nothing"<<'\n';
@@ -15,7 +15,7 @@ bool DamageHandler::heal(std::unique_ptr<Bench> &_bench,
 
 }
 
-void DamageHandler::generalDamage(std::unique_ptr<std::array<Bench,2>> &_bench,
+void DamageHandler::generalDamage(std::array<Bench,2> &_bench,
                                      const unsigned &_turnCount,
                                      const unsigned &_defenderIndex,
                                      const unsigned &_damage)
@@ -42,7 +42,7 @@ void DamageHandler::generalDamage(std::unique_ptr<std::array<Bench,2>> &_bench,
                                  PTCG::ORDER::AFTER);
 
 
-                _bench.get()->at(getDefender(_turnCount)).view().at(_defenderIndex)->takeDamage(totalDamage);
+                _bench.at(getDefender(_turnCount)).view().at(_defenderIndex)->takeDamage(totalDamage);
         }
         else
         {
@@ -59,7 +59,7 @@ void DamageHandler::generalDamage(std::unique_ptr<std::array<Bench,2>> &_bench,
                                  _defenderIndex,
                                  PTCG::ORDER::AFTER);
 
-                _bench.get()->at(getDefender(_turnCount)).view().at(_defenderIndex)->takeDamage(totalDamage);
+                _bench.at(getDefender(_turnCount)).view().at(_defenderIndex)->takeDamage(totalDamage);
         }
     }
     else //if target is bench
@@ -75,32 +75,32 @@ void DamageHandler::generalDamage(std::unique_ptr<std::array<Bench,2>> &_bench,
                            PTCG::ORDER::AFTER);
 
 
-          _bench.get()->at(getDefender(_turnCount)).view().at(_defenderIndex)->takeDamage(totalDamage);
+          _bench.at(getDefender(_turnCount)).view().at(_defenderIndex)->takeDamage(totalDamage);
     }
 
 
 }
 
-void DamageHandler::rawDamage(std::unique_ptr<Bench> &_bench,
+void DamageHandler::rawDamage(Bench &_bench,
                            const unsigned &_defenderIndex,
                            const unsigned &_damage)
 {
   std::cout<<"Taking "<<_damage<<" damage from effects."<<'\n';
-   _bench->view().at(_defenderIndex)->takeDamage(_damage);
+   _bench.view().at(_defenderIndex)->takeDamage(_damage);
 }
 
-int DamageHandler::applyWeakRes(std::unique_ptr<std::array<Bench,2>> &_bench,
+int DamageHandler::applyWeakRes(std::array<Bench,2> &_bench,
                                    const unsigned &_turnCount)
 {
 
 
-  if(_bench.get()->at(getAttacker(_turnCount)).view().at(0)->active()->weakness() ==
-     _bench.get()->at(getDefender(_turnCount)).view().at(0)->active()->weakness())
+  if(_bench.at(getAttacker(_turnCount)).view().at(0)->active()->weakness() ==
+     _bench.at(getDefender(_turnCount)).view().at(0)->active()->weakness())
   {
     return m_weaknessMult;
   }
-  else if (_bench.get()->at(getAttacker(_turnCount)).view().at(0)->active()->resistance() ==
-           _bench.get()->at(getDefender(_turnCount)).view().at(0)->active()->resistance())
+  else if (_bench.at(getAttacker(_turnCount)).view().at(0)->active()->resistance() ==
+           _bench.at(getDefender(_turnCount)).view().at(0)->active()->resistance())
   {
     return m_resistance;
   }
@@ -108,7 +108,7 @@ int DamageHandler::applyWeakRes(std::unique_ptr<std::array<Bench,2>> &_bench,
 }
 
 
-int DamageHandler::applyBonusDamage(std::unique_ptr<std::array<Bench, 2> > &_bench,
+int DamageHandler::applyBonusDamage(std::array<Bench, 2> &_bench,
                                        const unsigned &_turnCount,
                                        const unsigned &_defenderIndex,
                                        const PTCG::ORDER &_order)
@@ -118,23 +118,23 @@ int DamageHandler::applyBonusDamage(std::unique_ptr<std::array<Bench, 2> > &_ben
   if(_order==PTCG::ORDER::AFTER)
   {
 
-      if((_bench.get()->at(getAttacker(_turnCount)).view().at(0)->getBonusAfter()) -
-         _bench.get()->at(getDefender(_turnCount)).view().at(_defenderIndex)->getReductionAfter() < 0)
+      if((_bench.at(getAttacker(_turnCount)).view().at(0)->getBonusAfter()) -
+         _bench.at(getDefender(_turnCount)).view().at(_defenderIndex)->getReductionAfter() < 0)
         {
           return 0;
         }
-      return (_bench.get()->at(getAttacker(_turnCount)).view().at(0)->getBonusAfter()) -
-          _bench.get()->at(getDefender(_turnCount)).view().at(_defenderIndex)->getReductionAfter();
+      return (_bench.at(getAttacker(_turnCount)).view().at(0)->getBonusAfter()) -
+          _bench.at(getDefender(_turnCount)).view().at(_defenderIndex)->getReductionAfter();
   }
   else
   {
-      if((_bench.get()->at(getAttacker(_turnCount)).view().at(0)->getBonusBefore()) -
-         _bench.get()->at(getDefender(_turnCount)).view().at(_defenderIndex)->getReductionBefore() < 0)
+      if((_bench.at(getAttacker(_turnCount)).view().at(0)->getBonusBefore()) -
+         _bench.at(getDefender(_turnCount)).view().at(_defenderIndex)->getReductionBefore() < 0)
         {
           return 0;
         }
-      return (_bench.get()->at(getAttacker(_turnCount)).view().at(0)->getBonusBefore()) -
-          _bench.get()->at(getDefender(_turnCount)).view().at(_defenderIndex)->getReductionBefore();
+      return (_bench.at(getAttacker(_turnCount)).view().at(0)->getBonusBefore()) -
+          _bench.at(getDefender(_turnCount)).view().at(_defenderIndex)->getReductionBefore();
   }
   return 0;
 

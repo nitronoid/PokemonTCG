@@ -48,21 +48,27 @@ public:
   std::vector<std::unique_ptr<Card>> viewDiscard(const PTCG::PLAYER &_player) const;
   std::array<std::unique_ptr<BoardSlot>,6> viewBench(const PTCG::PLAYER &_player) const;
   std::vector<std::unique_ptr<Card>> viewHand(const PTCG::PLAYER &_player) const;
+  void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
+  inline unsigned getTurnCount()const{return m_turnCount;}
 private:
+
   Game(const Game &_original);
 
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
-
-  inline unsigned getTurnCount()const{return m_turnCount;}
-
+  void poison();
+  void burn();
+  void paralysis();
+  void confuse();
+  void sleep();
 
 private:
 
 
   std::array<std::unique_ptr<Player>, 2> m_players;
   std::array<Board, 2> m_boards;
+  DamageHandler m_damageHandler;
   std::unordered_set<PTCG::CARD> m_playableCards;
   PTCG::PHASE m_turnPhase = PTCG::PHASE::NONE;
   unsigned m_turnCount = 0;

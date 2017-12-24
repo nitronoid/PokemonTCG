@@ -22,6 +22,8 @@ public:
   {}
 
   inline void attack(Game& _game) const { m_attack(&_game); }
+  inline std::string name() const { return m_name; }
+  inline std::vector<PTCG::TYPE> requirements() const { return m_requirements; }
 private:
 
   std::string m_name;

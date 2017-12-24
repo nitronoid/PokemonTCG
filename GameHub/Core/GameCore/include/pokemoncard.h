@@ -55,8 +55,9 @@ public:
   inline unsigned    retreatCost()  const { return m_retreatCost; }
   inline unsigned    stage()        const { return m_stage; }
 
+  inline const std::vector<Attack>& attacks() const { return m_attacks; }
   // Purely for testing
-  inline unsigned    attackNum()    const { return m_attacks.size(); }
+  inline size_t    attackNum()      const { return m_attacks.size(); }
 
 private:
   PTCG::TYPE  m_type;

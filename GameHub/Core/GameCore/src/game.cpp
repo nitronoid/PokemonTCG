@@ -54,6 +54,32 @@ bool Game::drawCard(Board& _board)
   return true;
 }
 
+
+//_cardIndices - target cards on board/hand... to move
+bool Game::moveCards(const std::vector<unsigned> _cardIndices,
+                     const PTCG::PLAYER _owner,
+                     const PTCG::PILE _origin,
+                     const PTCG::PILE _destination,
+                     const bool _reveal,
+                     const std::vector<unsigned> _destIndex)
+{
+    int player=(m_turnCount+static_cast<int>(_owner)) % 2;
+    //if no particular index is specified in destination, do these
+    if(_destIndex.empty())
+    {
+
+
+    }
+    else
+    {
+
+
+    }
+    return false;
+}
+
+
+
 void Game::nextTurn()
 {
   // Get the current player

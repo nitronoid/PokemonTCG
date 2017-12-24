@@ -57,7 +57,6 @@ enum class PILE {
     DECK,
     HAND,
     DISCARD,
-    BENCH,
     PRIZE
 };
 

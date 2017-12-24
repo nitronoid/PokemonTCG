@@ -41,7 +41,7 @@ void Game::setupGame()
         std::cout<<"Could not draw cards from deck of Player "<<i+1<<", deck file might be empty or corrupted."<<'\n';
         return;
       }
-    auto choice = player->chooseCard(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, board.m_hand.view(), 1);
+    auto choice = player->chooseCards(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, board.m_hand.view(), 1);
     board.m_bench.put(board.m_hand.take(choice[0]), 0);
   }
 }
@@ -56,43 +56,46 @@ bool Game::drawCard(Board& _board)
 
 void Game::putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, std::unique_ptr<Card> &&_card)
 {
-    int player=(m_turnCount+static_cast<int>(_owner)) % 2;
-    switch (_dest) {
+  auto& board = m_boards[playerIndex(_owner)];
+  switch (_dest)
+  {
     case PTCG::PILE::DECK:
-        m_boards.at(player).m_deck.put(std::move(_card));
-        break;
+      board.m_deck.put(std::move(_card));
+      break;
     case PTCG::PILE::DISCARD:
-        m_boards.at(player).m_discardPile.put(std::move(_card));
-        break;
+      board.m_discardPile.put(std::move(_card));
+      break;
     case PTCG::PILE::HAND:
-        m_boards.at(player).m_hand.put(std::move(_card));
-        break;
+      board.m_hand.put(std::move(_card));
+      break;
     case PTCG::PILE::PRIZE:
-        m_boards.at(player).m_prizeCards.put(std::move(_card));
-        break;
-    default: return; break;
-    }
+      board.m_prizeCards.put(std::move(_card));
+      break;
+    default: break;
+  }
 }
 
 std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const unsigned _index)
 {
-    int player=(m_turnCount+static_cast<int>(_owner)) % 2;
-    switch (_dest) {
+  auto& board = m_boards[playerIndex(_owner)];
+  std::unique_ptr<Card> ret;
+  switch (_dest)
+  {
     case PTCG::PILE::DECK:
-        return m_boards.at(player).m_deck.take(_index);
-        break;
+      ret = board.m_deck.take(_index);
+      break;
     case PTCG::PILE::DISCARD:
-        m_boards.at(player).m_discardPile.take(_index);
-        break;
+      ret = board.m_discardPile.take(_index);
+      break;
     case PTCG::PILE::HAND:
-        m_boards.at(player).m_hand.take(_index);
-        break;
+      ret = board.m_hand.take(_index);
+      break;
     case PTCG::PILE::PRIZE:
-        m_boards.at(player).m_prizeCards.take(_index);
-        break;
-    default: return nullptr; break;
-    }
-    return nullptr;
+      ret = board.m_prizeCards.take(_index);
+      break;
+    default: break;
+  }
+  return ret;
 }
 
 
@@ -104,22 +107,22 @@ bool Game::moveCards(const std::vector<unsigned> _cardIndices,
                      const bool _reveal,
                      const std::vector<unsigned> _destIndex)
 {
-    //if no particular index is specified in destination, do these
-    if(_destIndex.empty())
+  //if no particular index is specified in destination, do these
+  if(_destIndex.empty())
+  {
+    for(unsigned i = 0; i<_cardIndices.size();++i)
     {
-        for(unsigned i = 0; i<_cardIndices.size();++i)
-        {
-            putToPile(_owner,_destination,std::move(takeFromPile(_owner,_origin,_cardIndices.at(i))));
-        }
-        return true;
+      putToPile(_owner,_destination,std::move(takeFromPile(_owner,_origin,_cardIndices.at(i))));
+    }
+    return true;
 
-    }
-    else
-    {
-        //for now, will implement later.
-        return false;
-    }
+  }
+  else
+  {
+    //for now, will implement later.
     return false;
+  }
+  return false;
 }
 
 

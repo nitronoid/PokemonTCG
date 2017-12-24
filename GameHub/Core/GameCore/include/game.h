@@ -41,7 +41,7 @@ public:
       const int _amount,
       const int _range
       );
-  size_t playerIndex(const PTCG::PLAYER &_player) const;
+
 
   std::vector<std::unique_ptr<Card>> viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
   std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player) const;
@@ -58,6 +58,7 @@ private:
   Game(const Game &_original);
   void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);
   std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner,PTCG::PILE _dest,const unsigned _index);
+  size_t playerIndex(const PTCG::PLAYER &_player) const;
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);

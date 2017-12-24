@@ -9,7 +9,7 @@ Player* HumanPlayer::clone() const
   return new HumanPlayer(*this);
 }
 
-std::vector<size_t> HumanPlayer::chooseCard(
+std::vector<size_t> HumanPlayer::chooseCards(
     const PTCG::PLAYER _player,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,

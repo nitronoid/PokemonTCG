@@ -17,8 +17,8 @@ std::vector<size_t> HumanPlayer::chooseCard(
     const unsigned ammount)
 {
   std::vector<size_t> badChoice(
-        0,
-        std::min(static_cast<unsigned>(_options.size() - 1), ammount)
+        std::min(static_cast<unsigned>(_options.size() - 1), ammount),
+        0
         );
   return badChoice;
 }
@@ -43,7 +43,7 @@ std::pair<bool, unsigned> HumanPlayer::turn()
   bool doAttack = randomBool();
 
   // Play random card from hand
-  unsigned attackNum = viewBench().at(0)->active()->attackNum();
+  unsigned attackNum = viewBench().at(0).active()->attackNum();
   std::uniform_int_distribution<unsigned> agen(0, attackNum);
 
   // Return the decision

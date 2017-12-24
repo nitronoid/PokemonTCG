@@ -33,7 +33,7 @@ protected:
   void retreat(const unsigned _replacement);
   std::vector<std::unique_ptr<Card>> viewHand() const;
   std::vector<std::unique_ptr<Card>> viewDiscard(const PTCG::PLAYER &_owner = PTCG::PLAYER::SELF) const;
-  std::array<std::unique_ptr<BoardSlot>,6> viewBench(const PTCG::PLAYER &_owner = PTCG::PLAYER::SELF) const;
+  std::array<BoardSlot, 6> viewBench(const PTCG::PLAYER &_owner = PTCG::PLAYER::SELF) const;
 
   Game getDummyGame() const;
 

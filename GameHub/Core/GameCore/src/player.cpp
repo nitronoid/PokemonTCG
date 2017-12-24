@@ -30,7 +30,7 @@ std::vector<std::unique_ptr<Card>> Player::viewDiscard(const PTCG::PLAYER &_owne
   return m_parentGame.viewDiscard(_owner);
 }
 
-std::array<std::unique_ptr<BoardSlot>, 6> Player::viewBench(const PTCG::PLAYER &_owner) const
+std::array<BoardSlot, 6> Player::viewBench(const PTCG::PLAYER &_owner) const
 {
   //TODO FOR ERIC
   return m_parentGame.viewBench(_owner);

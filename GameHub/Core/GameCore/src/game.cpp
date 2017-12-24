@@ -54,6 +54,47 @@ bool Game::drawCard(Board& _board)
   return true;
 }
 
+void Game::putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, std::unique_ptr<Card> &&_card)
+{
+    int player=(m_turnCount+static_cast<int>(_owner)) % 2;
+    switch (_dest) {
+    case PTCG::PILE::DECK:
+        m_boards.at(player).m_deck.put(std::move(_card));
+        break;
+    case PTCG::PILE::DISCARD:
+        m_boards.at(player).m_discardPile.put(std::move(_card));
+        break;
+    case PTCG::PILE::HAND:
+        m_boards.at(player).m_hand.put(std::move(_card));
+        break;
+    case PTCG::PILE::PRIZE:
+        m_boards.at(player).m_prizeCards.put(std::move(_card));
+        break;
+    default: return; break;
+    }
+}
+
+std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const unsigned _index)
+{
+    int player=(m_turnCount+static_cast<int>(_owner)) % 2;
+    switch (_dest) {
+    case PTCG::PILE::DECK:
+        return m_boards.at(player).m_deck.take(_index);
+        break;
+    case PTCG::PILE::DISCARD:
+        m_boards.at(player).m_discardPile.take(_index);
+        break;
+    case PTCG::PILE::HAND:
+        m_boards.at(player).m_hand.take(_index);
+        break;
+    case PTCG::PILE::PRIZE:
+        m_boards.at(player).m_prizeCards.take(_index);
+        break;
+    default: return nullptr; break;
+    }
+    return nullptr;
+}
+
 
 //_cardIndices - target cards on board/hand... to move
 bool Game::moveCards(const std::vector<unsigned> _cardIndices,
@@ -63,17 +104,20 @@ bool Game::moveCards(const std::vector<unsigned> _cardIndices,
                      const bool _reveal,
                      const std::vector<unsigned> _destIndex)
 {
-    int player=(m_turnCount+static_cast<int>(_owner)) % 2;
     //if no particular index is specified in destination, do these
     if(_destIndex.empty())
     {
-
+        for(unsigned i = 0; i<_cardIndices.size();++i)
+        {
+            putToPile(_owner,_destination,std::move(takeFromPile(_owner,_origin,_cardIndices.at(i))));
+        }
+        return true;
 
     }
     else
     {
-
-
+        //for now, will implement later.
+        return false;
     }
     return false;
 }

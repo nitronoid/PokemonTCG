@@ -56,7 +56,8 @@ public:
 private:
 
   Game(const Game &_original);
-
+  void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);
+  std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner,PTCG::PILE _dest,const unsigned _index);
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
@@ -67,7 +68,6 @@ private:
   void sleep();
 
 private:
-
 
   std::array<std::unique_ptr<Player>, 2> m_players;
   std::array<Board, 2> m_boards;

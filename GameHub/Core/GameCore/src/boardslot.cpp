@@ -131,4 +131,19 @@ BoardSlot::TypeMSet BoardSlot::energy() const
   return ret;
 }
 
+std::unique_ptr<Card> BoardSlot::viewTool()
+{
+    std::unique_ptr<Card> tmp(m_tool->clone());
+    return tmp;
+}
+
+std::vector<std::unique_ptr<Card>> BoardSlot::viewEnergy()
+{
+    std::vector<std::unique_ptr<Card>> temp;
+    for(unsigned m=0; m<m_energy.size(); ++m)
+    {
+        temp.emplace_back(m_energy.at(m)->clone());
+    }
+    return temp;
+}
 

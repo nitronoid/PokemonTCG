@@ -50,6 +50,16 @@ public:
   std::vector<std::unique_ptr<Card>> viewHand(const PTCG::PLAYER &_player) const;
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   inline unsigned getTurnCount()const{return m_turnCount;}
+
+    std::unique_ptr<Card> viewTool(const PTCG::PLAYER &_player, const unsigned _slot) const;
+    std::vector<std::unique_ptr<Card>> viewTool(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+    std::unique_ptr<Card> viewPokemon(const PTCG::PLAYER &_player, const unsigned _slot) const;
+    std::vector<std::unique_ptr<Card>> viewPokemon(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+    std::vector<std::unique_ptr<Card>> viewEnergy(const PTCG::PLAYER &_player, const unsigned _slot) const;
+    std::vector<std::unique_ptr<Card>> viewEnergy(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+
+    unsigned searchCountByName(std::string _name, const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+    bool matchPokemonType(const PTCG::TYPE &_type, const std::unique_ptr<PokemonCard> &&_card) const;
 private:
 
   Game(const Game &_original);

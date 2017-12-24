@@ -202,4 +202,171 @@ std::vector<std::unique_ptr<Card>> Game::viewHand(const PTCG::PLAYER &_player) c
 }
 
 
+std::unique_ptr<Card> Game::viewTool(const PTCG::PLAYER &_player, const unsigned _slot) const
+{
+    int player = (m_turnCount+static_cast<int>(_player))%2;
+    return m_boards[player].m_bench.view().at(_slot)->viewTool();
+}
 
+std::vector<std::unique_ptr<Card>> Game::viewTool(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
+{
+    int player = (m_turnCount+static_cast<int>(_player))%2;
+    std::vector<std::unique_ptr<Card>> temp;
+    switch(_target)
+    {
+    case PTCG::PILE::DECK :
+    {
+        temp = m_boards[player].m_deck.view();
+        break;
+
+    }
+    case PTCG::PILE::DISCARD :
+    {
+        temp = m_boards[player].m_discardPile.view();
+        break;
+
+    }
+    case PTCG::PILE::HAND :
+    {
+        temp = m_boards[player].m_hand.view();
+        break;
+    }
+    default : break;
+    }
+    std::vector<std::unique_ptr<Card>> tempRet;
+    for(unsigned m=0; m<temp.size(); ++m)
+    {
+        if(temp.at(m)->cardType() == PTCG::CARD::TOOL)
+        {
+            tempRet.emplace_back(temp.at(m)->clone());
+        }
+    }
+    return tempRet;
+}
+
+std::unique_ptr<Card> Game::viewPokemon(const PTCG::PLAYER &_player, const unsigned _slot) const
+{
+    int player = (m_turnCount+static_cast<int>(_player))%2;
+    std::unique_ptr<Card> tmp(m_boards.at(player).m_bench.view().at(_slot)->active()->clone());
+    return tmp;
+}
+
+std::vector<std::unique_ptr<Card>> Game::viewPokemon(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
+{
+    int player = (m_turnCount+static_cast<int>(_player))%2;
+    std::vector<std::unique_ptr<Card>> temp;
+    switch(_target)
+    {
+    case PTCG::PILE::DECK :
+    {
+        temp = m_boards[player].m_deck.view();
+        break;
+
+    }
+    case PTCG::PILE::DISCARD :
+    {
+        temp = m_boards[player].m_discardPile.view();
+        break;
+
+    }
+    case PTCG::PILE::HAND :
+    {
+        temp = m_boards[player].m_hand.view();
+        break;
+    }
+    default : break;
+    }
+    std::vector<std::unique_ptr<Card>> tempRet;
+    for(unsigned m=0; m<temp.size(); ++m)
+    {
+        if(temp.at(m)->cardType() == PTCG::CARD::POKEMON)
+        {
+            tempRet.emplace_back(temp.at(m)->clone());
+        }
+    }
+    return tempRet;
+}
+
+std::vector<std::unique_ptr<Card>> Game::viewEnergy(const PTCG::PLAYER &_player, const unsigned _slot) const
+{
+    int player = (m_turnCount+static_cast<int>(_player))%2;
+    std::vector<std::unique_ptr<Card>> temp = m_boards.at(player).m_bench.view().at(_slot)->viewEnergy();
+    return temp;
+}
+
+std::vector<std::unique_ptr<Card>> Game::viewEnergy(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
+{
+    int player = (m_turnCount+static_cast<int>(_player))%2;
+    std::vector<std::unique_ptr<Card>> temp;
+    switch(_target)
+    {
+    case PTCG::PILE::DECK :
+    {
+        temp = m_boards[player].m_deck.view();
+        break;
+
+    }
+    case PTCG::PILE::DISCARD :
+    {
+        temp = m_boards[player].m_discardPile.view();
+        break;
+
+    }
+    case PTCG::PILE::HAND :
+    {
+        temp = m_boards[player].m_hand.view();
+        break;
+    }
+    default : break;
+    }
+    std::vector<std::unique_ptr<Card>> tempRet;
+    for(unsigned m=0; m<temp.size(); ++m)
+    {
+        if(temp.at(m)->cardType() == PTCG::CARD::ENERGY)
+        {
+            tempRet.emplace_back(temp.at(m)->clone());
+        }
+    }
+    return tempRet;
+}
+
+unsigned Game::searchCountByName(std::string _name, const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
+{
+    int player = (m_turnCount+static_cast<int>(_player))%2;
+    std::vector<std::unique_ptr<Card>> temp;
+    switch(_target)
+    {
+    case PTCG::PILE::DECK :
+    {
+        temp = m_boards[player].m_deck.view();
+        break;
+
+    }
+    case PTCG::PILE::DISCARD :
+    {
+        temp = m_boards[player].m_discardPile.view();
+        break;
+
+    }
+    case PTCG::PILE::HAND :
+    {
+        temp = m_boards[player].m_hand.view();
+        break;
+    }
+    default : break;
+    }
+    unsigned matchCount=0;
+    for(unsigned m=0; m<temp.size(); ++m)
+    {
+        if(temp.at(m)->getName() == _name)
+        {
+            ++matchCount;
+        }
+    }
+    return matchCount;
+}
+
+bool Game::matchPokemonType(const PTCG::TYPE &_type, const std::unique_ptr<PokemonCard> &&_card) const
+{
+    if(_card->type() == _type){return true;}else{return false;}
+}

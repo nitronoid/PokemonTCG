@@ -47,6 +47,9 @@ public:
     inline size_t numEnergy() const { return m_energy.size(); }
     inline size_t numTool() const { return m_tool ? 1 : 0; }
     inline size_t numCards() const { return numPokemon() + numEnergy() + numTool(); }
+
+    std::vector<std::unique_ptr<Card>> viewEnergy();
+    std::unique_ptr<Card> viewTool();
 private:
     std::unordered_set<PTCG::CONDITION> m_conditions;
     std::unique_ptr<TrainerCard> m_tool;

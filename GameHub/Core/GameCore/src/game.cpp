@@ -16,6 +16,8 @@ void Game::init(const CardFactory &_factory, const std::string &_deckA, const st
 {
   m_boards[0].m_deck.init(_factory.loadDeck(_deckA));
   m_boards[1].m_deck.init(_factory.loadDeck(_deckB));
+  m_players[0].reset(new HumanPlayer(*this));
+  m_players[1].reset(new HumanPlayer(*this));
 }
 
 void Game::start()
@@ -35,10 +37,10 @@ void Game::setupGame()
     Board& board = m_boards[i];
     for (int j = 0; j < 6; ++j)
       if(!drawCard(board))
-        {
-          std::cout<<"Could not draw cards from deck of Player "<<i+1<<", deck file might be empty or corrupted."<<'\n';
-          return;
-        }
+      {
+        std::cout<<"Could not draw cards from deck of Player "<<i+1<<", deck file might be empty or corrupted."<<'\n';
+        return;
+      }
     auto choice = player->chooseCard(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, board.m_hand.view(), 1);
     board.m_bench.put(board.m_hand.take(choice[0]), 0);
   }
@@ -64,7 +66,7 @@ void Game::nextTurn()
     // Execute the players turn function
     auto attackDecision = currentPlayer->turn();
     if (attackDecision.first)
-        attack(currentBoard.m_bench.active(), attackDecision.second);
+      attack(currentBoard.m_bench.active(), attackDecision.second);
     std::cout<<m_turnCount<<'\n';
     ++m_turnCount;
   }
@@ -84,41 +86,35 @@ void Game::dealDamage(const unsigned _damage, const unsigned _id)
 
 void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
 {
-  int index = (m_turnCount+static_cast<int>(_target))%2;
+  Board& board = m_boards[playerIndex(_target)];
   switch (_condition) {
     case PTCG::CONDITION::ASLEEP:
-      {
-        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
-        return;
-        break;
-      }
-    case PTCG::CONDITION::BURNED:
-      {
-        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
-        return;
-        break;
-      }
-    case PTCG::CONDITION::CONFUSED:
-      {
-        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
-        return;
-        break;
-      }
-    case PTCG::CONDITION::PARALYZED:
-      {
-        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
-        return;
-        break;
-      }
-    case PTCG::CONDITION::POISONED:
-      {
-        m_boards.at(index).m_bench.view().at(0)->addCondition(_condition);
-        return;
-        break;
-      }
-    default: return; break;
+    {
+      board.m_bench.slotAt(0)->addCondition(_condition);
+      break;
     }
-  return;
+    case PTCG::CONDITION::BURNED:
+    {
+      board.m_bench.slotAt(0)->addCondition(_condition);
+      break;
+    }
+    case PTCG::CONDITION::CONFUSED:
+    {
+      board.m_bench.slotAt(0)->addCondition(_condition);
+      break;
+    }
+    case PTCG::CONDITION::PARALYZED:
+    {
+      board.m_bench.slotAt(0)->addCondition(_condition);
+      break;
+    }
+    case PTCG::CONDITION::POISONED:
+    {
+      board.m_bench.slotAt(0)->addCondition(_condition);
+      break;
+    }
+    default: break;
+  }
 }
 
 void Game::poison()
@@ -130,10 +126,10 @@ void Game::poison()
 void Game::burn()
 {
   m_damageHandler.rawDamage(m_boards.at(m_turnCount % 2).m_bench,0,m_damageHandler.getBurn());
-  if(flipCoin(1)==1)
-    {
-      m_boards.at(m_turnCount % 2).m_bench.view().at(0)->removeCondition(PTCG::CONDITION::BURNED);
-    }
+  if(flipCoin(1))
+  {
+    m_boards.at(m_turnCount % 2).m_bench.slotAt(0)->removeCondition(PTCG::CONDITION::BURNED);
+  }
 }
 
 void Game::paralysis()
@@ -156,10 +152,10 @@ unsigned Game::flipCoin(const unsigned _num)
   static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
   for(unsigned i  = 0; i<_num;++i)
   {
-      if(gen())
-      {
-          ++ret;
-      }
+    if(gen())
+    {
+      ++ret;
+    }
   }
   std::cout<<"Flipping coin...."<<ret<<" heads, "<<_num-ret<<" tails."<<'\n';
   return ret;
@@ -170,203 +166,69 @@ Game Game::clone() const
   return *this;
 }
 
+size_t Game::playerIndex(const PTCG::PLAYER &_player) const
+{
+  return (m_turnCount+static_cast<size_t>(_player)) % 2;
+}
+
 std::array<std::unique_ptr<Card>,6> Game::viewPrize(const PTCG::PLAYER &_player) const
 {
-  int player = (m_turnCount+static_cast<int>(_player))%2;
-  return m_boards[player].m_prizeCards.view();
+  return m_boards[playerIndex(_player)].m_prizeCards.view();
 }
 
 std::vector<std::unique_ptr<Card>> Game::viewDeck(const PTCG::PLAYER &_player) const
 {
-  int player = (m_turnCount+static_cast<int>(_player))%2;
-  return m_boards[player].m_deck.view();
+  return m_boards[playerIndex(_player)].m_deck.view();
 }
 
 std::vector<std::unique_ptr<Card>> Game::viewDiscard(const PTCG::PLAYER &_player) const
 {
-  int player = (m_turnCount+static_cast<int>(_player))%2;
-  return m_boards[player].m_discardPile.view();
+  return m_boards[playerIndex(_player)].m_discardPile.view();
 }
 
-std::array<std::unique_ptr<BoardSlot>, 6> Game::viewBench(const PTCG::PLAYER &_player) const
+std::array<BoardSlot, 6> Game::viewBench(const PTCG::PLAYER &_player) const
 {
-
-  int player = (m_turnCount+static_cast<int>(_player))%2;
-  return m_boards[player].m_bench.view();
+  return m_boards[playerIndex(_player)].m_bench.view();
 }
 
 std::vector<std::unique_ptr<Card>> Game::viewHand(const PTCG::PLAYER &_player) const
 {
-  int player = (m_turnCount+static_cast<int>(_player))%2;
-  return m_boards[player].m_hand.view();
-}
-
-
-std::unique_ptr<Card> Game::viewTool(const PTCG::PLAYER &_player, const unsigned _slot) const
-{
-    int player = (m_turnCount+static_cast<int>(_player))%2;
-    return m_boards[player].m_bench.view().at(_slot)->viewTool();
-}
-
-std::vector<std::unique_ptr<Card>> Game::viewTool(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
-{
-    int player = (m_turnCount+static_cast<int>(_player))%2;
-    std::vector<std::unique_ptr<Card>> temp;
-    switch(_target)
-    {
-    case PTCG::PILE::DECK :
-    {
-        temp = m_boards[player].m_deck.view();
-        break;
-
-    }
-    case PTCG::PILE::DISCARD :
-    {
-        temp = m_boards[player].m_discardPile.view();
-        break;
-
-    }
-    case PTCG::PILE::HAND :
-    {
-        temp = m_boards[player].m_hand.view();
-        break;
-    }
-    default : break;
-    }
-    std::vector<std::unique_ptr<Card>> tempRet;
-    for(unsigned m=0; m<temp.size(); ++m)
-    {
-        if(temp.at(m)->cardType() == PTCG::CARD::TOOL)
-        {
-            tempRet.emplace_back(temp.at(m)->clone());
-        }
-    }
-    return tempRet;
-}
-
-std::unique_ptr<Card> Game::viewPokemon(const PTCG::PLAYER &_player, const unsigned _slot) const
-{
-    int player = (m_turnCount+static_cast<int>(_player))%2;
-    std::unique_ptr<Card> tmp(m_boards.at(player).m_bench.view().at(_slot)->active()->clone());
-    return tmp;
-}
-
-std::vector<std::unique_ptr<Card>> Game::viewPokemon(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
-{
-    int player = (m_turnCount+static_cast<int>(_player))%2;
-    std::vector<std::unique_ptr<Card>> temp;
-    switch(_target)
-    {
-    case PTCG::PILE::DECK :
-    {
-        temp = m_boards[player].m_deck.view();
-        break;
-
-    }
-    case PTCG::PILE::DISCARD :
-    {
-        temp = m_boards[player].m_discardPile.view();
-        break;
-
-    }
-    case PTCG::PILE::HAND :
-    {
-        temp = m_boards[player].m_hand.view();
-        break;
-    }
-    default : break;
-    }
-    std::vector<std::unique_ptr<Card>> tempRet;
-    for(unsigned m=0; m<temp.size(); ++m)
-    {
-        if(temp.at(m)->cardType() == PTCG::CARD::POKEMON)
-        {
-            tempRet.emplace_back(temp.at(m)->clone());
-        }
-    }
-    return tempRet;
-}
-
-std::vector<std::unique_ptr<Card>> Game::viewEnergy(const PTCG::PLAYER &_player, const unsigned _slot) const
-{
-    int player = (m_turnCount+static_cast<int>(_player))%2;
-    std::vector<std::unique_ptr<Card>> temp = m_boards.at(player).m_bench.view().at(_slot)->viewEnergy();
-    return temp;
-}
-
-std::vector<std::unique_ptr<Card>> Game::viewEnergy(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
-{
-    int player = (m_turnCount+static_cast<int>(_player))%2;
-    std::vector<std::unique_ptr<Card>> temp;
-    switch(_target)
-    {
-    case PTCG::PILE::DECK :
-    {
-        temp = m_boards[player].m_deck.view();
-        break;
-
-    }
-    case PTCG::PILE::DISCARD :
-    {
-        temp = m_boards[player].m_discardPile.view();
-        break;
-
-    }
-    case PTCG::PILE::HAND :
-    {
-        temp = m_boards[player].m_hand.view();
-        break;
-    }
-    default : break;
-    }
-    std::vector<std::unique_ptr<Card>> tempRet;
-    for(unsigned m=0; m<temp.size(); ++m)
-    {
-        if(temp.at(m)->cardType() == PTCG::CARD::ENERGY)
-        {
-            tempRet.emplace_back(temp.at(m)->clone());
-        }
-    }
-    return tempRet;
+  return m_boards[playerIndex(_player)].m_hand.view();
 }
 
 unsigned Game::searchCountByName(std::string _name, const PTCG::PLAYER &_player, const PTCG::PILE &_target) const
 {
-    int player = (m_turnCount+static_cast<int>(_player))%2;
-    std::vector<std::unique_ptr<Card>> temp;
-    switch(_target)
-    {
+  const Board& board = m_boards[playerIndex(_player)];
+  std::vector<std::unique_ptr<Card>> temp;
+  switch(_target)
+  {
     case PTCG::PILE::DECK :
     {
-        temp = m_boards[player].m_deck.view();
-        break;
+      temp = board.m_deck.view();
+      break;
 
     }
     case PTCG::PILE::DISCARD :
     {
-        temp = m_boards[player].m_discardPile.view();
-        break;
+      temp = board.m_discardPile.view();
+      break;
 
     }
     case PTCG::PILE::HAND :
     {
-        temp = m_boards[player].m_hand.view();
-        break;
+      temp = board.m_hand.view();
+      break;
     }
     default : break;
-    }
-    unsigned matchCount=0;
-    for(unsigned m=0; m<temp.size(); ++m)
+  }
+  unsigned matchCount=0;
+  for(unsigned m=0; m<temp.size(); ++m)
+  {
+    if(temp.at(m)->getName() == _name)
     {
-        if(temp.at(m)->getName() == _name)
-        {
-            ++matchCount;
-        }
+      ++matchCount;
     }
-    return matchCount;
+  }
+  return matchCount;
 }
 
-bool Game::matchPokemonType(const PTCG::TYPE &_type, const std::unique_ptr<PokemonCard> &&_card) const
-{
-    if(_card->type() == _type){return true;}else{return false;}
-}

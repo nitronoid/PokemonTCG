@@ -18,7 +18,7 @@ public:
   Game clone() const;
   void init(const CardFactory &_factory, const std::string &_deckA, const std::string &_deckB);
 
-  void dealDamage(const unsigned _damage = 0,const unsigned _id = 0);
+  void dealDamage(const unsigned _damage, const unsigned _id = 0);
   unsigned flipCoin(const unsigned _num);
 
   void start();
@@ -32,6 +32,7 @@ public:
       const bool _reveal= false,
       const std::vector<unsigned> _destIndex = {}
       );
+
   std::vector<int> playerChoice(
       const PTCG::PLAYER _thinker,
       const PTCG::PLAYER _owner,
@@ -42,15 +43,17 @@ public:
       const int _range
       );
 
+  // View card pile functions
+  std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+  std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
+  std::vector<std::unique_ptr<Card>>  viewDiscard(const PTCG::PLAYER &_player) const;
+  std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;
+  std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player)   const;
+  std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
 
-  std::vector<std::unique_ptr<Card>> viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
-  std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player) const;
-  std::vector<std::unique_ptr<Card>> viewDeck(const PTCG::PLAYER &_player) const;
-  std::vector<std::unique_ptr<Card>> viewDiscard(const PTCG::PLAYER &_player) const;
-  std::array<BoardSlot, 6> viewBench(const PTCG::PLAYER &_player) const;
-  std::vector<std::unique_ptr<Card>> viewHand(const PTCG::PLAYER &_player) const;
+
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
-  inline unsigned getTurnCount()const{return m_turnCount;}
+  inline unsigned getTurnCount() const {return m_turnCount;}
 
   unsigned searchCountByName(std::string _name, const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
 private:
@@ -76,10 +79,9 @@ private:
   std::unordered_set<PTCG::CARD> m_playableCards;
   PTCG::PHASE m_turnPhase = PTCG::PHASE::NONE;
   unsigned m_turnCount = 0;
-  bool m_turnFinished = false;
-  bool m_rulesBroken = false;
-  bool m_gameFinished = false;
-
+  bool m_turnFinished  = false;
+  bool m_rulesBroken   = false;
+  bool m_gameFinished  = false;
 
 };
 

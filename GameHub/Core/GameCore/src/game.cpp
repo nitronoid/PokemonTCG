@@ -15,7 +15,9 @@ Game::Game(const Game &_original) :
 void Game::init(const CardFactory &_factory, const std::string &_deckA, const std::string &_deckB)
 {
   m_boards[0].m_deck.init(_factory.loadDeck(_deckA));
+  m_boards[0].m_deck.shuffle();
   m_boards[1].m_deck.init(_factory.loadDeck(_deckB));
+  m_boards[1].m_deck.shuffle();
   m_players[0].reset(new HumanPlayer(*this));
   m_players[1].reset(new HumanPlayer(*this));
 }
@@ -36,13 +38,27 @@ void Game::setupGame()
     auto& player = m_players[i];
     Board& board = m_boards[i];
     for (int j = 0; j < 6; ++j)
+    {
       if(!drawCard(board))
       {
         std::cout<<"Could not draw cards from deck of Player "<<i+1<<", deck file might be empty or corrupted."<<'\n';
         return;
       }
-    auto choice = player->chooseCards(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, board.m_hand.view(), 1);
-    board.m_bench.put(board.m_hand.take(choice[0]), 0);
+    }
+    auto hand = board.m_hand.view();
+    decltype (hand) pokemon;
+    std::vector<size_t> indexes;
+    for(size_t k = 0; k < hand.size() - 1; ++k)
+    {
+      auto& card = hand[k];
+      if(card->cardType() == PTCG::CARD::POKEMON)
+      {
+        pokemon.push_back(std::move(card));
+        indexes.push_back(k);
+      }
+    }
+    auto choice = player->chooseCards(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, pokemon, 1);
+    board.m_bench.put(board.m_hand.take(indexes[choice[0]]), 0);
   }
 }
 
@@ -112,7 +128,7 @@ bool Game::moveCards(const std::vector<unsigned> _cardIndices,
   {
     for(unsigned i = 0; i<_cardIndices.size();++i)
     {
-      putToPile(_owner,_destination,std::move(takeFromPile(_owner,_origin,_cardIndices.at(i))));
+      putToPile(_owner,_destination, std::move(takeFromPile(_owner,_origin,_cardIndices.at(i))));
     }
     return true;
 

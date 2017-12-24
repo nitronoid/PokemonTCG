@@ -48,7 +48,7 @@ void Game::setupGame()
     auto hand = board.m_hand.view();
     decltype (hand) pokemon;
     std::vector<size_t> indexes;
-    for(size_t k = 0; k < hand.size() - 1; ++k)
+    for(size_t k = 0; k < hand.size(); ++k)
     {
       auto& card = hand[k];
       if(card->cardType() == PTCG::CARD::POKEMON)

@@ -120,15 +120,24 @@ PTCG::CARD selectTrainerType(const char _c)
 
 Ability loadAbility(const QJsonObject  &_jsonCard)
 {
-  // Import this cards attacks
-  auto module = pybind11::module::import(std::to_string(intify(_jsonCard["ID"])).c_str());
   Ability cardAbility;
-  if (_jsonCard.contains("Ability"))
+  int id = intify(_jsonCard["ID"]);
+  // Import this cards attacks
+  try
   {
-    auto jAbility = _jsonCard["Ability"].toObject();
-    auto pyfunc = module.attr(stringify(jAbility["func"]).c_str());
-    auto ability = pyfunc.cast<AbilityFunc>();
-    cardAbility = Ability(ability, selectPhase(stringify(jAbility["phase"])[0]), selectDuration(stringify(jAbility["duration"])[0]));
+    auto module = pybind11::module::import(std::to_string(id).c_str());
+
+    if (_jsonCard.contains("Ability"))
+    {
+      auto jAbility = _jsonCard["Ability"].toObject();
+      auto pyfunc = module.attr(stringify(jAbility["func"]).c_str());
+      auto ability = pyfunc.cast<AbilityFunc>();
+      cardAbility = Ability(ability, selectPhase(stringify(jAbility["phase"])[0]), selectDuration(stringify(jAbility["duration"])[0]));
+    }
+  }
+  catch (pybind11::error_already_set e)
+  {
+    std::cerr<<"No python module was found for card "<<id<<'\n'<<e.what()<<'\n';
   }
   return cardAbility;
 }

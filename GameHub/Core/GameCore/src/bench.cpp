@@ -11,13 +11,13 @@ PokemonCard* Bench::active()
   return m_slots[0].active();
 }
 
-std::array<std::unique_ptr<BoardSlot>, 6> Bench::view() const
+std::array<BoardSlot, 6> Bench::view() const
 {
-  std::array<std::unique_ptr<BoardSlot>,6> ret;
+  std::array<BoardSlot,6> ret;
   for (int i =0 ; i < 6 ; ++i)
   {
       std::cout<<"Number of cards in slot "<< i <<" : "<<m_slots[i].numCards()<<'\n';
-      ret[i]=m_slots[i].clone();
+      ret[i]=m_slots[i];
   }
   return ret;
 }

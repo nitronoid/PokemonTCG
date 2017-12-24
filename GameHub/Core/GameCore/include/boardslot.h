@@ -15,7 +15,7 @@ using TypeMSet = std::unordered_multiset<PTCG::TYPE>;
 public:
     BoardSlot() = default;
     BoardSlot(const BoardSlot &_original);
-    BoardSlot& operator=(const BoardSlot &_original) = delete;
+    BoardSlot& operator=(const BoardSlot &_original);
 
     inline int getDamage() const {return m_damageTaken;}
     inline int getBonusBefore() const {return m_bonusDamageBefore;}

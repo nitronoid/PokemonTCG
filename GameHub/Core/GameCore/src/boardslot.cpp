@@ -4,10 +4,12 @@
 
 BoardSlot::BoardSlot(const BoardSlot &_original) :
   m_conditions(_original.m_conditions),
-  m_tool(new TrainerCard(*_original.m_tool)),
   m_damageTaken(_original.m_damageTaken),
   m_turnPlayed(_original.m_turnPlayed)
 {
+  if(_original.m_tool)
+    m_tool.reset(static_cast<TrainerCard*>(_original.m_tool->clone()));
+
   m_energy.reserve(_original.m_energy.size());
   for (const auto &eCard : _original.m_energy)
   {
@@ -19,6 +21,28 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
   {
     m_pokemon.emplace_back(new PokemonCard(*pCard));
   }
+}
+
+BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
+{
+  m_conditions = _original.m_conditions;
+  if(_original.m_tool)
+    m_tool.reset(static_cast<TrainerCard*>(_original.m_tool->clone()));
+  m_damageTaken = _original.m_damageTaken;
+  m_turnPlayed = _original.m_turnPlayed;
+
+  m_energy.reserve(_original.m_energy.size());
+  for (const auto &eCard : _original.m_energy)
+  {
+    m_energy.emplace_back(new EnergyCard(*eCard));
+  }
+
+  m_pokemon.reserve(_original.m_pokemon.size());
+  for (const auto &pCard : _original.m_pokemon)
+  {
+    m_pokemon.emplace_back(new PokemonCard(*pCard));
+  }
+  return *this;
 }
 
 void BoardSlot::takeDamage(const int _damage)
@@ -133,17 +157,17 @@ BoardSlot::TypeMSet BoardSlot::energy() const
 
 std::unique_ptr<Card> BoardSlot::viewTool()
 {
-    std::unique_ptr<Card> tmp(m_tool->clone());
-    return tmp;
+  std::unique_ptr<Card> tmp(m_tool->clone());
+  return tmp;
 }
 
 std::vector<std::unique_ptr<Card>> BoardSlot::viewEnergy()
 {
-    std::vector<std::unique_ptr<Card>> temp;
-    for(unsigned m=0; m<m_energy.size(); ++m)
-    {
-        temp.emplace_back(m_energy.at(m)->clone());
-    }
-    return temp;
+  std::vector<std::unique_ptr<Card>> temp;
+  for(unsigned m=0; m<m_energy.size(); ++m)
+  {
+    temp.emplace_back(m_energy.at(m)->clone());
+  }
+  return temp;
 }
 

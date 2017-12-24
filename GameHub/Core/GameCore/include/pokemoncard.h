@@ -57,7 +57,7 @@ public:
 
   inline const std::vector<Attack>& attacks() const { return m_attacks; }
   // Purely for testing
-  inline size_t    attackNum()      const { return m_attacks.size(); }
+  inline unsigned    attackNum()    const { return static_cast<unsigned>(m_attacks.size()); }
 
 private:
   PTCG::TYPE  m_type;

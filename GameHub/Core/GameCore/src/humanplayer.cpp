@@ -17,7 +17,7 @@ std::vector<size_t> HumanPlayer::chooseCards(
     const unsigned ammount)
 {
   std::vector<size_t> badChoice(
-        std::min(static_cast<unsigned>(_options.size() - 1), ammount),
+        std::min(static_cast<unsigned>(_options.size()), ammount),
         0
         );
   return badChoice;

@@ -155,6 +155,12 @@ BoardSlot::TypeMSet BoardSlot::energy() const
   return ret;
 }
 
+std::vector<PTCG::CONDITION> BoardSlot::conditions() const
+{
+    std::vector<PTCG::CONDITION> cond(m_conditions.begin(), m_conditions.end());
+    return cond;
+}
+
 std::unique_ptr<Card> BoardSlot::viewTool()
 {
   std::unique_ptr<Card> tmp(m_tool->clone());

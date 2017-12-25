@@ -37,11 +37,7 @@ public:
     void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
     PokemonCard* active() const;
     TypeMSet energy() const;
-
-    std::unique_ptr<BoardSlot> clone() const
-    {
-      return std::make_unique<BoardSlot>(*this);
-    }
+    std::vector<PTCG::CONDITION> conditions() const;
 
     inline size_t numPokemon() const { return m_pokemon.size(); }
     inline size_t numEnergy() const { return m_energy.size(); }

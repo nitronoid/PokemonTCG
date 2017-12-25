@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <algorithm>
 
 Game::Game(const Game &_original) :
   m_playableCards(_original.m_playableCards),
@@ -116,13 +117,16 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
 
 
 //_cardIndices - target cards on board/hand... to move
-bool Game::moveCards(const std::vector<unsigned> _cardIndices,
+bool Game::moveCards(std::vector<unsigned> _cardIndices,
                      const PTCG::PLAYER _owner,
                      const PTCG::PILE _origin,
                      const PTCG::PILE _destination,
                      const bool _reveal,
                      const std::vector<unsigned> _destIndex)
 {
+  //sort the input indices to avoid affecting take order in a vector
+  std::sort(_cardIndices.begin(), _cardIndices.end(),std::greater<unsigned>());
+
   //if no particular index is specified in destination, do these
   if(_destIndex.empty())
   {

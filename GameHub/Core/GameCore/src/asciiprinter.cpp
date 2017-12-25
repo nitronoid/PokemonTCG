@@ -77,22 +77,7 @@ std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlo
     unsigned hp = _slot->active()->hp();
     std::string name = _slot->active()->getName();
     std::string pType;
-    switch(_slot->active()->type())
-    {
-    case PTCG::TYPE::COLOURLESS : {pType.push_back('C'); break;}
-    case PTCG::TYPE::DARKNESS : {pType.push_back('D'); break;}
-    case PTCG::TYPE::DRAGON : {pType.push_back('N'); break;}
-    case PTCG::TYPE::FAIRY : {pType.push_back('Y'); break;}
-    case PTCG::TYPE::FIGHTING : {pType.push_back('F'); break;}
-    case PTCG::TYPE::FIRE : {pType.push_back('R'); break;}
-    case PTCG::TYPE::GRASS : {pType.push_back('G'); break;}
-    case PTCG::TYPE::LIGHTNING : {pType.push_back('L'); break;}
-    case PTCG::TYPE::METAL : {pType.push_back('M'); break;}
-    case PTCG::TYPE::PSYCHIC : {pType.push_back('P'); break;}
-    case PTCG::TYPE::WATER : {pType.push_back('W'); break;}
-    case PTCG::TYPE::ERROR : {pType.push_back('-'); break;}
-    default : break;
-    }
+    pType.push_back(charify(_slot->active()->type()));
     unsigned energ = _slot->numEnergy();
     std::string tool = _slot->viewTool()->getName();
     std::vector<std::vector<std::string>> attackInfo;
@@ -104,73 +89,20 @@ std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlo
         std::string tmp;
         for(unsigned p=0; p<_slot->active()->attacks().at(o).requirements().size(); ++p)
         {
-            switch(_slot->active()->attacks().at(o).requirements().at(p))
-            {
-            case PTCG::TYPE::COLOURLESS : {tmp.push_back('C'); break;}
-            case PTCG::TYPE::DARKNESS : {tmp.push_back('D'); break;}
-            case PTCG::TYPE::DRAGON : {tmp.push_back('N'); break;}
-            case PTCG::TYPE::FAIRY : {tmp.push_back('Y'); break;}
-            case PTCG::TYPE::FIGHTING : {tmp.push_back('F'); break;}
-            case PTCG::TYPE::FIRE : {tmp.push_back('R'); break;}
-            case PTCG::TYPE::GRASS : {tmp.push_back('G'); break;}
-            case PTCG::TYPE::LIGHTNING : {tmp.push_back('L'); break;}
-            case PTCG::TYPE::METAL : {tmp.push_back('M'); break;}
-            case PTCG::TYPE::PSYCHIC : {tmp.push_back('P'); break;}
-            case PTCG::TYPE::WATER : {tmp.push_back('W'); break;}
-            case PTCG::TYPE::ERROR : {tmp.push_back('-'); break;}
-            default : break;
-            }
+            tmp.push_back(charify(_slot->active()->attacks().at(o).requirements().at(p)));
         }
         temp.push_back(tmp);
         attackInfo.push_back(temp);
     }
     unsigned retreat = _slot->active()->retreatCost();
     std::string weak;
-    switch(_slot->active()->weakness())
-    {
-    case PTCG::TYPE::COLOURLESS : {weak.push_back('C'); break;}
-    case PTCG::TYPE::DARKNESS : {weak.push_back('D'); break;}
-    case PTCG::TYPE::DRAGON : {weak.push_back('N'); break;}
-    case PTCG::TYPE::FAIRY : {weak.push_back('Y'); break;}
-    case PTCG::TYPE::FIGHTING : {weak.push_back('F'); break;}
-    case PTCG::TYPE::FIRE : {weak.push_back('R'); break;}
-    case PTCG::TYPE::GRASS : {weak.push_back('G'); break;}
-    case PTCG::TYPE::LIGHTNING : {weak.push_back('L'); break;}
-    case PTCG::TYPE::METAL : {weak.push_back('M'); break;}
-    case PTCG::TYPE::PSYCHIC : {weak.push_back('P'); break;}
-    case PTCG::TYPE::WATER : {weak.push_back('W'); break;}
-    case PTCG::TYPE::ERROR : {weak.push_back('-'); break;}
-    default : break;
-    }
+    weak.push_back(charify(_slot->active()->weakness()));
     std::string res;
-    switch(_slot->active()->resistance())
-    {
-    case PTCG::TYPE::COLOURLESS : {res.push_back('C'); break;}
-    case PTCG::TYPE::DARKNESS : {res.push_back('D'); break;}
-    case PTCG::TYPE::DRAGON : {res.push_back('N'); break;}
-    case PTCG::TYPE::FAIRY : {res.push_back('Y'); break;}
-    case PTCG::TYPE::FIGHTING : {res.push_back('F'); break;}
-    case PTCG::TYPE::FIRE : {res.push_back('R'); break;}
-    case PTCG::TYPE::GRASS : {res.push_back('G'); break;}
-    case PTCG::TYPE::LIGHTNING : {res.push_back('L'); break;}
-    case PTCG::TYPE::METAL : {res.push_back('M'); break;}
-    case PTCG::TYPE::PSYCHIC : {res.push_back('P'); break;}
-    case PTCG::TYPE::WATER : {res.push_back('W'); break;}
-    case PTCG::TYPE::ERROR : {res.push_back('-'); break;}
-    default : break;
-    }
+    res.push_back(charify(_slot->active()->resistance()));
     std::string conditions;
     for(unsigned r=0; r<_slot->conditions().size(); ++r)
     {
-        switch(_slot->conditions().at(r))
-        {
-        case PTCG::CONDITION::ASLEEP : {conditions.push_back('A'); break;}
-        case PTCG::CONDITION::BURNED : {conditions.push_back('B'); break;}
-        case PTCG::CONDITION::CONFUSED : {conditions.push_back('C'); break;}
-        case PTCG::CONDITION::PARALYZED : {conditions.push_back('R'); break;}
-        case PTCG::CONDITION::POISONED : {conditions.push_back('P'); break;}
-        default : break;
-        }
+        conditions.push_back(charify(_slot->conditions().at(r)));
     }
     std::vector<std::string> allLines;
     return allLines;
@@ -197,5 +129,42 @@ std::vector<std::string> AsciiPrinter::getToolCardLines(std::unique_ptr<TrainerC
 std::vector<unsigned> AsciiPrinter::getPrizeCards(Board *_board)
 {
     std::vector<unsigned> ret;
+    return ret;
+}
+
+char AsciiPrinter::charify(PTCG::TYPE _in)
+{
+    char ret;
+    switch(_in)
+    {
+    case PTCG::TYPE::COLOURLESS : {ret='C'; break;}
+    case PTCG::TYPE::DARKNESS : {ret='D'; break;}
+    case PTCG::TYPE::DRAGON : {ret='N'; break;}
+    case PTCG::TYPE::FAIRY : {ret='Y'; break;}
+    case PTCG::TYPE::FIGHTING : {ret='F'; break;}
+    case PTCG::TYPE::FIRE : {ret='R'; break;}
+    case PTCG::TYPE::GRASS : {ret='G'; break;}
+    case PTCG::TYPE::LIGHTNING : {ret='L'; break;}
+    case PTCG::TYPE::METAL : {ret='M'; break;}
+    case PTCG::TYPE::PSYCHIC : {ret='P'; break;}
+    case PTCG::TYPE::WATER : {ret='W'; break;}
+    case PTCG::TYPE::ERROR : {ret='-'; break;}
+    default : break;
+    }
+    return ret;
+}
+
+char AsciiPrinter::charify(PTCG::CONDITION _in)
+{
+    char ret;
+    switch(_in)
+    {
+    case PTCG::CONDITION::ASLEEP : {ret='A'; break;}
+    case PTCG::CONDITION::BURNED : {ret='B'; break;}
+    case PTCG::CONDITION::CONFUSED : {ret='C'; break;}
+    case PTCG::CONDITION::PARALYZED : {ret='R'; break;}
+    case PTCG::CONDITION::POISONED : {ret='P'; break;}
+    default : break;
+    }
     return ret;
 }

@@ -54,7 +54,7 @@ void AsciiPrinter::drawBoard(Board *_board)
     std::cout<<m_line<<std::endl;
     std::cout<<"TODO HAND"<<std::endl;
     std::cout<<m_line<<std::endl;
-    std::vector<unsigned> opPrize = getPrizeCards(_board);
+    std::array<unsigned,6> opPrize = getPrizeCards(_board);
     for(unsigned m=0; m<3; ++m)
     {
         for(unsigned i=0; i<opPrize.size(); ++i)
@@ -230,9 +230,38 @@ std::vector<std::string> AsciiPrinter::getToolCardLines(std::unique_ptr<TrainerC
     return allLines;
 }
 
-std::vector<unsigned> AsciiPrinter::getPrizeCards(Board *_board)
+std::array<unsigned,6> AsciiPrinter::getPrizeCards(Board *_board)
 {
-    std::vector<unsigned> ret;
+    std::array<unsigned,6> ret;
+    for(int i=0; i<6; ++i)
+    {
+        if(_board->m_prizeCards.view().at(i) != nullptr)
+        {
+            ret.at(i)=1;
+        }
+        else
+        {
+            ret.at(i)=0;
+        }
+    }
+    return ret;
+}
+
+std::array<unsigned,6> getSlots(Board* _board)
+{
+    std::array<unsigned,6> ret;
+    for(int i=0; i<6; ++i)
+    {
+
+        if(_board->m_bench.view().at(i).active() != nullptr)
+        {
+            ret.at(i)=1;
+        }
+        else
+        {
+            ret.at(i)=0;
+        }
+    }
     return ret;
 }
 

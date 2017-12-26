@@ -19,10 +19,12 @@ private :
     std::vector<std::string> getPokemonCardLines(std::unique_ptr<PokemonCard> _card);
     std::vector<std::string> getEnergyCardLines(std::unique_ptr<EnergyCard> _card);
     std::vector<std::string> getToolCardLines(std::unique_ptr<TrainerCard> _card);
+
     char charify(PTCG::TYPE _in);
     char charify(PTCG::CONDITION _in);
 
-    std::vector<unsigned> getPrizeCards(Board *_board);
+    std::array<unsigned,6> getPrizeCards(Board *_board);
+    std::array<unsigned,6> getSlots(Board* _board);
 
     const unsigned m_width = 128;
     const unsigned m_slotWidth = 20;

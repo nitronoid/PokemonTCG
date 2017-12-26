@@ -12,7 +12,8 @@ public :
     void init(); //default
     void init(char _blank); //change symbol for empty spaces
 
-    virtual void drawBoard(Board *_board) override;
+    virtual void drawBoard(Board* _board) override;
+    virtual void drawBoard(Board* _board, const bool _isOp=false) override;
 private :
     std::vector<std::string> getSlotCardLines(std::unique_ptr<BoardSlot> _slot);
     std::vector<std::string> getPokemonCardLines(std::unique_ptr<PokemonCard> _card);

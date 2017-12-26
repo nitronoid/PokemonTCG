@@ -50,6 +50,10 @@ void AsciiPrinter::init(char _blank)
 void AsciiPrinter::drawBoard(Board *_board)
 {
     std::cout<<m_line<<std::endl;
+    std::cout<<"TODO SLOTS"<<std::endl;
+    std::cout<<m_line<<std::endl;
+    std::cout<<"TODO HAND"<<std::endl;
+    std::cout<<m_line<<std::endl;
     std::vector<unsigned> opPrize = getPrizeCards(_board);
     for(unsigned m=0; m<3; ++m)
     {
@@ -69,6 +73,18 @@ void AsciiPrinter::drawBoard(Board *_board)
     }
     std::cout<<m_line<<std::endl;
 
+}
+
+void AsciiPrinter::drawBoard(Board* _board, const bool _isOp)
+{
+    if(_isOp)
+    {
+        std::cout<<"TODO OPPONENT"<<std::endl;
+    }
+    else
+    {
+        std::cout<<"TODO SELF"<<std::endl;
+    }
 }
 
 std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlot> _slot)
@@ -106,18 +122,18 @@ std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlo
     }
     std::vector<std::string> allLines(12,"");
     //LINE NO.0
-    /*allLines.at(0).push_back("*["+id+"]");
+    allLines.at(0).append("*["+std::to_string(id)+"]");
     std::string hpStr;
-    hpStr.push_back('['+hp+"hp]*");
+    hpStr.append('['+std::to_string(hp)+"hp]*");
     unsigned lineSize=m_slotWidth-allLines.at(0).size()-hpStr.size();
     for(unsigned t=0; t<lineSize; ++t) allLines.at(0).push_back('-');
-    allLines.at(0).push_back(hpStr);
+    allLines.at(0).append(hpStr);
     //LINE NO.1
-    allLines.at(1).push_back("| ");
+    allLines.at(1).append("| ");
     int len = m_slotWidth - (name.size()+2+pType.size()+3);
     if(len >= 0)
     {
-        allLines.at(1).push_back(name);
+        allLines.at(1).append(name);
         for(int g=0; g<len; ++g)
         {
             allLines.at(1).push_back(' ');
@@ -125,74 +141,74 @@ std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlo
     }
     else
     {
-        for(unsigned j=0; j<name+len; ++j)//in this case len will be negative so it would subtract from name length
+        for(unsigned j=0; j<name.size()+len; ++j)//in this case len will be negative so it would subtract from name length
         {
             allLines.at(1).push_back(name.at(j));
         }
     }
-    allLines.at(1).push_back('['+pType+"]|");
+    allLines.at(1).append('['+pType+"]|");
     //LINE NO.2
-    allLines.at(2).push_back("| Energy: "+energ+'x');
+    allLines.at(2).append("| Energy: "+energ+'x');
     unsigned lnSz0 = m_slotWidth - (1+allLines.at(2).size());
     for(unsigned f=0; f<lnSz0; ++f)
         allLines.at(2).push_back(' ');
     allLines.at(2).push_back('|');
     //LINE NO.3
-    allLines.at(3).push_back("| Tool: ");
+    allLines.at(3).append("| Tool: ");
     int tSize = m_slotWidth - (tool.size()+allLines.at(3).size()+1);
     if(tSize < 0)
     {
-        for(int u=0; u<tool.size()+tsize; ++u)
+        for(int u=0; u<(int)(tool.size()+tSize); ++u)
             allLines.at(3).push_back(tool.at(u));
     }
     else
     {
-        allLines.at(3).push_back(tool);
+        allLines.at(3).append(tool);
         for(int k=0; k<tSize; ++k)
             allLines.at(3).push_back(' ');
     }
     allLines.at(3).push_back('|');
     //LINE NO.4
-    allLines.at(4).push_back(m_slotCardLineMid);
+    allLines.at(4).append(m_slotCardLineMid);
     //LINE NO.5,6,7,8
     for(unsigned i=0; i<4; ++i)
     {
-        allLines.at(i+5).push_back("| ");
+        allLines.at(i+5).append("| ");
         int lnSz1 = m_slotWidth - (7+attackInfo.at(i).at(0).size()+attackInfo.at(i).at(1).size()+attackInfo.at(i).at(2).size());
         if(lnSz1 < 0) //too long name
         {
-            for(int y=0; y<attackInfo.at(i).at(0).size()+lnSz1; ++y) //lnSz1 negative
+            for(int y=0; y<(int)(attackInfo.at(i).at(0).size()+lnSz1); ++y) //lnSz1 negative
                 allLines.at(i+5).push_back(attackInfo.at(i).at(0).at(y));
-            allLines.at(i+5).push_back(' '+attackInfo.at(i).at(1)+" ("+attackInfo.at(i).at(2)+')');
+            allLines.at(i+5).append(' '+attackInfo.at(i).at(1)+" ("+attackInfo.at(i).at(2)+')');
         }
         else //all good
         {
-            allLines.at(i+5).push_back(attackInfo.at(i).at(0)+' '+attackInfo.at(i).at(1)+" ("+attackInfo.at(i).at(2)+')');
+            allLines.at(i+5).append(attackInfo.at(i).at(0)+' '+attackInfo.at(i).at(1)+" ("+attackInfo.at(i).at(2)+')');
             for(int u=0; u<lnSz1; ++u)
                 allLines.at(i+5).push_back(' ');
         }
         allLines.at(i+5).push_back('|');
     }
     //LINE NO.9
-    allLines.at(9).push_back(m_slotCardLineMid);
+    allLines.at(9).append(m_slotCardLineMid);
     //LINE NO.10
-    allLines.at(10).push_back("|["+retreat+']');
+    allLines.at(10).append("|["+retreat+']');
     unsigned lnSz2 = m_slotWidth - (allLines.at(10).size()+5+weak.size()+res.size());
     unsigned diff = lnSz2%2;
     for(unsigned a=0; a<lnSz2/2+diff; ++a)
         allLines.at(10).push_back(' ');
-    allLines.at(10).push_back('['+weak+']');
+    allLines.at(10).append('['+weak+']');
     for(unsigned b=0; b<lnSz2/2; ++b)
         allLines.at(10).push_back(' ');
-    allLines.at(10).push_back('['+res+"]|");
+    allLines.at(10).append('['+res+"]|");
     //LINE NO.11
-    allLines.at(11).push_back("|["+conditions+']');
+    allLines.at(11).append("|["+conditions+']');
     unsigned lnSz3 = m_slotWidth - (allLines.at(11).size() + 1);
     for(unsigned i=0; i<lnSz3; ++i)
         allLines.at(11).push_back(' ');
     allLines.at(11).push_back('|');
     //LINE NO.12
-    allLines.at(12).push_back(m_slotCardLine);*/
+    allLines.at(12).append(m_slotCardLine);
     return allLines;
 }
 
@@ -236,8 +252,7 @@ char AsciiPrinter::charify(PTCG::TYPE _in)
     case PTCG::TYPE::METAL : {ret='M'; break;}
     case PTCG::TYPE::PSYCHIC : {ret='P'; break;}
     case PTCG::TYPE::WATER : {ret='W'; break;}
-    case PTCG::TYPE::ERROR : {ret='-'; break;}
-    default : break;
+    default : {ret='-'; break;}
     }
     return ret;
 }
@@ -252,7 +267,7 @@ char AsciiPrinter::charify(PTCG::CONDITION _in)
     case PTCG::CONDITION::CONFUSED : {ret='C'; break;}
     case PTCG::CONDITION::PARALYZED : {ret='R'; break;}
     case PTCG::CONDITION::POISONED : {ret='P'; break;}
-    default : break;
+    default : {ret='-'; break;}
     }
     return ret;
 }

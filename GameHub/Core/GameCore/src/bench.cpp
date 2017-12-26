@@ -22,6 +22,14 @@ std::array<BoardSlot, 6> Bench::view() const
   return ret;
 }
 
+void Bench::switchActive(const unsigned &_sub)
+{
+    //using rend to simplify index finding for the substitute
+    std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';
+    std::iter_swap(m_slots.begin()+_sub,m_slots.begin());
+    slotAt(_sub)->removeAllConditions();
+}
+
 void Bench::put(std::unique_ptr<Card> &&_card, const unsigned _index)
 {
   if(_index<5)

@@ -22,12 +22,15 @@ public:
     inline int getBonusAfter() const {return m_bonusDamageAfter;}
     inline int getReductionBefore() const {return m_damageReductionBefore;}
     inline int getReductionAfter() const {return m_damageReductionAfter;}
+    inline unsigned getTurnPlayed() const {return m_turnPlayed;}
 
     void takeDamage(const int _damage);
     void setDamage(const int _value);
     void addCondition(const PTCG::CONDITION _condition);
     void removeCondition(const PTCG::CONDITION _condition);
     void removeAllConditions();
+    bool isDefeated();
+
     void attachCard(std::unique_ptr<Card> &&_card);
     std::vector<std::unique_ptr<PokemonCard>> detachPokemon();
     std::unique_ptr<PokemonCard> devolvePokemon();

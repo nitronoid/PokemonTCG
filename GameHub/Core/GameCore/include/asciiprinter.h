@@ -12,19 +12,22 @@ public :
     void init(); //default
     void init(char _blank); //change symbol for empty spaces
 
-    virtual void drawBoard(Board* _board) override;
-    virtual void drawBoard(Board* _board, const bool _isOp=false) override;
+    virtual void drawBoard(Board* _board, const bool _isOp) override;
 private :
-    std::vector<std::string> getSlotCardLines(std::unique_ptr<BoardSlot> _slot);
-    std::vector<std::string> getPokemonCardLines(std::unique_ptr<PokemonCard> _card);
-    std::vector<std::string> getEnergyCardLines(std::unique_ptr<EnergyCard> _card);
-    std::vector<std::string> getToolCardLines(std::unique_ptr<TrainerCard> _card);
+    std::array<std::string,13> getSlotCardLines(std::unique_ptr<BoardSlot> _slot);
+    std::array<std::string,10> getPokemonCardLines(std::unique_ptr<PokemonCard> _card);
+    std::array<std::string,10> getEnergyCardLines(std::unique_ptr<EnergyCard> _card);
+    std::array<std::string,10> getToolCardLines(std::unique_ptr<TrainerCard> _card);
 
     char charify(PTCG::TYPE _in);
     char charify(PTCG::CONDITION _in);
 
     std::array<unsigned,6> getPrizeCards(Board *_board);
     std::array<unsigned,6> getSlots(Board* _board);
+
+    void drawPrize(std::array<unsigned,6> _prize) const;
+    void drawSlots(std::array<unsigned,6> _slots) const;
+    void drawHand(Hand* _hand) const;
 
     const unsigned m_width = 128;
     const unsigned m_slotWidth = 20;

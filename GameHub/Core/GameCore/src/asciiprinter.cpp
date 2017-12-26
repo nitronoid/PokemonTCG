@@ -47,47 +47,43 @@ void AsciiPrinter::init(char _blank)
     m_emptyChar = _blank;
 }
 
-void AsciiPrinter::drawBoard(Board *_board)
-{
-    std::cout<<m_line<<std::endl;
-    std::cout<<"TODO SLOTS"<<std::endl;
-    std::cout<<m_line<<std::endl;
-    std::cout<<"TODO HAND"<<std::endl;
-    std::cout<<m_line<<std::endl;
-    std::array<unsigned,6> opPrize = getPrizeCards(_board);
-    for(unsigned m=0; m<3; ++m)
-    {
-        for(unsigned i=0; i<opPrize.size(); ++i)
-        {
-            if(opPrize.at(i) == 1)
-            {
-                std::cout<<m_prizeCardLine1;
-            }
-            else
-            {
-                std::cout<<"`````";
-            }
-            if(i == opPrize.size()-1) std::cout<<m_emptyChar;
-        }
-        std::cout<<std::endl;
-    }
-    std::cout<<m_line<<std::endl;
-
-}
-
 void AsciiPrinter::drawBoard(Board* _board, const bool _isOp)
 {
     if(_isOp)
     {
         std::cout<<"TODO OPPONENT"<<std::endl;
+
     }
     else
     {
         std::cout<<"TODO SELF"<<std::endl;
+        std::cout<<m_line<<std::endl;
+        std::cout<<"TODO SLOTS"<<std::endl;
+        std::cout<<m_line<<std::endl;
+        std::cout<<"TODO HAND"<<std::endl;
+        std::cout<<m_line<<std::endl;
+        std::array<unsigned,6> opPrize = getPrizeCards(_board);
+        for(unsigned m=0; m<3; ++m)
+        {
+            for(unsigned i=0; i<opPrize.size(); ++i)
+            {
+                if(opPrize.at(i) == 1)
+                {
+                    std::cout<<m_prizeCardLine1;
+                }
+                else
+                {
+                    std::cout<<"`````";
+                }
+                if(i < opPrize.size()-1) std::cout<<m_emptyChar;
+            }
+            std::cout<<std::endl;
+        }
+        std::cout<<m_line<<std::endl;
     }
 }
 
-std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlot> _slot)
+std::array<std::string,13> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlot> _slot)
 {
     unsigned id = _slot->active()->getID();
     unsigned hp = _slot->active()->hp();
@@ -120,7 +116,7 @@ std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlo
     {
         conditions.push_back(charify(_slot->conditions().at(r)));
     }
-    std::vector<std::string> allLines(12,"");
+    std::array<std::string,13> allLines;
     //LINE NO.0
     allLines.at(0).append("*["+std::to_string(id)+"]");
     std::string hpStr;
@@ -212,22 +208,158 @@ std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlo
     return allLines;
 }
 
-std::vector<std::string> AsciiPrinter::getPokemonCardLines(std::unique_ptr<PokemonCard> _card)
+std::array<std::string,10> AsciiPrinter::getPokemonCardLines(std::unique_ptr<PokemonCard> _card)
 {
-    std::vector<std::string> allLines;
+    std::array<std::string,10> allLines;
+    std::vector<std::vector<std::string>> attackInfo;
+    for(unsigned o=0; o<_card->attacks().size(); ++o)
+    {
+        std::vector<std::string> temp;
+        temp.push_back(_card->attacks().at(o).name());
+        temp.push_back("NA");
+        std::string tmp;
+        for(unsigned p=0; p<_card->attacks().at(o).requirements().size(); ++p)
+        {
+            tmp.push_back(charify(_card->attacks().at(o).requirements().at(p)));
+        }
+        temp.push_back(tmp);
+        attackInfo.push_back(temp);
+    }
+    unsigned retreat = _card->retreatCost();
+    std::string weak;
+    weak.push_back(charify(_card->weakness()));
+    std::string res;
+    res.push_back(charify(_card->resistance()));
+
+    //LINE NO.0
+    allLines.at(0).append("*--[POKE]--*");
+    //LINE NO.1
+    std::string temp1 = std::to_string(_card->hp());
+    int snLen1 = m_handWidth - (_card->getName().size()+2);
+    if(snLen1 > 0) //all good
+    {
+        allLines.at(1).append("| "+_card->getName());
+        for(int i=0; i<snLen1; ++i)
+        {
+            allLines.at(1).push_back(' ');
+        }
+    }
+    else //name is too long
+    {
+        allLines.at(1).append("| "+_card->getName().substr(0,_card->getName().size()+snLen1));
+    }
+    allLines.at(1).push_back('|');
+    //LINE NO.2
+    allLines.at(2).append("| ["+temp1+"hp]");
+    unsigned snLen0 = m_handWidth - (allLines.at(2).size()+1);
+    for(unsigned l=0; l<snLen0; ++l)
+        allLines.at(2).push_back(' ');
+    allLines.at(2).push_back('|');
+    //LINE NO.3,4,5,6
+    unsigned attackNum = attackInfo.size();
+    for(unsigned i=0; i<attackNum; ++i)
+    {
+        int snLen2 = m_handWidth - (attackInfo.at(i).at(0).size()+attackInfo.at(i).at(1).size()+attackInfo.at(i).at(2).size()+1);
+        if(snLen2 >=0) //all good
+        {
+            allLines.at(i+3).append('|'+attackInfo.at(i).at(0).substr(0,(attackInfo.at(i).at(0).size()+snLen2)));
+            for(int t=0; t<snLen2; ++t)
+            {
+                allLines.at(i+3).push_back(' ');
+            }
+        }
+        else //too long name
+        {
+            allLines.at(i+3).append('|'+attackInfo.at(i).at(0).substr(0,(attackInfo.at(i).at(0).size()+snLen2))+' ');
+        }
+        allLines.at(i+3).append(attackInfo.at(i).at(1)+attackInfo.at(i).at(2)+'|');
+    }
+    if(attackNum < 4) //if not all 4 lines dedicated to attacks are filled
+    {
+        unsigned tmp4 = 4-attackNum;
+        for(unsigned i=0; i<tmp4; ++i)
+        {
+            allLines.at(i+3+attackNum).push_back('|');
+            for(unsigned f=0; f<(m_handWidth-2); ++f)
+                allLines.at(i+3+attackNum).push_back(' ');
+            allLines.at(i+3+attackNum).push_back('|');
+        }
+    }
+    //LINE NO.7
+    allLines.at(7).push_back('|');
+    for(unsigned f=0; f<(m_handWidth-2); ++f)
+        allLines.at(7).push_back('-');
+    allLines.at(7).push_back('|');
+    //LINE NO.8
+    allLines.at(8).append('|'+std::to_string(retreat)+' '+weak+' '+res);
+    unsigned snLine3 = m_handWidth - allLines.at(8).size();
+    for(unsigned r=0; r<snLine3; ++r)
+        allLines.at(8).push_back(' ');
+    allLines.at(8).push_back('|');
+    //LINE NO.9
+    allLines.at(9).append(m_handLine);
     return allLines;
 }
 
-std::vector<std::string> AsciiPrinter::getEnergyCardLines(std::unique_ptr<EnergyCard> _card)
+std::array<std::string,10> AsciiPrinter::getEnergyCardLines(std::unique_ptr<EnergyCard> _card)
 {
-    std::vector<std::string> allLines;
+    std::array<std::string,10> allLines;
+    //LINE NO.0
+    allLines.at(0).append("*--[ENRG]--*");
+    //LINE NO.1
+    allLines.at(1).append("|["+charify(_card->type())+']');
+    std::string enVal = std::to_string(_card->amount());
+    unsigned enLin1 = m_handWidth - (allLines.at(1).size()+2+enVal.size());
+    if(enLin1 >= 0) //all good
+    {
+        for(unsigned y=0; y<enLin1; ++y)
+            allLines.at(1).push_back('`');
+        allLines.at(1).append('['+enVal+"]|");
+    }
+    else //value too big => error
+    {
+        for(unsigned u=allLines.at(1).size(); u<m_handWidth-1; ++u)
+            allLines.at(1).push_back('#');
+        allLines.at(1).push_back('|');
+    }
+    //LINE NO.2
+    allLines.at(2).append(m_energyPart1);
+    //LINE NO.3
+    allLines.at(3).append(m_energyPart2);
+    //LINE NO.4
+    allLines.at(4).append(m_energyPart3);
+    //LINE NO.5
+    allLines.at(5).append(m_energyPart2);
+    //LINE NO.6
+    allLines.at(6).append(m_energyPart4);
+    //LINE NO.7
+    allLines.at(7).append(m_energyPart5);
+    //LINE NO.8
+    allLines.at(8).append(m_energyPart1);
+    //LINE NO.9
+    allLines.at(9).append(m_handLine);
     return allLines;
 }
 
-std::vector<std::string> AsciiPrinter::getToolCardLines(std::unique_ptr<TrainerCard> _card)
+std::array<std::string,10> AsciiPrinter::getToolCardLines(std::unique_ptr<TrainerCard> _card)
 {
-    std::vector<std::string> allLines;
+    std::array<std::string,10> allLines;
     return allLines;
+}
+
+void AsciiPrinter::drawPrize(std::array<unsigned,6> _prize) const
+{
+
+}
+
+void AsciiPrinter::drawSlots(std::array<unsigned,6> _slots) const
+{
+
+}
+
+void AsciiPrinter::drawHand(Hand* _hand) const
+{
+
 }
 
 std::array<unsigned,6> AsciiPrinter::getPrizeCards(Board *_board)

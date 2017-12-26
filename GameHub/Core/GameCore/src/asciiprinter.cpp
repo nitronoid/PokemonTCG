@@ -1,49 +1,25 @@
 #include "asciiprinter.h"
 
-void AsciiPrinter::init()
+AsciiPrinter::AsciiPrinter()
 {
-    for(unsigned i=0; i<m_width; ++i)
-    {
-        m_line.push_back('=');
-    }
-    for(unsigned i=0; i<m_slotWidth; ++i)
-    {
-        if(i==0 || i==m_slotWidth)
-        {
-            m_slotCardLine.push_back('*');
-        }
-        else
-        {
-            m_slotCardLine.push_back('-');
-        }
-    }
-    for(unsigned i=0; i<m_slotWidth; ++i)
-    {
-        if(i==0 || i==m_slotWidth)
-        {
-            m_slotCardLineMid.push_back('|');
-        }
-        else
-        {
-            m_slotCardLineMid.push_back('-');
-        }
-    }
-    for(unsigned i=0; i<m_handWidth; ++i)
-    {
-        if(i==0 || i==m_handWidth)
-        {
-            m_handLine.push_back('*');
-        }
-        else
-        {
-            m_handLine.push_back('-');
-        }
-    }
+    std::string ln(m_width,'=');
+    m_line = ln;
+    std::string scl(m_slotWidth-2,'-');
+    scl.push_back('*');
+    scl.insert(0,std::to_string('*'));
+    m_slotCardLine = scl;
+    std::string sclm(m_slotWidth-2,'-');
+    sclm.push_back('|');
+    sclm.insert(0,std::to_string('|'));
+    m_slotCardLineMid = sclm;
+    std::string hl(m_handWidth-2,'-');
+    hl.push_back('*');
+    hl.insert(0,std::to_string('*'));
+    m_handLine = hl;
 }
 
-void AsciiPrinter::init(char _blank)
+void AsciiPrinter::setBlank(char _blank)
 {
-    init();
     m_emptyChar = _blank;
 }
 
@@ -51,7 +27,6 @@ void AsciiPrinter::drawBoard(Board* _board, const bool _isOp)
 {
     if(_isOp)
     {
-        std::cout<<"TODO OPPONENT"<<std::endl;
         std::cout<<m_line<<std::endl;
         //DRAW PRIZE
         std::array<unsigned,6> opPrize = getPrizeCards(_board);
@@ -59,21 +34,18 @@ void AsciiPrinter::drawBoard(Board* _board, const bool _isOp)
         std::cout<<m_line<<std::endl;
         //DRAW SLOTS
         std::array<unsigned,6> opSlots = getSlots(_board);
-        drawSlots(opSlots);
-        std::cout<<"TODO SLOTS"<<std::endl;
+        drawSlots(_board, opSlots);
         std::cout<<m_line<<std::endl;
     }
     else
     {
-        std::cout<<"TODO SELF"<<std::endl;
         std::cout<<m_line<<std::endl;
         //DRAW SLOTS
         std::array<unsigned,6> mySlots = getSlots(_board);
-        drawSlots(mySlots);
-        std::cout<<"TODO SLOTS"<<std::endl;
+        drawSlots(_board, mySlots);
         std::cout<<m_line<<std::endl;
         //DRAW HAND
-        drawHand(_board->m_hand);
+        drawHand(&_board->m_hand);
         std::cout<<"TODO HAND"<<std::endl;
         std::cout<<m_line<<std::endl;
         //DRAW PRIZE
@@ -83,7 +55,7 @@ void AsciiPrinter::drawBoard(Board* _board, const bool _isOp)
     }
 }
 
-std::array<std::string,13> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlot> _slot)
+std::array<std::string,13> AsciiPrinter::getSlotCardLines(BoardSlot* _slot)
 {
     unsigned id = _slot->active()->getID();
     unsigned hp = _slot->active()->hp();
@@ -420,12 +392,33 @@ void AsciiPrinter::drawPrize(std::array<unsigned,6> _prize) const
     }
 }
 
-void AsciiPrinter::drawSlots(std::array<unsigned,6> _slots) const
+void AsciiPrinter::drawSlots(Board* _board, std::array<unsigned,6> _slots)
 {
     std::cout<<"TODO: SLOT PRINTOUT"<<std::endl;
+
+    std::array<std::array<std::string,13>,6> slotsStr;
+    for(int p=0; p<6; ++p)
+        slotsStr.at(p) = getSlotCardLines(_board->m_bench.slotAt(p));
+
+    for(int i=0; i<13; ++i)
+    {
+        for(int i=0; i<6; ++i)
+        {
+            if(_slots.at(i) == 1)
+            {
+
+            }
+            else
+            {
+                std::string tmp(m_slotWidth, m_emptyChar);
+                std::cout<<tmp;
+            }
+            if(i<5) std::cout<<m_emptyChar;
+        }
+    }
 }
 
-void AsciiPrinter::drawHand(Hand& _hand) const
+void AsciiPrinter::drawHand(Hand* _hand) const
 {
     std::cout<<"TODO: HAND PRINTOUT"<<std::endl;
 }

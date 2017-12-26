@@ -7,14 +7,14 @@
 class AsciiPrinter : public GuiModule
 {
 public :
-    AsciiPrinter() = default;
+    AsciiPrinter();
 
     void init(); //default
-    void init(char _blank); //change symbol for empty spaces
+    void setBlank(char _blank); //change symbol for empty spaces
 
     virtual void drawBoard(Board* _board, const bool _isOp) override;
 private :
-    std::array<std::string,13> getSlotCardLines(std::unique_ptr<BoardSlot> _slot);
+    std::array<std::string,13> getSlotCardLines(BoardSlot *_slot);
     std::array<std::string,10> getPokemonCardLines(std::unique_ptr<PokemonCard> _card);
     std::array<std::string,10> getEnergyCardLines(std::unique_ptr<EnergyCard> _card);
     std::array<std::string,10> getToolCardLines(std::unique_ptr<TrainerCard> _card);
@@ -26,8 +26,8 @@ private :
     std::array<unsigned,6> getSlots(Board* _board);
 
     void drawPrize(std::array<unsigned,6> _prize) const;
-    void drawSlots(std::array<unsigned,6> _slots) const;
-    void drawHand(Hand* _hand) const;
+    void drawSlots(Board* _board, std::array<unsigned,6> _slots);
+    void drawHand(Hand *_hand) const;
 
     const unsigned m_width = 128;
     const unsigned m_slotWidth = 20;

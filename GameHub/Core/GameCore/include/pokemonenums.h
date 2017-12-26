@@ -64,7 +64,8 @@ enum class ACTION {
     DRAW,
     DISCARD,
     PLAY,
-    VIEW
+    VIEW,
+    MOVE
 };
 
 enum class ORDER {

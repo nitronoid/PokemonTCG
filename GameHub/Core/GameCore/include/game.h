@@ -53,9 +53,17 @@ public:
 
 
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
+  void removeCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
+  void removeAllCondition(const PTCG::PLAYER &_target);
   inline unsigned getTurnCount() const {return m_turnCount;}
-
+  void switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex);
+  //added MOVE to ACTION enum since player needs to choose what to move into active if _index = 0
+  void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, const unsigned &_index=0);
+  void pileToBench(); //a case of playCard, will implement later
+  bool evolve(const unsigned &_index);
+  bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);
   unsigned searchCountByName(std::string _name, const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+
 private:
 
   Game(const Game &_original);

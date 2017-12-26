@@ -115,6 +115,18 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
   return ret;
 }
 
+void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
+{
+    if(_subIndex>5)
+    {
+        std::cout<<"Inex out of bench range when switching"<<'\n';
+        return;
+    }
+    auto& board = m_boards[playerIndex(_player)];
+    board.m_bench.switchActive(_subIndex);
+
+}
+
 
 //_cardIndices - target cards on board/hand... to move
 bool Game::moveCards(std::vector<unsigned> _cardIndices,
@@ -177,6 +189,41 @@ void Game::dealDamage(const unsigned _damage, const unsigned _id)
   std::cout<<"Attack did: "<<_damage<<" damage!\n";
 }
 
+bool Game::evolve(const unsigned &_index)
+{
+    Board& board = m_boards[playerIndex(PTCG::PLAYER::SELF)];
+    if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
+    {
+        std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
+        return false;
+    }
+    if(board.m_bench.slotAt(_index)->getTurnPlayed()==0)
+    {
+        std::cout<<"This mon cannot evolve yet."<<'\n';
+        return false;
+    }
+    //chooseCard here for valid Pokemon and return the card to attach to the evolving pokemon
+
+    if(_index==0)
+    {
+        board.m_bench.slotAt(0)->removeAllConditions();
+    }
+
+    return true;
+}
+// Need to implement take single pokemon card from m_pokemon in Board Slot
+bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
+{
+    Board& board = m_boards[playerIndex(_player)];
+    if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
+    {
+        std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
+        return false;
+    }
+
+    return true;
+}
+
 void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
 {
   Board& board = m_boards[playerIndex(_target)];
@@ -210,18 +257,28 @@ void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_c
   }
 }
 
+void Game::removeCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
+{
+    m_boards[playerIndex(_target)].m_bench.slotAt(0)->removeCondition(_condition);
+}
+
+void Game::removeAllCondition(const PTCG::PLAYER &_target)
+{
+    m_boards[playerIndex(_target)].m_bench.slotAt(0)->removeAllConditions();
+}
+
 void Game::poison()
 {
-  m_damageHandler.rawDamage(m_boards.at(m_turnCount % 2).m_bench,0,m_damageHandler.getPoison());
+  m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,0,m_damageHandler.getPoison());
 
 }
 
 void Game::burn()
 {
-  m_damageHandler.rawDamage(m_boards.at(m_turnCount % 2).m_bench,0,m_damageHandler.getBurn());
+  m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,0,m_damageHandler.getBurn());
   if(flipCoin(1))
   {
-    m_boards.at(m_turnCount % 2).m_bench.slotAt(0)->removeCondition(PTCG::CONDITION::BURNED);
+    m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0)->removeCondition(PTCG::CONDITION::BURNED);
   }
 }
 

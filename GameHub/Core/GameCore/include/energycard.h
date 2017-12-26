@@ -21,6 +21,7 @@ public:
     }
 
     inline PTCG::TYPE type() const { return m_type; }
+    inline unsigned amount() const { return m_amount; }
     virtual PTCG::CARD cardType() const override { return PTCG::CARD::ENERGY; }
 private:
     unsigned m_amount;

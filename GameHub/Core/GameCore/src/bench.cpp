@@ -26,7 +26,7 @@ void Bench::switchActive(const unsigned &_sub)
 {
     //using rend to simplify index finding for the substitute
     std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';
-    std::iter_swap(m_slots.begin()+_sub,m_slots.begin());
+    std::swap(m_slots[0],m_slots[_sub]);
     slotAt(_sub)->removeAllConditions();
 }
 

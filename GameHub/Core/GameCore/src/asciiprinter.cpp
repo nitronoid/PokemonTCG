@@ -406,7 +406,7 @@ void AsciiPrinter::drawSlots(Board* _board, std::array<unsigned,6> _slots)
         {
             if(_slots.at(i) == 1)
             {
-
+                std::cout<<slotsStr.at(i).at(i);
             }
             else
             {
@@ -415,6 +415,7 @@ void AsciiPrinter::drawSlots(Board* _board, std::array<unsigned,6> _slots)
             }
             if(i<5) std::cout<<m_emptyChar;
         }
+        std::cout<<std::endl;
     }
 }
 

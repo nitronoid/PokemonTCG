@@ -19,7 +19,6 @@ int main()
   foo->attack(0, test);
 
   AsciiPrinter drawer;
-  drawer.init();
   test.init(testPool, &drawer, "test_deck.json", "test_deck.json");
   test.start();
 

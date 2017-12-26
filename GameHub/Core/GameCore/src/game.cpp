@@ -13,7 +13,7 @@ Game::Game(const Game &_original) :
   }
 }
 
-void Game::init(const CardFactory &_factory, const std::string &_deckA, const std::string &_deckB)
+void Game::init(const CardFactory &_factory, GuiModule * const _drawer, const std::string &_deckA, const std::string &_deckB)
 {
   m_boards[0].m_deck.init(_factory.loadDeck(_deckA));
   m_boards[0].m_deck.shuffle();
@@ -21,6 +21,8 @@ void Game::init(const CardFactory &_factory, const std::string &_deckA, const st
   m_boards[1].m_deck.shuffle();
   m_players[0].reset(new HumanPlayer(*this));
   m_players[1].reset(new HumanPlayer(*this));
+
+  if(_drawer) m_drawer = _drawer;
 }
 
 void Game::start()
@@ -117,13 +119,13 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
 
 void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
 {
-    if(_subIndex>5)
-    {
-        std::cout<<"Inex out of bench range when switching"<<'\n';
-        return;
-    }
-    auto& board = m_boards[playerIndex(_player)];
-    board.m_bench.switchActive(_subIndex);
+  if(_subIndex>5)
+  {
+    std::cout<<"Inex out of bench range when switching"<<'\n';
+    return;
+  }
+  auto& board = m_boards[playerIndex(_player)];
+  board.m_bench.switchActive(_subIndex);
 
 }
 
@@ -164,7 +166,11 @@ void Game::nextTurn()
   // Get the current player
   auto& currentPlayer = m_players[m_turnCount % 2];
   Board& currentBoard = m_boards[m_turnCount % 2];
-
+  if (m_drawer)
+  {
+    m_drawer->drawBoard(&m_boards[(m_turnCount + 1) % 2],false);
+    m_drawer->drawBoard(&currentBoard, true);
+  }
   // Attempt to draw a card
   if (drawCard(currentBoard))
   {
@@ -191,37 +197,37 @@ void Game::dealDamage(const unsigned _damage, const unsigned _id)
 
 bool Game::evolve(const unsigned &_index)
 {
-    Board& board = m_boards[playerIndex(PTCG::PLAYER::SELF)];
-    if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
-    {
-        std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
-        return false;
-    }
-    if(board.m_bench.slotAt(_index)->getTurnPlayed()==0)
-    {
-        std::cout<<"This mon cannot evolve yet."<<'\n';
-        return false;
-    }
-    //chooseCard here for valid Pokemon and return the card to attach to the evolving pokemon
+  Board& board = m_boards[playerIndex(PTCG::PLAYER::SELF)];
+  if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
+  {
+    std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
+    return false;
+  }
+  if(board.m_bench.slotAt(_index)->getTurnPlayed()==0)
+  {
+    std::cout<<"This mon cannot evolve yet."<<'\n';
+    return false;
+  }
+  //chooseCard here for valid Pokemon and return the card to attach to the evolving pokemon
 
-    if(_index==0)
-    {
-        board.m_bench.slotAt(0)->removeAllConditions();
-    }
+  if(_index==0)
+  {
+    board.m_bench.slotAt(0)->removeAllConditions();
+  }
 
-    return true;
+  return true;
 }
 // Need to implement take single pokemon card from m_pokemon in Board Slot
 bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
 {
-    Board& board = m_boards[playerIndex(_player)];
-    if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
-    {
-        std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
-        return false;
-    }
+  Board& board = m_boards[playerIndex(_player)];
+  if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
+  {
+    std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
+    return false;
+  }
 
-    return true;
+  return true;
 }
 
 void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
@@ -259,12 +265,12 @@ void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_c
 
 void Game::removeCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
 {
-    m_boards[playerIndex(_target)].m_bench.slotAt(0)->removeCondition(_condition);
+  m_boards[playerIndex(_target)].m_bench.slotAt(0)->removeCondition(_condition);
 }
 
 void Game::removeAllCondition(const PTCG::PLAYER &_target)
 {
-    m_boards[playerIndex(_target)].m_bench.slotAt(0)->removeAllConditions();
+  m_boards[playerIndex(_target)].m_bench.slotAt(0)->removeAllConditions();
 }
 
 void Game::poison()

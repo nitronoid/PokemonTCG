@@ -8,6 +8,7 @@
 #include "cardfactory.h"
 #include "board.h"
 #include "damagehandler.h"
+#include "guimodule.h"
 
 class Game
 {
@@ -16,7 +17,7 @@ public:
   Game(Game&&_original) = default;
 
   Game clone() const;
-  void init(const CardFactory &_factory, const std::string &_deckA, const std::string &_deckB);
+  void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
 
   void dealDamage(const unsigned _damage, const unsigned _id = 0);
   unsigned flipCoin(const unsigned _num);
@@ -80,7 +81,7 @@ private:
   void sleep();
 
 private:
-
+  GuiModule* m_drawer;
   std::array<std::unique_ptr<Player>, 2> m_players;
   std::array<Board, 2> m_boards;
   DamageHandler m_damageHandler;

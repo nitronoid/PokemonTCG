@@ -106,9 +106,9 @@ std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlo
     }
     std::vector<std::string> allLines(12,"");
     //LINE NO.0
-    allLines.at(0).push_back("*["+_slot->active()->getID()+']');
+    /*allLines.at(0).push_back("*["+id+"]");
     std::string hpStr;
-    hpStr.push_back('['+_slot->active()->hp()+"hp]*");
+    hpStr.push_back('['+hp+"hp]*");
     unsigned lineSize=m_slotWidth-allLines.at(0).size()-hpStr.size();
     for(unsigned t=0; t<lineSize; ++t) allLines.at(0).push_back('-');
     allLines.at(0).push_back(hpStr);
@@ -192,7 +192,7 @@ std::vector<std::string> AsciiPrinter::getSlotCardLines(std::unique_ptr<BoardSlo
         allLines.at(11).push_back(' ');
     allLines.at(11).push_back('|');
     //LINE NO.12
-    allLines.at(12).push_back(m_slotCardLine);
+    allLines.at(12).push_back(m_slotCardLine);*/
     return allLines;
 }
 

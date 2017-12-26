@@ -52,33 +52,33 @@ void AsciiPrinter::drawBoard(Board* _board, const bool _isOp)
     if(_isOp)
     {
         std::cout<<"TODO OPPONENT"<<std::endl;
-
+        std::cout<<m_line<<std::endl;
+        //DRAW PRIZE
+        std::array<unsigned,6> opPrize = getPrizeCards(_board);
+        drawPrize(opPrize);
+        std::cout<<m_line<<std::endl;
+        //DRAW SLOTS
+        std::array<unsigned,6> opSlots = getSlots(_board);
+        drawSlots(opSlots);
+        std::cout<<"TODO SLOTS"<<std::endl;
+        std::cout<<m_line<<std::endl;
     }
     else
     {
         std::cout<<"TODO SELF"<<std::endl;
         std::cout<<m_line<<std::endl;
+        //DRAW SLOTS
+        std::array<unsigned,6> mySlots = getSlots(_board);
+        drawSlots(mySlots);
         std::cout<<"TODO SLOTS"<<std::endl;
         std::cout<<m_line<<std::endl;
+        //DRAW HAND
+        drawHand(_board->m_hand);
         std::cout<<"TODO HAND"<<std::endl;
         std::cout<<m_line<<std::endl;
-        std::array<unsigned,6> opPrize = getPrizeCards(_board);
-        for(unsigned m=0; m<3; ++m)
-        {
-            for(unsigned i=0; i<opPrize.size(); ++i)
-            {
-                if(opPrize.at(i) == 1)
-                {
-                    std::cout<<m_prizeCardLine1;
-                }
-                else
-                {
-                    std::cout<<"`````";
-                }
-                if(i < opPrize.size()-1) std::cout<<m_emptyChar;
-            }
-            std::cout<<std::endl;
-        }
+        //DRAW PRIZE
+        std::array<unsigned,6> myPrize = getPrizeCards(_board);
+        drawPrize(myPrize);
         std::cout<<m_line<<std::endl;
     }
 }
@@ -309,10 +309,10 @@ std::array<std::string,10> AsciiPrinter::getEnergyCardLines(std::unique_ptr<Ener
     //LINE NO.1
     allLines.at(1).append("|["+charify(_card->type())+']');
     std::string enVal = std::to_string(_card->amount());
-    unsigned enLin1 = m_handWidth - (allLines.at(1).size()+2+enVal.size());
+    int enLin1 = m_handWidth - (allLines.at(1).size()+2+enVal.size());
     if(enLin1 >= 0) //all good
     {
-        for(unsigned y=0; y<enLin1; ++y)
+        for(int y=0; y<enLin1; ++y)
             allLines.at(1).push_back('`');
         allLines.at(1).append('['+enVal+"]|");
     }
@@ -344,22 +344,90 @@ std::array<std::string,10> AsciiPrinter::getEnergyCardLines(std::unique_ptr<Ener
 std::array<std::string,10> AsciiPrinter::getToolCardLines(std::unique_ptr<TrainerCard> _card)
 {
     std::array<std::string,10> allLines;
+    std::string trType;
+    switch(_card->cardType())
+    {
+    case(PTCG::CARD::TOOL) : {trType="TOOL";break;}
+    case(PTCG::CARD::ITEM) : {trType="ITEM";break;}
+    case(PTCG::CARD::STADIUM) : {trType="STAD";break;}
+    default : {trType="ERRO";break;}
+    }
+    //LINE NO.0
+    allLines.at(0).append("*--[TRNR]--*");
+    //LINE NO.1
+    allLines.at(1).append("|["+trType+']');
+    unsigned trLn1 = m_handWidth - (allLines.at(1).size()+1);
+    for(unsigned i=0; i<trLn1; ++i)
+        allLines.at(1).push_back(',');
+    allLines.at(1).push_back('|');
+    //LINE NO.2
+    std::string trName = _card->getName();
+    if(trName.size() > m_handWidth-2)
+    {
+        allLines.at(2).append('|'+trName.substr(0,m_handWidth-2)+'|');
+    }
+    else
+    {
+        allLines.at(2).append('|'+trName);
+        for(int i=0; i<(int)(m_handWidth-allLines.at(2).size()); ++i)
+            allLines.at(2).push_back(',');
+        allLines.at(2).push_back('|');
+    }
+    //LINE NO.3,4,5,6,7,8
+    for(unsigned r=0; r<6; ++r)
+    {
+        allLines.at(r+3).push_back('|');
+        for(int i=0; i<(int)(m_handWidth-2); ++i)
+            allLines.at(r+3).push_back(',');
+        allLines.at(r+3).push_back('|');
+    }
+    //LINE NO.7
+
+    //LINE NO.8
+
+    //LINE NO.9
+    allLines.at(9).append(m_handLine);
     return allLines;
 }
 
 void AsciiPrinter::drawPrize(std::array<unsigned,6> _prize) const
 {
-
+    for(int i=0; i<3; ++i)
+    {
+        for(int y=0; y<6; ++y)
+        {
+            if(_prize.at(y)==1)
+            {
+                if(i==1)
+                {
+                    std::cout<<m_prizeCardLine2;
+                }
+                else
+                {
+                    std::cout<<m_prizeCardLine1;
+                }
+            }
+            else
+            {
+                std::string tmp;
+                for(unsigned u=0; u<m_handWidth; ++u)
+                    tmp.push_back(m_emptyChar);
+                std::cout<<tmp;
+            }
+            if(y<5) std::cout<<m_emptyChar;
+        }
+        std::cout<<std::endl;
+    }
 }
 
 void AsciiPrinter::drawSlots(std::array<unsigned,6> _slots) const
 {
-
+    std::cout<<"TODO: SLOT PRINTOUT"<<std::endl;
 }
 
-void AsciiPrinter::drawHand(Hand* _hand) const
+void AsciiPrinter::drawHand(Hand& _hand) const
 {
-
+    std::cout<<"TODO: HAND PRINTOUT"<<std::endl;
 }
 
 std::array<unsigned,6> AsciiPrinter::getPrizeCards(Board *_board)
@@ -379,7 +447,7 @@ std::array<unsigned,6> AsciiPrinter::getPrizeCards(Board *_board)
     return ret;
 }
 
-std::array<unsigned,6> getSlots(Board* _board)
+std::array<unsigned,6> AsciiPrinter::getSlots(Board* _board)
 {
     std::array<unsigned,6> ret;
     for(int i=0; i<6; ++i)

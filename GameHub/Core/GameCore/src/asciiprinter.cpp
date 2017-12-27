@@ -457,7 +457,7 @@ std::vector<std::vector<std::array<std::string,10>>> AsciiPrinter::getHandLines(
             }
             if(cards.size() < slotNum)
             {
-                for(unsigned j=0; j<(cards.size()-slotNum); ++j)
+                for(unsigned j=0; j<(slotNum - cards.size()); ++j)
                     ret.push_back(getHandCardLines());
             }
             returnValues.push_back(ret);

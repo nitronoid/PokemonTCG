@@ -3,7 +3,7 @@
 #include <typeinfo>
 #include <pybind11/embed.h>
 #include "game.h"
-#include "simpleprinter.h"
+#include "asciiprinter.h"
 #include "cardfactory.h"
 
 // Needed for python attack functions
@@ -18,7 +18,7 @@ int main()
   std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(9)));
   foo->attack(0, test);
 
-  SimplePrinter drawer;
+  AsciiPrinter drawer;
   test.init(testPool, &drawer, "test_deck.json", "test_deck.json");
   test.start();
 

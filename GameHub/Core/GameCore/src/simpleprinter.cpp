@@ -1,4 +1,5 @@
 #include "simpleprinter.h"
+#include "asciicards.h"
 #include <string>
 #include <iostream>
 #include <string>
@@ -99,7 +100,7 @@ void addVec(std::vector<std::string> &_lhs, const std::vector<std::string> &_rhs
 
 std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
 {
-  std::string ret = m_sentinelSlot;
+  std::string ret = k_sentinelSlot;
   auto active = _slot->active();
   str_replace(ret, "$ID", std::to_string(active->getID()));
   str_replace(ret, "$HP", std::to_string(active->hp()));
@@ -150,7 +151,7 @@ std::string SimplePrinter::benchStr(Bench * const _bench) const
     if (slot->active())
       addVec(benchVec, split(slotStr(_bench->slotAt(i))));
     else
-      addVec(benchVec, split(m_blankSlot));
+      addVec(benchVec, split(k_blankSlot));
   }
   // Concatenate the bench
   for (auto l : benchVec) ret += (l + '\n');
@@ -159,7 +160,7 @@ std::string SimplePrinter::benchStr(Bench * const _bench) const
 
 std::string SimplePrinter::pokemonCardStr(PokemonCard * const _card) const
 {
-  std::string ret = m_sentinelPokemonCard;
+  std::string ret = k_sentinelPokemonCard;
   str_replace(ret, "$TYPE", std::string{stringify(_card->cardType())});
   str_replace(ret, "$HP", std::to_string(_card->hp()));
   str_replace(ret, "$NAME$", _card->getName(), false);
@@ -175,10 +176,46 @@ std::string SimplePrinter::pokemonCardStr(PokemonCard * const _card) const
     str_replace(ret, "$AR" + std::to_string(i), requirements);
     ++i;
   }
+  for (; i < 2; ++i)
+  {
+    str_replace(ret, "$A"  + std::to_string(i) + "$$$$$", "", false);
+    str_replace(ret, "$D"  + std::to_string(i), "");
+    str_replace(ret, "$AR" + std::to_string(i), "");
+  }
 
   str_replace(ret, "$W", std::string{charify(_card->weakness())});
   str_replace(ret, "$R", std::string{charify(_card->resistance())});
   str_replace(ret, "$C", std::to_string(_card->retreatCost()));
+  return ret;
+}
+
+std::string SimplePrinter::energyCardStr(EnergyCard * const _card) const
+{
+  std::string ret;
+  switch(_card->type())
+  {
+    case PTCG::TYPE::COLOURLESS : {ret='C'; break;}
+    case PTCG::TYPE::DARKNESS :   {ret='D'; break;}
+    case PTCG::TYPE::DRAGON :     {ret='N'; break;}
+    case PTCG::TYPE::FAIRY :      {ret='Y'; break;}
+    case PTCG::TYPE::FIGHTING :   {ret='F'; break;}
+    case PTCG::TYPE::FIRE :       {ret='R'; break;}
+    case PTCG::TYPE::GRASS :      {ret='G'; break;}
+    case PTCG::TYPE::LIGHTNING :  {ret='L'; break;}
+    case PTCG::TYPE::METAL :      {ret='M'; break;}
+    case PTCG::TYPE::PSYCHIC :    {ret='P'; break;}
+    case PTCG::TYPE::WATER :      {ret='W'; break;}
+    default : {ret='-'; break;}
+
+  }
+  return k_electricCard;
+}
+
+std::string SimplePrinter::trainerCardStr(TrainerCard * const _card, const std::string &_type) const
+{
+  std::string ret = k_sentinelTrainerCard;
+  str_replace(ret, "$TYPE", _type);
+  str_replace(ret, "$NAME$$$$$$$$", _card->getName(), false);
   return ret;
 }
 
@@ -188,8 +225,13 @@ std::string SimplePrinter::cardStr(Card * const _card) const
   using crd = PTCG::CARD;
   switch(_card->cardType())
   {
-    case crd::POKEMON : { ret = pokemonCardStr(static_cast<PokemonCard*>(_card)); break;}
-    default:  ret = m_blankCard; break;
+    case crd::POKEMON : { ret = pokemonCardStr(static_cast<PokemonCard*>(_card)); break; }
+    case crd::ENERGY :  { ret = energyCardStr(static_cast<EnergyCard*>(_card)); break; }
+    case crd::ITEM :    { ret = trainerCardStr(static_cast<TrainerCard*>(_card), "ITEM"); break; }
+    case crd::TOOL :    { ret = trainerCardStr(static_cast<TrainerCard*>(_card), "TOOL"); break; }
+    case crd::SUPPORT : { ret = trainerCardStr(static_cast<TrainerCard*>(_card), "SPRT"); break; }
+    case crd::STADIUM : { ret = trainerCardStr(static_cast<TrainerCard*>(_card), "STAD"); break; }
+    default:  ret = k_blankCard; break;
   }
   return ret;
 }

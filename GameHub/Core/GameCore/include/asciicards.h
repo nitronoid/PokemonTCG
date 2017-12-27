@@ -63,6 +63,16 @@ static constexpr auto k_sentinelTrainerCard = R"(
 |             |
 *-------------*
                      )";
+static constexpr auto k_prizeCard = R"(
+*---*
+| ? |
+*---*
+                     )";
+static constexpr auto k_emptyPrize = R"(
+-----
+-----
+-----
+                     )";
 
 static constexpr auto k_electricCard = R"(
 *---[ENERG]---*
@@ -74,6 +84,42 @@ static constexpr auto k_electricCard = R"(
 |    /==/     |
 |   /=/       |
 |  /          |
+*-------------*
+                    )";
+static constexpr auto k_fireCard = R"(
+*---[ENERG]---*
+|     |\      |
+|  |\ \ \ /|  |
+|  / \/    /  |
+|  \    /| \  |
+|   |/| \ \ | |
+|  / \ \/  || |
+|  \  \   //  |
+|   -------   |
+*-------------*
+                    )";
+static constexpr auto k_leafCard = R"(
+*---[ENERG]---*
+|     /|\     |
+|    /_|_\    |
+|   /  |  \   |
+|  | __|__ |  |
+|  |   |   |  |
+|   \ _|_ /   |
+|    \ | /    |
+|     | |     |
+*-------------*
+                    )";
+static constexpr auto k_waterCard = R"(
+*---[ENERG]---*
+|             |
+|    //       |
+|  /  |       |
+| |    \__    |
+| |        \  |
+| |    _    | |
+|  \  |_|  /  |
+|    -----    |
 *-------------*
                     )";
 

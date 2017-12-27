@@ -194,21 +194,21 @@ std::string SimplePrinter::energyCardStr(EnergyCard * const _card) const
   std::string ret;
   switch(_card->type())
   {
-    case PTCG::TYPE::COLOURLESS : {ret='C'; break;}
-    case PTCG::TYPE::DARKNESS :   {ret='D'; break;}
-    case PTCG::TYPE::DRAGON :     {ret='N'; break;}
-    case PTCG::TYPE::FAIRY :      {ret='Y'; break;}
-    case PTCG::TYPE::FIGHTING :   {ret='F'; break;}
-    case PTCG::TYPE::FIRE :       {ret='R'; break;}
-    case PTCG::TYPE::GRASS :      {ret='G'; break;}
-    case PTCG::TYPE::LIGHTNING :  {ret='L'; break;}
-    case PTCG::TYPE::METAL :      {ret='M'; break;}
-    case PTCG::TYPE::PSYCHIC :    {ret='P'; break;}
-    case PTCG::TYPE::WATER :      {ret='W'; break;}
-    default : {ret='-'; break;}
+//    case PTCG::TYPE::COLOURLESS : {ret='C'; break;}
+//    case PTCG::TYPE::DARKNESS :   {ret='D'; break;}
+//    case PTCG::TYPE::DRAGON :     {ret='N'; break;}
+//    case PTCG::TYPE::FAIRY :      {ret='Y'; break;}
+//    case PTCG::TYPE::FIGHTING :   {ret='F'; break;}
+    case PTCG::TYPE::FIRE :       {ret=k_fireCard; break;}
+    case PTCG::TYPE::GRASS :      {ret=k_leafCard; break;}
+    case PTCG::TYPE::LIGHTNING :  {ret=k_electricCard; break;}
+//    case PTCG::TYPE::METAL :      {ret='M'; break;}
+//    case PTCG::TYPE::PSYCHIC :    {ret='P'; break;}
+    case PTCG::TYPE::WATER :      {ret=k_waterCard; break;}
+    default : {ret=k_blankCard; break;}
 
   }
-  return k_electricCard;
+  return ret;
 }
 
 std::string SimplePrinter::trainerCardStr(TrainerCard * const _card, const std::string &_type) const
@@ -250,11 +250,28 @@ std::string SimplePrinter::handStr(Hand * const _hand) const
   return ret;
 }
 
+std::string SimplePrinter::prizeStr(PrizeCards * const _prize) const
+{
+  std::string ret;
+  std::vector<std::string> prizeVec(5,"");
+  for (const auto & card : _prize->view())
+  {
+    if (card)
+      addVec(prizeVec, split(k_prizeCard));
+    else
+      addVec(prizeVec, split(k_emptyPrize));
+  }
+  // Concatenate the prize cards
+  for (auto l : prizeVec) ret += (l + '\n');
+  return ret;
+}
+
 void SimplePrinter::drawBoard(Board* _board, const bool _isOp)
 {
   Bench& bench = _board->m_bench;
   std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0))<<'\n';
   std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
   std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
+  std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
 }
 

@@ -18,6 +18,7 @@ private:
     std::string energyCardStr(EnergyCard * const _card) const;
     std::string pokemonCardStr(PokemonCard * const _card) const;
     std::string trainerCardStr(TrainerCard * const _card, const std::string &_type) const;
+    std::string prizeStr(PrizeCards * const _prize) const;
 };
 
 #endif // SIMPLEPRINTER_H

@@ -3,7 +3,7 @@
 #include <typeinfo>
 #include <pybind11/embed.h>
 #include "game.h"
-#include "asciiprinter.h"
+#include "simpleprinter.h"
 #include "cardfactory.h"
 
 // Needed for python attack functions
@@ -22,6 +22,7 @@ int main()
   goo->activateAbility(test);
 
   AsciiPrinter drawer;
+  SimplePrinter drawer;
   test.init(testPool, &drawer, "test_deck.json", "test_deck.json");
   test.start();
 

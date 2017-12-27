@@ -15,9 +15,11 @@ public :
     virtual void drawBoard(Board* _board, const bool _isOp) override;
 private :
     std::array<std::string,13> getSlotCardLines(BoardSlot *_slot);
-    std::array<std::string,10> getPokemonCardLines(std::unique_ptr<PokemonCard> _card);
-    std::array<std::string,10> getEnergyCardLines(std::unique_ptr<EnergyCard> _card);
-    std::array<std::string,10> getToolCardLines(std::unique_ptr<TrainerCard> _card);
+    std::vector<std::vector<std::array<std::string,10>>> getHandLines(Hand *_hand);
+    std::array<std::string,10> getHandCardLines(PokemonCard* _card);
+    std::array<std::string,10> getHandCardLines(EnergyCard* _card);
+    std::array<std::string,10> getHandCardLines(TrainerCard* _card);
+    std::array<std::string,10> getHandCardLines();
 
     char charify(PTCG::TYPE _in);
     char charify(PTCG::CONDITION _in);
@@ -27,7 +29,7 @@ private :
 
     void drawPrize(std::array<unsigned,6> _prize) const;
     void drawSlots(Board* _board, std::array<unsigned,6> _slots);
-    void drawHand(Hand *_hand) const;
+    void drawHand(Hand *_hand);
 
     const unsigned m_width = 128;
     const unsigned m_slotWidth = 20;

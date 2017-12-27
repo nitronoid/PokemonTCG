@@ -203,7 +203,7 @@ std::array<std::string,13> AsciiPrinter::getSlotCardLines(BoardSlot* _slot)
     return allLines;
 }
 
-std::array<std::string,10> AsciiPrinter::getPokemonCardLines(std::unique_ptr<PokemonCard> _card)
+std::array<std::string,10> AsciiPrinter::getHandCardLines(PokemonCard* _card)
 {
     std::array<std::string,10> allLines;
     if(_card != nullptr)
@@ -305,7 +305,7 @@ std::array<std::string,10> AsciiPrinter::getPokemonCardLines(std::unique_ptr<Pok
     return allLines;
 }
 
-std::array<std::string,10> AsciiPrinter::getEnergyCardLines(std::unique_ptr<EnergyCard> _card)
+std::array<std::string,10> AsciiPrinter::getHandCardLines(EnergyCard* _card)
 {
 
     std::array<std::string,10> allLines;
@@ -355,7 +355,7 @@ std::array<std::string,10> AsciiPrinter::getEnergyCardLines(std::unique_ptr<Ener
     return allLines;
 }
 
-std::array<std::string,10> AsciiPrinter::getToolCardLines(std::unique_ptr<TrainerCard> _card)
+std::array<std::string,10> AsciiPrinter::getHandCardLines(TrainerCard* _card)
 {
     std::array<std::string,10> allLines;
     if(_card != nullptr)
@@ -413,6 +413,68 @@ std::array<std::string,10> AsciiPrinter::getToolCardLines(std::unique_ptr<Traine
     return allLines;
 }
 
+std::array<std::string,10> AsciiPrinter::getHandCardLines()
+{
+    std::array<std::string,10> allLines;
+    std::string lnEx(m_handWidth, m_emptyChar);
+    for(int i=0; i<10; ++i)
+        allLines.at(i).append(lnEx);
+    return allLines;
+}
+
+std::vector<std::vector<std::array<std::string,10>>> AsciiPrinter::getHandLines(Hand *_hand)
+{
+    std::vector<std::vector<std::array<std::string,10>>> returnValues;
+    std::vector<std::array<std::string,10>> ret;
+    unsigned cardNum = _hand->view().size();
+    unsigned slotNum = (m_width+1)/(m_handWidth+1);
+    if(cardNum != 0)
+    {
+        std::vector<std::unique_ptr<Card>> cards = _hand->view();
+        unsigned A, B;
+        if(cards.size() > slotNum){A = 1+cards.size()/slotNum; B = slotNum;}else{A = 1;B = cards.size();}
+        for(unsigned u=0; u<A; ++u)
+        {
+            for (unsigned i=0; i<B; ++i)
+            {
+                Card* tmpCrd = cards.at(i).get();
+                using crd = PTCG::CARD;
+
+                switch(tmpCrd->cardType())
+                {
+                  case crd::POKEMON : {
+                    auto newCrd = static_cast<PokemonCard*>(tmpCrd); ret.push_back(getHandCardLines(newCrd)); break;}
+                  case crd::ENERGY : {
+                    auto newCrd = static_cast<EnergyCard*>(tmpCrd); ret.push_back(getHandCardLines(newCrd)); break;}
+                  case crd::TOOL : {
+                    auto newCrd = static_cast<TrainerCard*>(tmpCrd); ret.push_back(getHandCardLines(newCrd)); break;}
+                  case crd::STADIUM : {
+                    auto newCrd = static_cast<TrainerCard*>(tmpCrd); ret.push_back(getHandCardLines(newCrd)); break;}
+                  case crd::ITEM : {
+                    auto newCrd = static_cast<TrainerCard*>(tmpCrd); ret.push_back(getHandCardLines(newCrd)); break;}
+                  default: ret.push_back(getHandCardLines()); break;
+                }
+            }
+            if(cards.size() < slotNum)
+            {
+                for(unsigned j=0; j<(cards.size()-slotNum); ++j)
+                    ret.push_back(getHandCardLines());
+            }
+            returnValues.push_back(ret);
+            ret.clear();
+            if(cards.size()-(slotNum*(u+1)) > slotNum){B=slotNum;}
+            else{B=cards.size()-(slotNum*(u+1));}
+        }
+    }
+    else
+    {
+        for(unsigned j=0; j<slotNum; ++j)
+            ret.push_back(getHandCardLines());
+        returnValues.push_back(ret);
+    }
+    return returnValues;
+}
+
 void AsciiPrinter::drawPrize(std::array<unsigned,6> _prize) const
 {
     for(int i=0; i<3; ++i)
@@ -451,26 +513,41 @@ void AsciiPrinter::drawSlots(Board* _board, std::array<unsigned,6> _slots)
 
     for(int i=0; i<13; ++i)
     {
-        for(int i=0; i<6; ++i)
+        for(int y=0; y<6; ++y)
         {
-            if(_slots.at(i) == 1)
+            if(_slots.at(y) == 1)
             {
-                std::cout<<slotsStr.at(i).at(i);
+                std::cout<<slotsStr.at(y).at(i);
             }
             else
             {
                 std::string tmp(m_slotWidth, m_emptyChar);
                 std::cout<<tmp;
             }
-            if(i<5) std::cout<<m_emptyChar;
+            std::cout<<m_emptyChar;
         }
         std::cout<<std::endl;
     }
 }
 
-void AsciiPrinter::drawHand(Hand* _hand) const
+void AsciiPrinter::drawHand(Hand* _hand)
 {
-    std::cout<<"TODO: HAND PRINTOUT"<<std::endl;
+    std::vector<std::vector<std::array<std::string,10>>> cardLines = getHandLines(_hand);
+    for(unsigned p=0; p<cardLines.size(); ++p) //go through rows of cards (number > the width of window)
+    {
+        for(int y=0; y<10; ++y) //go through card lines
+        {
+            for(unsigned r=0; r<cardLines.at(p).size(); ++r) //go through cards (columns)
+            {
+                std::cout<<cardLines.at(p).at(r).at(y);
+                if(r<cardLines.at(p).size()-1)
+                    std::cout<<m_emptyChar;
+            }
+            std::cout<<std::endl;
+        }
+        std::string remp(m_width, m_emptyChar);
+        std::cout<<remp<<std::endl;
+    }
 }
 
 std::array<unsigned,6> AsciiPrinter::getPrizeCards(Board *_board)

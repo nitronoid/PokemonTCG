@@ -140,6 +140,7 @@ void BoardSlot::setPokemon(std::unique_ptr<PokemonCard> &&_pokemon)
 
 PokemonCard *BoardSlot::active() const
 {
+  if (m_pokemon.empty()) return nullptr;
   return m_pokemon[m_pokemon.size() - 1].get();
 }
 
@@ -163,6 +164,7 @@ std::vector<PTCG::CONDITION> BoardSlot::conditions() const
 
 std::unique_ptr<Card> BoardSlot::viewTool()
 {
+  if (!m_tool) return nullptr;
   std::unique_ptr<Card> tmp(m_tool->clone());
   return tmp;
 }

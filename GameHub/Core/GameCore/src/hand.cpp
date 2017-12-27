@@ -15,7 +15,6 @@ std::vector<std::unique_ptr<Card>> Hand::view()const
   ret.reserve(m_cards.size());
   for (const auto & card : m_cards)
   {
-    std::cout<<"Card ID: "<<card->getID()<<"Card Name: "<<card->getName()<<'\n';
     ret.emplace_back(card->clone());
   }
   return ret;
@@ -25,7 +24,6 @@ void Hand::put(std::unique_ptr<Card> &&_card)
 {
   std::cout<<_card->getName()<<" has been put into the hand."<<'\n';
   m_cards.push_back(std::move(_card));
-
 }
 
 

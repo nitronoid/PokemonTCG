@@ -48,20 +48,16 @@ void Game::setupGame()
         return;
       }
     }
-    auto hand = board.m_hand.view();
-    decltype (hand) pokemon;
-    std::vector<size_t> indexes;
-    for(size_t k = 0; k < hand.size(); ++k)
-    {
-      auto& card = hand[k];
-      if(card->cardType() == PTCG::CARD::POKEMON)
-      {
-        pokemon.push_back(std::move(card));
-        indexes.push_back(k);
-      }
-    }
-    auto choice = player->chooseCards(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, pokemon, 1);
-    board.m_bench.put(board.m_hand.take(indexes[choice[0]]), 0);
+
+    auto active = playerChoice(
+          static_cast<PTCG::PLAYER>(i),
+          PTCG::PLAYER::SELF,
+          PTCG::PILE::HAND,
+          PTCG::ACTION::PLAY,
+          [](auto& _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
+          1
+    )[0];
+    board.m_bench.put(board.m_hand.take(active), 0);
   }
 }
 
@@ -159,6 +155,71 @@ bool Game::moveCards(std::vector<unsigned> _cardIndices,
   return false;
 }
 
+void Game::filter(
+    std::vector<std::unique_ptr<Card>>& _filtered,
+    std::vector<size_t>& _originalPositions,
+    const PTCG::PLAYER _owner,
+    const PTCG::PILE _pile,
+    std::function<bool(const std::unique_ptr<Card>&)> _match
+    ) const
+{
+  std::vector<std::unique_ptr<Card>> unfiltered;
+  // Get the owners board
+  auto& board = m_boards[playerIndex(_owner)];
+  using pile = PTCG::PILE;
+  // Retrieve the unfiltered cards
+  switch (_pile)
+  {
+    case pile::DECK :    {unfiltered = board.m_deck.view(); break;}
+    case pile::HAND :    {unfiltered = board.m_hand.view(); break;}
+    case pile::DISCARD : {unfiltered = board.m_discardPile.view(); break;}
+    case pile::PRIZE :
+    {
+      // Prize needs to be converted from an array to a vector
+      for (auto& card : board.m_deck.view()) unfiltered.push_back(std::move(card));
+      break;
+    }
+    default: break;
+  }
+  // Filter the cards based on the provided function
+  for(size_t k = 0; k < unfiltered.size(); ++k)
+  {
+    auto& card = unfiltered[k];
+    if(_match(card))
+    {
+      // Move to our filtered vec
+      _filtered.push_back(std::move(card));
+      // Save its original position
+      _originalPositions.push_back(k);
+    }
+  }
+}
+
+std::vector<size_t> Game::playerChoice(
+    const PTCG::PLAYER _thinker,
+    const PTCG::PLAYER _owner,
+    const PTCG::PILE _origin,
+    const PTCG::ACTION _action,
+    std::function<bool(const std::unique_ptr<Card>&)> _match,
+    const unsigned _amount,
+    const size_t _range
+    )
+{
+  // Declare vectors to hold
+  std::vector<size_t> choice;
+  std::vector<size_t> positions;
+  std::vector<std::unique_ptr<Card>> options;
+  // Filter the origin pile based on the match functions
+  filter(options, positions, _owner, _origin, _match);
+  // Resize based on the choice given, if one was given
+  if(options.size() > _range && _range)
+    options.resize(_range);
+  // Get the players choice from our filtered options
+  choice = m_players[playerIndex(_thinker)]->chooseCards(_owner, _origin, _action, options, _amount);
+  // Convert the player choice to the original pile indexes
+  for (auto& pick : choice) pick = positions[pick];
+  return choice;
+}
 
 
 void Game::nextTurn()

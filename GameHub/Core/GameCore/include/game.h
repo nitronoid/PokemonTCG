@@ -34,14 +34,13 @@ public:
       const std::vector<unsigned> _destIndex = {}
       );
 
-  std::vector<int> playerChoice(
-      const PTCG::PLAYER _thinker,
+  std::vector<size_t> playerChoice(const PTCG::PLAYER _thinker,
       const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
-      const PTCG::CARD _cardType,
       const PTCG::ACTION _action,
-      const int _amount,
-      const int _range
+      std::function<bool(const std::unique_ptr<Card>&)> _match,
+      const unsigned _amount,
+      const size_t _range = 0
       );
 
   // View card pile functions
@@ -51,7 +50,6 @@ public:
   std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;
   std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player)   const;
   std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
-
 
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
@@ -66,8 +64,13 @@ public:
   unsigned searchCountByName(std::string _name, const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
 
 private:
-
   Game(const Game &_original);
+  void filter(std::vector<std::unique_ptr<Card>>& _filtered,
+      std::vector<size_t> &_originalPositions,
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _pile,
+      std::function<bool(const std::unique_ptr<Card>&)> _match
+      ) const;
   void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);
   std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner,PTCG::PILE _dest,const unsigned _index);
   size_t playerIndex(const PTCG::PLAYER &_player) const;

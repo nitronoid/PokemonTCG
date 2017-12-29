@@ -1,5 +1,6 @@
 import poke
 def canPlay(h):
+    # deck never empty ? 
     # checks if it is your first turn; if first turn and less than 8 cards in your hand return true
     return (h.turnCount() < 2 and len(h.viewHand(SELF))<8) or (h.turnCount() > 2 and len(h.viewHand(SELF)) < 6)
 

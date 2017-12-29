@@ -1,4 +1,7 @@
 import poke
+def canPlay(h):
+    # checks if it is your first turn; if first turn and less than 8 cards in your hand return true
+    return (h.turnCount() < 2 and len(h.viewHand(SELF))<8) or (h.turnCount() > 2 and len(h.viewHand(SELF)) < 6)
 
 def lillie(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -19,7 +22,8 @@ def lillie(h):
     # reveal - whether the enemy sees the card (True/False)
 
     # if first turn 
-    if(h.turnCount()<2):
+    # draw until 8 cards
+    if(h.turnCount()<2 and len(h.viewHand(SELF))<8):
         cards = h.playerChoice(SELF, SELF, DECK, ALL, DRAW, 8)
         h.moveCard(cards, SELF, DECK, HAND, False)
     # if more than first turn
@@ -27,7 +31,3 @@ def lillie(h):
         cards = h.playerChoice(SELF, SELF, DECK, ALL, DRAW, 6)
         h.moveCard(cards, SELF, DECK, HAND, False)
 
-
-def canPlay(h):
-    # checks if it is your first turn; if first turn and less than 8 cards in your hand return true
-    return (h.turnCount() < 2 and len(h.viewHand(SELF))<8) or (h.turnCount() > 2 and len(h.viewHand(SELF)) < 6)

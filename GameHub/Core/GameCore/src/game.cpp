@@ -113,6 +113,16 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
   return ret;
 }
 
+void Game::pileToBench(
+        const PTCG::PLAYER &_player,
+        const PTCG::PILE &_origin,
+        const unsigned &_pileIndex,
+        const unsigned &_benchIndex)
+{
+    auto& board = m_boards[playerIndex(_player)];
+    board.m_bench.slotAt(_benchIndex)->attachCard(takeFromPile(_player,_origin,_pileIndex));
+}
+
 void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
 {
   if(_subIndex>5)
@@ -127,12 +137,13 @@ void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
 
 
 //_cardIndices - target cards on board/hand... to move
-bool Game::moveCards(std::vector<unsigned> _cardIndices,
-                     const PTCG::PLAYER _owner,
-                     const PTCG::PILE _origin,
-                     const PTCG::PILE _destination,
-                     const bool _reveal,
-                     const std::vector<unsigned> _destIndex)
+bool Game::moveCards(
+        std::vector<unsigned> _cardIndices,
+        const PTCG::PLAYER _owner,
+        const PTCG::PILE _origin,
+        const PTCG::PILE _destination,
+        const bool _reveal,
+        const std::vector<unsigned> _destIndex)
 {
   //sort the input indices to avoid affecting take order in a vector
   std::sort(_cardIndices.begin(), _cardIndices.end(),std::greater<unsigned>());
@@ -256,21 +267,29 @@ void Game::dealDamage(const unsigned _damage, const unsigned _id)
   std::cout<<"Attack did: "<<_damage<<" damage!\n";
 }
 
-bool Game::evolve(const unsigned &_index)
+
+bool Game::evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index)
 {
   Board& board = m_boards[playerIndex(PTCG::PLAYER::SELF)];
+  //if indexed bench is empty or out of bound
   if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
   {
     std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
     return false;
   }
+  //if the pre-evolution is played on the same turn
   if(board.m_bench.slotAt(_index)->getTurnPlayed()==0)
   {
     std::cout<<"This mon cannot evolve yet."<<'\n';
     return false;
   }
-  //chooseCard here for valid Pokemon and return the card to attach to the evolving pokemon
-
+  //check if chosen card is the correct pokemon to evolve to
+  if(!(board.m_bench.slotAt(_index)->canEvolve(_postEvo)))
+  {
+    return false;
+  }
+  //moving post evolution card from hand to chosen slot, need pileToBench
+  pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,_handIndex,_index);
   if(_index==0)
   {
     board.m_bench.slotAt(0)->removeAllConditions();

@@ -162,6 +162,17 @@ std::vector<PTCG::CONDITION> BoardSlot::conditions() const
     return cond;
 }
 
+bool BoardSlot::canEvolve(const std::unique_ptr<PokemonCard> &_card)
+{
+    if(this->active()->preEvolution().compare(_card->getName()) != 0)
+    {
+        std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
+        return false;
+    }
+    return true;
+}
+
+
 std::unique_ptr<Card> BoardSlot::viewTool()
 {
   if (!m_tool) return nullptr;

@@ -15,11 +15,11 @@ int main()
   Game test;
   CardFactory testPool("../../Cards/SM/SUM/", "../PythonBindings/");
   testPool.init();
-  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(103)));
-  foo->attack(0, test);
+//  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(103)));
+//  foo->attack(0, test);
 
-  std::unique_ptr<TrainerCard> goo(static_cast<TrainerCard*>(testPool.loadCard(122)));
-  goo->activateAbility(test);
+//  std::unique_ptr<TrainerCard> goo(static_cast<TrainerCard*>(testPool.loadCard(122)));
+//  goo->activateAbility(test);
 
 
   SimplePrinter drawer;

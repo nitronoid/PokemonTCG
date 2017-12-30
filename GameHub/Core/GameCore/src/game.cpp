@@ -275,21 +275,15 @@ void Game::evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handI
   if(_index>5)
   {
     std::cout<<"selected pokemon is out of bound."<<'\n';
-    return;
   }
   //check if chosen card is the correct pokemon to evolve to
-  if(!(board.m_bench.slotAt(_index)->canEvolve(_postEvo,m_turnCount)))
+  else if(board.m_bench.slotAt(_index)->canEvolve(_postEvo,m_turnCount))
   {
-    return;
+    //moving post evolution card from hand to chosen slot, need pileToBench
+    pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,_handIndex,_index);
+    //remove conditions if evolved pokemon is an active
+    if(!_index) board.m_bench.slotAt(0)->removeAllConditions();
   }
-  //moving post evolution card from hand to chosen slot, need pileToBench
-  pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,_handIndex,_index);
-  //remove conditions if evolved pokemon is an active
-  if(_index==0)
-  {
-    board.m_bench.slotAt(0)->removeAllConditions();
-  }
-  return;
 }
 // Need to implement take single pokemon card from m_pokemon in Board Slot
 bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)

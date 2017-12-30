@@ -180,7 +180,6 @@ bool BoardSlot::canEvolve(const std::unique_ptr<PokemonCard> &_card, const unsig
         std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
         return false;
     }
-    m_turnPlayed=_turn;
     return true;
 }
 

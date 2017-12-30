@@ -5,4 +5,4 @@ def waveSplash(h):
 
 def disarmingVoice(h):
     h.dealDamage(50)
-    h.applyCondition(CONFUSED, ACTIVE, ENEMY)
+    h.applyCondition(CONFUSED, ENEMY)

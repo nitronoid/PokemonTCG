@@ -2,7 +2,7 @@ import poke
 
 def disarmingVoice(h):
     h.dealDamage(30)
-    h.applyCondition(CONFUSED,ACTIVE,ENEMY)
+    h.applyCondition(CONFUSED,ENEMY)
 
 def sparklingAria(h):
     h.dealDamage(100)

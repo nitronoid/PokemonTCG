@@ -6,7 +6,7 @@ def headlock(h):
         dmg += 30
         h.dealDamage(dmg)
     else:
-        h.applyCondition(PARALYZED, ACTIVE, SELF)
+        h.applyCondition(PARALYZED, ENEMY)
 
 
 def guardPress(h):

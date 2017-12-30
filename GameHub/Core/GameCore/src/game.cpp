@@ -378,7 +378,7 @@ void Game::sleep()
 
 unsigned Game::flipCoin(const unsigned _num)
 {
-  static unsigned ret = 0;
+  unsigned ret = 0;
   static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
   for(unsigned i  = 0; i<_num;++i)
   {

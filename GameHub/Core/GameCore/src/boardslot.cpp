@@ -162,9 +162,20 @@ std::vector<PTCG::CONDITION> BoardSlot::conditions() const
     return cond;
 }
 
-bool BoardSlot::canEvolve(const std::unique_ptr<PokemonCard> &_card)
+bool BoardSlot::canEvolve(const std::unique_ptr<PokemonCard> &_card, const unsigned &_turn)
 {
-    if(this->active()->preEvolution().compare(_card->getName()) != 0)
+    if(m_pokemon.empty())
+    {
+        std::cout<<"selected pokemon does not exist."<<'\n';
+        return false;
+    }
+    //if the pre-evolution is played on the same turn
+    if(m_turnPlayed==_turn)
+    {
+        std::cout<<"This mon cannot evolve yet."<<'\n';
+        return false;
+    }
+    if(active()->preEvolution().compare(_card->getName()) != 0)
     {
         std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
         return false;

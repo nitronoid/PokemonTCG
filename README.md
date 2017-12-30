@@ -47,7 +47,7 @@ To add in the table you put the | symbol under the last log and the seperate eac
 | 29/12/17 | Game Hub | Made issues on cards for both Game Hub and card teams to think about, please check issues tab on github. | Still implementing functions, so card teams, improve on pseudo codes stated in issues. |
 | 29/12/17 | Bright Tide | Corrected some cards | |
 | 30/12/17 | Bright Tide | Corrected/edited some cards | GameHub: If you communicate some errors could you please explain what the errors are in a couple of lines |   
-
+| 30/12/17 | Game Hub | Replied to issue responses | Bright Tide: Please check the response on the CanPlay and Implementation issue. | 
 
 
 

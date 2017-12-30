@@ -49,7 +49,7 @@ void Game::setupGame()
       }
     }
 
-    auto active = playerChoice(
+    auto active = playerCardChoice(
           static_cast<PTCG::PLAYER>(i),
           PTCG::PLAYER::SELF,
           PTCG::PILE::HAND,
@@ -167,8 +167,8 @@ bool Game::moveCards(
 }
 
 void Game::filter(
-    std::vector<std::unique_ptr<Card>>& _filtered,
-    std::vector<size_t>& _originalPositions,
+    std::vector<std::unique_ptr<Card>>& io_filtered,
+    std::vector<size_t>& io_originalPositions,
     const PTCG::PLAYER _owner,
     const PTCG::PILE _pile,
     std::function<bool(const std::unique_ptr<Card>&)> _match
@@ -199,14 +199,14 @@ void Game::filter(
     if(_match(card))
     {
       // Move to our filtered vec
-      _filtered.push_back(std::move(card));
+      io_filtered.push_back(std::move(card));
       // Save its original position
-      _originalPositions.push_back(k);
+      io_originalPositions.push_back(k);
     }
   }
 }
 
-std::vector<size_t> Game::playerChoice(
+std::vector<size_t> Game::playerCardChoice(
     const PTCG::PLAYER _thinker,
     const PTCG::PLAYER _owner,
     const PTCG::PILE _origin,
@@ -232,6 +232,32 @@ std::vector<size_t> Game::playerChoice(
   return choice;
 }
 
+std::vector<size_t> Game::playerSlotChoice(
+    const PTCG::PLAYER _thinker,
+    const PTCG::PLAYER _owner,
+    const PTCG::ACTION _action,
+    const unsigned _amount
+    )
+{
+  std::vector<size_t> choice;
+  std::vector<size_t> positions;
+  std::vector<BoardSlot> options;
+  auto benchArr = viewBench(_owner);
+  for (size_t i = 0; i < benchArr.size(); ++i)
+  {
+    auto& slot = benchArr[i];
+    if(slot.active())
+    {
+      options.push_back(std::move(slot));
+      positions.push_back(i);
+    }
+  }
+
+  choice = m_players[playerIndex(_thinker)]->chooseSlot(_owner, _action, options, _amount);
+  // Convert the player choice to the original pile indexes
+  for (auto& pick : choice) pick = positions[pick];
+  return choice;
+}
 
 void Game::nextTurn()
 {

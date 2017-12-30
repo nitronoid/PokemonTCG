@@ -34,13 +34,21 @@ public:
       const std::vector<unsigned> _destIndex = {}
       );
 
-  std::vector<size_t> playerChoice(const PTCG::PLAYER _thinker,
+  std::vector<size_t> playerCardChoice(
+      const PTCG::PLAYER _thinker,
       const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
       const PTCG::ACTION _action,
       std::function<bool(const std::unique_ptr<Card>&)> _match,
       const unsigned _amount,
       const size_t _range = 0
+      );
+
+  std::vector<size_t> playerSlotChoice(
+      const PTCG::PLAYER _thinker,
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const unsigned _amount
       );
 
   // View card pile functions
@@ -65,8 +73,8 @@ public:
 
 private:
   Game(const Game &_original);
-  void filter(std::vector<std::unique_ptr<Card>>& _filtered,
-      std::vector<size_t> &_originalPositions,
+  void filter(std::vector<std::unique_ptr<Card>>& io_filtered,
+      std::vector<size_t> &io_originalPositions,
       const PTCG::PLAYER _owner,
       const PTCG::PILE _pile,
       std::function<bool(const std::unique_ptr<Card>&)> _match

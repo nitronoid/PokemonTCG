@@ -9,18 +9,31 @@ Player* HumanPlayer::clone() const
   return new HumanPlayer(*this);
 }
 
-std::vector<size_t> HumanPlayer::chooseCards(
-    const PTCG::PLAYER _player,
+std::vector<size_t> HumanPlayer::chooseCards(const PTCG::PLAYER _player,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,
     const std::vector<std::unique_ptr<Card>> &_options,
-    const unsigned ammount)
+    const unsigned _amount)
 {
   std::vector<size_t> badChoice(
-        std::min(static_cast<unsigned>(_options.size()), ammount),
+        std::min(static_cast<unsigned>(_options.size()), _amount),
         0
         );
   return badChoice;
+}
+
+std::vector<size_t> HumanPlayer::chooseSlot(
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<BoardSlot> &_options,
+      const unsigned _amount
+      )
+{
+  std::vector<size_t> badChoice(
+        std::min(static_cast<unsigned>(_options.size()), _amount),
+        0
+        );
+  return  badChoice;
 }
 
 bool randomBool()

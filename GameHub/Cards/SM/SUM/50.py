@@ -1,7 +1,7 @@
 import poke
 
 def confuseRay(h):
-    h.applyCondition(CONFUSED, ACTIVE, ENEMY)
+    h.applyCondition(CONFUSED, ENEMY)
 
 def aquaSpark(h):
     dmg = 60

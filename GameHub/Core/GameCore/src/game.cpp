@@ -123,23 +123,6 @@ void Game::shuffleDeck(const PTCG::PLAYER _owner)
 }
 
 template<typename T>
-void reorder(std::vector<T> &io_vec, std::vector<size_t> _order)
-{
-  // for all elements to put in place
-  for(size_t i = 0; i < io_vec.size() - 1; ++i)
-  {
-    // while the element i is not yet in place
-    while(i != _order[i])
-    {
-      // swap it with the element at its final place
-      size_t alt = _order[i];
-      std::swap(io_vec[i], io_vec[alt]);
-      std::swap(_order[i], _order[alt]);
-    }
-  }
-}
-
-template<typename T>
 void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
 {
   struct sort_indices
@@ -152,8 +135,20 @@ void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
   std::vector<size_t> indices(io_sorter.size());
   std::iota (std::begin(indices), std::end(indices), 0);
   std::sort(indices.begin(), indices.end(), sort_indices(io_sorter));
-  reorder(io_sorter, indices);
-  reorder(io_second, indices);
+
+  // for all elements to put in place
+  for(size_t i = 0; i < io_sorter.size() - 1; ++i)
+  {
+    // while the element i is not yet in place
+    while(i != indices[i])
+    {
+      // swap it with the element at its final place
+      size_t alt = indices[i];
+      std::swap(io_sorter[i], io_sorter[alt]);
+      std::swap(io_second[i], io_second[alt]);
+      std::swap(indices[i], indices[alt]);
+    }
+  }
 }
 
 void Game::pileToBench(

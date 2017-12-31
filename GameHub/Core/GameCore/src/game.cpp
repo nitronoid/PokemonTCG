@@ -112,7 +112,11 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
   }
   return ret;
 }
+void Game::benchToPile(const PTCG::PLAYER &_player, Card &_card, const PTCG::PILE &_dest, const unsigned &_index)
+{
+    auto& board = m_boards[playerIndex(_player)];
 
+}
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
 {
   m_boards[playerIndex(_owner)].m_deck.shuffle();
@@ -121,11 +125,27 @@ void Game::shuffleDeck(const PTCG::PLAYER _owner)
 void Game::pileToBench(
         const PTCG::PLAYER &_player,
         const PTCG::PILE &_origin,
-        const unsigned &_pileIndex,
-        const unsigned &_benchIndex)
+        std::vector<unsigned> &_pileIndex,
+        std::vector<unsigned> &_benchIndex)
 {
+
+    if(_pileIndex.empty())
+    {
+        std::cout<<"No cards to put..."<<'\n';
+        return;
+    }
+    else if(_benchIndex.empty())
+    {
+        std::cout<<"Board full"<<'\n';
+        return;
+    }
+    std::sort(_pileIndex.begin(), _pileIndex.end(),std::greater<unsigned>());
     auto& board = m_boards[playerIndex(_player)];
-    board.m_bench.slotAt(_benchIndex)->attachCard(takeFromPile(_player,_origin,_pileIndex));
+    for(unsigned i = 0; i < _benchIndex.size(); ++i)
+    {
+        board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player,_origin,_pileIndex[i]));
+    }
+    return;
 }
 
 std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner)
@@ -323,8 +343,10 @@ void Game::evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handI
   //check if chosen card is the correct pokemon to evolve to
   else if(board.m_bench.slotAt(_index)->canEvolve(_postEvo,m_turnCount))
   {
+    std::vector<unsigned> hand = std::vector<unsigned>(_handIndex);
+    std::vector<unsigned> bench = std::vector<unsigned>(_index);
     //moving post evolution card from hand to chosen slot, need pileToBench
-    pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,_handIndex,_index);
+    pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,hand,bench);
     //remove conditions if evolved pokemon is an active
     if(!_index) board.m_bench.slotAt(0)->removeAllConditions();
   }

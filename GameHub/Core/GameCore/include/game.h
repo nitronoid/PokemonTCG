@@ -73,7 +73,7 @@ public:
   std::vector<size_t> freeSlots(const PTCG::PLAYER _owner);
   void shuffleDeck(const PTCG::PLAYER _owner);
 
-//private:
+private:
   Game(const Game &_original);
   void filter(std::vector<std::unique_ptr<Card>>& io_filtered,
       std::vector<size_t> &io_originalPositions,

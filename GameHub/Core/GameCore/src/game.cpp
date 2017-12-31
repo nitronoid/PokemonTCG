@@ -125,17 +125,17 @@ void Game::shuffleDeck(const PTCG::PLAYER _owner)
 template<typename T>
 void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
 {
-  struct sort_indices
-  {
-  public:
-    sort_indices(std::vector<T> & _vec) : vec(_vec){}
-    std::vector<T> &vec;
-    bool operator()(const T _a, const T _b) const { return vec[_a] > vec[_b]; }
-  };
+  // Construct and fill a vector of consecutive indices
   std::vector<size_t> indices(io_sorter.size());
   std::iota (std::begin(indices), std::end(indices), 0);
-  std::sort(indices.begin(), indices.end(), sort_indices(io_sorter));
+  // Sort the indices based on the passed vector
+  std::sort(indices.begin(), indices.end(), [&io_sorter](const T _a, const T _b)
+  {
+    return io_sorter[_a] > io_sorter[_b];
+  }
+  );
 
+  // Reorder the two vectors based on the sorted indices
   // for all elements to put in place
   for(size_t i = 0; i < io_sorter.size() - 1; ++i)
   {
@@ -170,7 +170,7 @@ void Game::pileToBench(
   {
     std::cout<<"Missmatched destination and card indices.\n"
                "Amount of card indices: "<<_pileIndex.size()<<"\n"
-               "Amount of destination indices: "<<_benchIndex.size()<<"\n";
+                                                              "Amount of destination indices: "<<_benchIndex.size()<<"\n";
   }
 }
 

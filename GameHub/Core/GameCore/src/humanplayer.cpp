@@ -15,10 +15,9 @@ std::vector<size_t> HumanPlayer::chooseCards(const PTCG::PLAYER _player,
     const std::vector<std::unique_ptr<Card>> &_options,
     const unsigned _amount)
 {
-  std::vector<size_t> badChoice(
-        std::min(static_cast<unsigned>(_options.size()), _amount),
-        0
-        );
+  std::vector<size_t> badChoice;
+  for (size_t i = 0; i < std::min(static_cast<unsigned>(_options.size()), _amount); ++i)
+    badChoice.push_back(i);
   return badChoice;
 }
 

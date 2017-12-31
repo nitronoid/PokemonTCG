@@ -1,5 +1,6 @@
 import poke as p
 
+
 def filter(card):
     return card.cardType() == p.CARD.POKEMON and not card.stage()
             
@@ -32,7 +33,7 @@ def callForFamily(h):
 
     cards.sort(reverse=True)
     freeSlots = h.freeSlots(p.PLAYER.SELF)
-    for i in range(len(freeSlots)):
+    for i in range(min(len(freeSlots), len(cards))):
         h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[i], freeSlots[i])
     h.shuffleDeck(p.PLAYER.SELF)
 

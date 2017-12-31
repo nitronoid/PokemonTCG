@@ -100,10 +100,25 @@ PYBIND11_MODULE(poke, m)
       .def("retreatCost", &PokemonCard::retreatCost)
       .def("stage", &PokemonCard::stage);
 
+  py::class_<BoardSlot>(m, "BoardSlot")
+      .def(py::init<>())
+      .def("getDamage", &BoardSlot::getDamage)
+      .def("getBonusBefore", &BoardSlot::getBonusBefore)
+      .def("getBonusAfter", &BoardSlot::getBonusAfter)
+      .def("getReductionBefore", &BoardSlot::getReductionBefore)
+      .def("getReductionAfter", &BoardSlot::getReductionAfter)
+      .def("getTurnPlayed", &BoardSlot::getTurnPlayed)
+      .def("numPokemon", &BoardSlot::numPokemon)
+      .def("numEnergy", &BoardSlot::numEnergy)
+      .def("numTool", &BoardSlot::numTool)
+      .def("numCards", &BoardSlot::numCards)
+      .def("active", &BoardSlot::active, py::return_value_policy::reference_internal);
+
 
   py::class_<Game>(m, "Game")
       .def(py::init<>())
       .def("dealDamage", &Game::dealDamage, py::arg("_damage"), py::arg("_id") = 0u)
+      .def("healDamage", &Game::healDamage, py::arg("_heal"), py::arg("_id") = 0u)
       .def("applyCondition", &Game::applyCondition)
       .def("freeSlots", &Game::freeSlots)
       .def("playerCardChoice", &Game::playerCardChoice,
@@ -114,6 +129,11 @@ PYBIND11_MODULE(poke, m)
            py::arg("_match"),
            py::arg("_amount"),
            py::arg("_range") = 0)
+      .def("viewDeck", &Game::viewDeck)
+      .def("viewDiscard", &Game::viewDiscard)
+      .def("viewHand", &Game::viewHand)
+      .def("viewPrize", &Game::viewPrize)
+      .def("viewBench", &Game::viewBench)
       .def("pileToBench", &Game::pileToBench)
       .def("shuffleDeck", &Game::shuffleDeck)
       .def("flipCoin", &Game::flipCoin);

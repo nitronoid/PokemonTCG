@@ -19,7 +19,8 @@ public:
   Game clone() const;
   void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
 
-  void dealDamage(const unsigned _damage, const unsigned _id = 0);
+  void dealDamage(const int _damage, const unsigned _id = 0);
+  void healDamage(const int _heal, const unsigned _id = 0);
   unsigned flipCoin(const unsigned _num);
 
   void start();
@@ -52,7 +53,7 @@ public:
       );
 
   // View card pile functions
-  std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+ // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
   std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
   std::vector<std::unique_ptr<Card>>  viewDiscard(const PTCG::PLAYER &_player) const;
   std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;

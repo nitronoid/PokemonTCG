@@ -352,11 +352,17 @@ void Game::attack(PokemonCard* _pokemon, const unsigned _index)
   _pokemon->attack(_index, *this);
 }
 
-void Game::dealDamage(const unsigned _damage, const unsigned _id)
+void Game::dealDamage(const int _damage, const unsigned _id)
 {
+  m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench.slotAt(_id)->takeDamage(_damage);
   std::cout<<"Attack did: "<<_damage<<" damage!\n";
 }
 
+void Game::healDamage(const int _heal, const unsigned _id)
+{
+  m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(_id)->removeDamage(_heal);
+  std::cout<<"Healed: "<<_heal<<" damage!\n";
+}
 
 void Game::evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index)
 {

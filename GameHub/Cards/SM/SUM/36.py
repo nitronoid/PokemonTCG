@@ -29,12 +29,10 @@ def callForFamily(h):
         p.ACTION.DRAW,
         filter,
         2)
-    print "yo"
-
-    cards.sort(reverse=True)
+    
     freeSlots = h.freeSlots(p.PLAYER.SELF)
-    for i in range(min(len(freeSlots), len(cards))):
-        h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[i], freeSlots[i])
+    amount = min(len(freeSlots), len(cards))
+    h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[:amount], freeSlots[:amount])
     h.shuffleDeck(p.PLAYER.SELF)
 
 def surf(h):

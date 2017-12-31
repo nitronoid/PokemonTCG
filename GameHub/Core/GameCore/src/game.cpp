@@ -55,7 +55,7 @@ void Game::setupGame()
           PTCG::PILE::HAND,
           PTCG::ACTION::PLAY,
           [](auto _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
-          1
+    1
     )[0];
     board.m_bench.put(board.m_hand.take(active), 0);
   }
@@ -114,7 +114,7 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
 }
 void Game::benchToPile(const PTCG::PLAYER &_player, Card &_card, const PTCG::PILE &_dest, const unsigned &_index)
 {
-    auto& board = m_boards[playerIndex(_player)];
+  auto& board = m_boards[playerIndex(_player)];
 
 }
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
@@ -123,29 +123,26 @@ void Game::shuffleDeck(const PTCG::PLAYER _owner)
 }
 
 void Game::pileToBench(
-        const PTCG::PLAYER &_player,
-        const PTCG::PILE &_origin,
-        std::vector<unsigned> &_pileIndex,
-        std::vector<unsigned> &_benchIndex)
+    const PTCG::PLAYER &_player,
+    const PTCG::PILE &_origin,
+    std::vector<unsigned> &_pileIndex,
+    std::vector<unsigned> &_benchIndex)
 {
-
-    if(_pileIndex.empty())
-    {
-        std::cout<<"No cards to put..."<<'\n';
-        return;
-    }
-    else if(_benchIndex.empty())
-    {
-        std::cout<<"Board full"<<'\n';
-        return;
-    }
+  if (_benchIndex.size() != _pileIndex.size() && !_pileIndex.empty())
+  {
+    std::cout<<"Missmatched destination and card indices.\n"
+               "Amount of card indices: "<<_pileIndex.size()<<"\n"
+            <<"Amount of destination indices: "<<_benchIndex.size()<<"\n";
+  }
+  else
+  {
     std::sort(_pileIndex.begin(), _pileIndex.end(),std::greater<unsigned>());
     auto& board = m_boards[playerIndex(_player)];
     for(unsigned i = 0; i < _benchIndex.size(); ++i)
     {
-        board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player,_origin,_pileIndex[i]));
+      board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
     }
-    return;
+  }
 }
 
 std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner)
@@ -174,12 +171,12 @@ void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
 
 //_cardIndices - target cards on board/hand... to move
 bool Game::moveCards(
-        std::vector<unsigned> _cardIndices,
-        const PTCG::PLAYER _owner,
-        const PTCG::PILE _origin,
-        const PTCG::PILE _destination,
-        const bool _reveal,
-        const std::vector<unsigned> _destIndex
+    std::vector<unsigned> _cardIndices,
+    const PTCG::PLAYER _owner,
+    const PTCG::PILE _origin,
+    const PTCG::PILE _destination,
+    const bool _reveal,
+    const std::vector<unsigned> _destIndex
     )
 {
   //sort the input indices to avoid affecting take order in a vector

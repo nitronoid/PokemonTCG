@@ -122,26 +122,60 @@ void Game::shuffleDeck(const PTCG::PLAYER _owner)
   m_boards[playerIndex(_owner)].m_deck.shuffle();
 }
 
+template<typename T>
+void reorder(std::vector<T> &io_vec, std::vector<size_t> _order)
+{
+  // for all elements to put in place
+  for(size_t i = 0; i < io_vec.size() - 1; ++i)
+  {
+    // while the element i is not yet in place
+    while(i != _order[i])
+    {
+      // swap it with the element at its final place
+      size_t alt = _order[i];
+      std::swap(io_vec[i], io_vec[alt]);
+      std::swap(_order[i], _order[alt]);
+    }
+  }
+}
+
+template<typename T>
+void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
+{
+  struct sort_indices
+  {
+  public:
+    sort_indices(std::vector<T> & _vec) : vec(_vec){}
+    std::vector<T> &vec;
+    bool operator()(const T _a, const T _b) const { return vec[_a] > vec[_b]; }
+  };
+  std::vector<size_t> indices(io_sorter.size());
+  std::iota (std::begin(indices), std::end(indices), 0);
+  std::sort(indices.begin(), indices.end(), sort_indices(io_sorter));
+  reorder(io_sorter, indices);
+  reorder(io_second, indices);
+}
+
 void Game::pileToBench(
     const PTCG::PLAYER &_player,
     const PTCG::PILE &_origin,
     std::vector<unsigned> &_pileIndex,
     std::vector<unsigned> &_benchIndex)
 {
-  if (_benchIndex.size() != _pileIndex.size() && !_pileIndex.empty())
+  if (_benchIndex.size() == _pileIndex.size() && !_pileIndex.empty())
   {
-    std::cout<<"Missmatched destination and card indices.\n"
-               "Amount of card indices: "<<_pileIndex.size()<<"\n"
-            <<"Amount of destination indices: "<<_benchIndex.size()<<"\n";
-  }
-  else
-  {
-    std::sort(_pileIndex.begin(), _pileIndex.end(),std::greater<unsigned>());
+    doubleVecSort(_pileIndex, _benchIndex);
     auto& board = m_boards[playerIndex(_player)];
-    for(unsigned i = 0; i < _benchIndex.size(); ++i)
+    for(size_t i = 0; i < _benchIndex.size(); ++i)
     {
       board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
     }
+  }
+  else
+  {
+    std::cout<<"Missmatched destination and card indices.\n"
+               "Amount of card indices: "<<_pileIndex.size()<<"\n"
+               "Amount of destination indices: "<<_benchIndex.size()<<"\n";
   }
 }
 

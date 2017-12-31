@@ -1,6 +1,6 @@
 import poke
 def canPlay(h):
-    return len(h.viewDeck(SELF)) >= 3 
+    return len(h.viewDeck(SELF)) > 0  
 def hau(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)

@@ -54,7 +54,7 @@ void Game::setupGame()
           PTCG::PLAYER::SELF,
           PTCG::PILE::HAND,
           PTCG::ACTION::PLAY,
-          [](auto& _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
+          [](auto _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
           1
     )[0];
     board.m_bench.put(board.m_hand.take(active), 0);
@@ -113,6 +113,11 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
   return ret;
 }
 
+void Game::shuffleDeck(const PTCG::PLAYER _owner)
+{
+  m_boards[playerIndex(_owner)].m_deck.shuffle();
+}
+
 void Game::pileToBench(
         const PTCG::PLAYER &_player,
         const PTCG::PILE &_origin,
@@ -121,6 +126,17 @@ void Game::pileToBench(
 {
     auto& board = m_boards[playerIndex(_player)];
     board.m_bench.slotAt(_benchIndex)->attachCard(takeFromPile(_player,_origin,_pileIndex));
+}
+
+std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner)
+{
+  std::vector<size_t> ret;
+  auto benchSlots = m_boards[playerIndex(_owner)].m_bench.view();
+  for (size_t i = 0; i < benchSlots.size(); ++i)
+  {
+    if (benchSlots[i].active()) ret.push_back(i);
+  }
+  return ret;
 }
 
 void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
@@ -143,7 +159,8 @@ bool Game::moveCards(
         const PTCG::PILE _origin,
         const PTCG::PILE _destination,
         const bool _reveal,
-        const std::vector<unsigned> _destIndex)
+        const std::vector<unsigned> _destIndex
+    )
 {
   //sort the input indices to avoid affecting take order in a vector
   std::sort(_cardIndices.begin(), _cardIndices.end(),std::greater<unsigned>());
@@ -171,7 +188,7 @@ void Game::filter(
     std::vector<size_t>& io_originalPositions,
     const PTCG::PLAYER _owner,
     const PTCG::PILE _pile,
-    std::function<bool(const std::unique_ptr<Card>&)> _match
+    std::function<bool(Card*const)> _match
     ) const
 {
   std::vector<std::unique_ptr<Card>> unfiltered;
@@ -196,7 +213,7 @@ void Game::filter(
   for(size_t k = 0; k < unfiltered.size(); ++k)
   {
     auto& card = unfiltered[k];
-    if(_match(card))
+    if(_match(card.get()))
     {
       // Move to our filtered vec
       io_filtered.push_back(std::move(card));
@@ -204,6 +221,7 @@ void Game::filter(
       io_originalPositions.push_back(k);
     }
   }
+
 }
 
 std::vector<size_t> Game::playerCardChoice(
@@ -211,7 +229,7 @@ std::vector<size_t> Game::playerCardChoice(
     const PTCG::PLAYER _owner,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,
-    std::function<bool(const std::unique_ptr<Card>&)> _match,
+    std::function<bool (Card * const)> _match,
     const unsigned _amount,
     const size_t _range
     )

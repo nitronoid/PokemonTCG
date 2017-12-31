@@ -1,4 +1,8 @@
-import poke
+import poke as p
+
+def filter(card):
+    return card.cardType() == p.CARD.POKEMON and not card.stage()
+            
 
 def callForFamily(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -17,9 +21,20 @@ def callForFamily(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
-    cards = h.playerChoice(SELF, SELF, DECK, BASIC_POKEMOM, DRAW, 2)
-    h.moveCard(cards, SELF, DECK, BENCH, False)
-    h.shuffleDeck()
+    cards = h.playerCardChoice(
+        p.PLAYER.SELF, 
+        p.PLAYER.SELF, 
+        p.PILE.DECK,
+        p.ACTION.DRAW,
+        filter,
+        2)
+    print "yo"
+
+    cards.sort(reverse=True)
+    freeSlots = h.freeSlots(p.PLAYER.SELF)
+    for i in range(len(freeSlots)):
+        h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[i], freeSlots[i])
+    h.shuffleDeck(p.PLAYER.SELF)
 
 def surf(h):
     h.dealDamage(60)

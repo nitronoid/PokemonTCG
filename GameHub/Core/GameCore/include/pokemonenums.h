@@ -72,6 +72,7 @@ enum class ORDER {
     BEFORE,
     AFTER
 };
+
 }
 
 #endif // POKEMONENUMS_H

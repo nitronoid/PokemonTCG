@@ -180,7 +180,7 @@ std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner)
   auto benchSlots = m_boards[playerIndex(_owner)].m_bench.view();
   for (size_t i = 0; i < benchSlots.size(); ++i)
   {
-    if (benchSlots[i].active()) ret.push_back(i);
+    if (!benchSlots[i].active()) ret.push_back(i);
   }
   return ret;
 }

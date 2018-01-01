@@ -66,7 +66,7 @@ public:
   inline unsigned getTurnCount() const {return m_turnCount;}
   void switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex);
   //player needs to choose what to move into active if _index = 0
-  void benchToPile(const PTCG::PLAYER &_player,Card &_card, const PTCG::PILE &_dest, const unsigned &_index=0);
+  void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const unsigned &_index=0);
   void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<unsigned> &_pileIndex, std::vector<unsigned> &_benchIndex);
   void evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index);
   bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);

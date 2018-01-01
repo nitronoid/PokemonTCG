@@ -169,9 +169,52 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
   }
   return ret;
 }
-void Game::benchToPile(const PTCG::PLAYER &_player, Card &_card, const PTCG::PILE &_dest, const unsigned &_index)
+void Game::benchToPile(
+    const PTCG::PLAYER &_player,
+    const PTCG::PILE &_dest,
+    std::function<bool(Card*const)> _match,
+    const unsigned &_index
+    )
 {
+  std::vector<std::unique_ptr<Card>> unfilteredEnergy;
+  std::vector<std::unique_ptr<Card>> filteredEnergy;
+  std::vector<size_t> originalPositions;
   auto& board = m_boards[playerIndex(_player)];
+  auto pokemon = std::unique_ptr<Card>(static_cast<Card*>(board.m_bench.slotAt(_index)->active()));
+  auto tool = std::unique_ptr<Card>(board.m_bench.slotAt(_index)->viewTool());
+  //filtering energy
+  unfilteredEnergy = board.m_bench.slotAt(_index)->viewEnergy();
+  filterCards(unfilteredEnergy,filteredEnergy,originalPositions,_match);
+  //sort to avoid index invalidation
+  std::sort(originalPositions.begin(), originalPositions.end(),std::greater<size_t>());
+
+  if(_match(pokemon.get()))
+  {
+    auto movePoke = board.m_bench.slotAt(_index)->detachPokemon();
+    for(int i=movePoke.size()-1; i > -1 ; --i)
+    {
+      //need to cast pointer to Card for passing into putToPile
+      auto cardify = std::unique_ptr<Card>(static_cast<Card*>(movePoke[i].release()));
+      putToPile(_player,_dest,std::move(cardify));
+    }
+  }
+  if(_match(tool.get()))
+  {
+    auto cardify = std::unique_ptr<Card>(static_cast<Card*>(board.m_bench.slotAt(_index)->detachTool().release()));
+    putToPile(_player,_dest,std::move(cardify));
+  }
+  if(!filteredEnergy.empty())
+  {
+
+    for(size_t i = 0; i < originalPositions.size(); ++i)
+    {
+      auto moveEnergy = board.m_bench.slotAt(_index)->detachEnergy(originalPositions[i]);
+      auto cardify = std::unique_ptr<Card>(static_cast<Card*>(moveEnergy.release()));
+      putToPile(_player,_dest,std::move(cardify));
+    }
+  }
+
+
 
 
 }
@@ -294,16 +337,19 @@ void Game::filterCards(
     std::function<bool(Card*const)> _match
     ) const
 {
-  // Filter the cards based on the provided function
-  for(size_t k = 0; k < io_unfiltered.size(); ++k)
+  if(!io_unfiltered.empty())
   {
-    auto& card = io_unfiltered[k];
-    if(_match(card.get()))
+    // Filter the cards based on the provided function
+    for(size_t k = 0; k < io_unfiltered.size(); ++k)
     {
-      // Move to our filtered vec
-      io_filtered.push_back(std::move(card));
-      // Save its original position
-      io_originalPositions.push_back(k);
+      auto& card = io_unfiltered[k];
+      if(_match(card.get()))
+      {
+        // Move to our filtered vec
+        io_filtered.push_back(std::move(card));
+        // Save its original position
+        io_originalPositions.push_back(k);
+      }
     }
   }
 }
@@ -435,7 +481,8 @@ bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
     std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
     return false;
   }
-
+  auto devolvedPokemon = std::unique_ptr<Card>(static_cast<Card*>(board.m_bench.slotAt(_index)->devolvePokemon().release()));
+  board.m_hand.put(std::move(devolvedPokemon));
   return true;
 }
 

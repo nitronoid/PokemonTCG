@@ -76,10 +76,16 @@ public:
 
 private:
   Game(const Game &_original);
-  void filter(std::vector<std::unique_ptr<Card>>& io_filtered,
+  void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
       std::vector<size_t> &io_originalPositions,
       const PTCG::PLAYER _owner,
       const PTCG::PILE _pile,
+      std::function<bool(Card*const)> _match
+      ) const;
+  void filterCards(
+      std::vector<std::unique_ptr<Card>>& io_unfiltered,
+      std::vector<std::unique_ptr<Card>>& io_filtered,
+      std::vector<size_t>& io_originalPositions,
       std::function<bool(Card*const)> _match
       ) const;
   void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);

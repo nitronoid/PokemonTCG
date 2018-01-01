@@ -287,7 +287,28 @@ bool Game::moveCards(
   return false;
 }
 
-void Game::filter(
+void Game::filterCards(
+    std::vector<std::unique_ptr<Card>>& io_unfiltered,
+    std::vector<std::unique_ptr<Card>>& io_filtered,
+    std::vector<size_t>& io_originalPositions,
+    std::function<bool(Card*const)> _match
+    ) const
+{
+  // Filter the cards based on the provided function
+  for(size_t k = 0; k < io_unfiltered.size(); ++k)
+  {
+    auto& card = io_unfiltered[k];
+    if(_match(card.get()))
+    {
+      // Move to our filtered vec
+      io_filtered.push_back(std::move(card));
+      // Save its original position
+      io_originalPositions.push_back(k);
+    }
+  }
+}
+
+void Game::filterPile(
     std::vector<std::unique_ptr<Card>>& io_filtered,
     std::vector<size_t>& io_originalPositions,
     const PTCG::PLAYER _owner,
@@ -313,19 +334,7 @@ void Game::filter(
     }
     default: break;
   }
-  // Filter the cards based on the provided function
-  for(size_t k = 0; k < unfiltered.size(); ++k)
-  {
-    auto& card = unfiltered[k];
-    if(_match(card.get()))
-    {
-      // Move to our filtered vec
-      io_filtered.push_back(std::move(card));
-      // Save its original position
-      io_originalPositions.push_back(k);
-    }
-  }
-
+  filterCards(unfiltered, io_filtered, io_originalPositions, _match);
 }
 
 std::vector<size_t> Game::playerCardChoice(
@@ -343,7 +352,7 @@ std::vector<size_t> Game::playerCardChoice(
   std::vector<size_t> positions;
   std::vector<std::unique_ptr<Card>> options;
   // Filter the origin pile based on the match functions
-  filter(options, positions, _owner, _origin, _match);
+  filterPile(options, positions, _owner, _origin, _match);
   // Resize based on the choice given, if one was given
   if(options.size() > _range && _range)
     options.resize(_range);

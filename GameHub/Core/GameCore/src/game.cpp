@@ -34,31 +34,88 @@ void Game::start()
   }
 }
 
+void Game::drawHand(Board& io_board)
+{
+  for (int j = 0; j < 6; ++j) drawCard(io_board);
+}
+
+void Game::setBoard(Board& io_board, const size_t _active)
+{
+  io_board.m_bench.put(io_board.m_hand.take(_active), 0);
+}
+
 void Game::setupGame()
 {
+  std::vector<size_t> mulligans;
   for (size_t i = 0; i < 2; ++i)
   {
-    auto& player = m_players[i];
     Board& board = m_boards[i];
-    for (int j = 0; j < 6; ++j)
-    {
-      if(!drawCard(board))
-      {
-        std::cout<<"Could not draw cards from deck of Player "<<i+1<<", deck file might be empty or corrupted."<<'\n';
-        return;
-      }
-    }
-
+    drawHand(board);
     auto active = playerCardChoice(
           static_cast<PTCG::PLAYER>(i),
-          PTCG::PLAYER::SELF,
+          static_cast<PTCG::PLAYER>(i),
           PTCG::PILE::HAND,
           PTCG::ACTION::PLAY,
           [](auto _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
-    1
-    )[0];
-    board.m_bench.put(board.m_hand.take(active), 0);
+          1
+    );
+    if (!active.empty()) setBoard(board, active[0]);
+    else mulligans.push_back(i);
   }
+  doMulligans(mulligans);
+}
+
+void Game::doMulligans(const std::vector<size_t> &_mulligans)
+{
+  for (const auto i : _mulligans)
+  {
+    auto& player = m_players[i];
+    Board& board = m_boards[i];
+    std::vector<size_t> active;
+    while (active.empty())
+    {
+      // REVEAL HAND
+      // Move the hand back to the deck
+      std::vector<unsigned> indices(board.m_hand.view().size());
+      std::iota (std::begin(indices), std::end(indices), 0);
+      moveCards(indices, static_cast<PTCG::PLAYER>(i), PTCG::PILE::HAND, PTCG::PILE::DECK);
+      shuffleDeck(static_cast<PTCG::PLAYER>(i));
+      drawHand(board);
+      active = playerCardChoice(
+            static_cast<PTCG::PLAYER>(i),
+            static_cast<PTCG::PLAYER>(i),
+            PTCG::PILE::HAND,
+            PTCG::ACTION::PLAY,
+            [](auto _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
+            1
+      );
+    }
+    setBoard(board, active[0]);
+  }
+}
+
+void Game::nextTurn()
+{
+  // Get the current player
+  auto& currentPlayer = m_players[m_turnCount % 2];
+  Board& currentBoard = m_boards[m_turnCount % 2];
+  if (m_drawer)
+  {
+    m_drawer->drawBoard(&m_boards[(m_turnCount + 1) % 2],false);
+    m_drawer->drawBoard(&currentBoard, true);
+  }
+  // Attempt to draw a card
+  if (drawCard(currentBoard))
+  {
+    // Execute the players turn function
+    auto attackDecision = currentPlayer->turn();
+    if (attackDecision.first)
+      attack(currentBoard.m_bench.active(), attackDecision.second);
+    std::cout<<m_turnCount<<'\n';
+    ++m_turnCount;
+  }
+  // Draw failed
+  else m_gameFinished = true;
 }
 
 bool Game::drawCard(Board& _board)
@@ -321,30 +378,6 @@ std::vector<size_t> Game::playerSlotChoice(
   // Convert the player choice to the original pile indexes
   for (auto& pick : choice) pick = positions[pick];
   return choice;
-}
-
-void Game::nextTurn()
-{
-  // Get the current player
-  auto& currentPlayer = m_players[m_turnCount % 2];
-  Board& currentBoard = m_boards[m_turnCount % 2];
-  if (m_drawer)
-  {
-    m_drawer->drawBoard(&m_boards[(m_turnCount + 1) % 2],false);
-    m_drawer->drawBoard(&currentBoard, true);
-  }
-  // Attempt to draw a card
-  if (drawCard(currentBoard))
-  {
-    // Execute the players turn function
-    auto attackDecision = currentPlayer->turn();
-    if (attackDecision.first)
-      attack(currentBoard.m_bench.active(), attackDecision.second);
-    std::cout<<m_turnCount<<'\n';
-    ++m_turnCount;
-  }
-  // Draw failed
-  else m_gameFinished = true;
 }
 
 void Game::attack(PokemonCard* _pokemon, const unsigned _index)

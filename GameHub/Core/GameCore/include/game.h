@@ -85,6 +85,9 @@ private:
   void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);
   std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner,PTCG::PILE _dest,const unsigned _index);
   size_t playerIndex(const PTCG::PLAYER &_player) const;
+  void doMulligans(const std::vector<size_t> &_mulligans);
+  void drawHand(Board& io_board);
+  void setBoard(Board& io_board, const size_t _active);
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);

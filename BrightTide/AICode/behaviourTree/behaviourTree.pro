@@ -9,11 +9,8 @@ SOURCES += main.cpp \
     sequence.cpp \
     testaction.cpp \
     condition.cpp \
-    conditionenergy.cpp \
-    conditiondead.cpp \
-    conditionsecondattack.cpp \
     cards.cpp \
-    conditionlistempty.cpp
+    functions.cpp
 
 HEADERS += \
     node.h \
@@ -22,9 +19,6 @@ HEADERS += \
     sequence.h \
     testaction.h \
     condition.h \
-    conditionenergy.h \
-    conditiondead.h \
-    conditionsecondattack.h \
     cards.h \
-    conditionlistempty.h
+    functions.h
 

@@ -1,12 +1,12 @@
-import poke
+import poke as p
 
 def headlock(h):
     dmg = 30
     if(h.flipCoin(1)):
         dmg += 30
-        h.dealDamage(dmg)
     else:
-        h.applyCondition(PARALYZED, ENEMY)
+        h.applyCondition(p.PLAYER.ENEMY, p.CONDITION.PARALYZED)
+    h.dealDamage(dmg)
 
 
 def guardPress(h):

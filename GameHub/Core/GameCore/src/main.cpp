@@ -21,8 +21,8 @@ int main()
   SimplePrinter drawer;
   test.init(testPool, &drawer, "test_deck.json", "test_deck.json");
   std::cout<<"BEGIN\n";
-  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(97)));
-  foo->attack(0, test);
+  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(104)));
+  foo->attack(1, test);
 
   //  std::unique_ptr<TrainerCard> goo(static_cast<TrainerCard*>(testPool.loadCard(122)));
   //  goo->activateAbility(test);

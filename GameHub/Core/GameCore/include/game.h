@@ -86,7 +86,6 @@ private:
   std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner,PTCG::PILE _dest,const unsigned _index);
   size_t playerIndex(const PTCG::PLAYER &_player) const;
   void doMulligans(const std::vector<size_t> &_mulligans);
-  std::vector<size_t> chooseActive(const PTCG::PLAYER _player);
   void drawHand(Board& io_board);
   void setBoard(Board& io_board, const size_t _active);
   void nextTurn();

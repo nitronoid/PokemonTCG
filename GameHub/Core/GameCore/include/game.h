@@ -19,7 +19,8 @@ public:
   Game clone() const;
   void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
 
-  void dealDamage(const unsigned _damage, const unsigned _id = 0);
+  void dealDamage(const int _damage, const unsigned _id = 0);
+  void healDamage(const int _heal, const unsigned _id = 0);
   unsigned flipCoin(const unsigned _num);
 
   void start();
@@ -52,7 +53,7 @@ public:
       );
 
   // View card pile functions
-  std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+ // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
   std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
   std::vector<std::unique_ptr<Card>>  viewDiscard(const PTCG::PLAYER &_player) const;
   std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;
@@ -84,6 +85,10 @@ private:
   void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);
   std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner,PTCG::PILE _dest,const unsigned _index);
   size_t playerIndex(const PTCG::PLAYER &_player) const;
+  void doMulligans(const std::vector<size_t> &_mulligans);
+  std::vector<size_t> chooseActive(const PTCG::PLAYER _player);
+  void drawHand(Board& io_board);
+  void setBoard(Board& io_board, const size_t _active);
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);

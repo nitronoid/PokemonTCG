@@ -51,6 +51,11 @@ void BoardSlot::takeDamage(const int _damage)
   m_damageTaken += _damage;
 }
 
+void BoardSlot::removeDamage(const int _damage)
+{
+  m_damageTaken = std::max(0, m_damageTaken - _damage);
+}
+
 void BoardSlot::setDamage(const int _value)
 {
   std::cout<<"Damage taken set to: "<<_value<<'\n';

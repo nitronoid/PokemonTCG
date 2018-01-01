@@ -34,31 +34,95 @@ void Game::start()
   }
 }
 
+void Game::drawHand(Board& io_board)
+{
+  for (int j = 0; j < 6; ++j) drawCard(io_board);
+}
+
+void Game::setBoard(Board& io_board, const size_t _active)
+{
+  io_board.m_bench.put(io_board.m_hand.take(_active), 0);
+}
+
+std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player)
+{
+  playerCardChoice(
+        _player,
+        _player,
+        PTCG::PILE::HAND,
+        PTCG::ACTION::PLAY,
+        [](auto _card)
+  {
+    // Filter for basic pokemons
+    if (_card->cardType() == PTCG::CARD::POKEMON)
+    {
+      auto pokemonCard = static_cast<PokemonCard*>(_card);
+      // !0 == true
+      return !pokemonCard->stage();
+    }
+    return false;
+  },
+        1
+  );
+}
+
 void Game::setupGame()
 {
+  std::vector<size_t> mulligans;
   for (size_t i = 0; i < 2; ++i)
   {
-    auto& player = m_players[i];
     Board& board = m_boards[i];
-    for (int j = 0; j < 6; ++j)
-    {
-      if(!drawCard(board))
-      {
-        std::cout<<"Could not draw cards from deck of Player "<<i+1<<", deck file might be empty or corrupted."<<'\n';
-        return;
-      }
-    }
-
-    auto active = playerCardChoice(
-          static_cast<PTCG::PLAYER>(i),
-          PTCG::PLAYER::SELF,
-          PTCG::PILE::HAND,
-          PTCG::ACTION::PLAY,
-          [](auto _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
-          1
-    )[0];
-    board.m_bench.put(board.m_hand.take(active), 0);
+    drawHand(board);
+    auto active = chooseActive(static_cast<PTCG::PLAYER>(i));
+    if (!active.empty()) setBoard(board, active[0]);
+    else mulligans.push_back(i);
   }
+  doMulligans(mulligans);
+}
+
+void Game::doMulligans(const std::vector<size_t> &_mulligans)
+{
+  for (const auto i : _mulligans)
+  {
+    Board& board = m_boards[i];
+    std::vector<size_t> active;
+    while (active.empty())
+    {
+      // REVEAL HAND
+      // Move the hand back to the deck
+      std::vector<unsigned> indices(board.m_hand.view().size());
+      std::iota (std::begin(indices), std::end(indices), 0);
+      moveCards(indices, static_cast<PTCG::PLAYER>(i), PTCG::PILE::HAND, PTCG::PILE::DECK);
+      shuffleDeck(static_cast<PTCG::PLAYER>(i));
+      drawHand(board);
+      active = chooseActive(static_cast<PTCG::PLAYER>(i));
+    }
+    setBoard(board, active[0]);
+  }
+}
+
+void Game::nextTurn()
+{
+  // Get the current player
+  auto& currentPlayer = m_players[m_turnCount % 2];
+  Board& currentBoard = m_boards[m_turnCount % 2];
+  if (m_drawer)
+  {
+    m_drawer->drawBoard(&m_boards[(m_turnCount + 1) % 2],false);
+    m_drawer->drawBoard(&currentBoard, true);
+  }
+  // Attempt to draw a card
+  if (drawCard(currentBoard))
+  {
+    // Execute the players turn function
+    auto attackDecision = currentPlayer->turn();
+    if (attackDecision.first)
+      attack(currentBoard.m_bench.active(), attackDecision.second);
+    std::cout<<m_turnCount<<'\n';
+    ++m_turnCount;
+  }
+  // Draw failed
+  else m_gameFinished = true;
 }
 
 bool Game::drawCard(Board& _board)
@@ -114,7 +178,7 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
 }
 void Game::benchToPile(const PTCG::PLAYER &_player, Card &_card, const PTCG::PILE &_dest, const unsigned &_index)
 {
-    auto& board = m_boards[playerIndex(_player)];
+  auto& board = m_boards[playerIndex(_player)];
 
 }
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
@@ -122,30 +186,56 @@ void Game::shuffleDeck(const PTCG::PLAYER _owner)
   m_boards[playerIndex(_owner)].m_deck.shuffle();
 }
 
-void Game::pileToBench(
-        const PTCG::PLAYER &_player,
-        const PTCG::PILE &_origin,
-        std::vector<unsigned> &_pileIndex,
-        std::vector<unsigned> &_benchIndex)
+template<typename T>
+void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
 {
+  // Construct and fill a vector of consecutive indices
+  std::vector<size_t> indices(io_sorter.size());
+  std::iota (std::begin(indices), std::end(indices), 0);
+  // Sort the indices based on the passed vector
+  std::sort(indices.begin(), indices.end(), [&io_sorter](const T _a, const T _b)
+  {
+    return io_sorter[_a] > io_sorter[_b];
+  }
+  );
 
-    if(_pileIndex.empty())
+  // Reorder the two vectors based on the sorted indices
+  // for all elements to put in place
+  for(size_t i = 0; i < io_sorter.size() - 1; ++i)
+  {
+    // while the element i is not yet in place
+    while(i != indices[i])
     {
-        std::cout<<"No cards to put..."<<'\n';
-        return;
+      // swap it with the element at its final place
+      size_t alt = indices[i];
+      std::swap(io_sorter[i], io_sorter[alt]);
+      std::swap(io_second[i], io_second[alt]);
+      std::swap(indices[i], indices[alt]);
     }
-    else if(_benchIndex.empty())
-    {
-        std::cout<<"Board full"<<'\n';
-        return;
-    }
-    std::sort(_pileIndex.begin(), _pileIndex.end(),std::greater<unsigned>());
+  }
+}
+
+void Game::pileToBench(
+    const PTCG::PLAYER &_player,
+    const PTCG::PILE &_origin,
+    std::vector<unsigned> &_pileIndex,
+    std::vector<unsigned> &_benchIndex)
+{
+  if (_benchIndex.size() == _pileIndex.size() && !_pileIndex.empty())
+  {
+    doubleVecSort(_pileIndex, _benchIndex);
     auto& board = m_boards[playerIndex(_player)];
-    for(unsigned i = 0; i < _benchIndex.size(); ++i)
+    for(size_t i = 0; i < _benchIndex.size(); ++i)
     {
-        board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player,_origin,_pileIndex[i]));
+      board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
     }
-    return;
+  }
+  else
+  {
+    std::cout<<"Missmatched destination and card indices.\n"
+               "Amount of card indices: "<<_pileIndex.size()<<"\n"
+                                                              "Amount of destination indices: "<<_benchIndex.size()<<"\n";
+  }
 }
 
 std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner)
@@ -154,7 +244,7 @@ std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner)
   auto benchSlots = m_boards[playerIndex(_owner)].m_bench.view();
   for (size_t i = 0; i < benchSlots.size(); ++i)
   {
-    if (benchSlots[i].active()) ret.push_back(i);
+    if (!benchSlots[i].active()) ret.push_back(i);
   }
   return ret;
 }
@@ -174,12 +264,12 @@ void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
 
 //_cardIndices - target cards on board/hand... to move
 bool Game::moveCards(
-        std::vector<unsigned> _cardIndices,
-        const PTCG::PLAYER _owner,
-        const PTCG::PILE _origin,
-        const PTCG::PILE _destination,
-        const bool _reveal,
-        const std::vector<unsigned> _destIndex
+    std::vector<unsigned> _cardIndices,
+    const PTCG::PLAYER _owner,
+    const PTCG::PILE _origin,
+    const PTCG::PILE _destination,
+    const bool _reveal,
+    const std::vector<unsigned> _destIndex
     )
 {
   //sort the input indices to avoid affecting take order in a vector
@@ -297,40 +387,22 @@ std::vector<size_t> Game::playerSlotChoice(
   return choice;
 }
 
-void Game::nextTurn()
-{
-  // Get the current player
-  auto& currentPlayer = m_players[m_turnCount % 2];
-  Board& currentBoard = m_boards[m_turnCount % 2];
-  if (m_drawer)
-  {
-    m_drawer->drawBoard(&m_boards[(m_turnCount + 1) % 2],false);
-    m_drawer->drawBoard(&currentBoard, true);
-  }
-  // Attempt to draw a card
-  if (drawCard(currentBoard))
-  {
-    // Execute the players turn function
-    auto attackDecision = currentPlayer->turn();
-    if (attackDecision.first)
-      attack(currentBoard.m_bench.active(), attackDecision.second);
-    std::cout<<m_turnCount<<'\n';
-    ++m_turnCount;
-  }
-  // Draw failed
-  else m_gameFinished = true;
-}
-
 void Game::attack(PokemonCard* _pokemon, const unsigned _index)
 {
   _pokemon->attack(_index, *this);
 }
 
-void Game::dealDamage(const unsigned _damage, const unsigned _id)
+void Game::dealDamage(const int _damage, const unsigned _id)
 {
+  m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench.slotAt(_id)->takeDamage(_damage);
   std::cout<<"Attack did: "<<_damage<<" damage!\n";
 }
 
+void Game::healDamage(const int _heal, const unsigned _id)
+{
+  m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(_id)->removeDamage(_heal);
+  std::cout<<"Healed: "<<_heal<<" damage!\n";
+}
 
 void Game::evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index)
 {

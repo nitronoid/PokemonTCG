@@ -26,6 +26,7 @@ public:
     inline unsigned getTurnPlayed() const {return m_turnPlayed;}
 
     void takeDamage(const int _damage);
+    void removeDamage(const int _damage);
     void setDamage(const int _value);
     void addCondition(const PTCG::CONDITION _condition);
     void removeCondition(const PTCG::CONDITION _condition);

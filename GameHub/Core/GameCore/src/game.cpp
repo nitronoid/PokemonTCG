@@ -44,6 +44,28 @@ void Game::setBoard(Board& io_board, const size_t _active)
   io_board.m_bench.put(io_board.m_hand.take(_active), 0);
 }
 
+std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player)
+{
+  playerCardChoice(
+        _player,
+        _player,
+        PTCG::PILE::HAND,
+        PTCG::ACTION::PLAY,
+        [](auto _card)
+  {
+    // Filter for basic pokemons
+    if (_card->cardType() == PTCG::CARD::POKEMON)
+    {
+      auto pokemonCard = static_cast<PokemonCard*>(_card);
+      // !0 == true
+      return !pokemonCard->stage();
+    }
+    return false;
+  },
+        1
+  );
+}
+
 void Game::setupGame()
 {
   std::vector<size_t> mulligans;
@@ -51,14 +73,7 @@ void Game::setupGame()
   {
     Board& board = m_boards[i];
     drawHand(board);
-    auto active = playerCardChoice(
-          static_cast<PTCG::PLAYER>(i),
-          static_cast<PTCG::PLAYER>(i),
-          PTCG::PILE::HAND,
-          PTCG::ACTION::PLAY,
-          [](auto _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
-          1
-    );
+    auto active = chooseActive(static_cast<PTCG::PLAYER>(i));
     if (!active.empty()) setBoard(board, active[0]);
     else mulligans.push_back(i);
   }
@@ -69,7 +84,6 @@ void Game::doMulligans(const std::vector<size_t> &_mulligans)
 {
   for (const auto i : _mulligans)
   {
-    auto& player = m_players[i];
     Board& board = m_boards[i];
     std::vector<size_t> active;
     while (active.empty())
@@ -81,14 +95,7 @@ void Game::doMulligans(const std::vector<size_t> &_mulligans)
       moveCards(indices, static_cast<PTCG::PLAYER>(i), PTCG::PILE::HAND, PTCG::PILE::DECK);
       shuffleDeck(static_cast<PTCG::PLAYER>(i));
       drawHand(board);
-      active = playerCardChoice(
-            static_cast<PTCG::PLAYER>(i),
-            static_cast<PTCG::PLAYER>(i),
-            PTCG::PILE::HAND,
-            PTCG::ACTION::PLAY,
-            [](auto _card){ return _card->cardType() == PTCG::CARD::POKEMON; },
-            1
-      );
+      active = chooseActive(static_cast<PTCG::PLAYER>(i));
     }
     setBoard(board, active[0]);
   }

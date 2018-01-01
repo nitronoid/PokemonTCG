@@ -56,7 +56,7 @@ std::pair<bool, unsigned> HumanPlayer::turn()
 
   // Play random card from hand
   unsigned attackNum = viewBench().at(0).active()->attackNum();
-  std::uniform_int_distribution<unsigned> agen(0, attackNum);
+  std::uniform_int_distribution<unsigned> agen(0, attackNum - 1);
 
   // Return the decision
   return std::pair<bool, unsigned> {doAttack, agen(eng)};

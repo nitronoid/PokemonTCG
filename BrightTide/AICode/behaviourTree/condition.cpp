@@ -1,7 +1,8 @@
 #include "condition.h"
 
-Condition::Condition()
+Condition::Condition(bool _func)
 {
+    m_func = _func;
 }
 //-------------------------------------------------------------------
 bool Condition::run()
@@ -12,5 +13,5 @@ bool Condition::run()
     // to make them think
     std::this_thread::sleep_for(std::chrono::milliseconds(800));
     // return condition
-    return conditionFunction();
+    return m_func;
 }

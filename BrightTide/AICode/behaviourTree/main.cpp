@@ -1,24 +1,22 @@
-#include <iostream>
+
 #include "selector.h"
 #include "sequence.h"
 #include "testaction.h"
-#include "conditionenergy.h"
-#include "conditiondead.h"
-#include "conditionsecondattack.h"
-#include "conditionlistempty.h"
+#include "condition.h"
 #include "cards.h"
+#include "functions.h"
+
 
 int main()
 {
     // popplio
     Cards card;
+    Functions func;
     card.setCurrentEnergy(0);
 
     // create a list of cards
     std::vector<Cards> m_listOfBenchCards;
     m_listOfBenchCards.push_back(card);
-    m_listOfBenchCards.push_back(card);
-
 //-----------------------------------------------------------------------------
     // build tree
     // add children from left to right
@@ -41,24 +39,28 @@ int main()
     actionDecision->addChild(drawBasic);
     // choose attack1 or attack2
     actionDecision->addChild(attack1ORattack2);
+
     // condition check if the bench is not empty
-    drawBasic->addChild(new conditionListEmpty(m_listOfBenchCards));
+    drawBasic->addChild(new Condition(func.listEmpty(m_listOfBenchCards)));
+    // condition check if there is a basic card
     drawBasic->addChild(new testAction("BENCH CARDS LIST NOT EMPTY"));
 
+    // attack sequences
     attack1ORattack2->addChild(attack2);
     attack1ORattack2->addChild(attack1);
     attack1ORattack2->addChild(new testAction("CAN'T ATTACK"));
     // checks for condition
-    attack2->addChild(new conditionSecondAttack(card.getCurrentEnergy(), card.getEnergy_1()));
+    attack2->addChild(new Condition(func.canAttack(card.getCurrentEnergy(), card.getEnergy_1())));
     attack2->addChild(new testAction("ATTACK 2"));
-    attack1->addChild(new conditionSecondAttack(card.getCurrentEnergy(), card.getEnergy_0()));
+    attack1->addChild(new Condition(func.canAttack(card.getCurrentEnergy(), card.getEnergy_0())));
     attack1->addChild(new testAction("ATTACK 1"));
+
     // ACTION or BENCH card to attach energy
     actionOrBenchSelector->addChild(energyNeededSequence);
 
     // Sequence for attaching energy
-    energyNeededSequence->addChild(new conditionEnergy(card.getCurrentEnergy(),card.getEnergy_0(), card.getEnergy_1()));
-    energyNeededSequence->addChild(new conditionDead(card.getHealth()));
+    energyNeededSequence->addChild(new Condition(func.needEnergy(card.getCurrentEnergy(),card.getEnergy_0(),card.getEnergy_1())));
+    energyNeededSequence->addChild(new Condition(func.isDead(card.getHealth())));
     energyNeededSequence->addChild(new testAction("ATTACH ENERGY TO ACTIVE CARD"));
 
     actionOrBenchSelector->addChild(new testAction("ATTACH ENERGY TO RANDOM BENCH CARD"));

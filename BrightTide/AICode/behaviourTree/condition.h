@@ -2,6 +2,7 @@
 #define CONDITION_H
 
 #include "node.h"
+#include "functions.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -12,7 +13,7 @@ public:
     ///-----------------------------------------------------------------
     /// @build constructor
     ///-----------------------------------------------------------------
-    Condition();
+    Condition(bool _func);
     ///-----------------------------------------------------------------
     /// @build run method
     ///-----------------------------------------------------------------
@@ -20,12 +21,14 @@ public:
     ///-----------------------------------------------------------------
     /// @build function condition
     ///-----------------------------------------------------------------
-    virtual bool conditionFunction() = 0;
+    //virtual bool conditionFunction() = 0;
+
 protected:
     ////-----------------------------------------------------------------
     /// @build status of the node
     ///-----------------------------------------------------------------
     bool m_result = false;
-};
+    bool m_func;
 
+};
 #endif // CONDITION_H

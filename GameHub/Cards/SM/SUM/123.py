@@ -1,9 +1,13 @@
-import poke
+import poke as p 
+
+def filter(card):
+    return card.cardType() == p.CARD.POKEMON and not card.stage()
+
 def canPlay(h):
     # checks if deck is not empty && checks if the type of pokemon is in the deck
     # if both return TRUE
     result = False
-    if(len(h.viewDeck(SELF)) > 0):
+    if(len(h.viewDeck(p.CARD.SELF)) > 0):
         result = True 
     return result 
 def nestBall(h):
@@ -24,6 +28,12 @@ def nestBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    cards = h.playerChoice(SELF, SELF, DECK, BASIC_POKEMON, DRAW, 1)
-    h.moveCard(card, SELF, DECK, BENCH, False)
-    h.shuffleDeck()
+    cards = h.playerCardChoice(
+        p.PLAYER.SELF, 
+        p.PLAYER.SELF, 
+        p.PILE.DECK, 
+        p.ACTION.DRAW,
+        filter,
+        1)
+    h.moveCard(card, p.PLAYER.SELF, p.PILE.DECK, p.PILE.BENCH)
+    h.shuffleDeck(p.PLAYER.SELF)

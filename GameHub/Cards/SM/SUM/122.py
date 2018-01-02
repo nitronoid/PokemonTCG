@@ -1,10 +1,14 @@
-import poke
+import poke as p
+
+def filter(card):
+    return True;
+
 def canPlay(h):
     # deck never empty ? 
     # checks if it is your first turn; if first turn and less than 8 cards in your hand return true
     result = False
-    if(len(h.viewDeck(SELF) > 0)):
-        if(h.turnCount() < 2 and len(h.viewHand(SELF))<8):
+    if(len(h.viewDeck(p.PLAYER.SELF) > 0)):
+        if(h.turnCount() < 2 and len(h.viewHand(p.PLAYER.SELF))<8):
             result = True
     return result 
 
@@ -28,11 +32,23 @@ def lillie(h):
 
     # if first turn 
     # draw until 8 cards
-    if(h.turnCount()==0 and len(h.viewHand(SELF))<8):
-        cards = h.playerChoice(SELF, SELF, DECK, ALL, DRAW, 8)
-        h.moveCard(cards, SELF, DECK, HAND, False)
+    if(h.turnCount()==0 and len(h.viewHand(p.PLAYER.SELF))<8):
+        cards = h.playerCardChoice(
+            p.PLAYER.SELF, 
+            p.PLAYER.SELF, 
+            p.PILE.DECK,
+            p.ACTION.DRAW,
+            filter,
+             8)
+        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
     # if more than first turn
     else: 
-        cards = h.playerChoice(SELF, SELF, DECK, ALL, DRAW, 6)
-        h.moveCard(cards, SELF, DECK, HAND, False)
+        cards = h.playerCardChoice(
+            p.PLAYER.SELF, 
+            p.PLAYER.SELF, 
+            p.PILE.DECK,
+            p.ACTION.DRAW,
+            filter, 
+            6)
+        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
 

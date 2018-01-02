@@ -1,7 +1,7 @@
 import poke as p 
 
 def filter(card):
-    return card.cardType() == p.CARD.ENERGY and card.cardType() == p.TYPE.WATER
+    return card.cardType() == p.CARD.ENERGY and card.Type() == p.TYPE.WATER
 
 def scratch(h):
     h.dealDamage(20)

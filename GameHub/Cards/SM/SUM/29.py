@@ -1,4 +1,7 @@
-import poke
+import poke as p 
+
+def filter(card):
+    return card.cardType() == p.CARD.ENERGY and card.cardType() == p.TYPE.WATER
 
 def scratch(h):
     h.dealDamage(20)
@@ -21,7 +24,13 @@ def doubleJet(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
     
-    cards = h.playerChoice(SELF, SELF , HAND, WATER_ENERGY, DISCARD, 2)
+    cards = h.playerChoice(
+        p.PLAYER.SELF, 
+        p.PLAYER.SELF , 
+        p.PILE.HAND, 
+        p.ACTION.DISCARD,
+        filter,
+        2)
     h.moveCards(cards, SELF, HAND, DISCARD, False)
     dmg = len(cards)*60
     h.dealDamage(dmg)

@@ -24,15 +24,9 @@ def professorKukui(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
-
-    cards = h.playerCardChoice(
-        p.PLAYER.SELF,
-        p.PLAYER.SELF, 
-        p.PILE.DECK, 
-        p.ACTION.DRAW
-        filter, 
-        2)
-    h.moveCards(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
+    
+    for i in range(2):
+        h.drawCard(p.PLAYER.SELF)
     
     # your Pokemon's attacks do 20 more damage to your opponent's Active Pokemon (before applying Weakness and Resistance).	
     h.attackBonus(20)

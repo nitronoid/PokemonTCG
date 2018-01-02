@@ -477,21 +477,24 @@ void Game::attack(PokemonCard* _pokemon, const unsigned _index)
 
 void Game::dealDamage(const int _damage, const unsigned _id)
 {
-  m_damageHandler.generalDamage(
-      m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench,
-      *m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0),_id,_damage);
-  std::cout<<"Attack did: "<<_damage<<" damage!\n";
+  if(_id<6)
+  {
+    m_damageHandler.generalDamage(
+        m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench.slotAt(_id),
+        m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0),static_cast<bool>(_id),_damage);
+    std::cout<<"Attack did: "<<_damage<<" damage!\n";
+  }
 }
 
 void Game::addDamageCounter(const int _damage, const PTCG::PLAYER &_player, const unsigned _id)
 {
-  m_damageHandler.rawDamage(m_boards[playerIndex(_player)].m_bench,_id,_damage);
+  m_damageHandler.rawDamage(m_boards[playerIndex(_player)].m_bench.slotAt(_id),_damage);
 }
 
 void Game::healDamage(const int _heal, const unsigned _id)
 {
 
-  m_damageHandler.heal(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,_id,_heal);
+  m_damageHandler.heal(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(_id),_heal);
   std::cout<<"Healed: "<<_heal<<" damage!\n";
 }
 
@@ -545,13 +548,13 @@ void Game::removeAllCondition(const PTCG::PLAYER &_target)
 
 void Game::poison()
 {
-  m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,0,m_damageHandler.getPoison());
+  m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0),m_damageHandler.getPoison());
 
 }
 
 void Game::burn()
 {
-  m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,0,m_damageHandler.getBurn());
+  m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0),m_damageHandler.getBurn());
   if(flipCoin(1))
   {
     m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0)->removeCondition(PTCG::CONDITION::BURNED);

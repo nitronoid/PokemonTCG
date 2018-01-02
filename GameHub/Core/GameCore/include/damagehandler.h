@@ -9,20 +9,16 @@ public:
     DamageHandler()=default;
     DamageHandler& operator =(const DamageHandler &_original) = delete;
 
-    bool heal(Bench &_bench,
-              const unsigned &_benchIndex,
-              const unsigned &_value);
+    bool heal(BoardSlot* _slot, const unsigned &_value);
 
     //factor in weakness, bonus damages for active, factoring only bonus for benched
-    void generalDamage(Bench &_bench,
-                       BoardSlot &_attacker,
-                       const unsigned &_defenderIndex,
+    void generalDamage(BoardSlot* _defender,
+                       BoardSlot* _attacker,
+                       const bool &_isBenched,
                        const unsigned &_damage);
 
     //factor only base damage, simulates "Put x Damage Counters onto xxxx Pokemon from special conditions, attacks."
-    void rawDamage(Bench &_bench,
-                   const unsigned &_defenderIndex,
-                   const unsigned &_damage);
+    void rawDamage(BoardSlot* _defender, const unsigned &_damage);
 
 
     void increasePoison(const int _damage);
@@ -33,8 +29,8 @@ public:
     inline unsigned getConfuse() const { return m_confuseDamage; }
 
 private:
-    int applyWeakRes(BoardSlot &_defender, BoardSlot &_attacker);
-    int applyBonusDamage(BoardSlot &_defender,BoardSlot &_attacker, const PTCG::ORDER &_order);
+    int applyWeakRes(BoardSlot* _defender, BoardSlot* _attacker);
+    int applyBonusDamage(BoardSlot* _defender,BoardSlot* _attacker, const PTCG::ORDER &_order);
 
 
     int m_weaknessMult = 2;

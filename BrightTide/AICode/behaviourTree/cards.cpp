@@ -45,6 +45,11 @@ void Cards::setCurrentEnergy(int _currentEnergy)
 {
     m_currentEnergy = _currentEnergy;
 }
+void Cards::addEnergy()
+{
+    m_currentEnergy++;
+}
+
 //-------------------------------------------------------------------
 int Cards::getType()
 {

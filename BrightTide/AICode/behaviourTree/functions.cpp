@@ -14,6 +14,7 @@ bool Functions::needEnergy(int _currentEnergy, int _energyA0, int _energyA1)
         m_result = true;
     }
     return m_result;
+    m_result = false;
 }
 
 bool Functions::isDead(int _health)
@@ -24,6 +25,7 @@ bool Functions::isDead(int _health)
         m_result = true;
     }
     return m_result;
+    m_result = false;
 }
 
 bool Functions::canAttack(int _currentEnergy, int _energy)
@@ -33,6 +35,7 @@ bool Functions::canAttack(int _currentEnergy, int _energy)
         m_result = true;
     }
     return m_result;
+    m_result = false;
 }
 
 bool Functions::listEmpty(std::vector<Cards> _list)
@@ -42,4 +45,11 @@ bool Functions::listEmpty(std::vector<Cards> _list)
         m_result = true;
     }
     return m_result;
+    m_result = false;
+}
+
+bool Functions::addEnergy(Cards _card)
+{
+    _card.addEnergy();
+    return true;
 }

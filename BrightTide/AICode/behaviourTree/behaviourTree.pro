@@ -10,7 +10,6 @@ SOURCES += main.cpp \
     testaction.cpp \
     condition.cpp \
     cards.cpp \
-    functions.cpp
 
 HEADERS += \
     node.h \
@@ -19,6 +18,4 @@ HEADERS += \
     sequence.h \
     testaction.h \
     condition.h \
-    cards.h \
-    functions.h
-
+    cards.h

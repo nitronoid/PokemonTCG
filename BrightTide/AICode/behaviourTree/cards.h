@@ -37,6 +37,7 @@ public:
     /// @build set current energy function
     ///-----------------------------------------------------------------
     void setCurrentEnergy(int _currentEnergy);
+    void addEnergy();
     ///-----------------------------------------------------------------
     /// @build get type function
     ///-----------------------------------------------------------------

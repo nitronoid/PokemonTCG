@@ -41,6 +41,8 @@ public:
       const std::vector<std::unique_ptr<Card>> &_revealed
       ) = 0;
 
+  virtual bool agree(const PTCG::ACTION _action) = 0;
+
   virtual std::pair<bool, unsigned> turn() = 0;
 
 protected:

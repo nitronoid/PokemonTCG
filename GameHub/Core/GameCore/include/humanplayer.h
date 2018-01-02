@@ -34,6 +34,8 @@ public:
       const std::vector<std::unique_ptr<Card>> &_revealed
       ) override;
 
+  virtual bool agree(const PTCG::ACTION _action) override;
+
   virtual std::pair<bool, unsigned> turn() override;
 
 };

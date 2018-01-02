@@ -44,6 +44,11 @@ void HumanPlayer::learnCards(
     )
 {}
 
+bool HumanPlayer::agree(const PTCG::ACTION _action)
+{
+  return true;
+}
+
 bool randomBool()
 {
   static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());

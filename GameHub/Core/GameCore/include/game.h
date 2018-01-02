@@ -57,6 +57,8 @@ public:
       const std::vector<size_t> &_indices
       );
 
+  bool playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action);
+
   // View card pile functions
  // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
   std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
@@ -97,7 +99,7 @@ private:
   void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);
   std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const size_t _index);
   size_t playerIndex(const PTCG::PLAYER &_player) const;
-  void doMulligans(const std::vector<size_t> &_mulligans);
+  void doMulligans(std::vector<size_t> &io_mulligans);
   void drawHand(Board& io_board);
   void setBoard(Board& io_board, const size_t _active);
   void nextTurn();

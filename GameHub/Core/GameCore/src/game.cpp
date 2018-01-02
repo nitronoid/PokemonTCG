@@ -63,6 +63,12 @@ std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player)
   );
 }
 
+
+bool Game::playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action)
+{
+  return m_players[playerIndex(_player)]->agree(_action);
+}
+
 void Game::setupGame()
 {
   std::vector<size_t> mulligans;
@@ -77,27 +83,45 @@ void Game::setupGame()
   doMulligans(mulligans);
 }
 
-void Game::doMulligans(const std::vector<size_t> &_mulligans)
+void Game::doMulligans(std::vector<size_t> &io_mulligans)
 {
-  for (const auto i : _mulligans)
+  // Keep track of the size of the vector
+  size_t size = io_mulligans.size();
+  for (size_t i = 0; i < size; ++i)
   {
-    Board& board = m_boards[i];
-    std::vector<size_t> active;
-    while (active.empty())
+    // get the player index at this point
+    const size_t index = io_mulligans[i];
+    // use the index to get the board and player flags
+    Board& board = m_boards[index];
+    auto currentPlayer = static_cast<PTCG::PLAYER>(index);
+    auto enemyPlayer = static_cast<PTCG::PLAYER>((index+1)%2);
+    // Generate consecutive integers for range of hand
+    std::vector<size_t> indices(board.m_hand.view().size());
+    std::iota (std::begin(indices), std::end(indices), 0);
+    // Reveal the Hand
+    revealCards(enemyPlayer, currentPlayer, PTCG::PILE::HAND, indices);
+    // Move the hand back to the deck
+    moveCards(indices, currentPlayer, PTCG::PILE::HAND, PTCG::PILE::DECK);
+    // Shuffle and redraw the hand
+    shuffleDeck(currentPlayer);
+    drawHand(board);
+    // Ask the player to choose an active pokemon from their hand
+    auto active = chooseActive(currentPlayer);
+    // If they were able to we set the board up
+    if (!active.empty())
+      setBoard(board, active[0]);
+    // Otherwise they will need to mulligan again
+    else
     {
-      PTCG::PLAYER currentPlayer = static_cast<PTCG::PLAYER>(i);
-      // Generate consecutive integers for range of hand
-      std::vector<size_t> indices(board.m_hand.view().size());
-      std::iota (std::begin(indices), std::end(indices), 0);
-      // Reveal the Hand
-      revealCards(static_cast<PTCG::PLAYER>((i+1)%2), currentPlayer, PTCG::PILE::HAND, indices);
-      // Move the hand back to the deck
-      moveCards(indices, currentPlayer, PTCG::PILE::HAND, PTCG::PILE::DECK);
-      shuffleDeck(currentPlayer);
-      drawHand(board);
-      active = chooseActive(currentPlayer);
+      // If this was the last scheduled mulligan, then we are now on a streak
+      // We must therefor offer the enemy the choice of drawing a card
+      if ((i == size - 1) && playerAgree(enemyPlayer, PTCG::ACTION::DRAW))
+        drawCard(m_boards[(index+1)%2]);
+      // Then schedule another mulligan for this player
+      io_mulligans.push_back(index);
+      // Update the size
+      size = io_mulligans.size();
     }
-    setBoard(board, active[0]);
   }
 }
 

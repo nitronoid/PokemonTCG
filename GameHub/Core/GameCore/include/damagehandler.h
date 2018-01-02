@@ -14,8 +14,8 @@ public:
               const unsigned &_value);
 
     //factor in weakness, bonus damages for active, factoring only bonus for benched
-    void generalDamage(std::array<Bench, 2> &_bench,
-                       const unsigned &_turnCount,
+    void generalDamage(Bench &_bench,
+                       BoardSlot &_attacker,
                        const unsigned &_defenderIndex,
                        const unsigned &_damage);
 
@@ -33,18 +33,8 @@ public:
     inline unsigned getConfuse() const { return m_confuseDamage; }
 
 private:
-
-    unsigned getAttacker(const unsigned _turnCount){return _turnCount % 2;}
-    unsigned getDefender(const unsigned _turnCount){return (1+_turnCount) % 2;}
-
-
-    int applyWeakRes(std::array<Bench, 2> &_bench,
-                     const unsigned &_turnCount);
-
-    int applyBonusDamage(std::array<Bench, 2> &_bench,
-                         const unsigned &_turnCount,
-                         const unsigned &_defenderIndex,
-                         const PTCG::ORDER &_order);
+    int applyWeakRes(BoardSlot &_defender, BoardSlot &_attacker);
+    int applyBonusDamage(BoardSlot &_defender,BoardSlot &_attacker, const PTCG::ORDER &_order);
 
 
     int m_weaknessMult = 2;

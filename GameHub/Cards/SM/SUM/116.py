@@ -12,7 +12,7 @@ def canPlay(h):
     for card in cards:
         if(card.type() == p.CARD.ENERGY):
             amountOfTypeCards += 1
-    return len(h.viewDiscard(p.PLAYER.SELF)) > 1 and amountOfTypeCards > 1
+    return amountOfTypeCards > 1
             
 def energyRetrieval(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);

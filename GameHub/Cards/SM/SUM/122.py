@@ -31,24 +31,10 @@ def lillie(h):
     # reveal - whether the enemy sees the card (True/False)
 
     # if first turn 
-    # draw until 8 cards
-    if(h.turnCount()==0 and len(h.viewHand(p.PLAYER.SELF))<8):
-        cards = h.playerCardChoice(
-            p.PLAYER.SELF, 
-            p.PLAYER.SELF, 
-            p.PILE.DECK,
-            p.ACTION.DRAW,
-            filter,
-             8)
-        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
-    # if more than first turn
-    else: 
-        cards = h.playerCardChoice(
-            p.PLAYER.SELF, 
-            p.PLAYER.SELF, 
-            p.PILE.DECK,
-            p.ACTION.DRAW,
-            filter, 
-            6)
-        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
+    amount = 6
+    handSize = len(h.viewHand(p.PLAYER.SELF)) < 8
+    if h.turnCount() < 2:
+        amount += 2
+    for i in range(max(0, amount - handSize)):
+        h.drawCard(p.PLAYER.SELF)
 

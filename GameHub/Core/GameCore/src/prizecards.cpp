@@ -32,7 +32,7 @@ void PrizeCards::put(std::unique_ptr<Card> &&)
     //dont do anything
 }
 
-std::unique_ptr<Card> PrizeCards::take(const unsigned _index)
+std::unique_ptr<Card> PrizeCards::take(const size_t _index)
 {
     if (_index > m_cards.size() - 1) return nullptr;
     return std::move(m_cards[_index]);

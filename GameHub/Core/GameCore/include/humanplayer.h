@@ -27,6 +27,13 @@ public:
       const unsigned _amount
       ) override;
 
+  virtual void learnCards(
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _origin,
+      const std::vector<size_t> &_indices,
+      const std::vector<std::unique_ptr<Card>> &_revealed
+      ) override;
+
   virtual std::pair<bool, unsigned> turn() override;
 
 };

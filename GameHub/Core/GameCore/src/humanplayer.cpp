@@ -9,7 +9,8 @@ Player* HumanPlayer::clone() const
   return new HumanPlayer(*this);
 }
 
-std::vector<size_t> HumanPlayer::chooseCards(const PTCG::PLAYER _player,
+std::vector<size_t> HumanPlayer::chooseCards(
+    const PTCG::PLAYER _player,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,
     const std::vector<std::unique_ptr<Card>> &_options,
@@ -22,11 +23,11 @@ std::vector<size_t> HumanPlayer::chooseCards(const PTCG::PLAYER _player,
 }
 
 std::vector<size_t> HumanPlayer::chooseSlot(
-      const PTCG::PLAYER _owner,
-      const PTCG::ACTION _action,
-      const std::vector<BoardSlot> &_options,
-      const unsigned _amount
-      )
+    const PTCG::PLAYER _owner,
+    const PTCG::ACTION _action,
+    const std::vector<BoardSlot> &_options,
+    const unsigned _amount
+    )
 {
   std::vector<size_t> badChoice(
         std::min(static_cast<unsigned>(_options.size()), _amount),
@@ -35,10 +36,18 @@ std::vector<size_t> HumanPlayer::chooseSlot(
   return  badChoice;
 }
 
+void HumanPlayer::learnCards(
+    const PTCG::PLAYER _owner,
+    const PTCG::PILE _origin,
+    const std::vector<size_t> &_indices,
+    const std::vector<std::unique_ptr<Card>> &_revealed
+    )
+{}
+
 bool randomBool()
 {
-    static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
-    return gen();
+  static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
+  return gen();
 }
 
 std::pair<bool, unsigned> HumanPlayer::turn()

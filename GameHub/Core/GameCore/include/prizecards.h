@@ -12,7 +12,7 @@ public:
     PrizeCards& operator=(const PrizeCards&) = delete;
 
     virtual void put(std::unique_ptr<Card> &&) override;
-    virtual std::unique_ptr<Card> take(const unsigned _index) override;
+    virtual std::unique_ptr<Card> take(const size_t _index) override;
     std::array<std::unique_ptr<Card>,6> view() const;
 
 private:

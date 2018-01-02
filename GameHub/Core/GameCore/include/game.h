@@ -27,7 +27,8 @@ public:
   bool canPlay(const std::unique_ptr<Card>& _card);
   bool playCard(const unsigned _index);
   bool drawCard(Board& _board);
-  bool moveCards(std::vector<unsigned> _cardIndices,
+  bool moveCards(
+      std::vector<size_t> _cardIndices,
       const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
       const PTCG::PILE _destination,
@@ -52,6 +53,13 @@ public:
       const unsigned _amount
       );
 
+  void revealCards(
+      const PTCG::PLAYER _learner,
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _origin,
+      const std::vector<size_t> &_indices
+      );
+
   // View card pile functions
  // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
   std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
@@ -70,12 +78,13 @@ public:
   void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<unsigned> &_pileIndex, std::vector<unsigned> &_benchIndex);
   void evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index);
   bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);
-  unsigned searchCountByName(std::string _name, const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
   std::vector<size_t> freeSlots(const PTCG::PLAYER _owner);
   void shuffleDeck(const PTCG::PLAYER _owner);
 
 private:
   Game(const Game &_original);
+  std::vector<size_t> chooseActive(const PTCG::PLAYER _player);
+  std::vector<std::unique_ptr<Card>> viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
       std::vector<size_t> &io_originalPositions,
       const PTCG::PLAYER _owner,
@@ -89,7 +98,7 @@ private:
       std::function<bool(Card*const)> _match
       ) const;
   void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);
-  std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner,PTCG::PILE _dest,const unsigned _index);
+  std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const size_t _index);
   size_t playerIndex(const PTCG::PLAYER &_player) const;
   void doMulligans(const std::vector<size_t> &_mulligans);
   void drawHand(Board& io_board);

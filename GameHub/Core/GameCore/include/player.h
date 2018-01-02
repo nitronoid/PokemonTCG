@@ -25,13 +25,20 @@ public:
       const PTCG::ACTION _action,
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
-                     ) = 0;
+      ) = 0;
 
   virtual std::vector<size_t> chooseSlot(
       const PTCG::PLAYER _owner,
       const PTCG::ACTION _action,
       const std::vector<BoardSlot> &_options,
       const unsigned _amount
+      ) = 0;
+
+  virtual void learnCards(
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _origin,
+      const std::vector<size_t> &_indices,
+      const std::vector<std::unique_ptr<Card>> &_revealed
       ) = 0;
 
   virtual std::pair<bool, unsigned> turn() = 0;

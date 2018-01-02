@@ -32,5 +32,7 @@ def nestBall(h):
         p.ACTION.DRAW,
         filter,
         1)
-    h.moveCard(card, p.PLAYER.SELF, p.PILE.DECK, p.PILE.BENCH)
-    h.shuffleDeck(p.PLAYER.SELF)
+   freeSlots = h.freeSlots(p.PLAYER.SELF)
+   amount = min(len(freeSlots), len(cards))
+   h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[:amount], freeSlots[:amount])
+   h.shuffleDeck(p.PLAYER.SELF)

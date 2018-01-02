@@ -6,11 +6,10 @@ def filter(card):
 def canPlay(h):
     # deck never empty ? 
     # checks if it is your first turn; if first turn and less than 8 cards in your hand return true
-    result = False
-    if(len(h.viewDeck(p.PLAYER.SELF) > 0)):
-        if(h.turnCount() < 2 and len(h.viewHand(p.PLAYER.SELF))<8):
-            result = True
-    return result 
+    drawAmount = 6
+    if h.turnCount() < 2:
+        drawAmount += 2
+    return len(h.viewDeck(p.PLAYER.SELF)) > (drawAmount - len(h.viewHand(p.PLAYER.SELF)))   
 
 def lillie(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -31,24 +30,10 @@ def lillie(h):
     # reveal - whether the enemy sees the card (True/False)
 
     # if first turn 
-    # draw until 8 cards
-    if(h.turnCount()==0 and len(h.viewHand(p.PLAYER.SELF))<8):
-        cards = h.playerCardChoice(
-            p.PLAYER.SELF, 
-            p.PLAYER.SELF, 
-            p.PILE.DECK,
-            p.ACTION.DRAW,
-            filter,
-             8)
-        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
-    # if more than first turn
-    else: 
-        cards = h.playerCardChoice(
-            p.PLAYER.SELF, 
-            p.PLAYER.SELF, 
-            p.PILE.DECK,
-            p.ACTION.DRAW,
-            filter, 
-            6)
-        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
+    amount = 6
+    handSize = len(h.viewHand(p.PLAYER.SELF)) < 8
+    if h.turnCount() < 2:
+        amount += 2
+    for i in range(max(0, amount - handSize)):
+        h.drawCard(p.PLAYER.SELF)
 

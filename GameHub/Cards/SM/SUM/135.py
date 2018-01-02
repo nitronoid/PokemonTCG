@@ -5,7 +5,7 @@ def filter(card):
 # checks if the amount of cards in your hand is bigger than 2 
 # return true if yes else return false 
 def canPlay(h):
-    return len(h.viewHand(p.PLAYER.SELF))-1 > 1
+    return len(h.viewHand(p.PLAYER.SELF)) > 1 and len(h.viewDeck(p.PLAYER.SELF))
 
 def ultraBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);

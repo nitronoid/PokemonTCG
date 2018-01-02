@@ -18,28 +18,30 @@ public:
     /// @build run overwrite function
     ///-----------------------------------------------------------------
     virtual bool run() override;
-    virtual int update() = 0;
 
 protected:
     ///-----------------------------------------------------------------
     /// @build text based action saying what it does
     ///-----------------------------------------------------------------
+    bool m_status = true;
+};
+//-------------------------------------------------------------------
+class actionAddEnergy : public testAction
+{
+public:
+    actionAddEnergy(Cards _card){m_card = _card;}
+    virtual bool run() override;
+private:
+    Cards m_card;
+};
+//-------------------------------------------------------------------
+class actionAddString : public testAction
+{
+public:
+    actionAddString(std::string _action){m_action = _action;}
+    virtual bool run() override;
+private:
     std::string m_action;
-    int m_current;
-};
-//-------------------------------------------------------------------
-class addEnergyAction : public testAction
-{
-public:
-    addEnergyAction(int _current, std::__1::string _action);
-    virtual int update() override;
-};
-//-------------------------------------------------------------------
-class addStringAction : public testAction
-{
-public:
-    addStringAction(std::string _string);
-    virtual int update() override;
 };
 
 #endif // TESTACTION_H

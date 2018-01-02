@@ -6,21 +6,21 @@ testAction::testAction()
 //-------------------------------------------------------------------
 bool testAction::run()
 {
-        std::cout<<m_action<<'\n';
-        update();
+        std::cout<<"ACTION"<<'\n';
         // set true because otherwise condition is not fufilled
-        return true;
+        return m_status;
 }
 //-------------------------------------------------------------------
-addEnergyAction::addEnergyAction(int _current, std::string _action)
+bool actionAddEnergy::run()
 {
-    m_current = _current;
-    m_action = _action;
+    std::cout<<"ATTACHED ENERGY"<<'\n';
+    m_card.setCurrentEnergy(1);
+    return m_status;
+
 }
 //-------------------------------------------------------------------
-int addEnergyAction::update()
+bool actionAddString::run()
 {
     std::cout<<m_action<<'\n';
-    return m_current+=1;
+    return m_status;
 }
-

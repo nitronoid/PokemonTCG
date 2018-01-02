@@ -42,12 +42,12 @@ int main()
     // add basic nodes (attack2, attack1, attack0)
     attack1ORattack2->addChild(attack2);
     attack1ORattack2->addChild(attack1);
-    attack1ORattack2->addChild(new addStringAction("CAN'T ATTACK"));
+    attack1ORattack2->addChild(new actionAddString("CANT ATTACK"));
     // checks for condition
     attack2->addChild(new conditionAttack(card.getCurrentEnergy(), card.getEnergy_1()));
-    attack2->addChild(new addStringAction("ATTACK 2"));
+    attack2->addChild(new actionAddString("ATTACK2"));
     attack1->addChild(new conditionAttack(card.getCurrentEnergy(), card.getEnergy_0()));
-    attack1->addChild(new addStringAction("ATTACK 1"));
+    attack1->addChild(new actionAddString("ATTACK1"));
 
     // ACTION or BENCH card to attach energy
     actionOrBenchSelector->addChild(energyNeededSequence);
@@ -55,7 +55,8 @@ int main()
     // Sequence for attaching energy
     energyNeededSequence->addChild(new conditionEnergy(card.getCurrentEnergy(),card.getEnergy_0(), card.getEnergy_1()));
     energyNeededSequence->addChild(new conditionDead(card.getHealth()));
-    energyNeededSequence->addChild(new addEnergyAction(card.getCurrentEnergy(), "ATTATCH ENERGY"));
+    energyNeededSequence->addChild(new actionAddEnergy(card));
+
     // while the root is not true then continue running !
     while(!actionDecision->run())
         std::cout<<"running"<<'\n';

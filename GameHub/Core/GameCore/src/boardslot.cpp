@@ -125,7 +125,7 @@ std::vector<std::unique_ptr<EnergyCard>> BoardSlot::detachEnergy()
   return ret;
 }
 
-std::unique_ptr<EnergyCard> BoardSlot::detachEnergy(const unsigned _index)
+std::unique_ptr<EnergyCard> BoardSlot::detachEnergy(const size_t _index)
 {
   if (_index > m_energy.size() - 1) return nullptr;
   std::unique_ptr<EnergyCard> temp(m_energy[_index].release());

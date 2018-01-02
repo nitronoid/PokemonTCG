@@ -298,34 +298,17 @@ void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
 }
 
 //_cardIndices - target cards on board/hand... to move
-bool Game::moveCards(
+void Game::moveCards(
     std::vector<size_t> _cardIndices,
     const PTCG::PLAYER _owner,
     const PTCG::PILE _origin,
-    const PTCG::PILE _destination,
-    const bool _reveal,
-    const std::vector<unsigned> _destIndex
+    const PTCG::PILE _destination
     )
 {
   //sort the input indices to avoid affecting take order in a vector
   std::sort(_cardIndices.begin(), _cardIndices.end(),std::greater<size_t>());
-
-  //if no particular index is specified in destination, do these
-  if(_destIndex.empty())
-  {
-    for(size_t i = 0; i<_cardIndices.size();++i)
-    {
-      putToPile(_owner,_destination, takeFromPile(_owner, _origin, _cardIndices[i]));
-    }
-    return true;
-
-  }
-  else
-  {
-    //for now, will implement later.
-    return false;
-  }
-  return false;
+  for(const auto i : _cardIndices)
+    putToPile(_owner,_destination, takeFromPile(_owner, _origin, i));
 }
 
 void Game::filterCards(
@@ -515,35 +498,7 @@ bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
 
 void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
 {
-  Board& board = m_boards[playerIndex(_target)];
-  switch (_condition) {
-    case PTCG::CONDITION::ASLEEP:
-    {
-      board.m_bench.slotAt(0)->addCondition(_condition);
-      break;
-    }
-    case PTCG::CONDITION::BURNED:
-    {
-      board.m_bench.slotAt(0)->addCondition(_condition);
-      break;
-    }
-    case PTCG::CONDITION::CONFUSED:
-    {
-      board.m_bench.slotAt(0)->addCondition(_condition);
-      break;
-    }
-    case PTCG::CONDITION::PARALYZED:
-    {
-      board.m_bench.slotAt(0)->addCondition(_condition);
-      break;
-    }
-    case PTCG::CONDITION::POISONED:
-    {
-      board.m_bench.slotAt(0)->addCondition(_condition);
-      break;
-    }
-    default: break;
-  }
+  m_boards[playerIndex(_target)].m_bench.slotAt(0)->addCondition(_condition);
 }
 
 void Game::removeCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)

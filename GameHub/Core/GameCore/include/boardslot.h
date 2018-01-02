@@ -37,7 +37,7 @@ public:
     std::vector<std::unique_ptr<PokemonCard>> detachPokemon();
     std::unique_ptr<PokemonCard> devolvePokemon();
     std::vector<std::unique_ptr<EnergyCard>> detachEnergy();
-    std::unique_ptr<EnergyCard> detachEnergy(const unsigned _index);
+    std::unique_ptr<EnergyCard> detachEnergy(const size_t _index);
     std::unique_ptr<TrainerCard> detachTool();
     void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
     PokemonCard* active() const;

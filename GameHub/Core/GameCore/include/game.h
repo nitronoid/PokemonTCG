@@ -27,14 +27,11 @@ public:
   bool canPlay(const std::unique_ptr<Card>& _card);
   bool playCard(const unsigned _index);
   bool drawCard(Board& _board);
-  bool moveCards(
+  void moveCards(
       std::vector<size_t> _cardIndices,
       const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
-      const PTCG::PILE _destination,
-      const bool _reveal= false,
-      const std::vector<unsigned> _destIndex = {}
-      );
+      const PTCG::PILE _destination);
 
   std::vector<size_t> playerCardChoice(
       const PTCG::PLAYER _thinker,

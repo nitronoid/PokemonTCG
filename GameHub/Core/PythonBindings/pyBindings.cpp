@@ -135,13 +135,8 @@ PYBIND11_MODULE(poke, m)
       .def("viewPrize", &Game::viewPrize)
       .def("viewBench", &Game::viewBench)
       .def("pileToBench", &Game::pileToBench)
-      .def("moveCards", &Game::moveCards,
-           py::arg("_cardIndices"),
-           py::arg("_owner"),
-           py::arg("_origin"),
-           py::arg("_destination"),
-           py::arg("_reveal") = false,
-           py::arg("_destIndex") = std::vector<unsigned>{})
+      .def("moveCards", &Game::moveCards)
+      .def("revealCards", &Game::revealCards)
       .def("shuffleDeck", &Game::shuffleDeck)
       .def("flipCoin", &Game::flipCoin);
 

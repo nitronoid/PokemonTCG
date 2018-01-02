@@ -1,9 +1,11 @@
-import poke
+import poke as p 
 
+def filter(card):
+    return card.cardType() == p.CARD.POKEMON
 # checks if the amount of cards in your hand is bigger than 2 
 # return true if yes else return false 
 def canPlay(h):
-    return len(h.viewHand(SELF))-1 > 1
+    return len(h.viewHand(p.PLAYER.SELF))-1 > 1
 
 def ultraBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -23,11 +25,25 @@ def ultraBall(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    discardChoice = h.playerChoice(SELF, SELF, HAND, ALL, DISCARD, 2) 
-    h.moveCards(discardChoice, SELF, HAND, DISCARD, False)
-    pokeCard = h.playerChoice(SELF, SELF, DECK, POKEMON, DRAW, 1)
-    h.moveCards(pokeCard, SELF, DECK, HAND, True)
-    h.shuffleDeck()
+    discardChoice = h.playerCardChoice(
+        p.PLAYER.SELF, 
+        p.PLAYER.SELF, 
+        p.PILE.HAND, 
+        p.ACTION.DISCARD,
+        True,
+        2) 
+    h.moveCards(discardChoice, p.PLAYER.SELF, p.PILE.HAND, p.PILE.DISCARD)
+    pokeCard = h.playerCardChoice(
+        p.PLAYER.SELF, 
+        p.PLAYER.SELF, 
+        p.PILE.DECK,
+        p.ACTION.DRAW
+        filter,
+        1)
+    h.moveCards(pokeCard, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
+    # dont know if this is right
+    h.revealCards(p.PLAYER.SELF, p.PLAYER.SELF, p.PILE.DECK, pokeCard)
+    h.shuffleDeck(p.PLAYER.SELF)
 
 
     

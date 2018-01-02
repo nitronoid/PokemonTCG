@@ -1,8 +1,12 @@
-import poke
+import poke as p 
+
+def filter(card):
+    return True
+
 def canPlay(h):
     # checks if there is pokemon on bench && active && needs healing
     result = False
-    for i in h.viewBoard(SELF):
+    for i in h.viewBoard(p.PLAYER.SELF):
         if(i.damage() != 0):
             result = True
         else:
@@ -27,6 +31,10 @@ def potion(h):
     # reveal - whether the enemy sees the card (True/False)
 
     # select card 
-    cards = h.playerChoice(SELF, SELF, DECK, ALL, SELECT, 1)
+    cards = h.playerSlotChoice(
+        p.PLAYER.SELF,
+        p.PLAYER.SELF,
+        p.ACTION.HEAL,
+        1)
     for card in cards:
         h.heal(30)

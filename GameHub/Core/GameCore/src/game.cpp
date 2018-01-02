@@ -176,48 +176,41 @@ void Game::benchToPile(
     const unsigned &_index
     )
 {
-  std::vector<std::unique_ptr<Card>> unfilteredEnergy;
-  std::vector<std::unique_ptr<Card>> filteredEnergy;
-  std::vector<size_t> originalPositions;
-  auto& board = m_boards[playerIndex(_player)];
-  auto pokemon = std::unique_ptr<Card>(static_cast<Card*>(board.m_bench.slotAt(_index)->active()));
-  auto tool = std::unique_ptr<Card>(board.m_bench.slotAt(_index)->viewTool());
-  //filtering energy
-  unfilteredEnergy = board.m_bench.slotAt(_index)->viewEnergy();
-  filterCards(unfilteredEnergy,filteredEnergy,originalPositions,_match);
+  // Get the slot that we are moving from
+  auto slot = m_boards[playerIndex(_player)].m_bench.slotAt(_index);
+  // Check the slot has a pokemon before filtering
+  auto rawPokemon = slot->active();
+  if(rawPokemon && _match(rawPokemon))
+  {
+    // Move all the attached pokemon
+    for (auto& poke : slot->detachPokemon())
+      putToPile(_player,_dest, std::unique_ptr<Card>{poke.release()});
+  }
+  // Check the slot has a tool before filtering
+  auto rawTool = slot->viewTool().get();
+  if (rawTool && _match(rawTool))
+  {
+    // Detatch and move the tool card
+    auto tool = slot->detachTool();
+    putToPile(_player, _dest, std::unique_ptr<Card>{tool.release()});
+  }
+  // Get the card energy
+  auto unfilteredEnergy = slot->viewEnergy();
+  // Declare arrays to store our filtered results
+  decltype(unfilteredEnergy) filteredEnergy;
+  std::vector<size_t> positions;
+  // Filter the energy cards
+  filterCards(unfilteredEnergy, filteredEnergy, positions, _match);
   //sort to avoid index invalidation
-  std::sort(originalPositions.begin(), originalPositions.end(),std::greater<size_t>());
-
-  if(_match(pokemon.get()))
+  std::sort(positions.begin(), positions.end(),std::greater<size_t>());
+  for (const auto pos : positions)
   {
-    auto movePoke = board.m_bench.slotAt(_index)->detachPokemon();
-    for(int i=movePoke.size()-1; i > -1 ; --i)
-    {
-      //need to cast pointer to Card for passing into putToPile
-      auto cardify = std::unique_ptr<Card>(static_cast<Card*>(movePoke[i].release()));
-      putToPile(_player,_dest,std::move(cardify));
-    }
+    // Move all the energy
+    auto energy = slot->detachEnergy(pos);
+    putToPile(_player, _dest, std::unique_ptr<Card>{energy.release()});
   }
-  if(_match(tool.get()))
-  {
-    auto cardify = std::unique_ptr<Card>(static_cast<Card*>(board.m_bench.slotAt(_index)->detachTool().release()));
-    putToPile(_player,_dest,std::move(cardify));
-  }
-  if(!filteredEnergy.empty())
-  {
-
-    for(size_t i = 0; i < originalPositions.size(); ++i)
-    {
-      auto moveEnergy = board.m_bench.slotAt(_index)->detachEnergy(originalPositions[i]);
-      auto cardify = std::unique_ptr<Card>(static_cast<Card*>(moveEnergy.release()));
-      putToPile(_player,_dest,std::move(cardify));
-    }
-  }
-
-
-
-
 }
+
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
 {
   m_boards[playerIndex(_owner)].m_deck.shuffle();

@@ -25,22 +25,14 @@ def timerBall(h):
     # reveal - whether the enemy sees the card (True/False)
     
     # flip coin twice
-    if(flipCoin(2)==1):
-        cards = h.playerCardChoice(
-            p.PLAYER.SELF, 
-            p.PLAYER.SELF, 
-            p.PILE.DECK, 
-            p.ACTION.DRAW,
-            filter, 
-            1)
-        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
-    elif(flipCoin(2)==2):
-        cards = h.playerCardChoice(
-            p.PLAYER.SELF, 
-            p.PLAYER.SELF, 
-            p.PILE.DECK, 
-            p.ACTION.DRAW,
-            filter, 
-            2)
+    headsAmount = flipCoin(2)
+    if headsAmount:
+        cards = h.playerCardChoice( 
+            p.PLAYER.SELF,  
+            p.PLAYER.SELF,  
+            p.PILE.DECK,  
+            p.ACTION.DRAW, 
+            filter,  
+            headsAmount)
         h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
     h.shuffleDeck(p.PLAYER.SELF)

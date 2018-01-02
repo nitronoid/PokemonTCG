@@ -6,6 +6,6 @@ def confuseRay(h):
 def aquaSpark(h):
     dmg = 60
     # if water energy is attached to pokemon
-    if(h.viewBoard(p.PLAYER.SELF)[0].energy() == WATER):
+    if(h.viewBoard(p.PLAYER.SELF)[0].energy() == p.TYPE.WATER):
         dmg += 60
     h.dealDamage(dmg)

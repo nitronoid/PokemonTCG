@@ -24,7 +24,7 @@ def searchingLight(h):
         p.PLAYER.SELF, 
         p.PLAYER.SELF, 
         p.PILE.PRIZE, 
-        p.ACTION.DRAW, 
+        p.ACTION.SELECT, 
         filter, 
         1)
         

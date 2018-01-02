@@ -47,7 +47,7 @@ void Cards::setCurrentEnergy(int _currentEnergy)
 }
 void Cards::addEnergy()
 {
-    m_currentEnergy++;
+    m_currentEnergy+=1;
 }
 
 //-------------------------------------------------------------------

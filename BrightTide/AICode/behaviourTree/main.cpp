@@ -1,14 +1,12 @@
-#include <iostream>
 #include "selector.h"
 #include "sequence.h"
 #include "condition.h"
 #include "testaction.h"
-
+/// NOTES: ACTION DOES NOT WORK HOW WILL I DO THAT
 int main()
 {
     // popplio
     Cards card;
-    card.setCurrentEnergy(0);
 
     // create a list of cards
     std::vector<Cards> m_listOfBenchCards;
@@ -33,32 +31,31 @@ int main()
 
     // root node and tell which action to choose
     actionDecision->addChild(actionOrBenchSelector);
-    // draw cards from hand to bench
-    actionDecision->addChild(drawBasic);
+//    // draw cards from hand to bench
+//    actionDecision->addChild(drawBasic);
     // choose attack1 or attack2
     actionDecision->addChild(attack1ORattack2);
-    // condition check if the bench is not empty
-    drawBasic->addChild(new conditionListEmpty(m_listOfBenchCards));
-    drawBasic->addChild(new testAction("BENCH CARDS LIST NOT EMPTY"));
+//    // condition check if the bench is not empty
+//    drawBasic->addChild(new conditionListEmpty(m_listOfBenchCards));
+//    drawBasic->addChild(new testAction("BENCH CARDS LIST NOT EMPTY"));
 
     // add basic nodes (attack2, attack1, attack0)
     attack1ORattack2->addChild(attack2);
     attack1ORattack2->addChild(attack1);
-    attack1ORattack2->addChild(new testAction("CAN'T ATTACK"));
+    attack1ORattack2->addChild(new addStringAction("CAN'T ATTACK"));
     // checks for condition
     attack2->addChild(new conditionAttack(card.getCurrentEnergy(), card.getEnergy_1()));
-    attack2->addChild(new testAction("ATTACK 2"));
+    attack2->addChild(new addStringAction("ATTACK 2"));
     attack1->addChild(new conditionAttack(card.getCurrentEnergy(), card.getEnergy_0()));
-    attack1->addChild(new testAction("ATTACK 1"));
+    attack1->addChild(new addStringAction("ATTACK 1"));
 
     // ACTION or BENCH card to attach energy
     actionOrBenchSelector->addChild(energyNeededSequence);
-    actionOrBenchSelector->addChild(new testAction("ATTACH ENERGY TO RANDOM BENCH CARD"));
+    //actionOrBenchSelector->addChild(new testAction("ATTACH ENERGY TO RANDOM BENCH CARD"));
     // Sequence for attaching energy
     energyNeededSequence->addChild(new conditionEnergy(card.getCurrentEnergy(),card.getEnergy_0(), card.getEnergy_1()));
     energyNeededSequence->addChild(new conditionDead(card.getHealth()));
-    energyNeededSequence->addChild(new testAction("ATTACH ENERGY TO ACTIVE CARD"));
-
+    energyNeededSequence->addChild(new addEnergyAction(card.getCurrentEnergy(), "ATTATCH ENERGY"));
     // while the root is not true then continue running !
     while(!actionDecision->run())
         std::cout<<"running"<<'\n';

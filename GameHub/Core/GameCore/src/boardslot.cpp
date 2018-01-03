@@ -45,6 +45,54 @@ BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
   return *this;
 }
 
+void BoardSlot::resetDamageBonus(const PTCG::ORDER &_order)
+{
+  if(_order==PTCG::ORDER::AFTER)
+  {
+    m_bonusDamageAfter=0;
+  }
+  else
+  {
+    m_bonusDamageBefore=0;
+  }
+}
+
+void BoardSlot::resetDefenseBonus(const PTCG::ORDER &_order)
+{
+  if(_order==PTCG::ORDER::AFTER)
+  {
+    m_damageReductionAfter=0;
+  }
+  else
+  {
+    m_damageReductionBefore=0;
+  }
+}
+
+void BoardSlot::addBonusDamage(const PTCG::ORDER &_order, const unsigned &_value)
+{
+  if(_order==PTCG::ORDER::AFTER)
+  {
+    m_bonusDamageAfter+=_value;
+  }
+  else
+  {
+    m_bonusDamageBefore+=_value;
+  }
+}
+
+void BoardSlot::addBonusDefense(const PTCG::ORDER &_order, const unsigned &_value)
+{
+  if(_order==PTCG::ORDER::AFTER)
+  {
+    m_damageReductionAfter+=_value;
+  }
+  else
+  {
+    m_damageReductionBefore+=_value;
+  }
+}
+
 void BoardSlot::takeDamage(const int _damage)
 {
   std::cout<<"Taking "<<_damage<<" damage."<<'\n';

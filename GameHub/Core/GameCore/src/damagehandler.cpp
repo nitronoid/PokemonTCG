@@ -26,30 +26,27 @@ void DamageHandler::generalDamage(
         //if it says -20, it's resistance and 2 for weakness multiplier
         if(weakRes<=0)
         {
-            totalDamage =
-                _damage +
-                applyBonusDamage(_defender, _attacker, PTCG::ORDER::BEFORE) +
-                weakRes +
-                applyBonusDamage(_defender, _attacker,PTCG::ORDER::AFTER);
-                _defender->takeDamage(std::max(0,totalDamage));
+          totalDamage =
+              _damage +
+              applyBonusDamage(_defender, _attacker, PTCG::ORDER::BEFORE) +
+              weakRes +
+              applyBonusDamage(_defender, _attacker,PTCG::ORDER::AFTER);
+          _defender->takeDamage(std::max(0,totalDamage));
         }
         else
         {
-            totalDamage =
-                (_damage +
-                applyBonusDamage(_defender, _attacker, PTCG::ORDER::BEFORE)) *
-                weakRes +
-                applyBonusDamage(_defender, _attacker, PTCG::ORDER::AFTER);
-                _defender->takeDamage(std::max(0,totalDamage));
+          totalDamage =
+              (_damage +
+              applyBonusDamage(_defender, _attacker, PTCG::ORDER::BEFORE)) *
+              weakRes +
+              applyBonusDamage(_defender, _attacker, PTCG::ORDER::AFTER);
+          _defender->takeDamage(std::max(0,totalDamage));
         }
     }
     else //if target is bench
     {
-      totalDamage =
-          _damage +
-          applyBonusDamage(_defender, _attacker, PTCG::ORDER::BEFORE) +
-          applyBonusDamage(_defender, _attacker, PTCG::ORDER::AFTER);
-          _defender->takeDamage(std::max(0,totalDamage));
+      totalDamage = _damage;
+      _defender->takeDamage(std::max(0,totalDamage));
     }
 
 

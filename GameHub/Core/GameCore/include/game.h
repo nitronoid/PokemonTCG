@@ -86,6 +86,8 @@ public:
   std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player)   const;
   std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
 
+  void addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
+  void addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeAllCondition(const PTCG::PLAYER &_target);

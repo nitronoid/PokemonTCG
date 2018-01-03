@@ -25,6 +25,10 @@ public:
     inline int getReductionAfter() const {return m_damageReductionAfter;}
     inline unsigned getTurnPlayed() const {return m_turnPlayed;}
 
+    void resetDamageBonus(const PTCG::ORDER &_order);
+    void resetDefenseBonus(const PTCG::ORDER &_order);
+    void addBonusDamage(const PTCG::ORDER &_order, const unsigned &_value);
+    void addBonusDefense(const PTCG::ORDER &_order, const unsigned &_value);
     void takeDamage(const int _damage);
     void removeDamage(const int _damage);
     void setDamage(const int _value);
@@ -54,6 +58,7 @@ public:
 private:
     std::unordered_set<PTCG::CONDITION> m_conditions;
     std::unique_ptr<TrainerCard> m_tool;
+    bool m_protected = false;
     int m_damageTaken = 0;
     int m_bonusDamageBefore = 0;
     int m_bonusDamageAfter = 0;

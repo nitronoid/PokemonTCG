@@ -8,17 +8,29 @@ void Player::playCard(const unsigned _index)
 
 }
 
-void Player::retreat(const unsigned _replacement)
+void Player::retreat()
 {
   if(m_canRetreat)
   {
+    auto switchChoice = m_parentGame.playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::MOVE,1);
     auto bench = m_parentGame.viewBench(PTCG::PLAYER::SELF);
     if(bench.at(0).numEnergy() >= bench.at(0).active()->retreatCost() &&
-       _replacement < 6 && _replacement != 0 &&
-      bench.at(_replacement).numPokemon()>0)
+       switchChoice[0] < 6 && switchChoice[0] != 0 &&
+      bench.at(switchChoice[0]).numPokemon()>0)
     {
-      std::function<bool(Card*const)> match;
+      // passing a lambda to return any energy card types
+      std::function<bool(Card*const)> match = [](Card* const){return true;};
       //we need to choose our energy to discard
+      auto choice = m_parentGame.playerEnergyChoice(
+            PTCG::PLAYER::SELF,
+            PTCG::PLAYER::SELF,
+            PTCG::PILE::DISCARD,
+            PTCG::ACTION::DISCARD,
+            0,
+            match,
+            bench.at(0).active()->retreatCost());
+      m_parentGame.removeEnergy(PTCG::PLAYER::SELF, PTCG::PILE::DISCARD,0,choice);
+      m_parentGame.switchActive(PTCG::PLAYER::SELF,switchChoice[0]);
     }
   }
 }

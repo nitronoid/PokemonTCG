@@ -178,6 +178,15 @@ void Game::nextTurn()
   else m_gameFinished = true;
 }
 
+void Game::addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player)
+{
+
+}
+
+void Game::addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player)
+{
+
+}
 bool Game::drawCard(Board& _board)
 {
   if (_board.m_deck.empty()) return false;

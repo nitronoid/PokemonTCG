@@ -16,9 +16,9 @@ std::vector<size_t> HumanPlayer::chooseCards(
     const std::vector<std::unique_ptr<Card>> &_options,
     const unsigned _amount)
 {
-  std::vector<size_t> badChoice;
-  for (size_t i = 0; i < std::min(static_cast<unsigned>(_options.size()), _amount); ++i)
-    badChoice.push_back(i);
+  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
+  std::vector<size_t> badChoice(length);
+  std::iota (std::begin(badChoice), std::end(badChoice), 0);
   return badChoice;
 }
 
@@ -29,11 +29,10 @@ std::vector<size_t> HumanPlayer::chooseSlot(
     const unsigned _amount
     )
 {
-  std::vector<size_t> badChoice(
-        std::min(static_cast<unsigned>(_options.size()), _amount),
-        0
-        );
-  return  badChoice;
+  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
+  std::vector<size_t> badChoice(length);
+  std::iota (std::begin(badChoice), std::end(badChoice), 0);
+  return badChoice;
 }
 
 void HumanPlayer::learnCards(
@@ -43,6 +42,20 @@ void HumanPlayer::learnCards(
     const std::vector<std::unique_ptr<Card>> &_revealed
     )
 {}
+
+std::vector<size_t> HumanPlayer::chooseEnergy(
+    const PTCG::PLAYER _owner,
+    const PTCG::PILE _destination,
+    const PTCG::ACTION _action,
+    const std::vector<std::unique_ptr<Card> > &_options,
+    const unsigned _amount
+    )
+{
+  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
+  std::vector<size_t> badChoice(length);
+  std::iota (std::begin(badChoice), std::end(badChoice), 0);
+  return badChoice;
+}
 
 bool HumanPlayer::agree(const PTCG::ACTION _action)
 {

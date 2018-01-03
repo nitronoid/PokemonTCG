@@ -20,7 +20,7 @@ public:
   void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
 
   void dealDamage(const int _damage, const unsigned _id = 0);
-  void addDamageCounter( const int _damage,const PTCG::PLAYER &_player= PTCG::PLAYER::ENEMY, const unsigned _id = 0);
+  void addDamageCounter(const int _damage, const PTCG::PLAYER _player = PTCG::PLAYER::ENEMY, const unsigned _id = 0);
   void healDamage(const int _heal, const unsigned _id = 0);
   unsigned flipCoin(const unsigned _num);
 
@@ -32,7 +32,8 @@ public:
       std::vector<size_t> _cardIndices,
       const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
-      const PTCG::PILE _destination);
+      const PTCG::PILE _destination
+      );
 
   std::vector<size_t> playerCardChoice(
       const PTCG::PLAYER _thinker,
@@ -56,6 +57,23 @@ public:
       const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
       const std::vector<size_t> &_indices
+      );
+
+  std::vector<size_t> playerEnergyChoice(
+      const PTCG::PLAYER _thinker,
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _destination,
+      const PTCG::ACTION _action,
+      const size_t _slotIndex,
+      std::function<bool(Card*const)> _match,
+      const unsigned _amount
+      );
+
+  void removeEnergy(
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _destination,
+      const size_t _slotIndex,
+      std::vector<size_t> _indices
       );
 
   bool playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action);

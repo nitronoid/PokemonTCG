@@ -41,6 +41,14 @@ public:
       const std::vector<std::unique_ptr<Card>> &_revealed
       ) = 0;
 
+  virtual std::vector<size_t> chooseEnergy(
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _destination,
+      const PTCG::ACTION _action,
+      const std::vector<std::unique_ptr<Card>> &_options,
+      const unsigned _amount
+      ) = 0;
+
   virtual bool agree(const PTCG::ACTION _action) = 0;
 
   virtual std::pair<bool, unsigned> turn() = 0;

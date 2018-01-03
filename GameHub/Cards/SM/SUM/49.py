@@ -20,11 +20,11 @@ def searchingLight(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
-    cards = h.playerChoice(
+    cards = h.playerCardChoice(
         p.PLAYER.SELF, 
         p.PLAYER.SELF, 
         p.PILE.PRIZE, 
-        p.ACTION.SELECT, 
+        p.ACTION.VIEW, 
         filter, 
         1)
         

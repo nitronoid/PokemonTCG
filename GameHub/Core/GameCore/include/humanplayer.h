@@ -34,6 +34,14 @@ public:
       const std::vector<std::unique_ptr<Card>> &_revealed
       ) override;
 
+  virtual std::vector<size_t> chooseEnergy(
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _destination,
+      const PTCG::ACTION _action,
+      const std::vector<std::unique_ptr<Card>> &_options,
+      const unsigned _amount
+      ) override;
+
   virtual bool agree(const PTCG::ACTION _action) override;
 
   virtual std::pair<bool, unsigned> turn() override;

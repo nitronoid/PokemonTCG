@@ -79,6 +79,25 @@ PYBIND11_MODULE(poke, m)
       .def("getName", &Card::getName)
       .def("getID", &Card::getID);
 
+  py::class_<EnergyCard, Card>(m, "EnergyCard")
+      .def(py::init<
+           const unsigned,
+           const std::string&,
+           const Ability&,
+           const unsigned,
+           const PTCG::TYPE
+           >())
+      .def("type", &EnergyCard::type)
+      .def("amount", &EnergyCard::amount);
+
+  py::class_<TrainerCard, Card>(m, "TrainerCard")
+      .def(py::init<
+           const unsigned,
+           const std::string&,
+           const Ability&,
+           const PTCG::CARD
+           >());
+
   py::class_<PokemonCard, Card>(m, "PokemonCard")
       .def(py::init<
            const unsigned,
@@ -112,14 +131,22 @@ PYBIND11_MODULE(poke, m)
       .def("numEnergy", &BoardSlot::numEnergy)
       .def("numTool", &BoardSlot::numTool)
       .def("numCards", &BoardSlot::numCards)
+      .def("viewEnergy", &BoardSlot::viewEnergy)
       .def("active", &BoardSlot::active, py::return_value_policy::reference_internal);
 
 
   py::class_<Game>(m, "Game")
       .def(py::init<>())
       .def("dealDamage", &Game::dealDamage, py::arg("_damage"), py::arg("_id") = 0u)
+      .def("addDamageCounter", &Game::addDamageCounter,
+           py::arg("_damage"),
+           py::arg("_player") = PTCG::PLAYER::ENEMY,
+           py::arg("_id") = 0u
+           )
       .def("healDamage", &Game::healDamage, py::arg("_heal"), py::arg("_id") = 0u)
       .def("applyCondition", &Game::applyCondition)
+      .def("removeCondition", &Game::removeCondition)
+      .def("removeAllCondition", &Game::removeAllCondition)
       .def("freeSlots", &Game::freeSlots)
       .def("playerCardChoice", &Game::playerCardChoice,
            py::arg("_thinker"),
@@ -129,6 +156,8 @@ PYBIND11_MODULE(poke, m)
            py::arg("_match"),
            py::arg("_amount"),
            py::arg("_range") = 0)
+      .def("playerSlotChoice", &Game::playerSlotChoice)
+      .def("playerEnergyChoice", &Game::playerEnergyChoice)
       .def("viewDeck", &Game::viewDeck)
       .def("viewDiscard", &Game::viewDiscard)
       .def("viewHand", &Game::viewHand)
@@ -138,6 +167,7 @@ PYBIND11_MODULE(poke, m)
       .def("moveCards", &Game::moveCards)
       .def("revealCards", &Game::revealCards)
       .def("shuffleDeck", &Game::shuffleDeck)
-      .def("flipCoin", &Game::flipCoin);
+      .def("flipCoin", &Game::flipCoin)
+      .def("removeEnergy", &Game::removeEnergy);
 
 }

@@ -7,7 +7,7 @@ class EnergyCard : public Card
 {
 public:
     EnergyCard(const EnergyCard&) = default;
-    EnergyCard(const unsigned _id, const std::string &_name, const Ability _ability, const unsigned _amount, const PTCG::TYPE _type) :
+    EnergyCard(const unsigned _id, const std::string &_name, const Ability &_ability, const unsigned _amount, const PTCG::TYPE _type) :
       Card(_id, _name, _ability),
       m_amount(_amount),
       m_type(_type)

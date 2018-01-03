@@ -481,12 +481,12 @@ void Game::dealDamage(const int _damage, const unsigned _id)
   {
     m_damageHandler.generalDamage(
         m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench.slotAt(_id),
-        m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0),static_cast<bool>(_id),_damage);
+        m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0), static_cast<bool>(_id), _damage);
     std::cout<<"Attack did: "<<_damage<<" damage!\n";
   }
 }
 
-void Game::addDamageCounter(const int _damage, const PTCG::PLAYER &_player, const unsigned _id)
+void Game::addDamageCounter(const int _damage, const PTCG::PLAYER _player, const unsigned _id)
 {
   m_damageHandler.rawDamage(m_boards[playerIndex(_player)].m_bench.slotAt(_id),_damage);
 }
@@ -529,6 +529,48 @@ bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
   auto devolvedPokemon = std::unique_ptr<Card>(static_cast<Card*>(board.m_bench.slotAt(_index)->devolvePokemon().release()));
   board.m_hand.put(std::move(devolvedPokemon));
   return true;
+}
+
+std::vector<size_t> Game::playerEnergyChoice(
+    const PTCG::PLAYER _thinker,
+    const PTCG::PLAYER _owner,
+    const PTCG::PILE _destination,
+    const PTCG::ACTION _action,
+    const size_t _slotIndex,
+    std::function<bool(Card*const)> _match,
+    const unsigned _amount
+    )
+{
+  // Player and players board
+  auto& player = m_players[playerIndex(_thinker)];
+  auto& board = m_boards[playerIndex(_thinker)];
+  // Get the unfiltered energy cards on the requested slot
+  auto energy = board.m_bench.slotAt(_slotIndex)->viewEnergy();
+  decltype (energy) filteredEnergy;
+  std::vector<size_t> positions;
+  // Filter the energies
+  filterCards(energy, filteredEnergy, positions, _match);
+  // Ask for the players pick of those filtered energies
+  auto choice = player->chooseEnergy(_owner, _destination, _action, filteredEnergy, _amount);
+  // Convert the choices to their original index
+  for (auto& pick : choice) pick = positions[pick];
+  return choice;
+}
+
+void Game::removeEnergy(
+    const PTCG::PLAYER _owner,
+    const PTCG::PILE _destination,
+    const size_t _slotIndex,
+    std::vector<size_t> _indices
+    )
+{
+  // Get the required slot
+  auto slot = m_boards[playerIndex(_owner)].m_bench.slotAt(_slotIndex);
+  // Sort the indices to avoid invalidation
+  std::sort(_indices.begin(), _indices.end(), std::greater<size_t>());
+  // Move the energies
+  for (const auto i : _indices)
+    putToPile(_owner, _destination, slot->detachEnergy(i));
 }
 
 void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)

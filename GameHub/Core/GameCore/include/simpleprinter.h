@@ -11,7 +11,7 @@ public :
 
 private:
     std::string slotStr(BoardSlot* const _slot) const;
-    std::string activeStr(BoardSlot* const _activeSlot) const;
+    std::string activeStr(BoardSlot* const _activeSlot, Status * const _activeStatus) const;
     std::string benchStr(Bench * const _bench) const;
     std::string handStr(Hand * const _hand) const;
     std::string cardStr(Card * const _card) const;

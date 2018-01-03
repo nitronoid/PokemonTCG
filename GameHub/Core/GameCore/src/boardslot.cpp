@@ -3,9 +3,8 @@
 #include <algorithm>
 
 BoardSlot::BoardSlot(const BoardSlot &_original) :
-  m_conditions(_original.m_conditions),
-  m_damageTaken(_original.m_damageTaken),
-  m_turnPlayed(_original.m_turnPlayed)
+  m_turnPlayed(_original.m_turnPlayed),
+  m_damageTaken(_original.m_damageTaken)
 {
   if(_original.m_tool)
     m_tool.reset(static_cast<TrainerCard*>(_original.m_tool->clone()));
@@ -25,7 +24,6 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
 
 BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
 {
-  m_conditions = _original.m_conditions;
   if(_original.m_tool)
     m_tool.reset(static_cast<TrainerCard*>(_original.m_tool->clone()));
   m_damageTaken = _original.m_damageTaken;
@@ -45,53 +43,7 @@ BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
   return *this;
 }
 
-void BoardSlot::resetDamageBonus(const PTCG::ORDER &_order)
-{
-  if(_order==PTCG::ORDER::AFTER)
-  {
-    m_bonusDamageAfter=0;
-  }
-  else
-  {
-    m_bonusDamageBefore=0;
-  }
-}
 
-void BoardSlot::resetDefenseBonus(const PTCG::ORDER &_order)
-{
-  if(_order==PTCG::ORDER::AFTER)
-  {
-    m_damageReductionAfter=0;
-  }
-  else
-  {
-    m_damageReductionBefore=0;
-  }
-}
-
-void BoardSlot::addBonusDamage(const PTCG::ORDER &_order, const unsigned &_value)
-{
-  if(_order==PTCG::ORDER::AFTER)
-  {
-    m_bonusDamageAfter+=_value;
-  }
-  else
-  {
-    m_bonusDamageBefore+=_value;
-  }
-}
-
-void BoardSlot::addBonusDefense(const PTCG::ORDER &_order, const unsigned &_value)
-{
-  if(_order==PTCG::ORDER::AFTER)
-  {
-    m_damageReductionAfter+=_value;
-  }
-  else
-  {
-    m_damageReductionBefore+=_value;
-  }
-}
 
 void BoardSlot::takeDamage(const int _damage)
 {
@@ -110,30 +62,7 @@ void BoardSlot::setDamage(const int _value)
   m_damageTaken = _value;
 }
 
-void BoardSlot::addCondition(const PTCG::CONDITION _condition)
-{
-  using cnd = PTCG::CONDITION;
-  if(_condition == cnd::ASLEEP    ||
-     _condition == cnd::CONFUSED  ||
-     _condition == cnd::PARALYZED
-     )
-  {
-    m_conditions.erase(cnd::ASLEEP);
-    m_conditions.erase(cnd::CONFUSED);
-    m_conditions.erase(cnd::PARALYZED);
-  }
-  m_conditions.insert(_condition);
-}
 
-void BoardSlot::removeCondition(const PTCG::CONDITION _condition)
-{
-  m_conditions.erase(_condition);
-}
-
-void BoardSlot::removeAllConditions()
-{
-  m_conditions.clear();
-}
 
 void BoardSlot::attachCard(std::unique_ptr<Card> &&_card)
 {
@@ -209,31 +138,25 @@ BoardSlot::TypeMSet BoardSlot::energy() const
   return ret;
 }
 
-std::vector<PTCG::CONDITION> BoardSlot::conditions() const
-{
-    std::vector<PTCG::CONDITION> cond(m_conditions.begin(), m_conditions.end());
-    return cond;
-}
-
 bool BoardSlot::canEvolve(const std::unique_ptr<PokemonCard> &_card, const unsigned &_turn)
 {
-    if(m_pokemon.empty())
-    {
-        std::cout<<"selected pokemon does not exist."<<'\n';
-        return false;
-    }
-    //if the pre-evolution is played on the same turn
-    if(m_turnPlayed==_turn)
-    {
-        std::cout<<"This mon cannot evolve yet."<<'\n';
-        return false;
-    }
-    if(active()->preEvolution().compare(_card->getName()) != 0)
-    {
-        std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
-        return false;
-    }
-    return true;
+  if(m_pokemon.empty())
+  {
+    std::cout<<"selected pokemon does not exist."<<'\n';
+    return false;
+  }
+  //if the pre-evolution is played on the same turn
+  if(m_turnPlayed==_turn)
+  {
+    std::cout<<"This mon cannot evolve yet."<<'\n';
+    return false;
+  }
+  if(active()->preEvolution().compare(_card->getName()) != 0)
+  {
+    std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
+    return false;
+  }
+  return true;
 }
 
 

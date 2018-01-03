@@ -513,13 +513,15 @@ void Game::attack(PokemonCard* _pokemon, const unsigned _index)
   _pokemon->attack(_index, *this);
 }
 
-void Game::dealDamage(const int _damage, const unsigned _id)
+void Game::dealDamage(const int _damage, const size_t _id)
 {
   if(_id<6)
   {
     m_damageHandler.generalDamage(
-          m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench.slotAt(_id),
-        m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0), static_cast<bool>(_id), _damage);
+          &m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,
+        &m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench,
+        _id,
+        _damage);
     std::cout<<"Attack did: "<<_damage<<" damage!\n";
   }
 }
@@ -552,7 +554,7 @@ void Game::evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handI
     //moving post evolution card from hand to chosen slot, need pileToBench
     pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,hand,bench);
     //remove conditions if evolved pokemon is an active
-    if(!_index) board.m_bench.slotAt(0)->removeAllConditions();
+    if(!_index) board.m_bench.activeStatus()->removeAllConditions();
   }
 }
 // Need to implement take single pokemon card from m_pokemon in Board Slot
@@ -613,17 +615,17 @@ void Game::removeEnergy(
 
 void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
 {
-  m_boards[playerIndex(_target)].m_bench.slotAt(0)->addCondition(_condition);
+  m_boards[playerIndex(_target)].m_bench.activeStatus()->addCondition(_condition);
 }
 
 void Game::removeCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
 {
-  m_boards[playerIndex(_target)].m_bench.slotAt(0)->removeCondition(_condition);
+  m_boards[playerIndex(_target)].m_bench.activeStatus()->removeCondition(_condition);
 }
 
 void Game::removeAllCondition(const PTCG::PLAYER &_target)
 {
-  m_boards[playerIndex(_target)].m_bench.slotAt(0)->removeAllConditions();
+  m_boards[playerIndex(_target)].m_bench.activeStatus()->removeAllConditions();
 }
 
 void Game::poison()
@@ -637,7 +639,7 @@ void Game::burn()
   m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0),m_damageHandler.getBurn());
   if(flipCoin(1))
   {
-    m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0)->removeCondition(PTCG::CONDITION::BURNED);
+    m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->removeCondition(PTCG::CONDITION::BURNED);
   }
 }
 

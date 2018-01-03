@@ -19,7 +19,7 @@ public:
   Game clone() const;
   void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
 
-  void dealDamage(const int _damage, const unsigned _id = 0);
+  void dealDamage(const int _damage, const size_t _id = 0);
   void addDamageCounter(const int _damage, const PTCG::PLAYER _player = PTCG::PLAYER::ENEMY, const unsigned _id = 0);
   void healDamage(const int _heal, const unsigned _id = 0);
   unsigned flipCoin(const unsigned _num);

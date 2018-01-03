@@ -3,7 +3,7 @@
 
 Player::~Player() {}
 
-void Player::playCard(const unsigned _index)
+void Player::playCard(const size_t _index)
 {
 
 }
@@ -30,7 +30,7 @@ void Player::retreat()
             match,
             bench.at(0).active()->retreatCost());
       m_parentGame.removeEnergy(PTCG::PLAYER::SELF, PTCG::PILE::DISCARD,0,choice);
-      m_parentGame.switchActive(PTCG::PLAYER::SELF,switchChoice[0]);
+      m_parentGame.switchActive(PTCG::PLAYER::SELF, switchChoice[0]);
     }
   }
 }

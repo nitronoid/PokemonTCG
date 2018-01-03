@@ -1,9 +1,14 @@
 #include "bench.h"
 
-BoardSlot* Bench::slotAt(const unsigned _index)
+BoardSlot* Bench::slotAt(const size_t _index)
 {
   if(_index>5) return nullptr;
   return &m_slots[_index];
+}
+
+Status* Bench::activeStatus()
+{
+  return &m_activeStatus;
 }
 
 PokemonCard* Bench::active()
@@ -14,7 +19,7 @@ PokemonCard* Bench::active()
 std::array<BoardSlot, 6> Bench::view() const
 {
   std::array<BoardSlot,6> ret;
-  for (int i =0 ; i < 6 ; ++i)
+  for (size_t i =0 ; i < 6 ; ++i)
   {
       ret[i]=m_slots[i];
   }
@@ -26,10 +31,10 @@ void Bench::switchActive(const unsigned &_sub)
     //using rend to simplify index finding for the substitute
     std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';
     std::swap(m_slots[0],m_slots[_sub]);
-    slotAt(_sub)->removeAllConditions();
+    m_activeStatus.removeAllConditions();
 }
 
-void Bench::put(std::unique_ptr<Card> &&_card, const unsigned _index)
+void Bench::put(std::unique_ptr<Card> &&_card, const size_t _index)
 {
   if(_index<5)
   {
@@ -37,7 +42,7 @@ void Bench::put(std::unique_ptr<Card> &&_card, const unsigned _index)
   }
 }
 
-std::vector<std::unique_ptr<Card>> Bench::take(const unsigned _index)
+std::vector<std::unique_ptr<Card>> Bench::take(const size_t _index)
 {
   std::vector<std::unique_ptr<Card>> ret;
   if(_index>5) return ret;

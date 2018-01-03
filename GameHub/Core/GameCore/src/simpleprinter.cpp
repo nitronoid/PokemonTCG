@@ -127,17 +127,17 @@ std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
   str_replace(ret, "$W", std::string{charify(active->weakness())});
   str_replace(ret, "$R", std::string{charify(active->resistance())});
   str_replace(ret, "$C", std::to_string(active->retreatCost()));
-  std::string conditions;
-  for (const auto& status : _slot->conditions())
-    conditions += charify(status);
-  str_replace(ret, "$STATUS$$$$$$$$$", conditions);
-
   return ret;
 }
 
-std::string SimplePrinter::activeStr(BoardSlot* const _activeSlot) const
+std::string SimplePrinter::activeStr(BoardSlot* const _activeSlot, Status *const _activeStatus) const
 {
-  return slotStr(_activeSlot);
+  auto ret = slotStr(_activeSlot);
+  std::string conditions;
+  for (const auto& status : _activeStatus->conditions())
+    conditions += charify(status);
+  str_replace(ret, "$STATUS$$$$$$$$$", conditions);
+  return ret;
 }
 
 std::string SimplePrinter::benchStr(Bench * const _bench) const
@@ -194,16 +194,16 @@ std::string SimplePrinter::energyCardStr(EnergyCard * const _card) const
   std::string ret;
   switch(_card->type())
   {
-//    case PTCG::TYPE::COLOURLESS : {ret='C'; break;}
-//    case PTCG::TYPE::DARKNESS :   {ret='D'; break;}
-//    case PTCG::TYPE::DRAGON :     {ret='N'; break;}
-//    case PTCG::TYPE::FAIRY :      {ret='Y'; break;}
-//    case PTCG::TYPE::FIGHTING :   {ret='F'; break;}
+    //    case PTCG::TYPE::COLOURLESS : {ret='C'; break;}
+    //    case PTCG::TYPE::DARKNESS :   {ret='D'; break;}
+    //    case PTCG::TYPE::DRAGON :     {ret='N'; break;}
+    //    case PTCG::TYPE::FAIRY :      {ret='Y'; break;}
+    //    case PTCG::TYPE::FIGHTING :   {ret='F'; break;}
     case PTCG::TYPE::FIRE :       {ret=k_fireCard; break;}
     case PTCG::TYPE::GRASS :      {ret=k_leafCard; break;}
     case PTCG::TYPE::LIGHTNING :  {ret=k_electricCard; break;}
-//    case PTCG::TYPE::METAL :      {ret='M'; break;}
-//    case PTCG::TYPE::PSYCHIC :    {ret='P'; break;}
+      //    case PTCG::TYPE::METAL :      {ret='M'; break;}
+      //    case PTCG::TYPE::PSYCHIC :    {ret='P'; break;}
     case PTCG::TYPE::WATER :      {ret=k_waterCard; break;}
     default : {ret=k_blankCard; break;}
 
@@ -269,7 +269,7 @@ std::string SimplePrinter::prizeStr(PrizeCards * const _prize) const
 void SimplePrinter::drawBoard(Board* _board, const bool _isOp)
 {
   Bench& bench = _board->m_bench;
-  std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0))<<'\n';
+  std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
   std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
   std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
   std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);

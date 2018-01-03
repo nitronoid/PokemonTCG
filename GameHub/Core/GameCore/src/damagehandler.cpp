@@ -1,11 +1,11 @@
 #include "damagehandler.h"
 
-bool DamageHandler::heal(BoardSlot *_slot, const unsigned &_value)
+bool DamageHandler::heal(BoardSlot *_slot, const int &_value)
 {
   if(_slot->getDamage()>0)
   {
-      _slot->removeDamage(_value);
-      return true;
+    _slot->removeDamage(_value);
+    return true;
   }
   std::cout<<"Full Health, this does nothing"<<'\n';
   return false;
@@ -13,49 +13,50 @@ bool DamageHandler::heal(BoardSlot *_slot, const unsigned &_value)
 }
 
 void DamageHandler::generalDamage(
-    BoardSlot *_defender,
-    BoardSlot *_attacker,
-    const bool &_isBenched,
-    const unsigned &_damage)
+    Bench *_attacker,
+    Bench *_defender,
+    const size_t &_defenderIndex,
+    const int &_damage)
 {
-    int totalDamage;
-    //If this is an active pokemon:
-    if(_isBenched == 0)
+  int totalDamage;
+  auto attackerSlot = _defender->slotAt(0);
+  auto defenderSlot = _defender->slotAt(_defenderIndex);
+  //If this is an active pokemon:
+  if(!_defenderIndex)
+  {
+    auto attackerStatus = _attacker->activeStatus();
+    auto defenderStatus = _defender->activeStatus();
+
+    int weakRes = applyWeakRes(defenderSlot, attackerSlot);
+    //if it says -20, it's resistance and 2 for weakness multiplier
+    if(weakRes<=0)
     {
-        int weakRes = applyWeakRes(_defender,_attacker);
-        //if it says -20, it's resistance and 2 for weakness multiplier
-        if(weakRes<=0)
-        {
-          totalDamage =
-              _damage +
-              applyBonusDamage(_defender, _attacker, PTCG::ORDER::BEFORE) +
-              weakRes +
-              applyBonusDamage(_defender, _attacker,PTCG::ORDER::AFTER);
-          _defender->takeDamage(std::max(0,totalDamage));
-        }
-        else
-        {
-          totalDamage =
-              (_damage +
-              applyBonusDamage(_defender, _attacker, PTCG::ORDER::BEFORE)) *
-              weakRes +
-              applyBonusDamage(_defender, _attacker, PTCG::ORDER::AFTER);
-          _defender->takeDamage(std::max(0,totalDamage));
-        }
+      totalDamage =
+          _damage + applyBonusDamage(defenderStatus, attackerStatus, PTCG::ORDER::BEFORE) +
+          weakRes + applyBonusDamage(defenderStatus, attackerStatus, PTCG::ORDER::AFTER);
+      defenderSlot->takeDamage(std::max(0,totalDamage));
     }
-    else //if target is bench
+    else
     {
-      totalDamage = _damage;
-      _defender->takeDamage(std::max(0,totalDamage));
+      totalDamage =
+          (_damage + applyBonusDamage(defenderStatus, attackerStatus, PTCG::ORDER::BEFORE)) *
+          weakRes + applyBonusDamage(defenderStatus, attackerStatus, PTCG::ORDER::AFTER);
+      defenderSlot->takeDamage(std::max(0,totalDamage));
     }
+  }
+  else //if target is bench
+  {
+    totalDamage = _damage;
+    defenderSlot->takeDamage(std::max(0,totalDamage));
+  }
 
 
 }
 
-void DamageHandler::rawDamage(BoardSlot* _defender, const unsigned &_damage)
+void DamageHandler::rawDamage(BoardSlot* _defender, const int &_damage)
 {
   std::cout<<"Taking "<<_damage<<" damage from effects."<<'\n';
-   _defender->takeDamage(_damage);
+  _defender->takeDamage(_damage);
 }
 
 int DamageHandler::applyWeakRes(BoardSlot* _defender, BoardSlot* _attacker)
@@ -72,19 +73,9 @@ int DamageHandler::applyWeakRes(BoardSlot* _defender, BoardSlot* _attacker)
 }
 
 
-int DamageHandler::applyBonusDamage(BoardSlot* _defender, BoardSlot* _attacker, const PTCG::ORDER &_order)
+int DamageHandler::applyBonusDamage(Status* _defender, Status* _attacker, const PTCG::ORDER &_order)
 {
-
-  if(_order==PTCG::ORDER::AFTER)
-  {
-    return _attacker->getBonusAfter() - _defender->getReductionAfter();
-  }
-  else
-  {
-    return _attacker->getBonusBefore() - _defender->getReductionBefore();
-  }
-  return 0;
-
+  return _attacker->getBonus(_order) - _defender->getReduction(_order);
 }
 
 

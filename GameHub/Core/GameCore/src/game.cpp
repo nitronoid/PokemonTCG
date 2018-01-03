@@ -41,6 +41,8 @@ void Game::drawHand(Board& io_board)
 void Game::setBoard(Board& io_board, const size_t _active)
 {
   io_board.m_bench.put(io_board.m_hand.take(_active), 0);
+  for (int i = 0; i < 6; ++i)
+    io_board.m_prizeCards.put(io_board.m_deck.takeTop());
 }
 
 std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player)

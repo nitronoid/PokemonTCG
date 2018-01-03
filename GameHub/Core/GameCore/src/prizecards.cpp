@@ -1,5 +1,5 @@
 #include "prizecards.h"
-
+#include <algorithm>
 
 PrizeCards::PrizeCards (const PrizeCards &_original)
 {
@@ -14,22 +14,22 @@ std::array<std::unique_ptr<Card>,6> PrizeCards::view() const
   std::array<std::unique_ptr<Card>,6> ret;
   for (size_t i = 0; i < m_cards.size(); ++i)
   {
-    if(m_cards.at(i) != nullptr)
+    if(m_cards[i])
     {
-      std::cout<<"Card ID: "<<m_cards.at(i)->getID()<<" Card Name: "<<m_cards.at(i)->getName()<<'\n';
-      ret.at(i).reset(m_cards.at(i)->clone());
-    }
-    else
-    {
-      ret.at(i) = nullptr;
+      //std::cout<<"Card ID: "<<m_cards.at(i)->getID()<<" Card Name: "<<m_cards.at(i)->getName()<<'\n';
+      ret[i].reset(m_cards[i]->clone());
     }
   }
   return ret;
 }
 
-void PrizeCards::put(std::unique_ptr<Card> &&)
+void PrizeCards::put(std::unique_ptr<Card> &&_card)
 {
-  //dont do anything
+  auto pos = std::find(m_cards.begin(), m_cards.end(), nullptr);
+  if (pos != m_cards.end())
+  {
+    pos->reset(_card.release());
+  }
 }
 
 std::unique_ptr<Card> PrizeCards::take(const size_t _index)

@@ -1,3 +1,4 @@
+
 #ifndef POKEMONENUMS_H
 #define POKEMONENUMS_H
 
@@ -26,10 +27,10 @@ enum class CONDITION {
   PARALYZED
 };
 
-enum class PHASE {
-  DRAW,
-  MAIN,
+enum class TRIGGER {
+  NOW,
   ATTACK,
+  END,
   NONE
 };
 

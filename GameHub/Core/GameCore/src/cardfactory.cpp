@@ -87,20 +87,18 @@ PTCG::DURATION selectDuration(const char _c)
     case 'S':  return PTCG::DURATION::SINGLE;
     case 'M':  return PTCG::DURATION::MULTIPLE;
     case 'P':  return PTCG::DURATION::PERMANENT;
-
-    default: return PTCG::DURATION::SINGLE;
+    default:   return PTCG::DURATION::SINGLE;
   }
 }
 
-PTCG::PHASE selectPhase(const char _c)
+PTCG::TRIGGER selectPhase(const char _c)
 {
   switch (_c)
   {
-    case 'D':  return PTCG::PHASE::DRAW;
-    case 'M':  return PTCG::PHASE::MAIN;
-    case 'A':  return PTCG::PHASE::ATTACK;
-
-    default: return PTCG::PHASE::NONE;
+    case 'N':  return PTCG::TRIGGER::NOW;
+    case 'A':  return PTCG::TRIGGER::ATTACK;
+    case 'E':  return PTCG::TRIGGER::END;
+    default:   return PTCG::TRIGGER::NONE;
   }
 }
 
@@ -112,8 +110,7 @@ PTCG::CARD selectTrainerType(const char _c)
     case 'T':  return PTCG::CARD::TOOL;
     case 'S':  return PTCG::CARD::SUPPORT;
     case 'A':  return PTCG::CARD::STADIUM;
-
-    default: return PTCG::CARD::SUPPORT;
+    default:   return PTCG::CARD::SUPPORT;
   }
 }
 

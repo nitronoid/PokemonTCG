@@ -4,7 +4,6 @@
 
 Game::Game(const Game &_original) :
   m_playableCards(_original.m_playableCards),
-  m_turnPhase(_original.m_turnPhase),
   m_turnCount(_original.m_turnCount)
 {
   for (size_t i = 0; i < m_players.size(); ++i)
@@ -46,21 +45,20 @@ void Game::setBoard(Board& io_board, const size_t _active)
 
 std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player)
 {
+  constexpr auto basicFilter = [](auto _card)
+  {
+    if (_card->cardType() == PTCG::CARD::POKEMON)
+      return !static_cast<PokemonCard*>(_card)->stage();
+    return false;
+  };
   return playerCardChoice(
         _player,
         _player,
         PTCG::PILE::HAND,
         PTCG::ACTION::PLAY,
-        [](auto _card)
-  {
-    if (_card->cardType() == PTCG::CARD::POKEMON)
-    {
-      return !static_cast<PokemonCard*>(_card)->stage();
-    }
-    return false;
-  },
+        basicFilter,
         1
-  );
+        );
 }
 
 
@@ -125,11 +123,32 @@ void Game::doMulligans(std::vector<size_t> &io_mulligans)
   }
 }
 
+void Game::splitEffects(std::vector<Ability>&io_attackTriggered, std::vector<Ability>&io_endTriggered)
+{
+  for (const auto & effect : m_effectQueue)
+  {
+    // only get the effects for this player
+    if (effect.first != m_turnCount % 2) continue;
+    switch (effect.second.getTrigger())
+    {
+      case PTCG::TRIGGER::ATTACK : io_attackTriggered.push_back(effect.second); break;
+      case PTCG::TRIGGER::END : io_endTriggered.push_back(effect.second); break;
+      default: break;
+    }
+  }
+}
+
+void Game::addEffect(const PTCG::PLAYER _affected, const Ability &_effect)
+{
+  m_effectQueue.push_back({playerIndex(_affected), _effect});
+}
+
 void Game::nextTurn()
 {
   // Get the current player
   auto& currentPlayer = m_players[m_turnCount % 2];
   Board& currentBoard = m_boards[m_turnCount % 2];
+  // Ascii print the board
   if (m_drawer)
   {
     m_drawer->drawBoard(&m_boards[(m_turnCount + 1) % 2],false);
@@ -140,8 +159,18 @@ void Game::nextTurn()
   {
     // Execute the players turn function
     auto attackDecision = currentPlayer->turn();
+    // Split the effects based on trigger
+    std::vector<Ability> attackTriggered, endTriggered;
+    splitEffects(attackTriggered, endTriggered);
     if (attackDecision.first)
+    {
+      // Apply all attack triggered effects
+      for (const auto & effect : attackTriggered) effect.use(*this);
       attack(currentBoard.m_bench.active(), attackDecision.second);
+    }
+    // NEED TO CLEAR ALL BONUSES HERE
+    // Apply all effects triggered by the end of a turn
+    for (const auto & effect : endTriggered) effect.use(*this);
     std::cout<<m_turnCount<<'\n';
     ++m_turnCount;
   }
@@ -480,7 +509,7 @@ void Game::dealDamage(const int _damage, const unsigned _id)
   if(_id<6)
   {
     m_damageHandler.generalDamage(
-        m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench.slotAt(_id),
+          m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench.slotAt(_id),
         m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0), static_cast<bool>(_id), _damage);
     std::cout<<"Attack did: "<<_damage<<" damage!\n";
   }

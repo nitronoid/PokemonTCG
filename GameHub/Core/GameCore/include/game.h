@@ -98,10 +98,12 @@ public:
   bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);
   std::vector<size_t> freeSlots(const PTCG::PLAYER _owner);
   void shuffleDeck(const PTCG::PLAYER _owner);
+  void addEffect(const PTCG::PLAYER _affected, const Ability &_effect);
 
 private:
   Game(const Game &_original);
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player);
+  void splitEffects(std::vector<Ability>&io_attackTriggered, std::vector<Ability>&io_endTriggered);
   std::vector<std::unique_ptr<Card>> viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
       std::vector<size_t> &io_originalPositions,
@@ -136,7 +138,7 @@ private:
   std::array<Board, 2> m_boards;
   DamageHandler m_damageHandler;
   std::unordered_set<PTCG::CARD> m_playableCards;
-  PTCG::PHASE m_turnPhase = PTCG::PHASE::NONE;
+  std::vector<std::pair<unsigned, Ability>> m_effectQueue;
   unsigned m_turnCount = 0;
   bool m_turnFinished  = false;
   bool m_rulesBroken   = false;

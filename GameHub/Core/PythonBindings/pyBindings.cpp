@@ -10,7 +10,7 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(poke, m)
 {
-// ENUMS
+  // ENUMS
   py::enum_<PTCG::TYPE>(m, "TYPE")
       .value("COLOURLESS", PTCG::TYPE::COLOURLESS)
       .value("FIGHTING",   PTCG::TYPE::FIGHTING)
@@ -32,11 +32,11 @@ PYBIND11_MODULE(poke, m)
       .value("CONFUSED",  PTCG::CONDITION::CONFUSED)
       .value("PARALYZED", PTCG::CONDITION::PARALYZED);
 
-  py::enum_<PTCG::PHASE>(m, "PHASE")
-      .value("DRAW",    PTCG::PHASE::DRAW)
-      .value("MAIN",    PTCG::PHASE::MAIN)
-      .value("ATTACK",  PTCG::PHASE::ATTACK)
-      .value("NONE",    PTCG::PHASE::NONE);
+  py::enum_<PTCG::TRIGGER>(m, "PHASE")
+      .value("NOW",     PTCG::TRIGGER::NOW)
+      .value("ATTACK",  PTCG::TRIGGER::ATTACK)
+      .value("END",     PTCG::TRIGGER::END)
+      .value("NONE",    PTCG::TRIGGER::NONE);
 
   py::enum_<PTCG::DURATION>(m, "DURATION")
       .value("SINGLE",    PTCG::DURATION::SINGLE)
@@ -66,11 +66,12 @@ PYBIND11_MODULE(poke, m)
       .value("DISCARD", PTCG::ACTION::DISCARD)
       .value("PLAY",    PTCG::ACTION::PLAY)
       .value("VIEW",    PTCG::ACTION::VIEW)
-      .value("MOVE",    PTCG::ACTION::MOVE);
+      .value("MOVE",    PTCG::ACTION::MOVE)
+      .value("HEAL",    PTCG::ACTION::HEAL);
 
   py::enum_<PTCG::ORDER>(m, "ORDER")
-        .value("BEFORE",  PTCG::ORDER::BEFORE)
-        .value("AFTER",   PTCG::ORDER::AFTER);
+      .value("BEFORE",  PTCG::ORDER::BEFORE)
+      .value("AFTER",   PTCG::ORDER::AFTER);
 
   py::class_<Card>(m, "Card")
       //.def(py::init<const unsigned, const std::string&, const Ability&>())
@@ -134,6 +135,13 @@ PYBIND11_MODULE(poke, m)
       .def("viewEnergy", &BoardSlot::viewEnergy)
       .def("active", &BoardSlot::active, py::return_value_policy::reference_internal);
 
+  py::class_<Ability>(m, "Ability")
+      .def(py::init<
+           std::function<void(Game*)>,
+           const PTCG::TRIGGER,
+           const PTCG::DURATION
+           >())
+      .def("getTrigger", &Ability::getTrigger);
 
   py::class_<Game>(m, "Game")
       .def(py::init<>())
@@ -142,7 +150,7 @@ PYBIND11_MODULE(poke, m)
            py::arg("_damage"),
            py::arg("_player") = PTCG::PLAYER::ENEMY,
            py::arg("_id") = 0u
-           )
+      )
       .def("healDamage", &Game::healDamage, py::arg("_heal"), py::arg("_id") = 0u)
       .def("applyCondition", &Game::applyCondition)
       .def("removeCondition", &Game::removeCondition)
@@ -168,6 +176,7 @@ PYBIND11_MODULE(poke, m)
       .def("revealCards", &Game::revealCards)
       .def("shuffleDeck", &Game::shuffleDeck)
       .def("flipCoin", &Game::flipCoin)
+      .def("addEffect", &Game::addEffect)
       .def("removeEnergy", &Game::removeEnergy);
 
 }

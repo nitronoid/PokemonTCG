@@ -479,7 +479,7 @@ std::vector<std::unique_ptr<Card>> Game::viewPile(const PTCG::PLAYER _owner, con
     case pile::PRIZE :
     {
       // Prize needs to be converted from an array to a vector
-      for (auto& card : board.m_deck.view()) ret.push_back(std::move(card));
+      for (auto& card : board.m_prizeCards.view()) ret.push_back(std::move(card));
       break;
     }
     default: break;

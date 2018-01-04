@@ -1,7 +1,7 @@
 import poke as p 
 
 def filter(card):
-    return True
+    return card is not None
 
 def searchingLight(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);

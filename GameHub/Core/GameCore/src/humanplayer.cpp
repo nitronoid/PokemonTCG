@@ -48,7 +48,7 @@ std::vector<size_t> HumanPlayer::chooseCards(
 {
   std::vector<size_t> choice;
   std::unordered_set<size_t> picked;
-  while (choice.size() < _amount)
+  while (_options.size() && choice.size() < _amount)
   {
     size_t len = _options.size();
     size_t pick  = len;
@@ -56,7 +56,7 @@ std::vector<size_t> HumanPlayer::chooseCards(
     while (pick > (len -1) || err)
     {
       std::string owner = "";
-      if (_player == PTCG::PLAYER::ENEMY) owner = " enemies ";
+      if (_player == PTCG::PLAYER::ENEMY) owner = "enemies ";
       std::cout<<"Pick a card from 0 - "<<len-1<<", to "<<actionStr(_action)<<" from your "<<owner<<pileStr(_origin)<<": ";
       std::cin>>pick;
       err = std::cin.fail() || picked.count(pick);

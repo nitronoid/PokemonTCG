@@ -39,12 +39,14 @@ std::string pileStr(const PTCG::PILE _origin)
   return ret;
 }
 
-std::vector<size_t> HumanPlayer::chooseCards(
+template<typename T>
+std::vector<size_t> promptChoice(
     const PTCG::PLAYER _player,
-    const PTCG::PILE _origin,
+    const std::string &_pile,
     const PTCG::ACTION _action,
-    const std::vector<std::unique_ptr<Card>> &_options,
-    const unsigned _amount)
+    const std::vector<T> &_options,
+    const unsigned _amount
+    )
 {
   std::vector<size_t> choice;
   std::unordered_set<size_t> picked;
@@ -57,10 +59,10 @@ std::vector<size_t> HumanPlayer::chooseCards(
     {
       std::string owner = "";
       if (_player == PTCG::PLAYER::ENEMY) owner = "enemies ";
-      std::cout<<"Pick a card from 0 - "<<len-1<<", to "<<actionStr(_action)<<" from your "<<owner<<pileStr(_origin)<<": ";
+      std::cout<<"Pick a card from 0 - "<<len-1<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<": ";
       std::cin>>pick;
       err = std::cin.fail() || picked.count(pick);
-      if (err) std::cout<<"Please enter an int.\n";
+      if (err) std::cout<<"Please enter an int that you haven't already chosen.\n";
       else
       {
         choice.push_back(pick);
@@ -71,6 +73,17 @@ std::vector<size_t> HumanPlayer::chooseCards(
   return choice;
 }
 
+std::vector<size_t> HumanPlayer::chooseCards(
+    const PTCG::PLAYER _player,
+    const PTCG::PILE _origin,
+    const PTCG::ACTION _action,
+    const std::vector<std::unique_ptr<Card>> &_options,
+    const unsigned _amount
+    )
+{
+  return promptChoice(_player, pileStr(_origin), _action, _options, _amount);
+}
+
 std::vector<size_t> HumanPlayer::chooseSlot(
     const PTCG::PLAYER _owner,
     const PTCG::ACTION _action,
@@ -78,10 +91,7 @@ std::vector<size_t> HumanPlayer::chooseSlot(
     const unsigned _amount
     )
 {
-  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
-  std::vector<size_t> badChoice(length);
-  std::iota (std::begin(badChoice), std::end(badChoice), 0);
-  return badChoice;
+  return promptChoice(_owner, "bench", _action, _options, _amount);
 }
 
 void HumanPlayer::learnCards(
@@ -100,15 +110,24 @@ std::vector<size_t> HumanPlayer::chooseEnergy(
     const unsigned _amount
     )
 {
-  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
-  std::vector<size_t> badChoice(length);
-  std::iota (std::begin(badChoice), std::end(badChoice), 0);
-  return badChoice;
+  return promptChoice(_owner, "active pokemon", _action, _options, _amount);
 }
 
 bool HumanPlayer::agree(const PTCG::ACTION _action)
 {
-  return true;
+  bool choice, err = false;
+  do
+  {
+    std::cout<<"Do you want to "<<actionStr(_action)<<"?: ";
+    std::cin>>choice;
+    err = std::cin.fail();
+    if (err)
+    {
+     std::cout<<"Please enter true(1) or false(0).";
+    }
+  }
+  while(err);
+  return choice;
 }
 
 bool randomBool()

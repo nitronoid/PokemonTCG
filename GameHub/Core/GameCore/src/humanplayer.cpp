@@ -9,6 +9,36 @@ Player* HumanPlayer::clone() const
   return new HumanPlayer(*this);
 }
 
+std::string actionStr(const PTCG::ACTION _action)
+{
+  using act = PTCG::ACTION;
+  std::string ret;
+  switch (_action)
+  {
+    case act::DRAW:    { ret = "draw"; break; }
+    case act::DISCARD: { ret = "discard"; break; }
+    case act::PLAY:    { ret = "play"; break; }
+    case act::VIEW:    { ret = "view"; break; }
+    case act::MOVE:    { ret = "move"; break; }
+    case act::HEAL:    { ret = "heal"; break; }
+  }
+  return ret;
+}
+
+std::string pileStr(const PTCG::PILE _origin)
+{
+  using pile = PTCG::PILE;
+  std::string ret;
+  switch (_origin)
+  {
+    case pile::DECK:    { ret = "deck"; break; }
+    case pile::DISCARD: { ret = "discard"; break; }
+    case pile::HAND:    { ret = "hand"; break; }
+    case pile::PRIZE:   { ret = "prize"; break; }
+  }
+  return ret;
+}
+
 std::vector<size_t> HumanPlayer::chooseCards(
     const PTCG::PLAYER _player,
     const PTCG::PILE _origin,
@@ -16,10 +46,29 @@ std::vector<size_t> HumanPlayer::chooseCards(
     const std::vector<std::unique_ptr<Card>> &_options,
     const unsigned _amount)
 {
-  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
-  std::vector<size_t> badChoice(length);
-  std::iota (std::begin(badChoice), std::end(badChoice), 0);
-  return badChoice;
+  std::vector<size_t> choice;
+  std::unordered_set<size_t> picked;
+  while (choice.size() < _amount)
+  {
+    size_t len = _options.size();
+    size_t pick  = len;
+    bool err = false;
+    while (pick > (len -1) || err)
+    {
+      std::string owner = "";
+      if (_player == PTCG::PLAYER::ENEMY) owner = " enemies ";
+      std::cout<<"Pick a card from 0 - "<<len-1<<", to "<<actionStr(_action)<<" from your "<<owner<<pileStr(_origin)<<": ";
+      std::cin>>pick;
+      err = std::cin.fail() || picked.count(pick);
+      if (err) std::cout<<"Please enter an int.\n";
+      else
+      {
+        choice.push_back(pick);
+        picked.insert(pick);
+      }
+    }
+  }
+  return choice;
 }
 
 std::vector<size_t> HumanPlayer::chooseSlot(

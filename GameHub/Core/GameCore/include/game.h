@@ -26,7 +26,7 @@ public:
 
   void start();
   bool canPlay(const std::unique_ptr<Card>& _card);
-  bool playCard(const unsigned _index);
+  void playCard(const size_t _index);
   bool drawCard(Board& _board);
   void moveCards(
       std::vector<size_t> _cardIndices,
@@ -96,7 +96,7 @@ public:
   //player needs to choose what to move into active if _index = 0
   void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const unsigned &_index=0);
   void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<unsigned> &_pileIndex, std::vector<unsigned> &_benchIndex);
-  void evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index);
+  bool evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index);
   bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);
   std::vector<size_t> freeSlots(const PTCG::PLAYER _owner);
   void shuffleDeck(const PTCG::PLAYER _owner);

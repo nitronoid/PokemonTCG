@@ -3,9 +3,9 @@
 
 Player::~Player() {}
 
-void Player::playCard(const size_t _index)
+void Player::playCard(const size_t &_index)
 {
-
+  m_parentGame.playCard(_index);
 }
 
 void Player::retreat()

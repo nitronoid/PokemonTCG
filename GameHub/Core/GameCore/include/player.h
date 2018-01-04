@@ -54,7 +54,7 @@ public:
   virtual std::pair<bool, unsigned> turn() = 0;
 
 protected:
-  void playCard(const size_t _index);
+  void playCard(const size_t &_index);
   void retreat();
   std::vector<std::unique_ptr<Card>> viewHand() const;
   std::vector<std::unique_ptr<Card>> viewDiscard(const PTCG::PLAYER &_owner = PTCG::PLAYER::SELF) const;

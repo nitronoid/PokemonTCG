@@ -67,7 +67,8 @@ enum class ACTION {
   PLAY,
   VIEW,
   MOVE,
-  HEAL
+  HEAL,
+  ATTACK
 };
 
 enum class ORDER {

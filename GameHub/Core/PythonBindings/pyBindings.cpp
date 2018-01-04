@@ -67,7 +67,8 @@ PYBIND11_MODULE(poke, m)
       .value("PLAY",    PTCG::ACTION::PLAY)
       .value("VIEW",    PTCG::ACTION::VIEW)
       .value("MOVE",    PTCG::ACTION::MOVE)
-      .value("HEAL",    PTCG::ACTION::HEAL);
+      .value("HEAL",    PTCG::ACTION::HEAL)
+      .value("ATTACK",  PTCG::ACTION::ATTACK);
 
   py::enum_<PTCG::ORDER>(m, "ORDER")
       .value("BEFORE",  PTCG::ORDER::BEFORE)

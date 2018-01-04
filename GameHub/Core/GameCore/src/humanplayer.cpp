@@ -21,6 +21,8 @@ std::string actionStr(const PTCG::ACTION _action)
     case act::VIEW:    { ret = "view"; break; }
     case act::MOVE:    { ret = "move"; break; }
     case act::HEAL:    { ret = "heal"; break; }
+    case act::ATTACK:    { ret = "attack"; break; }
+    default: break;
   }
   return ret;
 }
@@ -35,6 +37,7 @@ std::string pileStr(const PTCG::PILE _origin)
     case pile::DISCARD: { ret = "discard"; break; }
     case pile::HAND:    { ret = "hand"; break; }
     case pile::PRIZE:   { ret = "prize"; break; }
+    default: break;
   }
   return ret;
 }
@@ -54,21 +57,16 @@ std::vector<size_t> promptChoice(
   {
     size_t len = _options.size();
     size_t pick  = len;
-    bool err = false;
-    while (pick > (len -1) || err)
+    std::string owner = "";
+    if (_player == PTCG::PLAYER::ENEMY) owner = "enemies ";
+    do
     {
-      std::string owner = "";
-      if (_player == PTCG::PLAYER::ENEMY) owner = "enemies ";
-      std::cout<<"Pick a card from 0 - "<<len-1<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<": ";
-      std::cin>>pick;
-      err = std::cin.fail() || picked.count(pick);
-      if (err) std::cout<<"Please enter an int that you haven't already chosen.\n";
-      else
-      {
-        choice.push_back(pick);
-        picked.insert(pick);
-      }
+        std::cout<<"Pick a card from 0 - "<<len-1<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<"?"<<std::endl;
+        std::cin>>pick;
     }
+    while(!std::cin.fail() && (picked.count(pick) || (pick > (len -1))));
+    choice.push_back(pick);
+    picked.insert(pick);
   }
   return choice;
 }
@@ -115,44 +113,40 @@ std::vector<size_t> HumanPlayer::chooseEnergy(
 
 bool HumanPlayer::agree(const PTCG::ACTION _action)
 {
-  bool choice, err = false;
+  std::string answer;
   do
   {
-    std::cout<<"Do you want to "<<actionStr(_action)<<"?: ";
-    std::cin>>choice;
-    err = std::cin.fail();
-    if (err)
-    {
-     std::cout<<"Please enter true(1) or false(0).";
-    }
+      std::cout<<"Do you want to "<<actionStr(_action)<<"?[y/n]";
+      std::cin>>answer;
+      std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
   }
-  while(err);
-  return choice;
-}
-
-bool randomBool()
-{
-  static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
-  return gen();
+  while(!std::cin.fail() && answer!="y" && answer!="yes" && answer!="n" && answer!="no" );
+  return (answer == "y") || (answer == "yes");
 }
 
 std::pair<bool, unsigned> HumanPlayer::turn()
 {
-  // Random engine
-  static std::random_device seed;
-  static std::mt19937_64 eng(seed());
+  // Play cards
+  while (agree(PTCG::ACTION::PLAY))
+  {
+    auto card = chooseCards(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, viewHand(), 1);
+    if (!card.empty()) playCard(card[0]);
+    else std::cout<<"Hand is empty."<<std::endl;
+  }
 
-  // Play random card from hand
-  std::uniform_int_distribution<unsigned> hgen(0, static_cast<unsigned>(viewHand().size() - 1));
-  playCard(hgen(eng));
-
-  // Should we attack?
-  bool doAttack = randomBool();
-
-  // Play random card from hand
-  unsigned attackNum = viewBench().at(0).active()->attackNum();
-  std::uniform_int_distribution<unsigned> agen(0, attackNum - 1);
+  // Attack?
+  bool doAttack = agree(PTCG::ACTION::ATTACK);
+  unsigned attack = viewBench().at(0).active()->attackNum();
+  if (doAttack)
+  {
+    unsigned len = attack - 1;
+    do
+    {
+      std::cout<<"Pick an attack from 0 - "<<len<<std::endl;
+      std::cin>>attack;
+    } while (!std::cin.fail() && attack > len);
+  }
 
   // Return the decision
-  return std::pair<bool, unsigned> {doAttack, agen(eng)};
+  return std::pair<bool, unsigned> {doAttack, attack};
 }

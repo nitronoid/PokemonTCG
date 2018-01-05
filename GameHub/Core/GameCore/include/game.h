@@ -95,8 +95,8 @@ public:
   void switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex);
   //player needs to choose what to move into active if _index = 0
   void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const unsigned &_index=0);
-  void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<unsigned> &_pileIndex, std::vector<unsigned> &_benchIndex);
-  bool evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index);
+  void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<size_t> &_pileIndex, std::vector<size_t> &_benchIndex);
+  bool evolve(const std::unique_ptr<PokemonCard> &_postEvo, const size_t &_handIndex, const size_t &_index);
   bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);
   std::vector<size_t> freeSlots(const PTCG::PLAYER _owner);
   void shuffleDeck(const PTCG::PLAYER _owner);
@@ -145,6 +145,7 @@ private:
   bool m_turnFinished  = false;
   bool m_rulesBroken   = false;
   bool m_gameFinished  = false;
+  bool m_supportPlayed = false;
 
 };
 

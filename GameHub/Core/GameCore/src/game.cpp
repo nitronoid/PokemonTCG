@@ -48,31 +48,54 @@ void Game::playCard(const size_t _index)
 
         //check for empty slots or else, evolution
         auto slot = freeSlots(PTCG::PLAYER::SELF);
-        if(!slot.empty() && dynamic_cast<PokemonCard*>(chosenCard)->stage() == 0)
+        auto pokemon = dynamic_cast<PokemonCard*>(chosenCard->clone());
+        if(!slot.empty() && pokemon->stage() == 0)
         {
-        //play a basic pokemon onto the slot
+          auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::PLAY,1);
+          auto cardInHand = std::vector<size_t>{_index};
+          pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,cardInHand,slotChoice);
+          //play a basic pokemon onto the slot
         }
         else
         {
-        // try to evolve a pokemon
+          auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::PLAY,1);
+          evolve(std::unique_ptr<PokemonCard>(pokemon),_index,slotChoice[0]);
+          // try to evolve a pokemon
         }
         break;
       }
     case card::ITEM:
       {
         //call canPlay for trainer card
+        if(canPlay(std::unique_ptr<Card>(chosenCard)))
+        {
+          chosenCard->activateAbility(*this);
+          moveCards(std::vector<size_t>{_index},PTCG::PLAYER::SELF,PTCG::PILE::HAND,PTCG::PILE::DISCARD);
+        }
         break;
       }
     case card::TOOL:
       {
         //check for each non-empty slot, if any tools are attched,
         //let player choose between these tool-less slots
+        auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::PLAY,1);
+        if(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.view().at(slotChoice[0]).numTool()<1)
+        {
+          m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(slotChoice[0])->
+          attachCard(std::move(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.take(_index)));
+        }
         break;
       }
     case card::SUPPORT:
       {
         //need to check if a supporter card has already been played this turn
         //then call canPlay
+        if(!m_supportPlayed && canPlay(std::unique_ptr<Card>(chosenCard)))
+        {
+          chosenCard->activateAbility(*this);
+          moveCards(std::vector<size_t>{_index},PTCG::PLAYER::SELF,PTCG::PILE::HAND,PTCG::PILE::DISCARD);
+          m_supportPlayed = true;
+        }
         break;
       }
     case card::STADIUM:
@@ -87,7 +110,7 @@ void Game::playCard(const size_t _index)
 
 bool Game::canPlay(const std::unique_ptr<Card> &_card)
 {
-  return false;
+  return _card->canPlay();
 }
 void Game::drawHand(Board& io_board)
 {
@@ -238,12 +261,12 @@ void Game::nextTurn()
 
 void Game::addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player)
 {
-
+  m_boards[playerIndex(_player)].m_bench.activeStatus()->addBonusDamage(_order, _value);
 }
 
 void Game::addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player)
 {
-
+  m_boards[playerIndex(_player)].m_bench.activeStatus()->addBonusDefense(_order,_value);
 }
 bool Game::drawCard(Board& _board)
 {
@@ -375,8 +398,8 @@ void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
 void Game::pileToBench(
     const PTCG::PLAYER &_player,
     const PTCG::PILE &_origin,
-    std::vector<unsigned> &_pileIndex,
-    std::vector<unsigned> &_benchIndex)
+    std::vector<size_t> &_pileIndex,
+    std::vector<size_t> &_benchIndex)
 {
   if (_benchIndex.size() == _pileIndex.size() && !_pileIndex.empty())
   {
@@ -391,7 +414,7 @@ void Game::pileToBench(
   {
     std::cout<<"Missmatched destination and card indices.\n"
                "Amount of card indices: "<<_pileIndex.size()<<"\n"
-                                                              "Amount of destination indices: "<<_benchIndex.size()<<"\n";
+               "Amount of destination indices: "<<_benchIndex.size()<<"\n";
   }
 }
 
@@ -596,26 +619,27 @@ void Game::healDamage(const int _heal, const unsigned _id)
   std::cout<<"Healed: "<<_heal<<" damage!\n";
 }
 
-bool Game::evolve(std::unique_ptr<PokemonCard> &_postEvo, const unsigned &_handIndex, const unsigned &_index)
+bool Game::evolve(const std::unique_ptr<PokemonCard> &_postEvo, const size_t &_handIndex, const size_t &_index)
 {
   Board& board = m_boards[playerIndex(PTCG::PLAYER::SELF)];
   //if indexed bench is empty or out of bound
   if(_index>5)
   {
-    std::cout<<"selected pokemon is out of bound."<<'\n';
+    std::cout<<"selected pokemon is out of bound, evolution failed."<<'\n';
     return false;
   }
   //check if chosen card is the correct pokemon to evolve to
   else if(board.m_bench.slotAt(_index)->canEvolve(_postEvo,m_turnCount))
   {
-    std::vector<unsigned> hand = std::vector<unsigned>(_handIndex);
-    std::vector<unsigned> bench = std::vector<unsigned>(_index);
+    std::vector<size_t> hand = std::vector<size_t>(_handIndex);
+    std::vector<size_t> bench = std::vector<size_t>(_index);
     //moving post evolution card from hand to chosen slot, need pileToBench
     pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,hand,bench);
     //remove conditions if evolved pokemon is an active
     if(!_index) board.m_bench.activeStatus()->removeAllConditions();
     return true;
   }
+  std::cout<<"evolution failed."<<'\n';
   return false;
 }
 // Need to implement take single pokemon card from m_pokemon in Board Slot

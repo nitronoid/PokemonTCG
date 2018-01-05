@@ -48,7 +48,7 @@ void Game::playCard(const size_t _index)
 
         //check for empty slots or else, evolution
         auto slot = freeSlots(PTCG::PLAYER::SELF);
-        auto pokemon = dynamic_cast<PokemonCard*>(chosenCard->clone());
+        auto pokemon = static_cast<PokemonCard*>(chosenCard);
         if(!slot.empty() && pokemon->stage() == 0)
         {
           auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::PLAY,1);

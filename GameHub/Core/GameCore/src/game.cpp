@@ -244,7 +244,7 @@ void Game::clearEffects()
                         m_effectQueue.end(),
                         [this](auto ability)
   {
-    return ability.first == (m_turnCount % 2);
+    return ability.first == m_turnCount;
   }
   ), m_effectQueue.end());
 }
@@ -253,20 +253,24 @@ void Game::splitEffects(std::vector<Ability>&io_attackTriggered, std::vector<Abi
 {
   for (const auto & effect : m_effectQueue)
   {
-    // only get the effects for this player
-    if (effect.first != m_turnCount % 2) continue;
+    // only get the effects for this turn
+    if (effect.first != m_turnCount) continue;
     switch (effect.second.getTrigger())
     {
-      case PTCG::TRIGGER::ATTACK : io_attackTriggered.push_back(std::move(effect.second)); break;
-      case PTCG::TRIGGER::END : io_endTriggered.push_back(std::move(effect.second)); break;
+      case PTCG::TRIGGER::ATTACK : io_attackTriggered.push_back(effect.second); break;
+      case PTCG::TRIGGER::END : io_endTriggered.push_back(effect.second); break;
       default: break;
     }
   }
 }
 
-void Game::addEffect(const PTCG::PLAYER _affected, const Ability &_effect)
+void Game::addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect)
 {
-  m_effectQueue.push_back({playerIndex(_affected), _effect});
+  // Calculate the turn that this effect should be executed
+  // Flag of enemy will offset the turn by 1
+  // We multiply wait by 2 as it is the amount of turns that the affected player should wait
+  auto executionTurn = m_turnCount + static_cast<unsigned>(_affected) + _wait * 2;
+  m_effectQueue.push_back({executionTurn, _effect});
 }
 
 void Game::nextTurn()
@@ -283,14 +287,14 @@ void Game::nextTurn()
   // Attempt to draw a card
   if (drawCard(currentBoard))
   {
-    // Remove all the effects from this players last turn, before adding the new ones
-    // Need to check the rules to make sure this is right
-    clearEffects();
     // Execute the players turn function
     auto attackDecision = currentPlayer->turn();
     // Split the effects based on trigger
     std::vector<Ability> attackTriggered, endTriggered;
     splitEffects(attackTriggered, endTriggered);
+    // Remove all the effects for this turn from the queue, now that we have copied them into the split queues
+    // Need to check the rules to make sure this is right
+    clearEffects();
     if (attackDecision.first)
     {
       // Apply all attack triggered effects

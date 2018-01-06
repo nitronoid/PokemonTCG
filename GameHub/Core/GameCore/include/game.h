@@ -103,7 +103,7 @@ public:
   std::vector<size_t> freeSlots(const PTCG::PLAYER _owner) const;
   std::vector<size_t> nonFreeSlots(const PTCG::PLAYER _owner) const;
   void shuffleDeck(const PTCG::PLAYER _owner);
-  void addEffect(const PTCG::PLAYER _affected, const Ability &_effect);
+  void addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect);
 
 private:
   Game(const Game &_original);

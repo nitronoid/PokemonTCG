@@ -13,7 +13,7 @@ public:
   inline int  getBonus(const PTCG::ORDER _order)     const { return m_bonusDamage[static_cast<size_t>(_order)]; }
   inline int  getReduction(const PTCG::ORDER _order) const { return m_damageReduction[static_cast<size_t>(_order)]; }
   inline bool isProtected()        const { return m_protected; }
-
+  inline bool canAttack()          const { return m_canAttack; }
   void resetAll()
   {
     resetDamageEffects();
@@ -48,12 +48,13 @@ public:
   void removeCondition(const PTCG::CONDITION _condition);
   void removeAllConditions();
   std::vector<PTCG::CONDITION> conditions() const;
-
+  void setCanAttack(const bool &_val);
 private:
   std::unordered_set<PTCG::CONDITION> m_conditions;
   std::array<int, 2> m_bonusDamage     = {{0, 0}};
   std::array<int, 2> m_damageReduction = {{0, 0}};
   bool m_protected = false;
+  bool m_canAttack = true;
 };
 
 

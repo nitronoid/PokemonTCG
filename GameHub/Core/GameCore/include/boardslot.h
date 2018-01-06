@@ -25,7 +25,7 @@ public:
   void setDamage(const int _value);
 
   bool isDefeated();
-
+  void setTurnPlayed(const unsigned &_turn);
   void attachCard(std::unique_ptr<Card> &&_card);
   std::vector<std::unique_ptr<PokemonCard>> detachPokemon();
   std::unique_ptr<PokemonCard> devolvePokemon();

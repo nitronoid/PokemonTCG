@@ -43,7 +43,11 @@ BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
   return *this;
 }
 
-
+bool BoardSlot::isDefeated()
+{
+  if(m_damageTaken == active()->hp()) return true;
+  return false;
+}
 
 void BoardSlot::takeDamage(const int _damage)
 {
@@ -62,7 +66,10 @@ void BoardSlot::setDamage(const int _value)
   m_damageTaken = _value;
 }
 
-
+void BoardSlot::setTurnPlayed(const unsigned &_turn)
+{
+  m_turnPlayed=_turn;
+}
 
 void BoardSlot::attachCard(std::unique_ptr<Card> &&_card)
 {

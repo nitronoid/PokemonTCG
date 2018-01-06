@@ -89,6 +89,8 @@ public:
 
   void addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
   void addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
+  bool activateCondition(const PTCG::CONDITION &_condition);
+  bool checkCondition(const PTCG::CONDITION &_condition);
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeAllCondition(const PTCG::PLAYER &_target);
@@ -132,8 +134,7 @@ private:
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
-  void poison();
-  void burn();
+  void checkDefeated(const PTCG::PLAYER &_player, const unsigned &_index);
   void paralysis();
   void confuse();
   void sleep();

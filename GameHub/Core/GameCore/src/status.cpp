@@ -37,12 +37,17 @@ void Status::addCondition(const PTCG::CONDITION _condition)
 
 void Status::removeCondition(const PTCG::CONDITION _condition)
 {
+  if(_condition == PTCG::CONDITION::PARALYZED || _condition == PTCG::CONDITION::ASLEEP)
+  {
+    setCanAttack(true);
+  }
   m_conditions.erase(_condition);
 }
 
 void Status::removeAllConditions()
 {
   m_conditions.clear();
+  setCanAttack(true);
 }
 
 std::vector<PTCG::CONDITION> Status::conditions() const
@@ -51,7 +56,10 @@ std::vector<PTCG::CONDITION> Status::conditions() const
     return cond;
 }
 
-
+void Status::setCanAttack(const bool &_val)
+{
+  m_canAttack=_val;
+}
 
 
 

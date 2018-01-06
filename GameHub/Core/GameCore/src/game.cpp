@@ -51,7 +51,10 @@ void Game::playPokemon(PokemonCard* const _pokemon, const size_t _index)
     constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
     auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
     if (!slotChoice.empty())
+    {
       pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
+      m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(_index)->setTurnPlayed(m_turnCount);
+    }
   }
 }
 
@@ -89,6 +92,7 @@ void Game::playSupport(TrainerCard* const _support, const size_t _index)
   {
     _support->activateAbility(*this);
     moveCards({_index}, PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::PILE::DISCARD);
+    m_supportPlayed = true;
   }
 }
 
@@ -657,7 +661,17 @@ void Game::revealCards(
 
 void Game::attack(PokemonCard* _pokemon, const unsigned _index)
 {
-  _pokemon->attack(_index, *this);
+  //if your pokemon can attack...
+  if(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->canAttack())
+  {
+    //check for confusion
+    if(checkCondition(PTCG::CONDITION::CONFUSED))
+    {
+      //if confusion activates and you roll heads, attack normally.
+      if(activateCondition(PTCG::CONDITION::CONFUSED)) _pokemon->attack(_index, *this);
+    }
+  }
+
 }
 
 void Game::dealDamage(const int _damage, const size_t _id)
@@ -701,6 +715,7 @@ bool Game::evolve(PokemonCard*const _postEvo, const size_t &_handIndex, const si
     std::vector<size_t> bench = std::vector<size_t>(_index);
     //moving post evolution card from hand to chosen slot, need pileToBench
     pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,hand,bench);
+    board.m_bench.slotAt(_index)->setTurnPlayed(m_turnCount);
     //remove conditions if evolved pokemon is an active
     if(!_index) board.m_bench.activeStatus()->removeAllConditions();
     return true;
@@ -764,6 +779,77 @@ void Game::removeEnergy(
     putToPile(_owner, _destination, slot->detachEnergy(i));
 }
 
+
+void Game::checkDefeated(const PTCG::PLAYER &_player, const unsigned &_index)
+{
+  auto& bench = m_boards[playerIndex(_player)].m_bench;
+  if(bench.view().at(_index).isDefeated())
+  {
+    //discard and reset all state on that slot
+    if(_index==0) removeAllCondition(_player);
+    std::function<bool(Card*const)> match = [](Card* const){return true;};
+    benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
+    bench.slotAt(_index)->setDamage(0);
+  }
+}
+
+bool Game::checkCondition(const PTCG::CONDITION &_condition)
+{
+  auto conditions = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->conditions();
+  if(std::find(conditions.begin(),conditions.end(),_condition)!= conditions.end())
+  {
+    return true;
+  }
+  return false;
+}
+
+bool Game::activateCondition(const PTCG::CONDITION &_condition)
+{
+  switch (_condition)
+  {
+    case PTCG::CONDITION::ASLEEP:
+      {
+        m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->setCanAttack(false);
+        return true;
+        break;
+      }
+    case PTCG::CONDITION::BURNED:
+      {
+        addDamageCounter(m_damageHandler.getBurn(),PTCG::PLAYER::SELF);
+        if(flipCoin(1))
+        {
+          m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->removeCondition(PTCG::CONDITION::BURNED);
+        }
+        return true;
+        break;
+      }
+    case PTCG::CONDITION::CONFUSED:
+      {
+        if(!flipCoin(1))
+        {
+          addDamageCounter(m_damageHandler.getConfuse(),PTCG::PLAYER::SELF);
+          return false;
+        }
+        return true;
+        break;
+      }
+    case PTCG::CONDITION::PARALYZED:
+      {
+        m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->setCanAttack(false);
+        return true;
+        break;
+      }
+    case PTCG::CONDITION::POISONED:
+      {
+        addDamageCounter(m_damageHandler.getPoison(),PTCG::PLAYER::SELF);
+        return true;
+        break;
+      }
+    default:
+      break;
+  }
+  return true;
+}
 void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
 {
   m_boards[playerIndex(_target)].m_bench.activeStatus()->addCondition(_condition);
@@ -777,21 +863,6 @@ void Game::removeCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_
 void Game::removeAllCondition(const PTCG::PLAYER &_target)
 {
   m_boards[playerIndex(_target)].m_bench.activeStatus()->removeAllConditions();
-}
-
-void Game::poison()
-{
-  m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0),m_damageHandler.getPoison());
-
-}
-
-void Game::burn()
-{
-  m_damageHandler.rawDamage(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0),m_damageHandler.getBurn());
-  if(flipCoin(1))
-  {
-    m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->removeCondition(PTCG::CONDITION::BURNED);
-  }
 }
 
 void Game::paralysis()

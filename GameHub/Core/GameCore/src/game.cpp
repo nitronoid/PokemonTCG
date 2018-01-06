@@ -32,84 +32,117 @@ void Game::start()
     nextTurn();
   }
 }
+
+void Game::playPokemon(PokemonCard* const _pokemon, const size_t _index)
+{
+  // Not basic
+  if (_pokemon->stage())
+  {
+    // Choose from slots with pokemon
+    constexpr auto filter = [](BoardSlot*const _slot){return _slot->active();};
+    auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
+    if (!slotChoice.empty())
+      evolve(_pokemon, _index, slotChoice[0]);
+  }
+  // Basic Pokemon
+  else
+  {
+    // Use default filter to find empty slots
+    constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
+    auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
+    if (!slotChoice.empty())
+      pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
+  }
+}
+
+void Game::playItem(TrainerCard* const _item, const size_t _index)
+{
+  _item->activateAbility(*this);
+  moveCards({_index}, PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::PILE::DISCARD);
+}
+
+void Game::playTool(TrainerCard* const _tool, const size_t _index)
+{
+  // Slots with a pokemon that has no tool attached
+  auto filter = [](BoardSlot*const _slot){ return _slot->active() && !_slot->viewTool();};
+  auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
+  if (!slotChoice.empty())
+    pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
+}
+
+void Game::playEnergy(EnergyCard* const _energy, const size_t _index)
+{
+  // Choose from slots with pokemon
+  constexpr auto filter = [](BoardSlot*const _slot){return _slot->active();};
+  auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
+  if (!slotChoice.empty())
+  {
+    //_energy->activateAbility(*this);
+    pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
+  }
+}
+
+void Game::playSupport(TrainerCard* const _support, const size_t _index)
+{
+  //need to check if a supporter card has already been played this turn
+  if (!m_supportPlayed)
+  {
+    _support->activateAbility(*this);
+    moveCards({_index}, PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::PILE::DISCARD);
+  }
+}
+
 void Game::playCard(const size_t _index)
 {
-  auto chosenCard = viewHand(PTCG::PLAYER::SELF).at(_index).get();
-  PTCG::CARD cardType = chosenCard->cardType();
+  // MUST store the COPY of the hand here, rather than retrieve the card in one line
+  // Otherwise the copy is temp and gets destructed, which null's our card
+  auto hand = viewHand(PTCG::PLAYER::SELF);
+  auto chosenCard = hand[_index].get();
   using card = PTCG::CARD;
-  switch (cardType) {
-    case card::ENERGY:
+  if (chosenCard->canPlay())
+  {
+    switch (chosenCard->cardType())
+    {
+      case card::ENERGY:
       {
         //attach energy to occupied slots
+        playEnergy(static_cast<EnergyCard*>(chosenCard), _index);
         break;
       }
-    case card::POKEMON:
+      case card::POKEMON:
       {
-
-        //check for empty slots or else, evolution
-        auto slot = freeSlots(PTCG::PLAYER::SELF);
-        auto pokemon = static_cast<PokemonCard*>(chosenCard);
-        if(!slot.empty() && pokemon->stage() == 0)
-        {
-          auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::PLAY,1);
-          auto cardInHand = std::vector<size_t>{_index};
-          pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,cardInHand,slotChoice);
-          //play a basic pokemon onto the slot
-        }
-        else
-        {
-          auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::PLAY,1);
-          evolve(std::unique_ptr<PokemonCard>(pokemon),_index,slotChoice[0]);
-          // try to evolve a pokemon
-        }
+        playPokemon(static_cast<PokemonCard*>(chosenCard), _index);
         break;
       }
-    case card::ITEM:
+      case card::ITEM:
       {
-        //call canPlay for trainer card
-        if(canPlay(std::unique_ptr<Card>(chosenCard)))
-        {
-          chosenCard->activateAbility(*this);
-          moveCards(std::vector<size_t>{_index},PTCG::PLAYER::SELF,PTCG::PILE::HAND,PTCG::PILE::DISCARD);
-        }
+        playItem(static_cast<TrainerCard*>(chosenCard), _index);
         break;
       }
-    case card::TOOL:
+      case card::TOOL:
       {
-        //check for each non-empty slot, if any tools are attched,
-        //let player choose between these tool-less slots
-        auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::PLAY,1);
-        if(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.view().at(slotChoice[0]).numTool()<1)
-        {
-          m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(slotChoice[0])->
-          attachCard(std::move(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.take(_index)));
-        }
+        playTool(static_cast<TrainerCard*>(chosenCard), _index);
         break;
       }
-    case card::SUPPORT:
+      case card::SUPPORT:
       {
-        //need to check if a supporter card has already been played this turn
-        //then call canPlay
-        if(!m_supportPlayed && canPlay(std::unique_ptr<Card>(chosenCard)))
-        {
-          chosenCard->activateAbility(*this);
-          moveCards(std::vector<size_t>{_index},PTCG::PLAYER::SELF,PTCG::PILE::HAND,PTCG::PILE::DISCARD);
-          m_supportPlayed = true;
-        }
+        playSupport(static_cast<TrainerCard*>(chosenCard), _index);
         break;
       }
-    case card::STADIUM:
+      case card::STADIUM:
       {
         //WILL IMPLEMENT STADIUM LATER WHEN IT IS INCLUDED IN OUR SET
         break;
       }
-    default:
-      break;
+      default: break;
     }
+  }
 }
 
-bool Game::canPlay(const std::unique_ptr<Card> &_card)
+bool Game::canPlay(Card* const _card)
 {
+  std::cout<<_card->getName()<<'\t'<<_card->getID()<<'\n';
+  std::cout<<_card->canPlay()<<'\n';
   return _card->canPlay();
 }
 void Game::drawHand(Board& io_board)
@@ -398,10 +431,11 @@ void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
 void Game::pileToBench(
     const PTCG::PLAYER &_player,
     const PTCG::PILE &_origin,
-    std::vector<size_t> &_pileIndex,
-    std::vector<size_t> &_benchIndex)
+    std::vector<size_t> _pileIndex,
+    std::vector<size_t> _benchIndex
+    )
 {
-  if (_benchIndex.size() == _pileIndex.size() && !_pileIndex.empty())
+  if ((_benchIndex.size() == _pileIndex.size()) && !_pileIndex.empty())
   {
     doubleVecSort(_pileIndex, _benchIndex);
     auto& board = m_boards[playerIndex(_player)];
@@ -412,21 +446,32 @@ void Game::pileToBench(
   }
   else
   {
-    std::cout<<"Missmatched destination and card indices.\n"
-               "Amount of card indices: "<<_pileIndex.size()<<"\n"
+    std::cout<<"Missmatched destination and card indices.\n"<<
+               "Amount of card indices: "<<_pileIndex.size()<<"\n"<<
                "Amount of destination indices: "<<_benchIndex.size()<<"\n";
   }
 }
 
-std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner)
+std::vector<size_t> Game::filterSlots(const PTCG::PLAYER _owner, std::function<bool(BoardSlot*const)> _match) const
 {
   std::vector<size_t> ret;
-  auto benchSlots = m_boards[playerIndex(_owner)].m_bench.view();
+  auto benchSlots = viewBench(_owner);
   for (size_t i = 0; i < benchSlots.size(); ++i)
   {
-    if (!benchSlots[i].active()) ret.push_back(i);
+    if (_match(&benchSlots[i])) ret.push_back(i);
   }
   return ret;
+}
+
+
+std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner) const
+{
+  return filterSlots(_owner, [](BoardSlot*const _slot){return !_slot->active();});
+}
+
+std::vector<size_t> Game::nonFreeSlots(const PTCG::PLAYER _owner) const
+{
+  return filterSlots(_owner, [](BoardSlot*const _slot){return _slot->active();});
 }
 
 void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
@@ -521,7 +566,8 @@ std::vector<size_t> Game::playerSlotChoice(
     const PTCG::PLAYER _thinker,
     const PTCG::PLAYER _owner,
     const PTCG::ACTION _action,
-    const unsigned _amount
+    const unsigned _amount,
+    std::function<bool(BoardSlot*const)> _match
     )
 {
   std::vector<size_t> choice;
@@ -531,7 +577,7 @@ std::vector<size_t> Game::playerSlotChoice(
   for (size_t i = 0; i < benchArr.size(); ++i)
   {
     auto& slot = benchArr[i];
-    if(slot.active())
+    if(_match(&slot))
     {
       options.push_back(std::move(slot));
       positions.push_back(i);
@@ -619,7 +665,7 @@ void Game::healDamage(const int _heal, const unsigned _id)
   std::cout<<"Healed: "<<_heal<<" damage!\n";
 }
 
-bool Game::evolve(const std::unique_ptr<PokemonCard> &_postEvo, const size_t &_handIndex, const size_t &_index)
+bool Game::evolve(PokemonCard*const _postEvo, const size_t &_handIndex, const size_t &_index)
 {
   Board& board = m_boards[playerIndex(PTCG::PLAYER::SELF)];
   //if indexed bench is empty or out of bound

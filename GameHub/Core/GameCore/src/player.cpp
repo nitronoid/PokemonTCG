@@ -12,7 +12,8 @@ void Player::retreat()
 {
   if(m_canRetreat)
   {
-    auto switchChoice = m_parentGame.playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::MOVE,1);
+    constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
+    auto switchChoice = m_parentGame.playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::MOVE,1, filter);
     auto bench = m_parentGame.viewBench(PTCG::PLAYER::SELF);
     if(bench.at(0).numEnergy() >= bench.at(0).active()->retreatCost() &&
        switchChoice[0] < 6 && switchChoice[0] != 0 &&

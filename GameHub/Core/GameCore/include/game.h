@@ -25,7 +25,7 @@ public:
   unsigned flipCoin(const unsigned _num);
 
   void start();
-  bool canPlay(const std::unique_ptr<Card>& _card);
+  bool canPlay(Card * const _card);
   void playCard(const size_t _index);
   bool drawCard(Board& _board);
   void moveCards(
@@ -49,7 +49,8 @@ public:
       const PTCG::PLAYER _thinker,
       const PTCG::PLAYER _owner,
       const PTCG::ACTION _action,
-      const unsigned _amount
+      const unsigned _amount,
+      std::function<bool(BoardSlot*const)> _match
       );
 
   void revealCards(
@@ -95,10 +96,12 @@ public:
   void switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex);
   //player needs to choose what to move into active if _index = 0
   void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const unsigned &_index=0);
-  void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<size_t> &_pileIndex, std::vector<size_t> &_benchIndex);
-  bool evolve(const std::unique_ptr<PokemonCard> &_postEvo, const size_t &_handIndex, const size_t &_index);
+  void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<size_t> _pileIndex, std::vector<size_t> _benchIndex);
+  bool evolve(PokemonCard * const _postEvo, const size_t &_handIndex, const size_t &_index);
   bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);
-  std::vector<size_t> freeSlots(const PTCG::PLAYER _owner);
+  std::vector<size_t> filterSlots(const PTCG::PLAYER _owner, std::function<bool(BoardSlot*const)>) const;
+  std::vector<size_t> freeSlots(const PTCG::PLAYER _owner) const;
+  std::vector<size_t> nonFreeSlots(const PTCG::PLAYER _owner) const;
   void shuffleDeck(const PTCG::PLAYER _owner);
   void addEffect(const PTCG::PLAYER _affected, const Ability &_effect);
 
@@ -133,6 +136,11 @@ private:
   void paralysis();
   void confuse();
   void sleep();
+  void playPokemon(PokemonCard* const _pokemon, const size_t _index);
+  void playItem(TrainerCard* const _item, const size_t _index);
+  void playTool(TrainerCard* const _tool, const size_t _index);
+  void playSupport(TrainerCard* const _support, const size_t _index);
+  void playEnergy(EnergyCard* const _energy, const size_t _index);
 
 private:
   GuiModule* m_drawer;

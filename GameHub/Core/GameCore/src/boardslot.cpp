@@ -138,7 +138,7 @@ BoardSlot::TypeMSet BoardSlot::energy() const
   return ret;
 }
 
-bool BoardSlot::canEvolve(const std::unique_ptr<PokemonCard> &_card, const unsigned &_turn)
+bool BoardSlot::canEvolve(PokemonCard*const _card, const unsigned &_turn)
 {
   if(m_pokemon.empty())
   {

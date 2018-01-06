@@ -16,9 +16,9 @@ public:
     m_id(_id)
   {}
 
-  virtual ~Card(){}
+  virtual ~Card();
 
-  virtual bool canPlay() = 0;
+  virtual bool canPlay() const = 0;
   virtual Card* clone() = 0;
   virtual PTCG::CARD cardType() const = 0;
   void activateAbility(Game &_game) const;

@@ -21,7 +21,7 @@ void Game::init(const CardFactory &_factory, GuiModule * const _drawer, const st
   m_players[0].reset(new HumanPlayer(*this));
   m_players[1].reset(new HumanPlayer(*this));
 
-  if(_drawer) m_drawer = _drawer;
+  m_drawer = _drawer;
 }
 
 void Game::start()
@@ -236,6 +236,19 @@ void Game::doMulligans(std::vector<size_t> &io_mulligans)
   }
 }
 
+void Game::clearEffects()
+{
+  // Remove all effects for this player
+  m_effectQueue.erase(std::remove_if(
+                        m_effectQueue.begin(),
+                        m_effectQueue.end(),
+                        [this](auto ability)
+  {
+    return ability.first == (m_turnCount % 2);
+  }
+  ), m_effectQueue.end());
+}
+
 void Game::splitEffects(std::vector<Ability>&io_attackTriggered, std::vector<Ability>&io_endTriggered)
 {
   for (const auto & effect : m_effectQueue)
@@ -244,8 +257,8 @@ void Game::splitEffects(std::vector<Ability>&io_attackTriggered, std::vector<Abi
     if (effect.first != m_turnCount % 2) continue;
     switch (effect.second.getTrigger())
     {
-      case PTCG::TRIGGER::ATTACK : io_attackTriggered.push_back(effect.second); break;
-      case PTCG::TRIGGER::END : io_endTriggered.push_back(effect.second); break;
+      case PTCG::TRIGGER::ATTACK : io_attackTriggered.push_back(std::move(effect.second)); break;
+      case PTCG::TRIGGER::END : io_endTriggered.push_back(std::move(effect.second)); break;
       default: break;
     }
   }
@@ -270,6 +283,9 @@ void Game::nextTurn()
   // Attempt to draw a card
   if (drawCard(currentBoard))
   {
+    // Remove all the effects from this players last turn, before adding the new ones
+    // Need to check the rules to make sure this is right
+    clearEffects();
     // Execute the players turn function
     auto attackDecision = currentPlayer->turn();
     // Split the effects based on trigger
@@ -281,7 +297,8 @@ void Game::nextTurn()
       for (const auto & effect : attackTriggered) effect.use(*this);
       attack(currentBoard.m_bench.active(), attackDecision.second);
     }
-    // NEED TO CLEAR ALL BONUSES HERE
+    // Now that damage calc is over, we remove any damage/defense bonuses
+    currentBoard.m_bench.activeStatus()->resetDamageEffects();
     // Apply all effects triggered by the end of a turn
     for (const auto & effect : endTriggered) effect.use(*this);
     std::cout<<m_turnCount<<'\n';

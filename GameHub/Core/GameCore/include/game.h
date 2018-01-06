@@ -109,6 +109,7 @@ private:
   Game(const Game &_original);
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player);
   void splitEffects(std::vector<Ability>&io_attackTriggered, std::vector<Ability>&io_endTriggered);
+  void clearEffects();
   std::vector<std::unique_ptr<Card>> viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
       std::vector<size_t> &io_originalPositions,

@@ -14,7 +14,32 @@ public:
   inline int  getReduction(const PTCG::ORDER _order) const { return m_damageReduction[static_cast<size_t>(_order)]; }
   inline bool isProtected()        const { return m_protected; }
 
+  void resetAll()
+  {
+    resetDamageEffects();
+    removeAllConditions();
+  }
+
+  void resetDamageEffects()
+  {
+    resetAllDamageBonuses();
+    resetAllDefenseBonuses();
+    m_protected = false;
+  }
+
+  void resetAllDamageBonuses()
+  {
+    resetDamageBonus(PTCG::ORDER::AFTER);
+    resetDamageBonus(PTCG::ORDER::BEFORE);
+  }
+
   void resetDamageBonus(const PTCG::ORDER &_order);
+  void resetAllDefenseBonuses()
+  {
+    resetDefenseBonus(PTCG::ORDER::AFTER);
+    resetDefenseBonus(PTCG::ORDER::BEFORE);
+  }
+
   void resetDefenseBonus(const PTCG::ORDER &_order);
   void addBonusDamage(const PTCG::ORDER &_order, const unsigned &_value);
   void addBonusDefense(const PTCG::ORDER &_order, const unsigned &_value);

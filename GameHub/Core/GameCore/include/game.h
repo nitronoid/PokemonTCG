@@ -25,8 +25,8 @@ public:
   unsigned flipCoin(const unsigned _num);
 
   void start();
-  bool canPlay(Card * const _card);
   void playCard(const size_t _index);
+  bool canPlay(const size_t _index);
   bool drawCard(Board& _board);
   void moveCards(
       std::vector<size_t> _cardIndices,

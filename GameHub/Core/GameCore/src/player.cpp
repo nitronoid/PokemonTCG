@@ -36,12 +36,15 @@ void Player::retreat()
   }
 }
 
+bool Player::canPlay(const size_t &_index)
+{
+  return m_parentGame.canPlay(_index);
+}
 
 Game Player::getDummyGame() const
 {
   return m_parentGame.clone();
 }
-
 
 std::vector<std::unique_ptr<Card>> Player::viewHand() const
 {

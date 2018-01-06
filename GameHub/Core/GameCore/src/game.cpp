@@ -92,6 +92,11 @@ void Game::playSupport(TrainerCard* const _support, const size_t _index)
   }
 }
 
+bool Game::canPlay(const size_t _index)
+{
+  return viewHand(PTCG::PLAYER::SELF)[_index]->canPlay();
+}
+
 void Game::playCard(const size_t _index)
 {
   // MUST store the COPY of the hand here, rather than retrieve the card in one line
@@ -139,12 +144,6 @@ void Game::playCard(const size_t _index)
   }
 }
 
-bool Game::canPlay(Card* const _card)
-{
-  std::cout<<_card->getName()<<'\t'<<_card->getID()<<'\n';
-  std::cout<<_card->canPlay()<<'\n';
-  return _card->canPlay();
-}
 void Game::drawHand(Board& io_board)
 {
   for (int j = 0; j < 6; ++j) drawCard(io_board);

@@ -98,7 +98,7 @@ void Game::playSupport(TrainerCard* const _support, const size_t _index)
 
 bool Game::canPlay(const size_t _index)
 {
-  return viewHand(PTCG::PLAYER::SELF)[_index]->canPlay();
+  return viewHand(PTCG::PLAYER::SELF)[_index]->canPlay(*this);
 }
 
 void Game::playCard(const size_t _index)
@@ -108,7 +108,7 @@ void Game::playCard(const size_t _index)
   auto hand = viewHand(PTCG::PLAYER::SELF);
   auto chosenCard = hand[_index].get();
   using card = PTCG::CARD;
-  if (chosenCard->canPlay())
+  if (chosenCard->canPlay(*this))
   {
     switch (chosenCard->cardType())
     {
@@ -160,7 +160,7 @@ void Game::setBoard(Board& io_board, const size_t _active)
     io_board.m_prizeCards.put(io_board.m_deck.takeTop());
 }
 
-std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player)
+std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin)
 {
   constexpr auto basicFilter = [](auto _card)
   {
@@ -171,13 +171,30 @@ std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player)
   return playerCardChoice(
         _player,
         _player,
-        PTCG::PILE::HAND,
+        _origin,
         PTCG::ACTION::PLAY,
         basicFilter,
         1
         );
 }
 
+std::vector<size_t> Game::chooseReplacement(const PTCG::PLAYER _player)
+{
+  constexpr auto basicFilter = [](auto _slot)
+  {
+    auto card = _slot->active();
+    if (card && card->cardType() == PTCG::CARD::POKEMON)
+      return !static_cast<PokemonCard*>(card)->stage();
+    return false;
+  };
+  return playerSlotChoice(
+        _player,
+        _player,
+        PTCG::ACTION::PLAY,
+        1,
+        basicFilter
+        );
+}
 
 bool Game::playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action)
 {
@@ -780,14 +797,22 @@ void Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     constexpr auto match = [](Card* const){return true;};
     // Discard and reset all state on that slot
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
+    auto opponent = static_cast<PTCG::PLAYER>((static_cast<unsigned>(_player) + 1) % 2);
     bench.slotAt(_index)->setDamage(0);
     // If it was the active we need to reset the active condition
-    if(_index==0)
+    if(!_index)
+    {
       bench.activeStatus()->resetAll();
+      // Force the opponent to choose a new active pokemon
+      auto active = chooseReplacement(_player);
+      if (!active.empty())
+        switchActive(_player, active[0]);
+      else
+        m_gameFinished = true;
+    }
     //Taking a prize card in prize card.
-    PTCG::PLAYER winner = static_cast<PTCG::PLAYER>((m_turnCount + static_cast<unsigned>(_player) + 1) % 2);
-    auto choice = playerCardChoice(winner, winner, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, match, 1);
-    moveCards(choice, winner, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
+    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, match, 1);
+    moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
   }
 }
 

@@ -24,8 +24,8 @@ std::vector<std::unique_ptr<Card>> DiscardPile::view() const
 
 void DiscardPile::put(std::unique_ptr<Card> &&_card)
 {
-  m_cards.push_back(std::move(_card));
   std::cout<<_card->getName()<<" has been discarded."<<'\n';
+  m_cards.push_back(std::move(_card));
 }
 
 std::unique_ptr<Card> DiscardPile::take(const size_t _index)

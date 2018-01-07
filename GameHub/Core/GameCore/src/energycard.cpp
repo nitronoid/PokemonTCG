@@ -1,6 +1,6 @@
 #include "energycard.h"
 
-bool EnergyCard::canPlay() const { std::cout<<"yo\n"; return true; }
+bool EnergyCard::canPlay(Game &) const { return true; }
 
 Card* EnergyCard::clone()
 {

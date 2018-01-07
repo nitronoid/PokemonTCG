@@ -13,7 +13,7 @@ public:
       m_type(_type)
     {}
 
-    virtual bool canPlay() const override;
+    virtual bool canPlay(Game&) const override;
 
     virtual Card* clone() override;
 

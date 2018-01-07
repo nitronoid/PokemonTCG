@@ -45,7 +45,7 @@ BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
 
 bool BoardSlot::isDefeated()
 {
-  return m_damageTaken > active()->hp();
+  return m_damageTaken >= active()->hp();
 }
 
 void BoardSlot::takeDamage(const int _damage)

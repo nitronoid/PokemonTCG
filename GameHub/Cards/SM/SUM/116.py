@@ -4,9 +4,9 @@ def filter(card):
     return card.cardType() == p.CARD.ENERGY
 
 def canPlay(h): 
-#First check if there is more than two cards in discard pile, Second if there is more than two energy cards in a discard pile return true
-#checks the length of the discard pile if more than two return TRUE &&
-#checks if type of card > 2 in it too 
+    #First check if there is more than two cards in discard pile, Second if there is more than two energy cards in a discard pile return true
+    #checks the length of the discard pile if more than two return TRUE &&
+    #checks if type of card > 2 in it too 
     cards = h.viewDiscard(p.PLAYER.SELF)
     amountOfTypeCards = 0
     for card in cards:

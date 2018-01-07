@@ -4,7 +4,7 @@ def filter(card):
     return card.cardType() == p.CARD.POKEMON and card.stage()
 
 def canPlay(h):
-     return len(h.viewDeck(p.PLAYER.SELF)) > 0 
+    return len(h.viewDeck(p.PLAYER.SELF)) > 0 
 
 def timerBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -25,7 +25,7 @@ def timerBall(h):
     # reveal - whether the enemy sees the card (True/False)
     
     # flip coin twice
-    headsAmount = flipCoin(2)
+    headsAmount = h.flipCoin(2)
     if headsAmount:
         cards = h.playerCardChoice( 
             p.PLAYER.SELF,  
@@ -34,5 +34,5 @@ def timerBall(h):
             p.ACTION.DRAW, 
             filter,  
             headsAmount)
-        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
-    h.shuffleDeck(p.PLAYER.SELF)
+        h.moveCards(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
+        h.shuffleDeck(p.PLAYER.SELF)

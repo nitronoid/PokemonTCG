@@ -1,14 +1,18 @@
-import poke
+import poke as p 
+
+def filter(card):
+    return card.cardType() == p.CARD.ENERGY
+
 def canPlay(h): 
 #First check if there is more than two cards in discard pile, Second if there is more than two energy cards in a discard pile return true
 #checks the length of the discard pile if more than two return TRUE &&
 #checks if type of card > 2 in it too 
-    cards = h.viewDiscard(SELF)
+    cards = h.viewDiscard(p.PLAYER.SELF)
     amountOfTypeCards = 0
     for card in cards:
-        if(card.type() == ENERGY):
+        if(card.type() == p.CARD.ENERGY):
             amountOfTypeCards += 1
-    return len(h.viewDiscard(SELF)) > 1 and amountOfTypeCards > 1
+    return amountOfTypeCards > 1
             
 def energyRetrieval(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -28,5 +32,11 @@ def energyRetrieval(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    cards = h.playerChoice(SELF, SELF, DISCARD, ENERGY, DRAW, 2)
-    h.moveCards(cards, SELF, DISCARD, HAND, False)
+    cards = h.playerCardChoice(
+        p.PLAYER.SELF, 
+        p.PLAYER.SELF, 
+        p.PILE.DISCARD, 
+        p.ACTION.DRAW, 
+        filter,
+        2)
+    h.moveCards(cards, p.PLAYER.SELF, p.PILE.DISCARD, p.PILE.HAND)

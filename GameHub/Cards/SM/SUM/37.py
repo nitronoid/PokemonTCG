@@ -1,7 +1,7 @@
 import poke
 
 def roost(h):
-    h.heal(30)
+    h.healDamage(30)
     # next turn no retreat
     
 

@@ -15,13 +15,26 @@ std::string str_pad(std::string o_str, const size_t _len, const bool _front = tr
   return o_str;
 }
 
-void str_replace(std::string&io_str, const std::string &_rep, std::string _val,const bool _front = true)
+std::string sentinalFromID(const std::string &_str, const std::string &_id)
+{
+  size_t start = _str.find(_id);
+  size_t end = start + _id.size();
+  end = _str.find_first_not_of('$', end);
+  return  _str.substr(start, end - start);
+}
+
+void str_replace(std::string&io_str, const std::string &_rep, std::string _val, const bool _front = true)
 {
   size_t pos = io_str.find(_rep);
   size_t len = _rep.size();
   std::string empty(len, ' ');
   if (_val.size() > len) _val = _val.substr(0, len);
   io_str.replace(pos, len, str_pad(_val, len, _front));
+}
+
+void str_replace_sent(std::string&io_str, const std::string &_rep, std::string _val, const bool _front = true)
+{
+  str_replace(io_str, sentinalFromID(io_str, _rep), _val, _front);
 }
 
 char charify(PTCG::TYPE _in)
@@ -102,49 +115,31 @@ std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
 {
   std::string ret = k_sentinelSlot;
   auto active = _slot->active();
-  str_replace(ret, "$ID", std::to_string(active->getID()));
-  str_replace(ret, "$HP", std::to_string(active->hp()));
-  str_replace(ret, "$NAME$$$$$$$$", active->getName(), false);
-  str_replace(ret, "$T", std::string{charify(active->type())});
-  str_replace(ret, "$E", std::to_string(_slot->viewEnergy().size()));
-
+  str_replace_sent(ret, "$ID", std::to_string(active->getID()));
+  str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
   auto tool = _slot->viewTool();
   std::string toolName = "---";
   if (tool) toolName = tool->getName();
-  str_replace(ret, "$TOOL$$$$$$", toolName);
-
-  int i = 0;
-  for (const auto& attack : active->attacks())
-  {
-    str_replace(ret, "$A"  + std::to_string(i) + "$$$$", attack.name(), false);
-    str_replace(ret, "$D"  + std::to_string(i), "---");
-    std::string requirements;
-    for (const auto r : attack.requirements()) requirements += charify(r);
-    str_replace(ret, "$AR" + std::to_string(i), requirements);
-    ++i;
-  }
-
-  str_replace(ret, "$W", std::string{charify(active->weakness())});
-  str_replace(ret, "$R", std::string{charify(active->resistance())});
-  str_replace(ret, "$C", std::to_string(active->retreatCost()));
-  std::string conditions;
-  for (const auto& status : _slot->conditions())
-    conditions += charify(status);
-  str_replace(ret, "$STATUS$$$$$$$$$", conditions);
-
+  str_replace_sent(ret, "$TOOL", toolName);
+  pokemonStr(ret, active);
   return ret;
 }
 
-std::string SimplePrinter::activeStr(BoardSlot* const _activeSlot) const
+std::string SimplePrinter::activeStr(BoardSlot* const _activeSlot, Status *const _activeStatus) const
 {
-  return slotStr(_activeSlot);
+  auto ret = slotStr(_activeSlot);
+  std::string conditions;
+  for (const auto& status : _activeStatus->conditions())
+    conditions += charify(status);
+  str_replace_sent(ret, "$STATUS", conditions);
+  return ret;
 }
 
 std::string SimplePrinter::benchStr(Bench * const _bench) const
 {
   std::string ret;
   // Produce the bench string
-  std::vector<std::string> benchVec(13,"");
+  std::vector<std::string> benchVec(12,"");
   for (unsigned i = 1; i < 6; ++i)
   {
     BoardSlot* slot = _bench->slotAt(i);
@@ -158,34 +153,39 @@ std::string SimplePrinter::benchStr(Bench * const _bench) const
   return ret;
 }
 
-std::string SimplePrinter::pokemonCardStr(PokemonCard * const _card) const
+void SimplePrinter::pokemonStr(std::string &_str, PokemonCard * const _card) const
 {
-  std::string ret = k_sentinelPokemonCard;
-  str_replace(ret, "$TYPE", std::string{stringify(_card->cardType())});
-  str_replace(ret, "$HP", std::to_string(_card->hp()));
-  str_replace(ret, "$NAME$", _card->getName(), false);
-  str_replace(ret, "$T", std::string{charify(_card->type())});
+  str_replace_sent(_str, "$HP", std::to_string(_card->hp()));
+  str_replace_sent(_str, "$NAME", _card->getName(), false);
+  str_replace_sent(_str, "$T", std::string{charify(_card->type())});
 
   int i = 0;
   for (const auto& attack : _card->attacks())
   {
-    str_replace(ret, "$A"  + std::to_string(i) + "$$$$$", attack.name(), false);
-    str_replace(ret, "$D"  + std::to_string(i), "---");
+    str_replace_sent(_str, "$A"  + std::to_string(i), attack.name(), false);
+    str_replace_sent(_str, "$D"  + std::to_string(i), "---");
     std::string requirements;
     for (const auto r : attack.requirements()) requirements += charify(r);
-    str_replace(ret, "$AR" + std::to_string(i), requirements);
+    str_replace_sent(_str, "$AR" + std::to_string(i), requirements);
     ++i;
   }
   for (; i < 2; ++i)
   {
-    str_replace(ret, "$A"  + std::to_string(i) + "$$$$$", "", false);
-    str_replace(ret, "$D"  + std::to_string(i), "");
-    str_replace(ret, "$AR" + std::to_string(i), "");
+    str_replace_sent(_str, "$A"  + std::to_string(i), "", false);
+    str_replace_sent(_str, "$D"  + std::to_string(i), "");
+    str_replace_sent(_str, "$AR" + std::to_string(i), "");
   }
 
-  str_replace(ret, "$W", std::string{charify(_card->weakness())});
-  str_replace(ret, "$R", std::string{charify(_card->resistance())});
-  str_replace(ret, "$C", std::to_string(_card->retreatCost()));
+  str_replace_sent(_str, "$W", std::string{charify(_card->weakness())});
+  str_replace_sent(_str, "$R", std::string{charify(_card->resistance())});
+  str_replace_sent(_str, "$C", std::to_string(_card->retreatCost()));
+}
+
+std::string SimplePrinter::pokemonCardStr(PokemonCard * const _card) const
+{
+  std::string ret = k_sentinelPokemonCard;
+  str_replace_sent(ret, "$TYPE", std::string{stringify(_card->cardType())});
+  pokemonStr(ret, _card);
   return ret;
 }
 
@@ -194,16 +194,16 @@ std::string SimplePrinter::energyCardStr(EnergyCard * const _card) const
   std::string ret;
   switch(_card->type())
   {
-//    case PTCG::TYPE::COLOURLESS : {ret='C'; break;}
-//    case PTCG::TYPE::DARKNESS :   {ret='D'; break;}
-//    case PTCG::TYPE::DRAGON :     {ret='N'; break;}
-//    case PTCG::TYPE::FAIRY :      {ret='Y'; break;}
-//    case PTCG::TYPE::FIGHTING :   {ret='F'; break;}
+    //    case PTCG::TYPE::COLOURLESS : {ret='C'; break;}
+    //    case PTCG::TYPE::DARKNESS :   {ret='D'; break;}
+    //    case PTCG::TYPE::DRAGON :     {ret='N'; break;}
+    //    case PTCG::TYPE::FAIRY :      {ret='Y'; break;}
+    //    case PTCG::TYPE::FIGHTING :   {ret='F'; break;}
     case PTCG::TYPE::FIRE :       {ret=k_fireCard; break;}
     case PTCG::TYPE::GRASS :      {ret=k_leafCard; break;}
     case PTCG::TYPE::LIGHTNING :  {ret=k_electricCard; break;}
-//    case PTCG::TYPE::METAL :      {ret='M'; break;}
-//    case PTCG::TYPE::PSYCHIC :    {ret='P'; break;}
+      //    case PTCG::TYPE::METAL :      {ret='M'; break;}
+      //    case PTCG::TYPE::PSYCHIC :    {ret='P'; break;}
     case PTCG::TYPE::WATER :      {ret=k_waterCard; break;}
     default : {ret=k_blankCard; break;}
 
@@ -214,8 +214,8 @@ std::string SimplePrinter::energyCardStr(EnergyCard * const _card) const
 std::string SimplePrinter::trainerCardStr(TrainerCard * const _card, const std::string &_type) const
 {
   std::string ret = k_sentinelTrainerCard;
-  str_replace(ret, "$TYPE", _type);
-  str_replace(ret, "$NAME$$$$$$$$", _card->getName(), false);
+  str_replace_sent(ret, "$TYPE", _type);
+  str_replace_sent(ret, "$NAME", _card->getName(), false);
   return ret;
 }
 
@@ -236,14 +236,33 @@ std::string SimplePrinter::cardStr(Card * const _card) const
   return ret;
 }
 
+void reline(std::vector<std::string> &io_vec, const size_t _len, const size_t _startLine)
+{
+  const size_t lines = io_vec.size();
+  for (size_t i = _startLine; i < lines; ++i)
+  {
+    io_vec.push_back(io_vec[i].substr(_len));
+    io_vec[i].erase(_len);
+  }
+}
+
 std::string SimplePrinter::handStr(Hand * const _hand) const
 {
   std::string ret;
   auto cards = _hand->view();
-  std::vector<std::string> handVec(12,"");
+  std::vector<std::string> handVec(11,"");
   for (const auto & card : cards)
   {
     addVec(handVec, split(cardStr(card.get())));
+  }
+  // The max width of the hand is 10 cards
+  size_t line = 1, len = (15 * 10);
+  // We reline the cards until there are no lines longer than 10
+  while ((handVec.end()-1)->size() > len)
+  {
+    size_t temp = handVec.size();
+    reline(handVec, len, line);
+    line = temp;
   }
   // Concatenate the hand
   for (auto l : handVec) ret += (l + '\n');
@@ -253,7 +272,7 @@ std::string SimplePrinter::handStr(Hand * const _hand) const
 std::string SimplePrinter::prizeStr(PrizeCards * const _prize) const
 {
   std::string ret;
-  std::vector<std::string> prizeVec(5,"");
+  std::vector<std::string> prizeVec(4,"");
   for (const auto & card : _prize->view())
   {
     if (card)
@@ -269,7 +288,7 @@ std::string SimplePrinter::prizeStr(PrizeCards * const _prize) const
 void SimplePrinter::drawBoard(Board* _board, const bool _isOp)
 {
   Bench& bench = _board->m_bench;
-  std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0))<<'\n';
+  std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
   std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
   std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
   std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);

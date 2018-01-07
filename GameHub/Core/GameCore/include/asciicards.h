@@ -12,8 +12,7 @@ static constexpr auto k_sentinelSlot = R"(
 |--------------------|
 | [$W]   [$R]   [$C] |
 | [$STATUS$$$$$$$$$] |
-*--------------------*
-                     )";
+*--------------------*)";
 static constexpr auto k_blankSlot = R"(
 *--------------------*
 |                    |
@@ -25,8 +24,7 @@ static constexpr auto k_blankSlot = R"(
 |                    |
 |                    |
 |                    |
-*--------------------*
-                     )";
+*--------------------*)";
 static constexpr auto k_sentinelPokemonCard = R"(
 *---[$TYPE]---*
 |$NAME$  [$HP]|
@@ -37,8 +35,7 @@ static constexpr auto k_sentinelPokemonCard = R"(
 |$D1      $AR1|
 |[$W]     [$R]|
 |[$C]         |
-*-------------*
-                     )";
+*-------------*)";
 static constexpr auto k_blankCard = R"(
 *---[BLANK]---*
 |             |
@@ -49,8 +46,7 @@ static constexpr auto k_blankCard = R"(
 |             |
 |             |
 |             |
-*-------------*
-                     )";
+*-------------*)";
 static constexpr auto k_sentinelTrainerCard = R"(
 *---[$TYPE]---*
 |$NAME$$$$$$$$|
@@ -61,18 +57,15 @@ static constexpr auto k_sentinelTrainerCard = R"(
 |  ---------  |
 |             |
 |             |
-*-------------*
-                     )";
+*-------------*)";
 static constexpr auto k_prizeCard = R"(
 *---*
 | ? |
-*---*
-                     )";
+*---*)";
 static constexpr auto k_emptyPrize = R"(
 -----
 -----
------
-                     )";
+-----)";
 
 static constexpr auto k_electricCard = R"(
 *---[ENERG]---*
@@ -84,8 +77,7 @@ static constexpr auto k_electricCard = R"(
 |    /==/     |
 |   /=/       |
 |  /          |
-*-------------*
-                    )";
+*-------------*)";
 static constexpr auto k_fireCard = R"(
 *---[ENERG]---*
 |     |\      |
@@ -96,8 +88,7 @@ static constexpr auto k_fireCard = R"(
 |  / \ \/  || |
 |  \  \   //  |
 |   -------   |
-*-------------*
-                    )";
+*-------------*)";
 static constexpr auto k_leafCard = R"(
 *---[ENERG]---*
 |     /|\     |
@@ -108,8 +99,7 @@ static constexpr auto k_leafCard = R"(
 |   \ _|_ /   |
 |    \ | /    |
 |     | |     |
-*-------------*
-                    )";
+*-------------*)";
 static constexpr auto k_waterCard = R"(
 *---[ENERG]---*
 |             |
@@ -120,7 +110,6 @@ static constexpr auto k_waterCard = R"(
 | |    _    | |
 |  \  |_|  /  |
 |    -----    |
-*-------------*
-                    )";
+*-------------*)";
 
 #endif // ASCIICARDS_H

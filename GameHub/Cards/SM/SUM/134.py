@@ -1,6 +1,11 @@
-import poke
-def canPlay():
-     return True
+import poke as p 
+
+def filter(card):
+    return card.cardType() == p.CARD.POKEMON and card.stage()
+
+def canPlay(h):
+     return len(h.viewDeck(p.PLAYER.SELF)) > 0 
+
 def timerBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -20,10 +25,14 @@ def timerBall(h):
     # reveal - whether the enemy sees the card (True/False)
     
     # flip coin twice
-    if(flipCoin(2)==1):
-        cards = h.playerChoice(SELF, SELF, DECK, EVOLUTION_POKEMON, DRAW, 1)
-        h.moveCard(cards, SELF, DECK, HAND, True)
-    elif(flipCoin(2)==2):
-        cards = h.playerChoice(SELF, SELF, DECK, EVOLUTION_POKEMON, DRAW, 2)
-        h.moveCard(cards, SELF, DECK, HAND, True)
-    h.shuffleDeck()
+    headsAmount = flipCoin(2)
+    if headsAmount:
+        cards = h.playerCardChoice( 
+            p.PLAYER.SELF,  
+            p.PLAYER.SELF,  
+            p.PILE.DECK,  
+            p.ACTION.DRAW, 
+            filter,  
+            headsAmount)
+        h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
+    h.shuffleDeck(p.PLAYER.SELF)

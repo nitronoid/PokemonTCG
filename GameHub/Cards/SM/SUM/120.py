@@ -1,6 +1,9 @@
-import poke
+import poke as p 
+
+def filter(card):
+    return True
 def canPlay(h):
-    return len(h.viewDeck(SELF)) >= 3 
+    return len(h.viewDeck(p.PLAYER.SELF)) > 0  
 def hau(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -19,5 +22,12 @@ def hau(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    cards = h.playerChoice(SELF, SELF, DECK, ALL, DRAW, 3)
-    h.moveCard(cards, SELF, DECK, HAND, False)
+    cards = h.playerCardChoice(
+        p.PLAYER.SELF, 
+        p.PLAYER.SELF, 
+        p.PILE.DECK, 
+        p.ACTION.DRAW, 
+        filter, 
+        3)
+
+    h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)

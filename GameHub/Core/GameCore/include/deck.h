@@ -15,7 +15,7 @@ public:
     void init(std::vector<std::unique_ptr<Card>> &&_cards);
 
     virtual void put(std::unique_ptr<Card> &&_card) override;
-    virtual std::unique_ptr<Card> take(const unsigned _index) override;
+    virtual std::unique_ptr<Card> take(const size_t _index) override;
     std::unique_ptr<Card> takeTop();
     std::vector<std::unique_ptr<Card>> view() const;
     inline bool empty() const { return m_cards.empty(); }

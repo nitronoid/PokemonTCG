@@ -34,30 +34,24 @@ public:
   {}
 
   // Fix this later
-  virtual bool canPlay() override { return true; }
+  virtual bool canPlay() const override;
 
-  virtual Card* clone() override
-  {
-    return new PokemonCard(*this);
-  }
+  virtual Card* clone() override;
 
-  inline void attack(const unsigned &_attackIndex, Game& _game)
-  {
-    m_attacks[_attackIndex].attack(_game);
-  }
+  void attack(const unsigned &_attackIndex, Game& _game);
 
-  virtual PTCG::CARD cardType()     const override { return PTCG::CARD::POKEMON; }
-  inline std::string preEvolution() const { return m_preEvolution; }
-  inline PTCG::TYPE  type()         const { return m_type; }
-  inline PTCG::TYPE  weakness()     const { return m_weakness; }
-  inline PTCG::TYPE  resistance()   const { return m_resistance; }
-  inline int         hp()           const { return m_hp; }
-  inline unsigned    retreatCost()  const { return m_retreatCost; }
-  inline unsigned    stage()        const { return m_stage; }
+  virtual PTCG::CARD cardType()     const override;
+  std::string preEvolution() const;
+  PTCG::TYPE  type()         const;
+  PTCG::TYPE  weakness()     const;
+  PTCG::TYPE  resistance()   const;
+  int         hp()           const;
+  unsigned    retreatCost()  const;
+  unsigned    stage()        const;
 
-  inline const std::vector<Attack>& attacks() const { return m_attacks; }
+  const std::vector<Attack>& attacks() const;
   // Purely for testing
-  inline unsigned    attackNum()    const { return static_cast<unsigned>(m_attacks.size()); }
+  unsigned    attackNum()    const;
 
 private:
   PTCG::TYPE  m_type;

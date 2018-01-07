@@ -5,6 +5,6 @@
     "Ability" : {
         "func" : "energyRetrieval",
         "duration" : "S",
-        "phase" : "M"
+        "phase" : "N"
     }
 }

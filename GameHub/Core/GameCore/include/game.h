@@ -93,7 +93,7 @@ public:
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeAllCondition(const PTCG::PLAYER &_target);
-  inline unsigned getTurnCount() const {return m_turnCount;}
+  inline unsigned turnCount() const {return m_turnCount;}
   void switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex);
   //player needs to choose what to move into active if _index = 0
   void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const size_t &_index=0);

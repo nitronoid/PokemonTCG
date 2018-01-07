@@ -1,7 +1,10 @@
 import poke as p 
 
-def filter(card):
+def pokeFilter(card):
     return card.cardType() == p.CARD.POKEMON
+
+def discardFilter(card):
+    return True
 # checks if the amount of cards in your hand is bigger than 2 
 # return true if yes else return false 
 def canPlay(h):
@@ -30,15 +33,15 @@ def ultraBall(h):
         p.PLAYER.SELF, 
         p.PILE.HAND, 
         p.ACTION.DISCARD,
-        True,
+        discardFilter,
         2) 
     h.moveCards(discardChoice, p.PLAYER.SELF, p.PILE.HAND, p.PILE.DISCARD)
     pokeCard = h.playerCardChoice(
         p.PLAYER.SELF, 
         p.PLAYER.SELF, 
         p.PILE.DECK,
-        p.ACTION.DRAW
-        filter,
+        p.ACTION.DRAW,
+        pokeFilter,
         1)
     h.moveCards(pokeCard, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
     # dont know if this is right

@@ -2,8 +2,10 @@ import poke as p
 
 def filter(card):
     return True
+
 def canPlay(h):
-    return len(h.viewDeck(p.PLAYER.SELF)) > 0  
+    return len(h.viewDeck(p.PLAYER.SELF)) > 0 
+
 def hau(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -30,4 +32,4 @@ def hau(h):
         filter, 
         3)
 
-    h.moveCard(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
+    h.moveCards(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)

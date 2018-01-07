@@ -1,6 +1,6 @@
 #include "pokemoncard.h"
 
-bool PokemonCard::canPlay() const { return true; }
+bool PokemonCard::canPlay(Game &) const { return true; }
 
 Card* PokemonCard::clone()
 {

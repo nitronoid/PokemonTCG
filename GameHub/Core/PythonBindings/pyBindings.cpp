@@ -138,12 +138,14 @@ PYBIND11_MODULE(poke, m)
       .def(py::init<
            std::function<void(Game*)>,
            const PTCG::TRIGGER,
-           const PTCG::DURATION
+           const PTCG::DURATION,
+           const std::function<bool(Game*const)>
            >())
       .def("getTrigger", &Ability::getTrigger);
 
   py::class_<Game>(m, "Game")
       .def(py::init<>())
+      .def("turnCount", &Game::turnCount)
       .def("dealDamage", &Game::dealDamage, py::arg("_damage") ,py::arg("_id") = 0u, py::arg("_applyWeak") = true)
       .def("addDamageCounter", &Game::addDamageCounter,
            py::arg("_damage"),

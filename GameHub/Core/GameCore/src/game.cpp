@@ -98,7 +98,7 @@ void Game::playSupport(TrainerCard* const _support, const size_t _index)
 
 bool Game::canPlay(const size_t _index)
 {
-  return viewHand(PTCG::PLAYER::SELF)[_index]->canPlay();
+  return viewHand(PTCG::PLAYER::SELF)[_index]->canPlay(*this);
 }
 
 void Game::playCard(const size_t _index)
@@ -108,7 +108,7 @@ void Game::playCard(const size_t _index)
   auto hand = viewHand(PTCG::PLAYER::SELF);
   auto chosenCard = hand[_index].get();
   using card = PTCG::CARD;
-  if (chosenCard->canPlay())
+  if (chosenCard->canPlay(*this))
   {
     switch (chosenCard->cardType())
     {

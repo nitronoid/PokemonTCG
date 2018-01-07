@@ -6,7 +6,8 @@ def filter(card):
 def canPlay(h):
     # checks if deck is not empty && checks if the type of pokemon is in the deck
     # if both return TRUE
-    return len(h.viewDeck(p.CARD.SELF)) > 0
+    return len(h.viewDeck(p.PLAYER.SELF)) > 0
+
 def nestBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)
@@ -32,7 +33,8 @@ def nestBall(h):
         p.ACTION.DRAW,
         filter,
         1)
-   freeSlots = h.freeSlots(p.PLAYER.SELF)
-   amount = min(len(freeSlots), len(cards))
-   h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[:amount], freeSlots[:amount])
-   h.shuffleDeck(p.PLAYER.SELF)
+    freeSlots = h.freeSlots(p.PLAYER.SELF)
+    amount = min(len(freeSlots), len(cards))
+    h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[:amount], freeSlots[:amount])
+    h.shuffleDeck(p.PLAYER.SELF)
+

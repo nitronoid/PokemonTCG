@@ -115,7 +115,7 @@ PTCG::CARD selectTrainerType(const char _c)
 }
 
 
-Ability loadAbility(const QJsonObject  &_jsonCard)
+Ability loadAbility(const QJsonObject  &_jsonCard, const std::string &_canPlayName = "")
 {
   Ability cardAbility;
   int id = intify(_jsonCard["ID"]);
@@ -127,9 +127,21 @@ Ability loadAbility(const QJsonObject  &_jsonCard)
     if (_jsonCard.contains("Ability"))
     {
       auto jAbility = _jsonCard["Ability"].toObject();
-      auto pyfunc = module.attr(stringify(jAbility["func"]).c_str());
-      auto ability = pyfunc.cast<AbilityFunc>();
-      cardAbility = Ability(ability, selectPhase(stringify(jAbility["phase"])[0]), selectDuration(stringify(jAbility["duration"])[0]));
+      auto pyAbilty = module.attr(stringify(jAbility["func"]).c_str());
+      auto ability = pyAbilty.cast<AbilityFunc>();
+
+      CanPlayFunc canPlay = [](auto){return true;};
+      if (!_canPlayName.empty())
+      {
+        auto pyCanPlay = module.attr(_canPlayName.c_str());
+        canPlay = pyCanPlay.cast<CanPlayFunc>();
+      }
+      cardAbility = Ability(
+            ability,
+            selectPhase(stringify(jAbility["phase"])[0]),
+            selectDuration(stringify(jAbility["duration"])[0]),
+            canPlay
+            );
     }
   }
   catch (pybind11::error_already_set e)
@@ -180,7 +192,7 @@ TrainerCard* CardFactory::loadTrainerCard(const QJsonObject &_jsonCard) const
   return new TrainerCard(
         static_cast<unsigned>(intify(_jsonCard["ID"])),
         stringify(_jsonCard["Name"]),
-        loadAbility(_jsonCard),
+        loadAbility(_jsonCard, "canPlay"),
         selectTrainerType(stringify(_jsonCard["Trainer"])[0])
         );
 }

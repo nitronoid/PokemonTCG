@@ -5,10 +5,11 @@ def filter(card):
 
 def canPlay(h):
     # checks if there is pokemon on bench && active && needs healing
-    for slot in h.viewBoard(p.PLAYER.SELF):
-        if slot.damage():
+    for slot in h.viewBench(p.PLAYER.SELF):
+        if slot.getDamage():
             return True
-    return False 
+    return False
+
 def potion(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
     # thinker - Player who makes the choice (SELF/ENEMY)

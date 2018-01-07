@@ -16,7 +16,8 @@ public:
       Bench *_attacker,
       Bench *_defender,
       const size_t &_defenderIndex,
-      const int &_damage
+      const int &_damage,
+      const bool &_applyWeak = true
       );
 
   //factor only base damage, simulates "Put x Damage Counters onto xxxx Pokemon from special conditions, attacks."

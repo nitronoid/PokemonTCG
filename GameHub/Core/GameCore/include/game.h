@@ -19,7 +19,7 @@ public:
   Game clone() const;
   void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
 
-  void dealDamage(const int _damage, const size_t _id = 0);
+  void dealDamage(const int _damage, const bool &_applyWeak = true, const size_t _id = 0);
   void addDamageCounter(const int _damage, const PTCG::PLAYER _player = PTCG::PLAYER::ENEMY, const unsigned _id = 0);
   void healDamage(const int _heal, const unsigned _id = 0);
   unsigned flipCoin(const unsigned _num);
@@ -135,15 +135,12 @@ private:
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
   void checkDefeated(const PTCG::PLAYER &_player, const unsigned &_index);
-  void paralysis();
-  void confuse();
-  void sleep();
   void playPokemon(PokemonCard* const _pokemon, const size_t _index);
   void playItem(TrainerCard* const _item, const size_t _index);
   void playTool(TrainerCard* const _tool, const size_t _index);
   void playSupport(TrainerCard* const _support, const size_t _index);
   void playEnergy(EnergyCard* const _energy, const size_t _index);
-
+  void resolveConditions();
 private:
   GuiModule* m_drawer;
   std::array<std::unique_ptr<Player>, 2> m_players;

@@ -307,6 +307,8 @@ void Game::nextTurn()
     }
     // Now that damage calc is over, we remove any damage/defense bonuses
     currentBoard.m_bench.activeStatus()->resetDamageEffects();
+    //Resolve all between-turn status conditions
+    resolveConditions();
     // Apply all effects triggered by the end of a turn
     for (const auto & effect : endTriggered) effect.use(*this);
     std::cout<<m_turnCount<<'\n';
@@ -662,7 +664,8 @@ void Game::revealCards(
 void Game::attack(PokemonCard* _pokemon, const unsigned _index)
 {
   //if your pokemon can attack...
-  if(m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->canAttack())
+  if(!checkCondition(PTCG::CONDITION::ASLEEP)||
+     !checkCondition(PTCG::CONDITION::PARALYZED))
   {
     //check for confusion
     if(checkCondition(PTCG::CONDITION::CONFUSED))
@@ -670,11 +673,15 @@ void Game::attack(PokemonCard* _pokemon, const unsigned _index)
       //if confusion activates and you roll heads, attack normally.
       if(activateCondition(PTCG::CONDITION::CONFUSED)) _pokemon->attack(_index, *this);
     }
+    else
+    {
+      _pokemon->attack(_index, *this);
+    }
   }
 
 }
 
-void Game::dealDamage(const int _damage, const size_t _id)
+void Game::dealDamage(const int _damage, const bool &_applyWeak, const size_t _id)
 {
   if(_id<6)
   {
@@ -682,14 +689,17 @@ void Game::dealDamage(const int _damage, const size_t _id)
           &m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,
         &m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench,
         _id,
-        _damage);
+        _damage,
+        _applyWeak);
     std::cout<<"Attack did: "<<_damage<<" damage!\n";
+    checkDefeated(PTCG::PLAYER::ENEMY,_id);
   }
 }
 
 void Game::addDamageCounter(const int _damage, const PTCG::PLAYER _player, const unsigned _id)
 {
   m_damageHandler.rawDamage(m_boards[playerIndex(_player)].m_bench.slotAt(_id),_damage);
+  checkDefeated(_player,_id);
 }
 
 void Game::healDamage(const int _heal, const unsigned _id)
@@ -790,8 +800,31 @@ void Game::checkDefeated(const PTCG::PLAYER &_player, const unsigned &_index)
     std::function<bool(Card*const)> match = [](Card* const){return true;};
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
     bench.slotAt(_index)->setDamage(0);
+    //Taking a prize card in prize card.
+    PTCG::PLAYER winner;
+    if(_player == PTCG::PLAYER::SELF)
+    {
+      winner = PTCG::PLAYER::ENEMY;
+    }
+    else winner = PTCG::PLAYER::SELF;
+    auto choice = playerCardChoice(winner,winner,PTCG::PILE::PRIZE,PTCG::ACTION::DRAW,[](Card * const){return true;},1);
+    moveCards(choice,winner,PTCG::PILE::PRIZE,PTCG::PILE::HAND);
   }
 }
+
+void Game::resolveConditions()
+{
+  auto conditions = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->conditions();
+  if (!conditions.empty())
+  {
+    for (size_t i =0;i<conditions.size();++i)
+    {
+      if(conditions.at(i)!=PTCG::CONDITION::CONFUSED)
+        activateCondition(conditions.at(i));
+    }
+  }
+}
+
 
 bool Game::checkCondition(const PTCG::CONDITION &_condition)
 {
@@ -809,7 +842,7 @@ bool Game::activateCondition(const PTCG::CONDITION &_condition)
   {
     case PTCG::CONDITION::ASLEEP:
       {
-        m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->setCanAttack(false);
+        if(flipCoin(1)) {removeCondition(PTCG::PLAYER::SELF,_condition); }
         return true;
         break;
       }
@@ -818,7 +851,7 @@ bool Game::activateCondition(const PTCG::CONDITION &_condition)
         addDamageCounter(m_damageHandler.getBurn(),PTCG::PLAYER::SELF);
         if(flipCoin(1))
         {
-          m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->removeCondition(PTCG::CONDITION::BURNED);
+          m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->removeCondition(_condition);
         }
         return true;
         break;
@@ -835,7 +868,7 @@ bool Game::activateCondition(const PTCG::CONDITION &_condition)
       }
     case PTCG::CONDITION::PARALYZED:
       {
-        m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->setCanAttack(false);
+        removeCondition(PTCG::PLAYER::SELF,_condition);
         return true;
         break;
       }
@@ -863,20 +896,6 @@ void Game::removeCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_
 void Game::removeAllCondition(const PTCG::PLAYER &_target)
 {
   m_boards[playerIndex(_target)].m_bench.activeStatus()->removeAllConditions();
-}
-
-void Game::paralysis()
-{
-  //TODO AFTER GAME LOOP
-}
-
-void Game::confuse()
-{
-  //TODO AFTER GAMELOOP
-}
-void Game::sleep()
-{
-  //TODO AFTER LOOP
 }
 
 unsigned Game::flipCoin(const unsigned _num)

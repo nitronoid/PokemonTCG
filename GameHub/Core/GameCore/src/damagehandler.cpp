@@ -12,21 +12,20 @@ bool DamageHandler::heal(BoardSlot *_slot, const int &_value)
 
 }
 
-void DamageHandler::generalDamage(
-    Bench *_attacker,
+void DamageHandler::generalDamage(Bench *_attacker,
     Bench *_defender,
     const size_t &_defenderIndex,
-    const int &_damage)
+    const int &_damage,
+    const bool &_applyWeak)
 {
   int totalDamage;
   auto attackerSlot = _defender->slotAt(0);
   auto defenderSlot = _defender->slotAt(_defenderIndex);
-  //If this is an active pokemon:
-  if(!_defenderIndex)
+  //If this is an active pokemon and applies weakness/res:
+  auto attackerStatus = _attacker->activeStatus();
+  auto defenderStatus = _defender->activeStatus();
+  if(!_defenderIndex && _applyWeak)
   {
-    auto attackerStatus = _attacker->activeStatus();
-    auto defenderStatus = _defender->activeStatus();
-
     int weakRes = applyWeakRes(defenderSlot, attackerSlot);
     //if it says -20, it's resistance and 2 for weakness multiplier
     if(weakRes<=0)
@@ -43,6 +42,13 @@ void DamageHandler::generalDamage(
           weakRes + applyBonusDamage(defenderStatus, attackerStatus, PTCG::ORDER::AFTER);
       defenderSlot->takeDamage(std::max(0,totalDamage));
     }
+  }
+  else if(!_defenderIndex && _applyWeak)
+  {
+    totalDamage =
+        _damage + applyBonusDamage(defenderStatus, attackerStatus, PTCG::ORDER::BEFORE) +
+        applyBonusDamage(defenderStatus, attackerStatus, PTCG::ORDER::AFTER);
+    defenderSlot->takeDamage(std::max(0,totalDamage));
   }
   else //if target is bench
   {

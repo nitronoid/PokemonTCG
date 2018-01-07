@@ -13,7 +13,8 @@ public:
 
   virtual Player* clone() const override;
 
-  virtual std::vector<size_t> chooseCards(const PTCG::PLAYER _player,
+  virtual std::vector<size_t> chooseCards(
+      const PTCG::PLAYER _player,
       const PTCG::PILE _origin,
       const PTCG::ACTION _action,
       const std::vector<std::unique_ptr<Card>> &_options,

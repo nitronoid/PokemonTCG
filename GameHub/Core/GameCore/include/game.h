@@ -19,7 +19,7 @@ public:
   Game clone() const;
   void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
 
-  void dealDamage(const int _damage, const bool &_applyWeak = true, const size_t _id = 0);
+  void dealDamage(const int _damage, const size_t _id = 0, const bool &_applyWeak = true);
   void addDamageCounter(const int _damage, const PTCG::PLAYER _player = PTCG::PLAYER::ENEMY, const unsigned _id = 0);
   void healDamage(const int _heal, const unsigned _id = 0);
   unsigned flipCoin(const unsigned _num);
@@ -89,15 +89,14 @@ public:
 
   void addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
   void addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
-  bool activateCondition(const PTCG::CONDITION &_condition);
-  bool checkCondition(const PTCG::CONDITION &_condition);
+  bool hasCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeAllCondition(const PTCG::PLAYER &_target);
   inline unsigned getTurnCount() const {return m_turnCount;}
   void switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex);
   //player needs to choose what to move into active if _index = 0
-  void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const unsigned &_index=0);
+  void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const size_t &_index=0);
   void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<size_t> _pileIndex, std::vector<size_t> _benchIndex);
   bool evolve(PokemonCard * const _postEvo, const size_t &_handIndex, const size_t &_index);
   bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);
@@ -134,13 +133,16 @@ private:
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
-  void checkDefeated(const PTCG::PLAYER &_player, const unsigned &_index);
+  void handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
   void playPokemon(PokemonCard* const _pokemon, const size_t _index);
   void playItem(TrainerCard* const _item, const size_t _index);
   void playTool(TrainerCard* const _tool, const size_t _index);
   void playSupport(TrainerCard* const _support, const size_t _index);
   void playEnergy(EnergyCard* const _energy, const size_t _index);
-  void resolveConditions();
+  void resolveAllEndConditions(const PTCG::PLAYER _player);
+  bool resolveAttackConditions(const PTCG::PLAYER _player);
+  void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
+
 private:
   GuiModule* m_drawer;
   std::array<std::unique_ptr<Player>, 2> m_players;

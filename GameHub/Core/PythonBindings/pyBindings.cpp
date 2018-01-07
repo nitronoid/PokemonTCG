@@ -143,7 +143,7 @@ PYBIND11_MODULE(poke, m)
 
   py::class_<Game>(m, "Game")
       .def(py::init<>())
-      .def("dealDamage", &Game::dealDamage, py::arg("_damage"), py::arg("_applyWeak") = true ,py::arg("_id") = 0u)
+      .def("dealDamage", &Game::dealDamage, py::arg("_damage") ,py::arg("_id") = 0u, py::arg("_applyWeak") = true)
       .def("addDamageCounter", &Game::addDamageCounter,
            py::arg("_damage"),
            py::arg("_player") = PTCG::PLAYER::ENEMY,

@@ -46,6 +46,7 @@ public:
   void addCondition(const PTCG::CONDITION _condition);
   void removeCondition(const PTCG::CONDITION _condition);
   void removeAllConditions();
+  bool hasCondition(const PTCG::CONDITION _condition) const;
   std::vector<PTCG::CONDITION> conditions() const;
   void setProtected(const bool &_val);
 private:

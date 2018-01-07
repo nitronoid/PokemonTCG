@@ -13,10 +13,11 @@ void Player::retreat()
   if(m_canRetreat)
   {
     constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
-    auto switchChoice = m_parentGame.playerSlotChoice(PTCG::PLAYER::SELF,PTCG::PLAYER::SELF,PTCG::ACTION::MOVE,1, filter);
-    auto bench = viewBench(PTCG::PLAYER::SELF);
-    if(!m_parentGame.checkCondition(PTCG::CONDITION::PARALYZED) ||
-       !m_parentGame.checkCondition(PTCG::CONDITION::ASLEEP))
+    constexpr auto self = PTCG::PLAYER::SELF;
+    auto switchChoice = m_parentGame.playerSlotChoice(self, self, PTCG::ACTION::MOVE, 1, filter);
+    auto bench = viewBench(self);
+    if(!m_parentGame.hasCondition(self, PTCG::CONDITION::PARALYZED) ||
+       !m_parentGame.hasCondition(self, PTCG::CONDITION::ASLEEP))
     {
       if(bench.at(0).numEnergy() >= bench.at(0).active()->retreatCost() &&
          switchChoice[0] < 6 && switchChoice[0] != 0 &&
@@ -26,15 +27,15 @@ void Player::retreat()
         std::function<bool(Card*const)> match = [](Card* const){return true;};
         //we need to choose our energy to discard
         auto choice = m_parentGame.playerEnergyChoice(
-              PTCG::PLAYER::SELF,
-              PTCG::PLAYER::SELF,
+              self,
+              self,
               PTCG::PILE::DISCARD,
               PTCG::ACTION::DISCARD,
               0,
               match,
               bench.at(0).active()->retreatCost());
-        m_parentGame.removeEnergy(PTCG::PLAYER::SELF, PTCG::PILE::DISCARD,0,choice);
-        m_parentGame.switchActive(PTCG::PLAYER::SELF, switchChoice[0]);
+        m_parentGame.removeEnergy(self, PTCG::PILE::DISCARD,0,choice);
+        m_parentGame.switchActive(self, switchChoice[0]);
         m_canRetreat = false;
       }
     }

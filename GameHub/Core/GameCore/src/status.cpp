@@ -45,6 +45,11 @@ void Status::removeAllConditions()
   m_conditions.clear();
 }
 
+bool Status::hasCondition(const PTCG::CONDITION _condition) const
+{
+  return m_conditions.count(_condition);
+}
+
 std::vector<PTCG::CONDITION> Status::conditions() const
 {
     std::vector<PTCG::CONDITION> cond(m_conditions.begin(), m_conditions.end());

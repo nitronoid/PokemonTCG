@@ -308,7 +308,7 @@ void Game::nextTurn()
     // Now that damage calc is over, we remove any damage/defense bonuses
     currentBoard.m_bench.activeStatus()->resetDamageEffects();
     //Resolve all between-turn status conditions
-    resolveConditions();
+    resolveAllEndConditions(PTCG::PLAYER::SELF);
     // Apply all effects triggered by the end of a turn
     for (const auto & effect : endTriggered) effect.use(*this);
     std::cout<<m_turnCount<<'\n';
@@ -382,7 +382,7 @@ void Game::benchToPile(
     const PTCG::PLAYER &_player,
     const PTCG::PILE &_dest,
     std::function<bool(Card*const)> _match,
-    const unsigned &_index
+    const size_t &_index
     )
 {
   // Get the slot that we are moving from
@@ -663,43 +663,31 @@ void Game::revealCards(
 
 void Game::attack(PokemonCard* _pokemon, const unsigned _index)
 {
-  //if your pokemon can attack...
-  if(!checkCondition(PTCG::CONDITION::ASLEEP)||
-     !checkCondition(PTCG::CONDITION::PARALYZED))
+  if(resolveAttackConditions(PTCG::PLAYER::SELF))
   {
-    //check for confusion
-    if(checkCondition(PTCG::CONDITION::CONFUSED))
-    {
-      //if confusion activates and you roll heads, attack normally.
-      if(activateCondition(PTCG::CONDITION::CONFUSED)) _pokemon->attack(_index, *this);
-    }
-    else
-    {
-      _pokemon->attack(_index, *this);
-    }
+    _pokemon->attack(_index, *this);
   }
-
 }
 
-void Game::dealDamage(const int _damage, const bool &_applyWeak, const size_t _id)
+void Game::dealDamage(const int _damage, const size_t _id, const bool &_applyWeak)
 {
   if(_id<6)
   {
     m_damageHandler.generalDamage(
-          &m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,
+        &m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,
         &m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench,
         _id,
         _damage,
         _applyWeak);
     std::cout<<"Attack did: "<<_damage<<" damage!\n";
-    checkDefeated(PTCG::PLAYER::ENEMY,_id);
+    handleKnockOut(PTCG::PLAYER::ENEMY,_id);
   }
 }
 
 void Game::addDamageCounter(const int _damage, const PTCG::PLAYER _player, const unsigned _id)
 {
   m_damageHandler.rawDamage(m_boards[playerIndex(_player)].m_bench.slotAt(_id),_damage);
-  checkDefeated(_player,_id);
+  handleKnockOut(_player,_id);
 }
 
 void Game::healDamage(const int _heal, const unsigned _id)
@@ -712,19 +700,13 @@ void Game::healDamage(const int _heal, const unsigned _id)
 bool Game::evolve(PokemonCard*const _postEvo, const size_t &_handIndex, const size_t &_index)
 {
   Board& board = m_boards[playerIndex(PTCG::PLAYER::SELF)];
-  //if indexed bench is empty or out of bound
-  if(_index>5)
-  {
-    std::cout<<"selected pokemon is out of bound, evolution failed."<<'\n';
-    return false;
-  }
   //check if chosen card is the correct pokemon to evolve to
-  else if(board.m_bench.slotAt(_index)->canEvolve(_postEvo,m_turnCount))
+  if(board.m_bench.slotAt(_index)->canEvolve(_postEvo,m_turnCount))
   {
     std::vector<size_t> hand = std::vector<size_t>(_handIndex);
     std::vector<size_t> bench = std::vector<size_t>(_index);
     //moving post evolution card from hand to chosen slot, need pileToBench
-    pileToBench(PTCG::PLAYER::SELF,PTCG::PILE::HAND,hand,bench);
+    pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, hand, bench);
     board.m_bench.slotAt(_index)->setTurnPlayed(m_turnCount);
     //remove conditions if evolved pokemon is an active
     if(!_index) board.m_bench.activeStatus()->removeAllConditions();
@@ -742,8 +724,7 @@ bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
     std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
     return false;
   }
-  auto devolvedPokemon = std::unique_ptr<Card>(static_cast<Card*>(board.m_bench.slotAt(_index)->devolvePokemon().release()));
-  board.m_hand.put(std::move(devolvedPokemon));
+  board.m_hand.put(std::unique_ptr<Card>(board.m_bench.slotAt(_index)->devolvePokemon().release()));
   return true;
 }
 
@@ -790,98 +771,78 @@ void Game::removeEnergy(
 }
 
 
-void Game::checkDefeated(const PTCG::PLAYER &_player, const unsigned &_index)
+void Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
 {
   auto& bench = m_boards[playerIndex(_player)].m_bench;
-  if(bench.view().at(_index).isDefeated())
+  if(bench.view()[_index].isDefeated())
   {
-    //discard and reset all state on that slot
-    if(_index==0) removeAllCondition(_player);
-    std::function<bool(Card*const)> match = [](Card* const){return true;};
+    // Match all cards
+    constexpr auto match = [](Card* const){return true;};
+    // Discard and reset all state on that slot
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
     bench.slotAt(_index)->setDamage(0);
+    // If it was the active we need to reset the active condition
+    if(_index==0)
+      bench.activeStatus()->resetAll();
     //Taking a prize card in prize card.
-    PTCG::PLAYER winner;
-    if(_player == PTCG::PLAYER::SELF)
-    {
-      winner = PTCG::PLAYER::ENEMY;
-    }
-    else winner = PTCG::PLAYER::SELF;
-    auto choice = playerCardChoice(winner,winner,PTCG::PILE::PRIZE,PTCG::ACTION::DRAW,[](Card * const){return true;},1);
-    moveCards(choice,winner,PTCG::PILE::PRIZE,PTCG::PILE::HAND);
+    PTCG::PLAYER winner = static_cast<PTCG::PLAYER>((m_turnCount + static_cast<unsigned>(_player) + 1) % 2);
+    auto choice = playerCardChoice(winner, winner, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, match, 1);
+    moveCards(choice, winner, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
   }
 }
 
-void Game::resolveConditions()
+void Game::resolveAllEndConditions(const PTCG::PLAYER _player)
 {
-  auto conditions = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->conditions();
-  if (!conditions.empty())
+  auto conditions = m_boards[playerIndex(_player)].m_bench.activeStatus()->conditions();
+  for (const auto& condition : conditions)
   {
-    for (size_t i =0;i<conditions.size();++i)
-    {
-      if(conditions.at(i)!=PTCG::CONDITION::CONFUSED)
-        activateCondition(conditions.at(i));
-    }
+    resolveEndCondition(_player, condition);
   }
 }
 
-
-bool Game::checkCondition(const PTCG::CONDITION &_condition)
+bool Game::hasCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition)
 {
-  auto conditions = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->conditions();
-  if(std::find(conditions.begin(),conditions.end(),_condition)!= conditions.end())
-  {
-    return true;
-  }
-  return false;
+  // Return if the active has this condition
+  return m_boards[playerIndex(_player)].m_bench.activeStatus()->hasCondition(_condition);
 }
 
-bool Game::activateCondition(const PTCG::CONDITION &_condition)
+bool Game::resolveAttackConditions(const PTCG::PLAYER _player)
+{
+  using cond = PTCG::CONDITION;
+  bool confused;
+  if((confused =  hasCondition(_player, cond::CONFUSED) && !flipCoin(1)))
+    addDamageCounter(m_damageHandler.getConfuse(), _player);
+  // if you flipped heads and you're not alseep or paralyzed
+  return !confused && !(hasCondition(_player, cond::ASLEEP) || hasCondition(_player, cond::PARALYZED));
+}
+
+void Game::resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition)
 {
   switch (_condition)
   {
     case PTCG::CONDITION::ASLEEP:
-      {
-        if(flipCoin(1)) {removeCondition(PTCG::PLAYER::SELF,_condition); }
-        return true;
-        break;
-      }
-    case PTCG::CONDITION::BURNED:
-      {
-        addDamageCounter(m_damageHandler.getBurn(),PTCG::PLAYER::SELF);
-        if(flipCoin(1))
-        {
-          m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.activeStatus()->removeCondition(_condition);
-        }
-        return true;
-        break;
-      }
-    case PTCG::CONDITION::CONFUSED:
-      {
-        if(!flipCoin(1))
-        {
-          addDamageCounter(m_damageHandler.getConfuse(),PTCG::PLAYER::SELF);
-          return false;
-        }
-        return true;
-        break;
-      }
-    case PTCG::CONDITION::PARALYZED:
-      {
-        removeCondition(PTCG::PLAYER::SELF,_condition);
-        return true;
-        break;
-      }
-    case PTCG::CONDITION::POISONED:
-      {
-        addDamageCounter(m_damageHandler.getPoison(),PTCG::PLAYER::SELF);
-        return true;
-        break;
-      }
-    default:
+    {
+      if(flipCoin(1)) removeCondition(_player, _condition);
       break;
+    }
+    case PTCG::CONDITION::BURNED:
+    {
+      addDamageCounter(m_damageHandler.getBurn(), _player);
+      if(flipCoin(1)) removeCondition(_player, _condition);
+      break;
+    }
+    case PTCG::CONDITION::PARALYZED:
+    {
+      removeCondition(_player, _condition);
+      break;
+    }
+    case PTCG::CONDITION::POISONED:
+    {
+      addDamageCounter(m_damageHandler.getPoison(), _player);
+      break;
+    }
+    default: break;
   }
-  return true;
 }
 void Game::applyCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_condition)
 {

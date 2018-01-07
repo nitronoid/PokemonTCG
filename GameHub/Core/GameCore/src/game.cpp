@@ -813,7 +813,7 @@ bool Game::resolveAttackConditions(const PTCG::PLAYER _player)
   if((confused =  hasCondition(_player, cond::CONFUSED) && !flipCoin(1)))
     addDamageCounter(m_damageHandler.getConfuse(), _player);
   // if you flipped heads and you're not alseep or paralyzed
-  return !confused && !(hasCondition(_player, cond::ASLEEP) || hasCondition(_player, cond::PARALYZED));
+  return !(confused || hasCondition(_player, cond::ASLEEP) || hasCondition(_player, cond::PARALYZED));
 }
 
 void Game::resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition)

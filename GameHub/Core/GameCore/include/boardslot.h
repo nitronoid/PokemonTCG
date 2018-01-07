@@ -20,6 +20,7 @@ public:
 
   inline unsigned getTurnPlayed() const { return m_turnPlayed; }
   inline int      getDamage()     const { return m_damageTaken; }
+  inline int      getRemainingHP()const { return std::max(0, active()->hp() - m_damageTaken);}
   void takeDamage(const int _damage);
   void removeDamage(const int _damage);
   void setDamage(const int _value);

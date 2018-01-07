@@ -123,6 +123,7 @@ PYBIND11_MODULE(poke, m)
 
   py::class_<BoardSlot>(m, "BoardSlot")
       .def(py::init<>())
+      .def("getRemainingHP", &BoardSlot::getRemainingHP)
       .def("getDamage", &BoardSlot::getDamage)
       .def("getTurnPlayed", &BoardSlot::getTurnPlayed)
       .def("numPokemon", &BoardSlot::numPokemon)

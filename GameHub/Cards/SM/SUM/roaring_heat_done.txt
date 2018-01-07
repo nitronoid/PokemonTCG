@@ -10,6 +10,7 @@ Done cards:
 75
 73
 72
+69
 67
 26
 25
@@ -27,7 +28,6 @@ Cards to be done:
 73
 72
 70
-69
 
 Total cards:
 169

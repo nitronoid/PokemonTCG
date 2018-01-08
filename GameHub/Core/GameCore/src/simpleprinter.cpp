@@ -164,7 +164,7 @@ void SimplePrinter::pokemonStr(std::string &_str, PokemonCard * const _card) con
   for (const auto& attack : _card->attacks())
   {
     str_replace_sent(_str, "$A"  + std::to_string(i), attack.name(), false);
-    str_replace_sent(_str, "$D"  + std::to_string(i), "---");
+    str_replace_sent(_str, "$D"  + std::to_string(i), attack.damageString());
     std::string requirements;
     for (const auto r : attack.requirements()) requirements += charify(r);
     str_replace_sent(_str, "$AR" + std::to_string(i), requirements);

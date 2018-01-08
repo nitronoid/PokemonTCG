@@ -40,8 +40,8 @@ static constexpr auto k_sentinelSlot = R"(
 | Energy: $Ex        |
 | Tool: $TOOL$$$$$$  |
 |--------------------|
-| $A0$$$$ $D0 ($AR0) |
-| $A1$$$$ $D1 ($AR1) |
+| $A0$$$ $D0$ ($AR0) |
+| $A1$$$ $D1$ ($AR1) |
 |--------------------|
 | [$W]   [$R]   [$C] |
 | [$STATUS$$$$$$$$$] |
@@ -63,9 +63,9 @@ static constexpr auto k_sentinelPokemonCard = R"(
 |$NAME$  [$HP]|
 |         [$T]|
 |$A0$$$$$     |
-|$D0      $AR0|
+|$D0$     $AR0|
 |$A1$$$$$     |
-|$D1      $AR1|
+|$D1$     $AR1|
 |[$W]     [$R]|
 |[$C]         |
 *-------------*)";

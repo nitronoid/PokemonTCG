@@ -128,7 +128,7 @@ Ability loadAbility(const QJsonObject  &_jsonCard, const std::string &_canPlayNa
     {
       auto jAbility = _jsonCard["Ability"].toObject();
       auto pyAbilty = module.attr(stringify(jAbility["func"]).c_str());
-      auto ability = pyAbilty.cast<AbilityFunc>();
+      auto ability = pyAbilty.cast<EffectFunc>();
 
       CanPlayFunc canPlay = [](auto){return true;};
       if (!_canPlayName.empty())
@@ -138,10 +138,11 @@ Ability loadAbility(const QJsonObject  &_jsonCard, const std::string &_canPlayNa
       }
       cardAbility = Ability(
             ability,
-            selectPhase(stringify(jAbility["phase"])[0]),
-            selectDuration(stringify(jAbility["duration"])[0]),
-            canPlay
-            );
+            stringify(jAbility["Name"]),
+          selectPhase(stringify(jAbility["phase"])[0]),
+          selectDuration(stringify(jAbility["duration"])[0]),
+          canPlay
+          );
     }
   }
   catch (pybind11::error_already_set e)
@@ -166,14 +167,18 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
     // Load the attack
     auto attackObj = jAttackObj[attackName].toObject();
     auto pyfunc = module.attr(stringify(attackObj["func"]).c_str());
-    Attack newAttack(pyfunc.cast<AttackFunc>(),
-                     attackName.toStdString(),
-                     getEnergyList(stringify(attackObj["energy"])));
+    Attack newAttack(
+          pyfunc.cast<EffectFunc>(),
+          attackName.toStdString(),
+          PTCG::TRIGGER::NOW,
+          PTCG::DURATION::SINGLE,
+          getEnergyList(stringify(attackObj["energy"]))
+        );
     attacks.push_back(newAttack);
   }
 
   return new PokemonCard(
-      static_cast<unsigned>(intify(_jsonCard["ID"])),
+        static_cast<unsigned>(intify(_jsonCard["ID"])),
       stringify(_jsonCard["Name"]),
       loadAbility(_jsonCard),
       std::move(attacks),
@@ -191,10 +196,10 @@ TrainerCard* CardFactory::loadTrainerCard(const QJsonObject &_jsonCard) const
   // Import this cards ability
   return new TrainerCard(
         static_cast<unsigned>(intify(_jsonCard["ID"])),
-        stringify(_jsonCard["Name"]),
-        loadAbility(_jsonCard, "canPlay"),
-        selectTrainerType(stringify(_jsonCard["Trainer"])[0])
-        );
+      stringify(_jsonCard["Name"]),
+      loadAbility(_jsonCard, "canPlay"),
+      selectTrainerType(stringify(_jsonCard["Trainer"])[0])
+      );
 }
 
 EnergyCard*  CardFactory::loadEnergyCard(const QJsonObject &_jsonCard) const
@@ -202,11 +207,11 @@ EnergyCard*  CardFactory::loadEnergyCard(const QJsonObject &_jsonCard) const
   // Import this cards ability
   return new EnergyCard(
         static_cast<unsigned>(intify(_jsonCard["ID"])),
-        stringify(_jsonCard["Name"]),
-        loadAbility(_jsonCard),
-        static_cast<unsigned>(intify(_jsonCard["Ammount"])),
-        selectType(stringify(_jsonCard["Type"])[0])
-        );
+      stringify(_jsonCard["Name"]),
+      loadAbility(_jsonCard),
+      static_cast<unsigned>(intify(_jsonCard["Ammount"])),
+      selectType(stringify(_jsonCard["Type"])[0])
+      );
 }
 
 Card* CardFactory::loadCard(const unsigned _id) const

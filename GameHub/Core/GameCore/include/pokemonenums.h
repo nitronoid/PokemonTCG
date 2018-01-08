@@ -29,6 +29,7 @@ enum class CONDITION {
 
 enum class TRIGGER {
   NOW,
+  START,
   ATTACK,
   END,
   NONE

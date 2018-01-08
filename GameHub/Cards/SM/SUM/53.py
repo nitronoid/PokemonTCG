@@ -1,9 +1,16 @@
 import poke as p
 
+def effect(h):
+    print "prevent all damage done"
+
+def canUse(h):
+    return True
+
 def defenseCurl(h):
     if(h.flipCoin(1)):
-        print "Need to heal"
-        # prevent all damage done next turn (heal the amount that pokemon attacks)
+        # prevent all damage done next turn
+        ability = p.Abilty(effect, p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
+        h.addEffect(p.PLAYER.ENEMY, 0, ability)
 
 def filter(card):
     card.cardType() == p.CARD.ENERGY and card.type() == p.TYPE.LIGHTNING

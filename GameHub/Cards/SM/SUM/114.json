@@ -1,0 +1,10 @@
+{
+    "ID" : 114,
+    "Name" : "Big Malasada",
+    "Trainer" : "I",
+    "Ability" : {
+        "func" : "healDamage",
+        "duration" : "S",
+        "phase" : "N"
+    }
+}

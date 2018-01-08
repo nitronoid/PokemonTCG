@@ -6,8 +6,8 @@ def wallofSand(h):
     h.addBonusDefense(20, p.ORDER.AFTER)
 
 def absorbVitality(h):
-    healAmount=h.viewBench(p.PLAYER.ENEMY)[0].remainingHP()
-    healAmount=clamp(0,50,healAmount)
+    origHealth=h.viewBench(p.PLAYER.ENEMY)[0].remainingHP()
     h.dealDamage(50) #heal from this pokemon same amount of damage as done to opponent active pokemon
-    h.healDamage(healAmount)
+    newHealth=h.viewBench(p.PLAYER.ENEMY)[0].remainingHP()
+    h.healDamage(origHealth-newHealth)
     

@@ -2,7 +2,7 @@
     "ID" : 28,
     "Name" : "Psyduck",
     "HP" : 70,
-    "Trainer" : "W",
+    "Type" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 2,

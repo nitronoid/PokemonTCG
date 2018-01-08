@@ -116,6 +116,7 @@ std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
   std::string ret = k_sentinelSlot;
   auto active = _slot->active();
   str_replace_sent(ret, "$ID", std::to_string(active->getID()));
+  str_replace_sent(ret, "$RH", std::to_string(_slot->getRemainingHP()));
   str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
   auto tool = _slot->viewTool();
   std::string toolName = "---";

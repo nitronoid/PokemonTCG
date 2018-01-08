@@ -11,6 +11,6 @@ def headlock(h):
 
 def guardPress(h):
     h.dealDamage(80)
-    # next turn less damage (20)
+    h.addBonusDefense(20, p.ORDER.AFTER, p.PLAYER.SELF)
     
 

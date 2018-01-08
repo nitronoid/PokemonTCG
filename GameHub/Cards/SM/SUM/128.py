@@ -29,4 +29,4 @@ def professorKukui(h):
         h.drawCard(p.PLAYER.SELF)
     
     # your Pokemon's attacks do 20 more damage to your opponent's Active Pokemon (before applying Weakness and Resistance).	
-    h.attackBonus(20)
+    h.addBonusDamage(20, p.ORDER.BEFORE, p.PLAYER.SELF)

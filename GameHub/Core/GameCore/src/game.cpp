@@ -1,6 +1,7 @@
 #include "game.h"
 #include <iostream>
 #include <algorithm>
+#include "blankcard.h"
 
 Game::Game(const Game &_original) :
   m_playableCards(_original.m_playableCards),
@@ -927,7 +928,22 @@ unsigned Game::flipCoin(const unsigned _num)
 
 Game Game::clone() const
 {
-  return *this;
+  BlankCard card = BlankCard();
+  Game copy = *this;
+  copy.fillerDeck(PTCG::PLAYER::SELF,card);
+  copy.fillerDeck(PTCG::PLAYER::ENEMY,card);
+  copy.fillerHand(PTCG::PLAYER::ENEMY,card);
+  return copy;
+}
+
+void Game::fillerDeck(const PTCG::PLAYER &_player, Card &_card)
+{
+  m_boards[playerIndex(_player)].m_deck.filler(_card);
+}
+
+void Game::fillerHand(const PTCG::PLAYER &_player,Card &_card)
+{
+  m_boards[playerIndex(_player)].m_hand.filler(_card);
 }
 
 size_t Game::playerIndex(const PTCG::PLAYER &_player) const

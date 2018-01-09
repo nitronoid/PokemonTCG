@@ -1,6 +1,5 @@
 #ifndef HAND_H
 #define HAND_H
-
 #include "cardpile.h"
 #include <vector>
 
@@ -14,6 +13,7 @@ public:
     virtual void put(std::unique_ptr<Card> &&_card) override;
     virtual std::unique_ptr<Card> take(const size_t _index) override;
     std::vector<std::unique_ptr<Card>> view() const;
+    void filler(std::unique_ptr<Card> &_card);
 private:
     std::vector<std::unique_ptr<Card>> m_cards;
 };

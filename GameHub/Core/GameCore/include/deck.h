@@ -1,6 +1,5 @@
 #ifndef DECK_H
 #define DECK_H
-
 #include <vector>
 #include "cardpile.h"
 #include <random>
@@ -20,7 +19,7 @@ public:
     std::vector<std::unique_ptr<Card>> view() const;
     inline bool empty() const { return m_cards.empty(); }
     void shuffle();
-
+    void filler(std::unique_ptr<Card> &_card);
 private:
     std::vector<std::unique_ptr<Card>> m_cards;
     

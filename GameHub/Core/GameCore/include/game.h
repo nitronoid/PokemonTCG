@@ -1,6 +1,5 @@
 #ifndef GAME_H
 #define GAME_H
-
 #include <memory>
 #include <unordered_set>
 #include "pokemoncard.h"
@@ -9,11 +8,10 @@
 #include "board.h"
 #include "damagehandler.h"
 #include "guimodule.h"
-
 class Game
 {
 public:
-  Game() = default;
+  Game() = default; 
   Game(Game&&_original) = default;
 
   Game clone() const;
@@ -145,7 +143,8 @@ private:
   void resolveAllEndConditions(const PTCG::PLAYER _player);
   bool resolveAttackConditions(const PTCG::PLAYER _player);
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
-
+  void fillerDeck(const PTCG::PLAYER &_player, Card &_card);
+  void fillerHand(const PTCG::PLAYER &_player, Card &_card);
 private:
   GuiModule* m_drawer;
   std::array<std::unique_ptr<Player>, 2> m_players;
@@ -158,6 +157,7 @@ private:
   bool m_rulesBroken   = false;
   bool m_gameFinished  = false;
   bool m_supportPlayed = false;
+
 
 };
 

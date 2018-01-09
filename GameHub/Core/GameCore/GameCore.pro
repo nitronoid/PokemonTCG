@@ -2,10 +2,12 @@ cache()
 CONFIG += console c++14
 CONFIG -= app_bundle
 
-SOURCES += $$files(../GameCore/src/*.cpp)
+SOURCES += $$files(../GameCore/src/*.cpp) \
+    include/brighttideaiplayer.cpp
 
 HEADERS += $$files(../GameCore/include/*.h) \
-    include/effect.h
+    include/effect.h \
+    include/brighttideaiplayer.h
 
 INCLUDEPATH+=$$PWD/include
 INCLUDEPATH+=../pybind11/include

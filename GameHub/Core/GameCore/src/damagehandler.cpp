@@ -12,11 +12,13 @@ bool DamageHandler::heal(BoardSlot *_slot, const int &_value)
 
 }
 
-void DamageHandler::generalDamage(Bench *_attacker,
+void DamageHandler::generalDamage(
+    Bench *_attacker,
     Bench *_defender,
     const size_t &_defenderIndex,
     const int &_damage,
-    const bool &_applyWeak)
+    const bool &_applyWeak
+    )
 {
   int totalDamage;
   auto attackerSlot = _defender->slotAt(0);

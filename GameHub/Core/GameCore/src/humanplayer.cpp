@@ -61,10 +61,11 @@ std::vector<size_t> promptChoice(
     if (_player == PTCG::PLAYER::ENEMY) owner = "enemies ";
     do
     {
-        std::cout<<"Pick a card from 0 - "<<len-1<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<"?"<<std::endl;
-        std::cin>>pick;
+      std::cout<<"Pick a card from 1 - "<<len<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<std::endl;
+      std::cin>>pick;
     }
-    while(!std::cin.fail() && (picked.count(pick) || (pick > (len -1))));
+    while(!std::cin.fail() && (picked.count(pick-1) || (pick > len)));
+    --pick;
     choice.push_back(pick);
     picked.insert(pick);
   }
@@ -116,9 +117,9 @@ bool HumanPlayer::agree(const PTCG::ACTION _action)
   std::string answer;
   do
   {
-      std::cout<<"Do you want to "<<actionStr(_action)<<"?[y/n]";
-      std::cin>>answer;
-      std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
+    std::cout<<"Do you want to "<<actionStr(_action)<<"?[y/n]";
+    std::cin>>answer;
+    std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
   }
   while(!std::cin.fail() && answer!="y" && answer!="yes" && answer!="n" && answer!="no" );
   return (answer == "y") || (answer == "yes");
@@ -139,14 +140,14 @@ std::pair<bool, unsigned> HumanPlayer::turn()
   unsigned attack = viewBench().at(0).active()->attackNum();
   if (doAttack)
   {
-    unsigned len = attack - 1;
+    unsigned len = attack;
     do
     {
-      std::cout<<"Pick an attack from 0 - "<<len<<std::endl;
+      std::cout<<"Pick an attack from 1 - "<<len<<std::endl;
       std::cin>>attack;
     } while (!std::cin.fail() && attack > len);
   }
 
   // Return the decision
-  return std::pair<bool, unsigned> {doAttack, attack};
+  return std::pair<bool, unsigned> {doAttack, attack-1};
 }

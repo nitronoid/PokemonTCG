@@ -342,16 +342,16 @@ void Game::nextTurn()
     }
     if (!m_gameFinished)
     {
-        // Now that damage calc is over, we remove any damage/defense bonuses
-        currentBoard.m_bench.activeStatus()->resetDamageEffects();
-        //Resolve all between-turn status conditions
-        resolveAllEndConditions(PTCG::PLAYER::SELF);
-        // Apply all effects triggered by the end of a turn
-        executeTurnEffects(PTCG::TRIGGER::END);
-        // The effects could have knocked out a pokemon so we check
-        m_gameFinished = checkForKnockouts();
-        // Remove all the effects for this turn from the queue, now that we executed them all
-        clearEffects();
+      // Now that damage calc is over, we remove any damage/defense bonuses
+      currentBoard.m_bench.activeStatus()->resetDamageEffects();
+      //Resolve all between-turn status conditions
+      resolveAllEndConditions(PTCG::PLAYER::SELF);
+      // Apply all effects triggered by the end of a turn
+      executeTurnEffects(PTCG::TRIGGER::END);
+      // The effects could have knocked out a pokemon so we check
+      m_gameFinished = checkForKnockouts();
+      // Remove all the effects for this turn from the queue, now that we executed them all
+      clearEffects();
     }
     ++m_turnCount;
   }
@@ -715,7 +715,7 @@ void Game::dealDamage(const int _damage, const size_t _id, const bool &_applyWea
   if(_id<6)
   {
     m_damageHandler.generalDamage(
-        &m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,
+          &m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench,
         &m_boards[playerIndex(PTCG::PLAYER::ENEMY)].m_bench,
         _id,
         _damage,
@@ -838,7 +838,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, match, 1);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!board.m_prizeCards.numCards())
-        gameOver = true;
+      gameOver = true;
   }
   return gameOver;
 }

@@ -9,15 +9,15 @@
 
 struct Board
 {
-    Board() = default;
-    Board(const Board&) = default;
-    Board& operator=(const Board&) = default;
+  Board() = default;
+  Board(const Board&) = default;
+  Board& operator=(const Board&) = default;
 
-    Bench m_bench;
-    PrizeCards m_prizeCards;
-    Hand m_hand;
-    Deck m_deck;
-    DiscardPile m_discardPile;
+  Bench m_bench;
+  PrizeCards m_prizeCards;
+  Hand m_hand;
+  Deck m_deck;
+  DiscardPile m_discardPile;
 };
 
 #endif // BOARD_H

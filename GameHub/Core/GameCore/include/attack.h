@@ -21,7 +21,7 @@ public:
       const PTCG::DURATION _duration,
       std::vector<PTCG::TYPE> &&_requirements,
       const std::function<bool(Game*const)> _canUse = [](auto){return true;}
-      ) :
+  ) :
     Effect (_attack, _name, _trigger, _duration, _canUse),
     m_damageString(_dmgString),
     m_requirements(_requirements)

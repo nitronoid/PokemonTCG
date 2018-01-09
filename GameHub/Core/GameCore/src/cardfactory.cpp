@@ -171,9 +171,9 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
           pyfunc.cast<EffectFunc>(),
           attackName.toStdString(),
           stringify(attackObj["baseDamage"]),
-          PTCG::TRIGGER::NOW,
-          PTCG::DURATION::SINGLE,
-          getEnergyList(stringify(attackObj["energy"]))
+        PTCG::TRIGGER::NOW,
+        PTCG::DURATION::SINGLE,
+        getEnergyList(stringify(attackObj["energy"]))
         );
     attacks.push_back(newAttack);
   }

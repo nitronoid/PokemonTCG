@@ -11,7 +11,7 @@
 class Game
 {
 public:
-  Game() = default; 
+  Game() = default;
   Game(Game&&_original) = default;
 
   Game clone() const;
@@ -78,7 +78,7 @@ public:
   bool playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action);
 
   // View card pile functions
- // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+  // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
   std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
   std::vector<std::unique_ptr<Card>>  viewDiscard(const PTCG::PLAYER &_player) const;
   std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;
@@ -114,11 +114,11 @@ private:
   void clearEffects();
   std::vector<std::unique_ptr<Card>> viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
-      std::vector<size_t> &io_originalPositions,
-      const PTCG::PLAYER _owner,
-      const PTCG::PILE _pile,
-      std::function<bool(Card*const)> _match
-      ) const;
+                  std::vector<size_t> &io_originalPositions,
+                  const PTCG::PLAYER _owner,
+                  const PTCG::PILE _pile,
+                  std::function<bool(Card*const)> _match
+                  ) const;
   void filterCards(
       std::vector<std::unique_ptr<Card>>& io_unfiltered,
       std::vector<std::unique_ptr<Card>>& io_filtered,

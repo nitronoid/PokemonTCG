@@ -11,6 +11,7 @@ public :
 
 private:
     void pokemonStr(std::string &_str, PokemonCard * const _card) const;
+    std::string bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus) const;
     std::string slotStr(BoardSlot* const _slot) const;
     std::string activeStr(BoardSlot* const _activeSlot, Status * const _activeStatus) const;
     std::string benchStr(Bench * const _bench) const;

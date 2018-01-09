@@ -8,7 +8,8 @@ SOURCES += main.cpp \
     sequence.cpp \
     selector.cpp \
     condition.cpp \
-    action.cpp
+    action.cpp \
+    tree.cpp
 
 HEADERS += \
     node.h \
@@ -16,4 +17,5 @@ HEADERS += \
     sequence.h \
     selector.h \
     condition.h \
-    action.h
+    action.h \
+    tree.h

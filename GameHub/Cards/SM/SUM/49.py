@@ -1,4 +1,7 @@
-import poke
+import poke as p 
+
+def filter(card):
+    return card is not None
 
 def searchingLight(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -17,8 +20,15 @@ def searchingLight(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
-    cards = h.playerChoice(SELF, SELF, PRIZE, ALL, DRAW, 1)
-    h.showCard(cards)
+    cards = h.playerCardChoice(
+        p.PLAYER.SELF, 
+        p.PLAYER.SELF, 
+        p.PILE.PRIZE, 
+        p.ACTION.VIEW, 
+        filter, 
+        1)
+        
+    h.revealCards(p.PLAYER.SELF, p.PLAYER.SELF, p.PILE.PRIZE, cards)
 
 def electroBall(h):
     h.dealDamage(30)

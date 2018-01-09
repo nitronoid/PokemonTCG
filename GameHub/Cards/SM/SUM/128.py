@@ -1,8 +1,11 @@
-import poke
+import poke as p 
+
+def filter(card):
+    return True
 
 def canPlay(h):
     # if deck has more than two cards 
-    return len(h.viewDeck(SELF)) >= 2
+    return len(h.viewDeck(p.PLAYER.SELF)) >= 2
 
 def professorKukui(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);
@@ -21,9 +24,9 @@ def professorKukui(h):
     # origin - card's original location (DECK/HAND/DISCARD/BENCH/PRIZE)
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
-
-    cards = h.playerChoice(SELF, SELF, DECK, ALL, DRAW, 2)
-    h.moveCards(cards, SELF, DECK, HAND, False)
+    
+    for i in range(2):
+        h.drawCard(p.PLAYER.SELF)
     
     # your Pokemon's attacks do 20 more damage to your opponent's Active Pokemon (before applying Weakness and Resistance).	
-    h.attackBonus(20)
+    h.addBonusDamage(20, p.ORDER.BEFORE, p.PLAYER.SELF)

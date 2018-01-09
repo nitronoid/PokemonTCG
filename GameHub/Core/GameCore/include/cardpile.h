@@ -9,7 +9,7 @@ class CardPile
 public:
     virtual ~CardPile(){}
     virtual void put(std::unique_ptr<Card> &&_card)=0;
-    virtual std::unique_ptr<Card> take(const unsigned _index)=0;
+    virtual std::unique_ptr<Card> take(const size_t _index)=0;
 };
 
 #endif // CARDPILE_H

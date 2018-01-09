@@ -1,76 +1,80 @@
+
 #ifndef POKEMONENUMS_H
 #define POKEMONENUMS_H
 
 namespace PTCG
 {
 enum class TYPE {
-    COLOURLESS,
-    FIGHTING,
-    LIGHTNING,
-    GRASS,
-    PSYCHIC,
-    METAL,
-    WATER,
-    DARKNESS,
-    FIRE,
-    DRAGON,
-    FAIRY,
-    ERROR
+  COLOURLESS,
+  FIGHTING,
+  LIGHTNING,
+  GRASS,
+  PSYCHIC,
+  METAL,
+  WATER,
+  DARKNESS,
+  FIRE,
+  DRAGON,
+  FAIRY,
+  ERROR
 };
 
 enum class CONDITION {
-    ASLEEP,
-    BURNED,
-    POISONED,
-    CONFUSED,
-    PARALYZED
+  ASLEEP,
+  BURNED,
+  POISONED,
+  CONFUSED,
+  PARALYZED
 };
 
-enum class PHASE {
-    DRAW,
-    MAIN,
-    ATTACK,
-    NONE
+enum class TRIGGER {
+  NOW,
+  START,
+  ATTACK,
+  END,
+  NONE
 };
 
 enum class DURATION {
-    SINGLE,
-    MULTIPLE,
-    PERMANENT
+  SINGLE,
+  MULTIPLE,
+  PERMANENT
 };
 
 enum class CARD {
-    ENERGY,
-    POKEMON,
-    ITEM,
-    TOOL,
-    SUPPORT,
-    STADIUM
+  ENERGY,
+  POKEMON,
+  ITEM,
+  TOOL,
+  SUPPORT,
+  STADIUM
 };
 
 enum class PLAYER {
-    SELF,
-    ENEMY
+  SELF,
+  ENEMY
 };
 
 enum class PILE {
-    DECK,
-    HAND,
-    DISCARD,
-    PRIZE
+  DECK,
+  HAND,
+  DISCARD,
+  PRIZE
 };
 
 enum class ACTION {
-    DRAW,
-    DISCARD,
-    PLAY,
-    VIEW,
-    MOVE
+  DRAW,
+  DISCARD,
+  PLAY,
+  VIEW,
+  MOVE,
+  HEAL,
+  ATTACK
 };
 
 enum class ORDER {
-    BEFORE,
-    AFTER
+  BEFORE,
+  AFTER
 };
 
 }

@@ -7,22 +7,19 @@ class EnergyCard : public Card
 {
 public:
     EnergyCard(const EnergyCard&) = default;
-    EnergyCard(const unsigned _id, const std::string &_name, const Ability _ability, const unsigned _amount, const PTCG::TYPE _type) :
+    EnergyCard(const unsigned _id, const std::string &_name, const Ability &_ability, const unsigned _amount, const PTCG::TYPE _type) :
       Card(_id, _name, _ability),
       m_amount(_amount),
       m_type(_type)
     {}
 
-    virtual bool canPlay() override { return true; }
+    virtual bool canPlay(Game&) const override;
 
-    virtual Card* clone() override
-    {
-      return new EnergyCard(*this);
-    }
+    virtual Card* clone() override;
 
-    inline PTCG::TYPE type() const { return m_type; }
-    inline unsigned amount() const { return m_amount; }
-    virtual PTCG::CARD cardType() const override { return PTCG::CARD::ENERGY; }
+    PTCG::TYPE type() const;
+    unsigned amount() const;
+    virtual PTCG::CARD cardType() const override;
 private:
     unsigned m_amount;
     PTCG::TYPE m_type;

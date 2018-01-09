@@ -1,29 +1,27 @@
 #ifndef ABILITY_H
 #define ABILITY_H
 
-#include <functional>
-#include "pokemonenums.h"
+#include "effect.h"
 
-class Game;
-using AbilityFunc = std::function<void(Game*)>;
-
-class Ability
+class Ability : public Effect
 {
 public:
   Ability() = default;
   Ability(const Ability&) = default;
   Ability& operator =(const Ability&) = default;
-  Ability(const AbilityFunc _ability, const PTCG::PHASE _phase, const PTCG::DURATION _duration) :
-    m_ability(_ability),
-    m_ablityPhase(_phase),
-    m_abilityDuration(_duration)
+  Ability(
+      const EffectFunc _ability,
+      const std::string &_name,
+      const PTCG::TRIGGER _trigger,
+      const PTCG::DURATION _duration,
+      const std::function<bool(Game*const)> _canUse = [](auto){return true;}
+      ) :
+    Effect (_ability, _name, _trigger, _duration, _canUse)
   {}
 
-  inline void use(Game& _game) const { m_ability(&_game); }
-private:
-  AbilityFunc m_ability;
-  PTCG::PHASE m_ablityPhase = PTCG::PHASE::NONE;
-  PTCG::DURATION m_abilityDuration = PTCG::DURATION::PERMANENT;
+  inline void use(Game& _game) const { activate(_game); }
+  inline bool canUse(Game&_game) const { return canActivate(_game);}
+
 };
 
 #endif // ABILITY_H

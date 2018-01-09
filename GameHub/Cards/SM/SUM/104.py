@@ -15,7 +15,7 @@ def treasureHunt(h):
         p.ACTION.DRAW,
         filter,
         1)
-    h.moveCards(cards, p.PLAYER.SELF, p.PILE.DISCARD, p.PILE.HAND, False)
+    h.moveCards(cards, p.PLAYER.SELF, p.PILE.DISCARD, p.PILE.HAND)
 
 def bite(h):
     h.dealDamage(50)

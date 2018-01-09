@@ -14,7 +14,7 @@ public:
     virtual void put(std::unique_ptr<Card> &&_card) override;
     virtual std::unique_ptr<Card> take(const size_t _index) override;
     std::array<std::unique_ptr<Card>,6> view() const;
-
+    size_t numCards() const;
 private:
     std::array<std::unique_ptr<Card>,6> m_cards;
 };

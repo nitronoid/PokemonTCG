@@ -17,7 +17,6 @@ void Deck::init(std::vector<std::unique_ptr<Card>> &&_cards)
   {
     m_cards.emplace_back(card->clone());
   }
-  //m_cards = _cards;
 }
 
 std::vector<std::unique_ptr<Card>> Deck::view() const
@@ -26,7 +25,7 @@ std::vector<std::unique_ptr<Card>> Deck::view() const
   ret.reserve(m_cards.size());
   for (const auto & card : m_cards)
   {
-    std::cout<<"Card ID: "<<card->getID()<<" Card Name: "<<card->getName()<<'\n';
+    //std::cout<<"Card ID: "<<card->getID()<<" Card Name: "<<card->getName()<<'\n';
     ret.emplace_back(card->clone());
   }
   return ret;
@@ -42,7 +41,7 @@ void Deck::shuffle()
 
 void Deck::put(std::unique_ptr<Card> &&_card)
 {
-  std::cout<<_card->getName()<<" has been put into the deck."<<'\n';
+  //std::cout<<_card->getName()<<" has been put into the deck."<<'\n';
   m_cards.push_back(std::move(_card));
 }
 

@@ -3,9 +3,8 @@
 #include <algorithm>
 
 BoardSlot::BoardSlot(const BoardSlot &_original) :
-  m_conditions(_original.m_conditions),
-  m_damageTaken(_original.m_damageTaken),
-  m_turnPlayed(_original.m_turnPlayed)
+  m_turnPlayed(_original.m_turnPlayed),
+  m_damageTaken(_original.m_damageTaken)
 {
   if(_original.m_tool)
     m_tool.reset(static_cast<TrainerCard*>(_original.m_tool->clone()));
@@ -25,7 +24,6 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
 
 BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
 {
-  m_conditions = _original.m_conditions;
   if(_original.m_tool)
     m_tool.reset(static_cast<TrainerCard*>(_original.m_tool->clone()));
   m_damageTaken = _original.m_damageTaken;
@@ -45,6 +43,11 @@ BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
   return *this;
 }
 
+bool BoardSlot::isDefeated()
+{
+  return m_damageTaken >= active()->hp();
+}
+
 void BoardSlot::takeDamage(const int _damage)
 {
   std::cout<<"Taking "<<_damage<<" damage."<<'\n';
@@ -62,29 +65,9 @@ void BoardSlot::setDamage(const int _value)
   m_damageTaken = _value;
 }
 
-void BoardSlot::addCondition(const PTCG::CONDITION _condition)
+void BoardSlot::setTurnPlayed(const unsigned &_turn)
 {
-  using cnd = PTCG::CONDITION;
-  if(_condition == cnd::ASLEEP    ||
-     _condition == cnd::CONFUSED  ||
-     _condition == cnd::PARALYZED
-     )
-  {
-    m_conditions.erase(cnd::ASLEEP);
-    m_conditions.erase(cnd::CONFUSED);
-    m_conditions.erase(cnd::PARALYZED);
-  }
-  m_conditions.insert(_condition);
-}
-
-void BoardSlot::removeCondition(const PTCG::CONDITION _condition)
-{
-  m_conditions.erase(_condition);
-}
-
-void BoardSlot::removeAllConditions()
-{
-  m_conditions.clear();
+  m_turnPlayed=_turn;
 }
 
 void BoardSlot::attachCard(std::unique_ptr<Card> &&_card)
@@ -125,7 +108,7 @@ std::vector<std::unique_ptr<EnergyCard>> BoardSlot::detachEnergy()
   return ret;
 }
 
-std::unique_ptr<EnergyCard> BoardSlot::detachEnergy(const unsigned _index)
+std::unique_ptr<EnergyCard> BoardSlot::detachEnergy(const size_t _index)
 {
   if (_index > m_energy.size() - 1) return nullptr;
   std::unique_ptr<EnergyCard> temp(m_energy[_index].release());
@@ -161,31 +144,25 @@ BoardSlot::TypeMSet BoardSlot::energy() const
   return ret;
 }
 
-std::vector<PTCG::CONDITION> BoardSlot::conditions() const
+bool BoardSlot::canEvolve(PokemonCard*const _card, const unsigned &_turn)
 {
-    std::vector<PTCG::CONDITION> cond(m_conditions.begin(), m_conditions.end());
-    return cond;
-}
-
-bool BoardSlot::canEvolve(const std::unique_ptr<PokemonCard> &_card, const unsigned &_turn)
-{
-    if(m_pokemon.empty())
-    {
-        std::cout<<"selected pokemon does not exist."<<'\n';
-        return false;
-    }
-    //if the pre-evolution is played on the same turn
-    if(m_turnPlayed==_turn)
-    {
-        std::cout<<"This mon cannot evolve yet."<<'\n';
-        return false;
-    }
-    if(active()->preEvolution().compare(_card->getName()) != 0)
-    {
-        std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
-        return false;
-    }
-    return true;
+  if(m_pokemon.empty())
+  {
+    std::cout<<"selected pokemon does not exist."<<'\n';
+    return false;
+  }
+  //if the pre-evolution is played on the same turn
+  if(m_turnPlayed==_turn)
+  {
+    std::cout<<"This mon cannot evolve yet."<<'\n';
+    return false;
+  }
+  if(active()->preEvolution().compare(_card->getName()) != 0)
+  {
+    std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
+    return false;
+  }
+  return true;
 }
 
 

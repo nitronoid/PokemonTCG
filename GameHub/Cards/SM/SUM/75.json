@@ -1,0 +1,23 @@
+{
+    "ID" : 75,
+    "Name" : "Palossand",
+    "HP" : 130,
+    "Type" : "F",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 4,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Wall of Sand" : {
+            "func" : "wallofSand",
+            "baseDamage" : "",
+            "energy" : ""
+        },
+        "Absorb Vitality" : {
+            "func" : "absorbVitality",
+            "baseDamage" : "50",
+            "energy" : "FC"
+        }
+    }
+}

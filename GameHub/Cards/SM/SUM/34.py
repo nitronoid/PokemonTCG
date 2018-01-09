@@ -8,9 +8,16 @@ def headlock(h):
         h.applyCondition(p.PLAYER.ENEMY, p.CONDITION.PARALYZED)
     h.dealDamage(dmg)
 
+def effect(h):
+    h.addBonusDefense(20, p.ORDER.AFTER, p.PLAYER.ENEMY)
+
+def canUse(h):
+    return True
 
 def guardPress(h):
     h.dealDamage(80)
-    # next turn less damage (20)
+    ability = p.Abilty(effect, p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
+    h.addEffect(p.PLAYER.ENEMY, 0, ability)
+   
     
 

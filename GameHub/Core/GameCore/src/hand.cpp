@@ -27,7 +27,7 @@ void Hand::put(std::unique_ptr<Card> &&_card)
 }
 
 
-std::unique_ptr<Card> Hand::take(const unsigned _index)
+std::unique_ptr<Card> Hand::take(const size_t _index)
 {
   if (_index > m_cards.size() - 1) return nullptr;
   std::unique_ptr<Card> temp = std::move(m_cards[_index]);

@@ -45,6 +45,7 @@ PYBIND11_MODULE(poke, m)
       .value("PERMANENT", PTCG::DURATION::PERMANENT);
 
   py::enum_<PTCG::CARD>(m, "CARD")
+      .value("BLANK",     PTCG::CARD::BLANK)
       .value("ENERGY",    PTCG::CARD::ENERGY)
       .value("POKEMON",   PTCG::CARD::POKEMON)
       .value("ITEM",      PTCG::CARD::ITEM)

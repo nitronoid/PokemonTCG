@@ -33,3 +33,8 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
 }
+
+void AIPlayerBT::createTree()
+{
+    rootNode->addChild(new Action);
+}

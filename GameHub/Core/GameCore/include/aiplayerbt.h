@@ -1,7 +1,10 @@
 #ifndef AIPLAYERBT_H
 #define AIPLAYERBT_H
 
-
+#include "condition.h"
+#include "action.h"
+#include "selector.h"
+#include "sequence.h"
 #include "player.h"
 
 class AIPlayerBT : public Player
@@ -47,6 +50,16 @@ public:
   virtual bool agree(const PTCG::ACTION _action) override;
 
   virtual std::pair<bool, unsigned> turn() override;
+
+  /// @build BrightTide function to make the AI think
+  void createTree();
+
+
+private:
+  /// @build root node
+  /// Needs to be a sequence, because it goes through each child for the actions
+  /// actions return true
+  Sequence* rootNode = new Sequence;
 
 };
 

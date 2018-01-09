@@ -5,29 +5,35 @@
 #include <string>
 #include <vector>
 #include <pokemonenums.h>
+#include "ability.h"
 
-class Game;
-using AttackFunc = std::function<void(Game*)>;
-
-class Attack
+class Attack : public Effect
 {
 public:
   Attack() = default;
   Attack(const Attack&) = default;
   Attack& operator =(const Attack&) = default;
-  Attack(const AttackFunc _attack, const std::string &_name, std::vector<PTCG::TYPE> &&_requirements) :
-    m_name(_name),
-    m_attack(_attack),
+  Attack(
+      const EffectFunc _attack,
+      const std::string &_name,
+      const std::string &_dmgString,
+      const PTCG::TRIGGER _trigger,
+      const PTCG::DURATION _duration,
+      std::vector<PTCG::TYPE> &&_requirements,
+      const std::function<bool(Game*const)> _canUse = [](auto){return true;}
+      ) :
+    Effect (_attack, _name, _trigger, _duration, _canUse),
+    m_damageString(_dmgString),
     m_requirements(_requirements)
   {}
 
-  inline void attack(Game& _game) const { m_attack(&_game); }
-  inline std::string name() const { return m_name; }
+  inline void attack(Game& _game) const { activate(_game); }
+  inline bool canAttack(Game& _game) const { return canActivate(_game); }
   inline std::vector<PTCG::TYPE> requirements() const { return m_requirements; }
-private:
+  inline std::string damageString() const { return m_damageString; }
 
-  std::string m_name;
-  AttackFunc m_attack;
+private:
+  std::string m_damageString;
   std::vector<PTCG::TYPE> m_requirements;
 };
 

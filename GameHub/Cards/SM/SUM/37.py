@@ -9,6 +9,6 @@ def canUse(h):
 def roost(h):
     h.healDamage(30)
     # next turn no retreat
-    ability = p.Abilty(effect, p.TRIGGER.START, p.DURATION.SINGLE, canUse)
+    ability = p.Ability(effect, '', p.TRIGGER.START, p.DURATION.SINGLE, canUse)
     h.addEffect(p.PLAYER.SELF, 1, ability)
 

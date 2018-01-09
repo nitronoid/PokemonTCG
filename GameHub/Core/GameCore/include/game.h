@@ -108,9 +108,11 @@ public:
 
 private:
   Game(const Game &_original);
+  bool checkForKnockouts();
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin = PTCG::PILE::HAND);
   std::vector<size_t> chooseReplacement(const PTCG::PLAYER _player);
-  void splitEffects(std::vector<Ability>&io_attackTriggered, std::vector<Ability>&io_endTriggered);
+  void executeTurnEffects(const PTCG::TRIGGER _trigger);
+  std::vector<Ability> filterEffects(const PTCG::TRIGGER _trigger);
   void clearEffects();
   std::vector<std::unique_ptr<Card>> viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
@@ -134,7 +136,7 @@ private:
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
-  void handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
+  bool handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
   void playPokemon(PokemonCard* const _pokemon, const size_t _index);
   void playItem(TrainerCard* const _item, const size_t _index);
   void playTool(TrainerCard* const _tool, const size_t _index);

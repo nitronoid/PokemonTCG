@@ -2,7 +2,7 @@
     "ID" : 104,
     "Name" : "Herdier",
     "HP" : 90,
-    "Trainer" : "C",
+    "Type" : "C",
     "Weakness" : "F",
     "Resistance" : "",
     "Retreat" : 1,

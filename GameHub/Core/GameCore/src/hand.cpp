@@ -35,8 +35,7 @@ std::unique_ptr<Card> Hand::take(const size_t _index)
   return temp;
 }
 
-void Hand::filler(Card _card)
+void Hand::filler(std::unique_ptr<Card> &_card)
 {
-  std::unique_ptr<Card> card = std::unique_ptr<Card>(_card);
-  std::fill(m_cards.begin(),m_cards.end(),card);
+  std::fill(m_cards.begin(),m_cards.end(),_card);
 }

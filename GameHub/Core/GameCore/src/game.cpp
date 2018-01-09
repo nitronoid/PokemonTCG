@@ -930,20 +930,20 @@ Game Game::clone() const
 {
   BlankCard card = BlankCard();
   Game copy = *this;
-  copy.fillerDeck(PTCG::PLAYER::SELF,card);
-  copy.fillerDeck(PTCG::PLAYER::ENEMY,card);
-  copy.fillerHand(PTCG::PLAYER::ENEMY,card);
+  copy.fillerDeck(PTCG::PLAYER::SELF,&card);
+  copy.fillerDeck(PTCG::PLAYER::ENEMY,&card);
+  copy.fillerHand(PTCG::PLAYER::ENEMY,&card);
   return copy;
 }
 
-void Game::fillerDeck(const PTCG::PLAYER &_player, Card &_card)
+void Game::fillerDeck(const PTCG::PLAYER &_player, Card* _card)
 {
-  m_boards[playerIndex(_player)].m_deck.filler(_card);
+  m_boards[playerIndex(_player)].m_deck.filler(std::unique_ptr<Card>(_card));
 }
 
-void Game::fillerHand(const PTCG::PLAYER &_player,Card &_card)
+void Game::fillerHand(const PTCG::PLAYER &_player,Card* _card)
 {
-  m_boards[playerIndex(_player)].m_hand.filler(_card);
+  m_boards[playerIndex(_player)].m_hand.filler(std::unique_ptr<Card>(_card));
 }
 
 size_t Game::playerIndex(const PTCG::PLAYER &_player) const

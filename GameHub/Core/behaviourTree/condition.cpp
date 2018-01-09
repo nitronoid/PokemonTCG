@@ -1,6 +1,9 @@
 #include "condition.h"
 
-Condition::Condition()
+Condition::Condition() : Node()
+{}
+//--------------------------------------------------
+bool Condition::execute()
 {
-
+    return conditionFunction();
 }

@@ -9,6 +9,21 @@ Hand::Hand (const Hand &_original)
   }
 }
 
+Hand& Hand::operator=(const Hand&_original)
+{
+  m_cards.reserve(_original.m_cards.size());
+  for (const auto &card : _original.m_cards)
+  {
+    m_cards.emplace_back(card->clone());
+  }
+  return *this;
+}
+
+Card* Hand::cardAt(const size_t _index)
+{
+  return m_cards[_index].get();
+}
+
 std::vector<std::unique_ptr<Card>> Hand::view()const
 {
   std::vector<std::unique_ptr<Card>> ret;
@@ -35,7 +50,7 @@ std::unique_ptr<Card> Hand::take(const size_t _index)
   return temp;
 }
 
-void Hand::filler(std::unique_ptr<Card> &_card)
+size_t Hand::numCards() const
 {
-  std::fill(m_cards.begin(),m_cards.end(),_card);
+  return m_cards.size();
 }

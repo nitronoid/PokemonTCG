@@ -917,33 +917,28 @@ unsigned Game::flipCoin(const unsigned _num)
   static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
   for(unsigned i  = 0; i<_num;++i)
   {
-    if(gen())
-    {
-      ++ret;
-    }
+    ret += gen();
   }
   std::cout<<"Flipping coin...."<<ret<<" heads, "<<_num-ret<<" tails."<<'\n';
   return ret;
 }
 
+std::vector<std::unique_ptr<Card>> blankCardVector(const size_t _len)
+{
+  std::vector<std::unique_ptr<Card>> ret(_len);
+  for (auto& c : ret) c.reset(new BlankCard);
+  return ret;
+}
+
 Game Game::clone() const
 {
-  BlankCard card = BlankCard();
   Game copy = *this;
-  copy.fillerDeck(PTCG::PLAYER::SELF,&card);
-  copy.fillerDeck(PTCG::PLAYER::ENEMY,&card);
-  copy.fillerHand(PTCG::PLAYER::ENEMY,&card);
+  auto& copySelfBoard   = copy.m_boards[playerIndex(PTCG::PLAYER::SELF)];
+  auto& copyEnemyBoard  = copy.m_boards[playerIndex(PTCG::PLAYER::ENEMY)];
+  copySelfBoard.m_deck  = Deck(blankCardVector(copySelfBoard.m_hand.numCards()));
+  copyEnemyBoard.m_hand = Hand(blankCardVector(copyEnemyBoard.m_hand.numCards()));
+  copyEnemyBoard.m_deck = Deck(blankCardVector(copyEnemyBoard.m_hand.numCards()));
   return copy;
-}
-
-void Game::fillerDeck(const PTCG::PLAYER &_player, Card* _card)
-{
-  m_boards[playerIndex(_player)].m_deck.filler(std::unique_ptr<Card>(_card));
-}
-
-void Game::fillerHand(const PTCG::PLAYER &_player,Card* _card)
-{
-  m_boards[playerIndex(_player)].m_hand.filler(std::unique_ptr<Card>(_card));
 }
 
 size_t Game::playerIndex(const PTCG::PLAYER &_player) const

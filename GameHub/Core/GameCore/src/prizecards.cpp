@@ -9,6 +9,11 @@ PrizeCards::PrizeCards (const PrizeCards &_original)
     }
 }
 
+Card* PrizeCards::cardAt(const size_t _index)
+{
+  return m_cards[_index].get();
+}
+
 std::array<std::unique_ptr<Card>,6> PrizeCards::view() const
 {
     std::array<std::unique_ptr<Card>,6> ret;

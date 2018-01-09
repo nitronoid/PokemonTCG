@@ -10,6 +10,21 @@ Deck::Deck (const Deck &_original)
   }
 }
 
+Deck& Deck::operator=(const Deck&_original)
+{
+  m_cards.reserve(_original.m_cards.size());
+  for (const auto &card : _original.m_cards)
+  {
+    m_cards.emplace_back(card->clone());
+  }
+  return *this;
+}
+
+Card* Deck::cardAt(const size_t _index)
+{
+  return m_cards[_index].get();
+}
+
 void Deck::init(std::vector<std::unique_ptr<Card>> &&_cards)
 {
   m_cards.reserve(_cards.size());
@@ -59,8 +74,7 @@ std::unique_ptr<Card> Deck::takeTop()
   return take(m_cards.size() - 1);
 }
 
-void Deck::filler(std::unique_ptr<Card> &_card)
+size_t Deck::numCards() const
 {
-  std::fill(m_cards.begin(),m_cards.end(),_card);
+  return m_cards.size();
 }
-

@@ -2,7 +2,7 @@
     "ID" : 97,
     "Name" : "Spearow",
     "HP" : 60,
-    "Trainer" : "C",
+    "Type" : "C",
     "Weakness" : "L",
     "Resistance" : "F-20",
     "Retreat" : 1,

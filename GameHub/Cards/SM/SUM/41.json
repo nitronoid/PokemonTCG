@@ -2,7 +2,7 @@
     "ID" : 41,
     "Name" : "Primarina",
     "HP" : 150,
-    "Trainer" : "W",
+    "Type" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 2,

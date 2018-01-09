@@ -1,3 +1,8 @@
+# exe name
+TARGET=PokemonTCG
+# put the .o files in separate folder to keep it clean
+OBJECTS_DIR=obj
+
 cache()
 CONFIG += console c++14
 CONFIG -= app_bundle
@@ -14,11 +19,3 @@ linux {
     INCLUDEPATH += /usr/include/python2.7
     DEPENDPATH += /usr/include/python2.7
 }
-
-win32 {
-    LIBS+= "C:/Python27/libs/python27.lib"
-    INCLUDEPATH += C:/Python27/include
-    DEPENDPATH += C:/Python27/include
-}
-
-

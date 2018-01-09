@@ -2,7 +2,7 @@
     "ID" : 39,
     "Name" : "Popplio",
     "HP" : 70,
-    "Trainer" : "W",
+    "Type" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 1,

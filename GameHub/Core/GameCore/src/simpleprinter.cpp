@@ -116,6 +116,7 @@ std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
   std::string ret = k_sentinelSlot;
   auto active = _slot->active();
   str_replace_sent(ret, "$ID", std::to_string(active->getID()));
+  str_replace_sent(ret, "$RH", std::to_string(_slot->getRemainingHP()));
   str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
   auto tool = _slot->viewTool();
   std::string toolName = "---";
@@ -163,7 +164,7 @@ void SimplePrinter::pokemonStr(std::string &_str, PokemonCard * const _card) con
   for (const auto& attack : _card->attacks())
   {
     str_replace_sent(_str, "$A"  + std::to_string(i), attack.name(), false);
-    str_replace_sent(_str, "$D"  + std::to_string(i), "---");
+    str_replace_sent(_str, "$D"  + std::to_string(i), attack.damageString());
     std::string requirements;
     for (const auto r : attack.requirements()) requirements += charify(r);
     str_replace_sent(_str, "$AR" + std::to_string(i), requirements);

@@ -1,0 +1,22 @@
+{
+    "ID" : 74,
+    "Name" : "Sandygast",
+    "HP" : 80,
+    "Type" : "F",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 3,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Shore Up" : {
+            "func" : "shoreUp",
+            "energy" : "C"
+        },
+        "Sand Tomb" : {
+            "func" : "sandTomb",
+            "baseDamage" : "30",
+            "energy" : "FCC"
+        }
+    }
+}

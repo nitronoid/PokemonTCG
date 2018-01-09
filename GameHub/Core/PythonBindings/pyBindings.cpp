@@ -32,7 +32,8 @@ PYBIND11_MODULE(poke, m)
       .value("CONFUSED",  PTCG::CONDITION::CONFUSED)
       .value("PARALYZED", PTCG::CONDITION::PARALYZED);
 
-  py::enum_<PTCG::TRIGGER>(m, "PHASE")
+  py::enum_<PTCG::TRIGGER>(m, "TRIGGER")
+      .value("START",   PTCG::TRIGGER::START)
       .value("NOW",     PTCG::TRIGGER::NOW)
       .value("ATTACK",  PTCG::TRIGGER::ATTACK)
       .value("END",     PTCG::TRIGGER::END)
@@ -136,7 +137,8 @@ PYBIND11_MODULE(poke, m)
 
   py::class_<Ability>(m, "Ability")
       .def(py::init<
-           std::function<void(Game*)>,
+           const std::function<void(Game*)>,
+           const std::string &,
            const PTCG::TRIGGER,
            const PTCG::DURATION,
            const std::function<bool(Game*const)>

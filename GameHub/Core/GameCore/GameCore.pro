@@ -4,7 +4,8 @@ CONFIG -= app_bundle
 
 SOURCES += $$files(../GameCore/src/*.cpp)
 
-HEADERS += $$files(../GameCore/include/*.h)
+HEADERS += $$files(../GameCore/include/*.h) \
+    include/effect.h
 
 INCLUDEPATH+=$$PWD/include
 INCLUDEPATH+=../pybind11/include

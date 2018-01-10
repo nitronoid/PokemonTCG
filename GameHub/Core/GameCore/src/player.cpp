@@ -10,7 +10,7 @@ void Player::playCard(const size_t &_index)
 
 void Player::retreat()
 {
-  if(m_canRetreat)
+  if(canRetreat())
   {
     constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
     constexpr auto self = PTCG::PLAYER::SELF;
@@ -66,4 +66,9 @@ std::vector<std::unique_ptr<Card>> Player::viewDiscard(const PTCG::PLAYER &_owne
 std::array<BoardSlot, 6> Player::viewBench(const PTCG::PLAYER &_owner) const
 {
   return m_parentGame.viewBench(_owner);
+}
+
+bool Player::canRetreat()
+{
+  return m_canRetreat && m_parentGame.activeCanRetreat(PTCG::PLAYER::SELF);
 }

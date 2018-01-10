@@ -63,7 +63,7 @@ public:
   std::array<BoardSlot, 6> viewBench(const PTCG::PLAYER &_owner = PTCG::PLAYER::SELF) const;
 
   Game getDummyGame() const;
-
+  bool canRetreat();
 private:
   bool m_canRetreat = true;
   Game& m_parentGame;

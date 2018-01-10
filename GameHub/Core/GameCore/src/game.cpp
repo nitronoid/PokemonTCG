@@ -971,4 +971,11 @@ std::vector<std::unique_ptr<Card>> Game::viewHand(const PTCG::PLAYER &_player) c
   return m_boards[playerIndex(_player)].m_hand.view();
 }
 
-
+bool Game::activeCanRetreat(const PTCG::PLAYER &_player)
+{
+  return m_boards[playerIndex(_player)].m_bench.activeStatus()->canRetreat();
+}
+void Game::setActiveCanRetreat(const PTCG::PLAYER &_player, const bool &_val)
+{
+  m_boards[playerIndex(_player)].m_bench.activeStatus()->setProtected(_val);
+}

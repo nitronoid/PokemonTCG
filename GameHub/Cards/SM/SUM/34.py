@@ -16,7 +16,7 @@ def canUse(h):
 
 def guardPress(h):
     h.dealDamage(80)
-    ability = p.Abilty(effect, p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
+    ability = p.Abilty(effect,'', p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
     h.addEffect(p.PLAYER.ENEMY, 0, ability)
    
     

@@ -26,6 +26,8 @@ int main()
 
   SimplePrinter drawer;
   HumanPlayer a(test), b(test);
+  //HumanPlayer b(test);
+  //AIPlayerBT a(test);
   test.init(testPool, &drawer, &a, &b);
   std::cout<<"BEGIN\n";
   //  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(53)));

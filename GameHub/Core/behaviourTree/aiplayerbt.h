@@ -17,7 +17,14 @@ public:
   {}
 
   virtual Player* clone() const override;
-
+  ///-----------------------------------------------------------------------------------
+  /// @build chooseCards function
+  /// @param _player : which player choose the cards
+  /// @param _origin : from which pile are you choosing
+  /// @param _action : what do you do with the card
+  /// @param _options: pile vector chosen cards
+  /// @param _amount : how many cards you are choosing
+  ///-----------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseCards(
       const PTCG::PLAYER _player,
       const PTCG::PILE _origin,
@@ -25,21 +32,28 @@ public:
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
       ) override;
-
+  ///-----------------------------------------------------------------------------------
+  /// @build where to put your cards on the bench/activeCard
+  /// NOTE: just wherever it is free
+  ///-----------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseSlot(
       const PTCG::PLAYER _owner,
       const PTCG::ACTION _action,
       const std::vector<BoardSlot> &_options,
       const unsigned _amount
       ) override;
-
+  ///-----------------------------------------------------------------------------------
+  /// @build optional
+  ///-----------------------------------------------------------------------------------
   virtual void learnCards(
       const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
       const std::vector<size_t> &_indices,
       const std::vector<std::unique_ptr<Card>> &_revealed
       ) override;
-
+  ///-----------------------------------------------------------------------------------
+  /// @build what do to with the energy, Discard and where to move it
+  ///-----------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseEnergy(
       const PTCG::PLAYER _owner,
       const PTCG::PILE _destination,
@@ -47,10 +61,14 @@ public:
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
       ) override;
-
+  ///-----------------------------------------------------------------------------------
+  /// @build function for if you are agreeing with the action or not
+  ///-----------------------------------------------------------------------------------
   virtual bool agree(const PTCG::ACTION _action) override;
-
-  /// @build bool (attack or not), unsigned (which attack)
+  ///-----------------------------------------------------------------------------------
+  /// @build what do you do while it is your turn
+  /// return a pair with bool (attack or not), unsigned (which attack)
+  ///-----------------------------------------------------------------------------------
   virtual std::pair<bool, unsigned> turn() override;
 
 };

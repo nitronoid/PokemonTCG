@@ -2,7 +2,6 @@
 
 Player* AIPlayerBT::clone() const
 {
-    return new AIPlayerBT(*this);
 }
 
 std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PTCG::PILE _origin, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)

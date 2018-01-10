@@ -6,11 +6,6 @@
 #include "simpleprinter.h"
 #include "cardfactory.h"
 
-/// BrightTide includes
-#include "sequence.h"
-#include "selector.h"
-#include "action.h"
-#include "condition.h"
 
 
 // Needed for python attack functions
@@ -18,12 +13,13 @@ pybind11::scoped_interpreter m_python;
 
 int main()
 {
-  // Simple test
-    Selector* hello = new Selector;
-    hello->addChild(new Action);
 
-    while(!hello->execute())
-        std::cout<<"STOP"<<'\n';
+//    Selector* hello = new Selector;
+//    hello->addChild(new Action);
+
+//    while(!hello->execute())
+//        std::cout<<"STOP"<<'\n';
+  // Simple test
   Game test;
   CardFactory testPool("../../Cards/SM/SUM/", "../PythonBindings/");
   testPool.init();

@@ -9,7 +9,7 @@ def canUse(h):
 def defenseCurl(h):
     if(h.flipCoin(1)):
         # prevent all damage done next turn
-        ability = p.Abilty(effect, p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
+        ability = p.Abilty(effect,'', p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
         h.addEffect(p.PLAYER.ENEMY, 0, ability)
 
 def filter(card):

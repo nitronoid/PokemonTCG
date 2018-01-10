@@ -25,7 +25,7 @@ public:
   void start();
   void playCard(const size_t _index);
   bool canPlay(const size_t _index);
-  bool drawCard(Board& _board);
+  bool drawCard(const PTCG::PLAYER _player);
   void moveCards(
       std::vector<size_t> _cardIndices,
       const PTCG::PLAYER _owner,
@@ -129,7 +129,7 @@ private:
   std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const size_t _index);
   size_t playerIndex(const PTCG::PLAYER &_player) const;
   void doMulligans(std::vector<size_t> &io_mulligans);
-  void drawHand(Board& io_board);
+  void drawHand(const PTCG::PLAYER _player);
   void setBoard(Board& io_board, const size_t _active);
   void nextTurn();
   void setupGame();

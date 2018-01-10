@@ -9,7 +9,7 @@ def canUse(h):
 def defenseCurl(h):
     if(h.flipCoin(1)):
         # prevent all damage done next turn
-        ability = p.Abilty(effect, p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
+        ability = p.Abilty(effect,'', p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
         h.addEffect(p.PLAYER.ENEMY, 0, ability)
 
 def filter(card):
@@ -20,6 +20,7 @@ def discharge(h):
     # for each electricity card you DISCARD
     # on pokemon
     energy = h.viewBench(p.PLAYER.SELF)[0].viewEnergy()
+    print energy
     lightingEnergy = []
     for i in range(len(energy)):
         if filter(energy[i]):

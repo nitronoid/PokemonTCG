@@ -17,6 +17,7 @@ public:
   BoardSlot(const BoardSlot &_original);
   BoardSlot (BoardSlot &&_origin) = default;
   BoardSlot& operator=(const BoardSlot &_original);
+  BoardSlot& operator=(BoardSlot &&_original) = default;
 
   inline unsigned getTurnPlayed() const { return m_turnPlayed; }
   inline int      getDamage()     const { return m_damageTaken; }
@@ -44,8 +45,10 @@ public:
   bool canEvolve(PokemonCard * const _card, const unsigned &_turn);
   std::vector<std::unique_ptr<Card>> viewEnergy();
   std::unique_ptr<Card> viewTool();
-
+  void swap(BoardSlot& _slot);
 private:
+
+
   std::unique_ptr<TrainerCard> m_tool;
   unsigned m_turnPlayed = 0;
   std::vector<std::unique_ptr<EnergyCard>> m_energy;

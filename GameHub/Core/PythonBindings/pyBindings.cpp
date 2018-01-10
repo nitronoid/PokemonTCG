@@ -155,6 +155,8 @@ PYBIND11_MODULE(poke, m)
            py::arg("_player") = PTCG::PLAYER::ENEMY,
            py::arg("_id") = 0u
       )
+      .def("addBonusDamage", &Game::addBonusDamage)
+      .def("addBonusDefense", &Game::addBonusDefense)
       .def("healDamage", &Game::healDamage, py::arg("_heal"), py::arg("_id") = 0u)
       .def("applyCondition", &Game::applyCondition)
       .def("removeCondition", &Game::removeCondition)
@@ -181,6 +183,8 @@ PYBIND11_MODULE(poke, m)
       .def("shuffleDeck", &Game::shuffleDeck)
       .def("flipCoin", &Game::flipCoin)
       .def("addEffect", &Game::addEffect)
+      .def("drawCard", &Game::drawCard)
       .def("removeEnergy", &Game::removeEnergy);
+
 
 }

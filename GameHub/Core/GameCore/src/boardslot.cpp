@@ -22,6 +22,13 @@ BoardSlot::BoardSlot(const BoardSlot &_original) :
   }
 }
 
+void BoardSlot::swap(BoardSlot& _slot)
+{
+  auto temp = std::move(_slot);
+  _slot = std::move(*this);
+  *this = std::move(temp);
+}
+
 BoardSlot& BoardSlot::operator=(const BoardSlot &_original)
 {
   if(_original.m_tool)

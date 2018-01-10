@@ -143,9 +143,9 @@ void Game::playCard(const size_t _index)
   }
 }
 
-void Game::drawHand(Board& io_board)
+void Game::drawHand(const PTCG::PLAYER _player)
 {
-  for (int j = 0; j < 6; ++j) drawCard(io_board);
+  for (int j = 0; j < 6; ++j) drawCard(_player);
 }
 
 void Game::setBoard(Board& io_board, const size_t _active)
@@ -199,13 +199,13 @@ bool Game::playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action)
 void Game::setupGame()
 {
   std::vector<size_t> mulligans;
-  for (size_t i = 0; i < 2; ++i)
+  for (const auto p : {PTCG::PLAYER::SELF, PTCG::PLAYER::ENEMY})
   {
-    Board& board = m_boards[i];
-    drawHand(board);
-    auto active = chooseActive(static_cast<PTCG::PLAYER>(i));
+    Board& board = m_boards[playerIndex(p)];
+    drawHand(p);
+    auto active = chooseActive(p);
     if (!active.empty()) setBoard(board, active[0]);
-    else mulligans.push_back(i);
+    else mulligans.push_back(playerIndex(p));
   }
   doMulligans(mulligans);
 }
@@ -219,11 +219,11 @@ void Game::doMulligans(std::vector<size_t> &io_mulligans)
     // get the player index at this point
     const size_t index = io_mulligans[i];
     // use the index to get the board and player flags
-    Board& board = m_boards[index];
+    Board& currentPlayerBoard = m_boards[index];
     auto currentPlayer = static_cast<PTCG::PLAYER>(index);
     auto enemyPlayer = static_cast<PTCG::PLAYER>((index+1)%2);
     // Generate consecutive integers for range of hand
-    std::vector<size_t> indices(board.m_hand.view().size());
+    std::vector<size_t> indices(currentPlayerBoard.m_hand.view().size());
     std::iota (std::begin(indices), std::end(indices), 0);
     // Reveal the Hand
     revealCards(enemyPlayer, currentPlayer, PTCG::PILE::HAND, indices);
@@ -231,19 +231,19 @@ void Game::doMulligans(std::vector<size_t> &io_mulligans)
     moveCards(indices, currentPlayer, PTCG::PILE::HAND, PTCG::PILE::DECK);
     // Shuffle and redraw the hand
     shuffleDeck(currentPlayer);
-    drawHand(board);
+    drawHand(currentPlayer);
     // Ask the player to choose an active pokemon from their hand
     auto active = chooseActive(currentPlayer);
     // If they were able to we set the board up
     if (!active.empty())
-      setBoard(board, active[0]);
+      setBoard(currentPlayerBoard, active[0]);
     // Otherwise they will need to mulligan again
     else
     {
       // If this was the last scheduled mulligan, then we are now on a streak
       // We must therefor offer the enemy the choice of drawing a card
       if ((i == size - 1) && playerAgree(enemyPlayer, PTCG::ACTION::DRAW))
-        drawCard(m_boards[(index+1)%2]);
+        drawCard(enemyPlayer);
       // Then schedule another mulligan for this player
       io_mulligans.push_back(index);
       // Update the size
@@ -310,19 +310,20 @@ bool Game::checkForKnockouts()
 void Game::nextTurn()
 {
   // Get the current player
-  auto currentPlayer = m_players[m_turnCount % 2];
-  Board& currentBoard = m_boards[m_turnCount % 2];
+  size_t playerId = playerIndex(PTCG::PLAYER::SELF);
+  auto currentPlayer = m_players[playerId];
+  Board& currentBoard = m_boards[playerId];
   // Ascii print the board
   if (m_drawer)
   {
-    m_drawer->drawBoard(&m_boards[(m_turnCount + 1) % 2],false);
+    m_drawer->drawBoard(&m_boards[playerIndex(PTCG::PLAYER::ENEMY)],false);
     m_drawer->drawBoard(&currentBoard, true);
   }
   // Apply all effects that are triggered by the start of a turn
   executeTurnEffects(PTCG::TRIGGER::START);
   // The effects could have knocked out a pokemon so we check
   // Attempt to draw a card
-  if (!checkForKnockouts() && drawCard(currentBoard))
+  if (!checkForKnockouts() && drawCard(PTCG::PLAYER::SELF))
   {
     // Execute the players turn function
     auto attackDecision = currentPlayer->turn();
@@ -362,11 +363,12 @@ void Game::addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, co
 {
   m_boards[playerIndex(_player)].m_bench.activeStatus()->addBonusDefense(_order,_value);
 }
-bool Game::drawCard(Board& _board)
+bool Game::drawCard(const PTCG::PLAYER _player)
 {
-  if (_board.m_deck.empty()) return false;
-  auto topCard = _board.m_deck.takeTop();
-  _board.m_hand.put(std::move(topCard));
+  Board& board = m_boards[playerIndex(_player)];
+  if (board.m_deck.empty()) return false;
+  auto topCard = board.m_deck.takeTop();
+  board.m_hand.put(std::move(topCard));
   return true;
 }
 
@@ -858,7 +860,10 @@ bool Game::resolveAttackConditions(const PTCG::PLAYER _player)
   using cond = PTCG::CONDITION;
   bool confused;
   if((confused =  hasCondition(_player, cond::CONFUSED) && !flipCoin(1)))
+  {
+    std::cout<<"Confused and failed to flip heads, taking confusion damage."<<'\n';
     addDamageCounter(m_damageHandler.getConfuse(), _player);
+  }
   // if you flipped heads and you're not alseep or paralyzed
   return !(confused || hasCondition(_player, cond::ASLEEP) || hasCondition(_player, cond::PARALYZED));
 }

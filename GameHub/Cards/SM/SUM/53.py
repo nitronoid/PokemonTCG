@@ -20,6 +20,7 @@ def discharge(h):
     # for each electricity card you DISCARD
     # on pokemon
     energy = h.viewBench(p.PLAYER.SELF)[0].viewEnergy()
+    print energy
     lightingEnergy = []
     for i in range(len(energy)):
         if filter(energy[i]):

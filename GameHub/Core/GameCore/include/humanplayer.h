@@ -46,8 +46,13 @@ public:
       ) override;
 
   virtual bool agree(const PTCG::ACTION _action) override;
-
   virtual std::pair<bool, unsigned> turn() override;
+
+  void setAttack(const unsigned _index);
+
+private:
+  unsigned m_attackID;
+  bool m_doAttack = false;
 
 };
 

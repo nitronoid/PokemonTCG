@@ -390,7 +390,6 @@ void SimplePrinter::drawBoard(Board* _board, const bool _isOp)
     std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
     std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
     std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
-
   }
   else
   {

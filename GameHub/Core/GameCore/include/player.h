@@ -55,7 +55,6 @@ public:
 
   virtual std::pair<bool, unsigned> turn() = 0;
 
-protected:
   bool canPlay(const size_t &_index);
   void playCard(const size_t &_index);
   void retreat();

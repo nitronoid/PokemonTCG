@@ -997,5 +997,5 @@ bool Game::activeCanRetreat(const PTCG::PLAYER &_player)
 }
 void Game::setActiveCanRetreat(const PTCG::PLAYER &_player, const bool &_val)
 {
-  m_boards[playerIndex(_player)].m_bench.activeStatus()->setProtected(_val);
+  m_boards[playerIndex(_player)].m_bench.activeStatus()->setCanRetreat(_val);
 }

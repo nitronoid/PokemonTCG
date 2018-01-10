@@ -11,18 +11,21 @@
 class AIPlayerBT : public Player
 {
 public:
-  AIPlayerBT(const AIPlayerBT&) = default;
-  AIPlayerBT(Game& _parentGame) :
-    Player(_parentGame)
-  {}
+    AIPlayerBT(const AIPlayerBT&) = default;
+    AIPlayerBT(Game& _parentGame) :
+      Player(_parentGame)
+    {}
 
   virtual Player* clone() const override;
+
+  virtual std::string deckName() const override;
+
   ///-----------------------------------------------------------------------------------
   /// @build chooseCards function
   /// @param _player : which player choose the cards
   /// @param _origin : from which pile are you choosing
   /// @param _action : what do you do with the card
-  /// @param _options: pile vector chosen cards
+  /// @param _options: pile of cards
   /// @param _amount : how many cards you are choosing
   ///-----------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseCards(
@@ -34,7 +37,7 @@ public:
       ) override;
   ///-----------------------------------------------------------------------------------
   /// @build where to put your cards on the bench/activeCard
-  /// NOTE: just wherever it is free
+  /// NOTE: checks if the vector is full, if not choose index that is not full
   ///-----------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseSlot(
       const PTCG::PLAYER _owner,

@@ -18,7 +18,8 @@ int main()
 
   SimplePrinter drawer;
   HumanPlayer a(test), b(test);
-  test.init(testPool, &drawer, &a, &b);
+  test.init(testPool, &a, &b);
+  test.registerGui(&drawer);
   std::cout<<"BEGIN\n";
   //  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(53)));
   //  foo->attack(1, test);

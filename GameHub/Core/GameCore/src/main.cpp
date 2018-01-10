@@ -16,10 +16,9 @@ int main()
   CardFactory testPool("../../Cards/SM/SUM/", "../PythonBindings/");
   testPool.init();
 
-
-
   SimplePrinter drawer;
-  test.init(testPool, &drawer, "test_deck.json", "test_deck.json");
+  HumanPlayer a(test), b(test);
+  test.init(testPool, &drawer, &a, &b);
   std::cout<<"BEGIN\n";
   //  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(53)));
   //  foo->attack(1, test);

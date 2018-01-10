@@ -19,6 +19,8 @@ public:
 
   virtual Player* clone() const = 0;
 
+  virtual std::string deckName() const = 0;
+
   virtual std::vector<size_t> chooseCards(
       const PTCG::PLAYER _player,
       const PTCG::PILE _origin,

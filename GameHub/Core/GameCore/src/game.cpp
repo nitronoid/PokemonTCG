@@ -6,22 +6,16 @@
 Game::Game(const Game &_original) :
   m_playableCards(_original.m_playableCards),
   m_turnCount(_original.m_turnCount)
-{
-  for (size_t i = 0; i < m_players.size(); ++i)
-  {
-    if (_original.m_players[i]) m_players[i].reset( _original.m_players[i]->clone());
-  }
-}
+{}
 
-void Game::init(const CardFactory &_factory, GuiModule * const _drawer, const std::string &_deckA, const std::string &_deckB)
+void Game::init(const CardFactory &_factory, GuiModule * const _drawer, Player*const _playerA, Player*const _playerB)
 {
-  m_boards[0].m_deck.init(_factory.loadDeck(_deckA));
+  m_boards[0].m_deck.init(_factory.loadDeck(_playerA->deckName()));
   m_boards[0].m_deck.shuffle();
-  m_boards[1].m_deck.init(_factory.loadDeck(_deckB));
+  m_boards[1].m_deck.init(_factory.loadDeck(_playerB->deckName()));
   m_boards[1].m_deck.shuffle();
-  m_players[0].reset(new HumanPlayer(*this));
-  m_players[1].reset(new HumanPlayer(*this));
-
+  m_players[0] = _playerA;
+  m_players[1] = _playerB;
   m_drawer = _drawer;
 }
 
@@ -300,14 +294,14 @@ void Game::addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const A
 bool Game::checkForKnockouts()
 {
   bool gameOver = false;
-  for (size_t i = 0; i < m_boards.size(); ++i)
+  for (const auto p : {PTCG::PLAYER::SELF, PTCG::PLAYER::ENEMY})
   {
-    auto& board = m_boards[i];
+    auto& board = m_boards[playerIndex(p)];
     for (size_t j = 0; j < 6; ++j)
     {
       auto slot = board.m_bench.slotAt(j);
       if (slot->active())
-        gameOver = gameOver || handleKnockOut(static_cast<PTCG::PLAYER>(i), j);
+        gameOver = gameOver || handleKnockOut(p, j);
     }
   }
   return gameOver;
@@ -316,7 +310,7 @@ bool Game::checkForKnockouts()
 void Game::nextTurn()
 {
   // Get the current player
-  auto& currentPlayer = m_players[m_turnCount % 2];
+  auto currentPlayer = m_players[m_turnCount % 2];
   Board& currentBoard = m_boards[m_turnCount % 2];
   // Ascii print the board
   if (m_drawer)
@@ -778,7 +772,7 @@ std::vector<size_t> Game::playerEnergyChoice(
     )
 {
   // Player and players board
-  auto& player = m_players[playerIndex(_thinker)];
+  auto player = m_players[playerIndex(_thinker)];
   auto& board = m_boards[playerIndex(_thinker)];
   // Get the unfiltered energy cards on the requested slot
   auto energy = board.m_bench.slotAt(_slotIndex)->viewEnergy();
@@ -815,14 +809,15 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
   bool gameOver = false;
   auto & board = m_boards[playerIndex(_player)];
   auto& bench = board.m_bench;
-  if(bench.view()[_index].isDefeated())
+  auto slot = bench.slotAt(_index);
+  if(slot->active() && slot->isDefeated())
   {
     // Match all cards
     constexpr auto match = [](Card* const){return true;};
     // Discard and reset all state on that slot
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
     auto opponent = static_cast<PTCG::PLAYER>((static_cast<unsigned>(_player) + 1) % 2);
-    bench.slotAt(_index)->setDamage(0);
+    slot->setDamage(0);
     // If it was the active we need to reset the active condition
     if(!_index)
     {

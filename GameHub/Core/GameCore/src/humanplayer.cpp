@@ -1,4 +1,5 @@
 #include "humanplayer.h"
+#include "game.h"
 #include <ctime>
 #include <cstdlib>
 #include <random>
@@ -7,6 +8,12 @@
 Player* HumanPlayer::clone() const
 {
   return new HumanPlayer(*this);
+}
+
+
+std::string HumanPlayer::deckName() const
+{
+  return "test_deck.json";
 }
 
 std::string actionStr(const PTCG::ACTION _action)
@@ -127,6 +134,8 @@ bool HumanPlayer::agree(const PTCG::ACTION _action)
 
 std::pair<bool, unsigned> HumanPlayer::turn()
 {
+  auto dummy = getDummyGame();
+//  dummy.
   // Play cards
   while (agree(PTCG::ACTION::PLAY))
   {

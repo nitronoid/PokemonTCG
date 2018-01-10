@@ -15,7 +15,7 @@ public:
   Game(Game&&_original) = default;
 
   Game clone() const;
-  void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
+  void init(const CardFactory &_factory, GuiModule *const _drawer, Player * const _playerA, Player * const _playerB);
 
   void dealDamage(const int _damage, const size_t _id = 0, const bool &_applyWeak = true);
   void addDamageCounter(const int _damage, const PTCG::PLAYER _player = PTCG::PLAYER::ENEMY, const unsigned _id = 0);
@@ -146,7 +146,7 @@ private:
 
 private:
   GuiModule* m_drawer;
-  std::array<std::unique_ptr<Player>, 2> m_players;
+  std::array<Player*, 2> m_players{{nullptr, nullptr}};
   std::array<Board, 2> m_boards;
   DamageHandler m_damageHandler;
   std::unordered_set<PTCG::CARD> m_playableCards;

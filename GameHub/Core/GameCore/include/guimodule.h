@@ -5,10 +5,10 @@
 class GuiModule
 {
 public :
-    GuiModule() = default;
-    virtual ~GuiModule(){}
-    virtual void drawBoard(Board* _board, const bool _isOp)=0;
-    //_drawType == f -> current; _drawType == t -> opponent
+  GuiModule() = default;
+  virtual ~GuiModule(){}
+  virtual void drawBoard(Board* _board, const bool _isOp)=0;
+  //_drawType == f -> current; _drawType == t -> opponent
 };
 
 #endif // GUIMODULE_H

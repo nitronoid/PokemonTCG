@@ -42,6 +42,7 @@ enum class DURATION {
 };
 
 enum class CARD {
+  BLANK,
   ENERGY,
   POKEMON,
   ITEM,

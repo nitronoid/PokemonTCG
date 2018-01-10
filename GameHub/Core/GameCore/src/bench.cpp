@@ -21,17 +21,17 @@ std::array<BoardSlot, 6> Bench::view() const
   std::array<BoardSlot,6> ret;
   for (size_t i =0 ; i < 6 ; ++i)
   {
-      ret[i]=m_slots[i];
+    ret[i]=m_slots[i];
   }
   return ret;
 }
 
 void Bench::switchActive(const unsigned &_sub)
 {
-    //using rend to simplify index finding for the substitute
-    std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';
-    std::swap(m_slots[0],m_slots[_sub]);
-    m_activeStatus.removeAllConditions();
+  //using rend to simplify index finding for the substitute
+  std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';
+  std::swap(m_slots[0],m_slots[_sub]);
+  m_activeStatus.removeAllConditions();
 }
 
 void Bench::put(std::unique_ptr<Card> &&_card, const size_t _index)

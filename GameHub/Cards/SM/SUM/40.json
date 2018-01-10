@@ -2,7 +2,7 @@
     "ID" : 40,
     "Name" : "Brionne",
     "HP" : 90,
-    "Trainer" : "W",
+    "Type" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 2,

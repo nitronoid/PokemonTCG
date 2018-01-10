@@ -20,7 +20,7 @@ public:
       const PTCG::TRIGGER _trigger,
       const PTCG::DURATION _duration,
       const std::function<bool(Game*const)> _canUse = [](auto){return true;}
-      ) :
+  ) :
     m_name(_name),
     m_ability(_ability),
     m_trigger(_trigger),

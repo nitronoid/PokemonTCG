@@ -21,7 +21,7 @@ void Player::retreat()
     {
       if(bench.at(0).numEnergy() >= bench.at(0).active()->retreatCost() &&
          switchChoice[0] < 6 && switchChoice[0] != 0 &&
-        bench.at(switchChoice[0]).numPokemon()>0)
+         bench.at(switchChoice[0]).numPokemon()>0)
       {
         // passing a lambda to return any energy card types
         std::function<bool(Card*const)> match = [](Card* const){return true;};

@@ -15,7 +15,7 @@ public:
       const PTCG::TRIGGER _trigger,
       const PTCG::DURATION _duration,
       const std::function<bool(Game*const)> _canUse = [](auto){return true;}
-      ) :
+  ) :
     Effect (_ability, _name, _trigger, _duration, _canUse)
   {}
 

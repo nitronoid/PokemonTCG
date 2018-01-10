@@ -1,6 +1,5 @@
 #ifndef CARDPOOL_H
 #define CARDPOOL_H
-
 #include "pokemoncard.h"
 #include "trainercard.h"
 #include "energycard.h"

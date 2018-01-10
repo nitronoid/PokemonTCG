@@ -1,6 +1,5 @@
 #ifndef GAME_H
 #define GAME_H
-
 #include <memory>
 #include <unordered_set>
 #include "pokemoncard.h"
@@ -9,7 +8,6 @@
 #include "board.h"
 #include "damagehandler.h"
 #include "guimodule.h"
-
 class Game
 {
 public:
@@ -17,7 +15,7 @@ public:
   Game(Game&&_original) = default;
 
   Game clone() const;
-  void init(const CardFactory &_factory, GuiModule *const _drawer, const std::string &_deckA, const std::string &_deckB);
+  void init(const CardFactory &_factory, GuiModule *const _drawer, Player * const _playerA, Player * const _playerB);
 
   void dealDamage(const int _damage, const size_t _id = 0, const bool &_applyWeak = true);
   void addDamageCounter(const int _damage, const PTCG::PLAYER _player = PTCG::PLAYER::ENEMY, const unsigned _id = 0);
@@ -80,7 +78,7 @@ public:
   bool playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action);
 
   // View card pile functions
- // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+  // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
   std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
   std::vector<std::unique_ptr<Card>>  viewDiscard(const PTCG::PLAYER &_player) const;
   std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;
@@ -108,7 +106,7 @@ public:
 
 private:
   Game(const Game &_original);
-  void checkForKnockouts();
+  bool checkForKnockouts();
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin = PTCG::PILE::HAND);
   std::vector<size_t> chooseReplacement(const PTCG::PLAYER _player);
   void executeTurnEffects(const PTCG::TRIGGER _trigger);
@@ -116,11 +114,11 @@ private:
   void clearEffects();
   std::vector<std::unique_ptr<Card>> viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
-      std::vector<size_t> &io_originalPositions,
-      const PTCG::PLAYER _owner,
-      const PTCG::PILE _pile,
-      std::function<bool(Card*const)> _match
-      ) const;
+                  std::vector<size_t> &io_originalPositions,
+                  const PTCG::PLAYER _owner,
+                  const PTCG::PILE _pile,
+                  std::function<bool(Card*const)> _match
+                  ) const;
   void filterCards(
       std::vector<std::unique_ptr<Card>>& io_unfiltered,
       std::vector<std::unique_ptr<Card>>& io_filtered,
@@ -136,7 +134,7 @@ private:
   void nextTurn();
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
-  void handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
+  bool handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
   void playPokemon(PokemonCard* const _pokemon, const size_t _index);
   void playItem(TrainerCard* const _item, const size_t _index);
   void playTool(TrainerCard* const _tool, const size_t _index);
@@ -148,7 +146,7 @@ private:
 
 private:
   GuiModule* m_drawer;
-  std::array<std::unique_ptr<Player>, 2> m_players;
+  std::array<Player*, 2> m_players{{nullptr, nullptr}};
   std::array<Board, 2> m_boards;
   DamageHandler m_damageHandler;
   std::unordered_set<PTCG::CARD> m_playableCards;
@@ -158,6 +156,7 @@ private:
   bool m_rulesBroken   = false;
   bool m_gameFinished  = false;
   bool m_supportPlayed = false;
+
 
 };
 

@@ -39,7 +39,6 @@ void Player::retreat()
         m_canRetreat = false;
       }
     }
-
   }
 }
 

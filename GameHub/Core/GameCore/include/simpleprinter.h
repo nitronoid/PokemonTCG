@@ -7,9 +7,10 @@ class SimplePrinter : public GuiModule
 public :
   SimplePrinter() = default;
   virtual ~SimplePrinter(){}
-  virtual void drawBoard(Board* _board, const bool _isOp) override;
+  virtual void drawBoard() override;
 
 private:
+  void drawSide(Board* _board, const bool _isOp);
   void pokemonStr(std::string &_str, PokemonCard * const _card) const;
   std::string bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus) const;
   std::string slotStr(BoardSlot* const _slot) const;

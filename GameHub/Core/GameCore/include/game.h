@@ -8,6 +8,7 @@
 #include "board.h"
 #include "damagehandler.h"
 #include "guimodule.h"
+
 class Game
 {
 public:
@@ -15,7 +16,7 @@ public:
   Game(Game&&_original) = default;
 
   Game clone() const;
-  void init(const CardFactory &_factory, GuiModule *const _drawer, Player * const _playerA, Player * const _playerB);
+  void init(const CardFactory &_factory, Player * const _playerA, Player * const _playerB);
 
   void dealDamage(const int _damage, const size_t _id = 0, const bool &_applyWeak = true);
   void addDamageCounter(const int _damage, const PTCG::PLAYER _player = PTCG::PLAYER::ENEMY, const unsigned _id = 0);
@@ -103,9 +104,11 @@ public:
   std::vector<size_t> nonFreeSlots(const PTCG::PLAYER _owner) const;
   void shuffleDeck(const PTCG::PLAYER _owner);
   void addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect);
-
+  Board* getBoard(const PTCG::PLAYER _owner);
+  void registerGui(GuiModule*const _gui);
 private:
   Game(const Game &_original);
+  void notifyGui();
   bool checkForKnockouts();
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin = PTCG::PILE::HAND);
   std::vector<size_t> chooseReplacement(const PTCG::PLAYER _player);
@@ -145,7 +148,7 @@ private:
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
 
 private:
-  GuiModule* m_drawer;
+  std::vector<GuiModule*> m_guiObservers;
   std::array<Player*, 2> m_players{{nullptr, nullptr}};
   std::array<Board, 2> m_boards;
   DamageHandler m_damageHandler;

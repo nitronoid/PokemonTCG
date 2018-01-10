@@ -1,0 +1,23 @@
+{
+    "ID" : 70,
+    "Name" : "Boldore",
+    "HP" : 110,
+    "Type" : "F",
+    "Weakness" : "G",
+    "Resistance" : "",
+    "Retreat" : 4,
+    "Stage" : 1,
+    "Pre evolution" : "Roggenrola",
+    "Attacks" : {
+        "Headbutt" : {
+            "func" : "headbutt",
+            "baseDamage" : "30",
+            "energy" : "FC"
+        },
+        "Rock Hurl" : {
+            "func" : "rockHurl",
+            "baseDamage" : "50",
+            "energy" : "FCC"
+        }
+    }
+}

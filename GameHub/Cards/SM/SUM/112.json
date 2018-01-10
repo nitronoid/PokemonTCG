@@ -1,0 +1,23 @@
+{
+    "ID" : 112,
+    "Name" : "Bewear",
+    "HP" : 130,
+    "Type" : "C",
+    "Weakness" : "F",
+    "Resistance" : "",
+    "Retreat" : 3,
+    "Stage" : 1,
+    "Pre evolution" : "Stufful",
+    "Attacks" : {
+        "Bear Hug" : {
+            "func" : "bearHug",
+            "baseDamage" : "40",
+            "energy" : "CC"
+        },
+        "Superpower" : {
+            "func" : "superpower",
+            "baseDamage" : "80",
+            "energy" : "CCC"
+        }
+    }
+}

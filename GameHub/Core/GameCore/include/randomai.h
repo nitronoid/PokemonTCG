@@ -1,13 +1,13 @@
-#ifndef ROARINGFLUKE_H
-#define ROARINGFLUKE_H
+#ifndef RANDOMAI_H
+#define RANDOMAI_H
 
 #include "player.h"
 
-class RoaringFluke : public Player
+class RandomAI : public Player
 {
 public:
-  RoaringFluke(const RoaringFluke&) = default;
-  RoaringFluke(Game& _parentGame) :
+  RandomAI(const RandomAI&) = default;
+  RandomAI(Game& _parentGame) :
     Player(_parentGame)
   {}
 
@@ -45,16 +45,17 @@ public:
       const unsigned _amount
       ) override;
 
+  virtual std::vector<size_t> chooseConditions(
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> &_options,
+      const unsigned _amount
+      ) override;
+
   virtual bool agree(const PTCG::ACTION _action) override;
   virtual std::pair<bool, unsigned> turn() override;
-
-  void setAttack(const unsigned _index);
-
-private:
-  unsigned m_attackID;
-  bool m_doAttack = false;
 
 };
 
 
-#endif // ROARINGFLUKE_H
+#endif // RANDOMAI_H

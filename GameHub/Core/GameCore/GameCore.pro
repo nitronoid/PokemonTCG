@@ -7,9 +7,14 @@ cache()
 CONFIG += console c++14
 CONFIG -= app_bundle
 
+# Core
+HEADERS += $$files(../GameCore/include/*.h)
 SOURCES += $$files(../GameCore/src/*.cpp)
 
-HEADERS += $$files(../GameCore/include/*.h)
+# Roaring Heat AI
+HEADERS += $$files(../../../RoaringHeat/include/*.h)
+SOURCES += $$files(../../../RoaringHeat/src/*.cpp)
+INCLUDEPATH+=../../../RoaringHeat/include
 
 INCLUDEPATH+=$$PWD/include
 INCLUDEPATH+=../pybind11/include

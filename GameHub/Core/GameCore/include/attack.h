@@ -37,21 +37,21 @@ public:
     m_damageString(_dmgString),
     m_requirements(_requirements)
   {}
-  /// @brief
-  /// @param
+  /// @brief method to call the attack effect methods
+  /// @param [in] _game current game state to affect
   inline void attack(Game& _game) const { activate(_game); }
-  /// @brief
-  /// @param
+  /// @brief method to check for valid attack condition
+  /// @param [in] _game current game state to check
   inline bool canAttack(Game& _game) const { return canActivate(_game); }
-  /// @brief
-  /// @param
+  /// @brief method to return energy requirements of the attacks
   inline std::vector<PTCG::TYPE> requirements() const { return m_requirements; }
-  /// @brief
-  /// @param
+  /// @brief method to return damage text
   inline std::string damageString() const { return m_damageString; }
 
 private:
+  ///@brief base damage for the attack
   std::string m_damageString;
+  ///@brief energy requirements for the attack
   std::vector<PTCG::TYPE> m_requirements;
 };
 

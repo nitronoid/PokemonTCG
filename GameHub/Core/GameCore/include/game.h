@@ -108,7 +108,7 @@ public:
   void setActiveCanRetreat(const PTCG::PLAYER &_player,const bool &_val = false);
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
-
+  void retreat();
 private:
   Game(const Game &_original);
   void notifyGui();

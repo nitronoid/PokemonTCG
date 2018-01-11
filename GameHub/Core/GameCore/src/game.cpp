@@ -302,6 +302,7 @@ std::vector<Ability> Game::filterEffects(const PTCG::TRIGGER _trigger)
 void Game::executeTurnEffects(const PTCG::TRIGGER _trigger)
 {
   for (const auto & effect : filterEffects(_trigger)) effect.use(*this);
+  notifyGui();
 }
 
 void Game::addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect)
@@ -556,6 +557,33 @@ std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner) const
 std::vector<size_t> Game::nonFreeSlots(const PTCG::PLAYER _owner) const
 {
   return filterSlots(_owner, [](BoardSlot*const _slot){return _slot->active();});
+}
+
+void Game::retreat()
+{
+    constexpr auto self = PTCG::PLAYER::SELF;
+    constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
+    auto replacement = playerSlotChoice(self, self, PTCG::ACTION::MOVE, 1, filter);
+    if (!replacement.empty())
+    {
+        constexpr auto  match = [](Card* const){return true;};
+        auto slot = m_boards[playerIndex(self)].m_bench.slotAt(0);
+        auto choice = playerEnergyChoice(
+            self,
+            self,
+            PTCG::PILE::DISCARD,
+            PTCG::ACTION::DISCARD,
+            0,
+            match,
+            slot->active()->retreatCost()
+                    );
+        if (!choice.empty())
+        {
+            removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
+            switchActive(self, replacement[0]);
+            m_players[playerIndex(self)]->setRetreat(false);
+        }
+    }
 }
 
 void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)

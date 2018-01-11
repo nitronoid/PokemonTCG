@@ -9,7 +9,8 @@ CONFIG -= app_bundle
 
 # Core
 HEADERS += $$files(../GameCore/include/*.h)
-SOURCES += $$files(../GameCore/src/*.cpp)
+SOURCES += $$files(../GameCore/src/*.cpp) \
+    src/cardpile.cpp
 
 # Roaring Heat AI
 HEADERS += $$files(../../../RoaringHeat/include/*.h)

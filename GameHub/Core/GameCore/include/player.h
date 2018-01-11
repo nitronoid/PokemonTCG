@@ -51,6 +51,13 @@ public:
       const unsigned _amount
       ) = 0;
 
+  virtual std::vector<size_t> chooseConditions(
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> &_options,
+      const unsigned _amount
+      ) = 0;
+
   virtual bool agree(const PTCG::ACTION _action) = 0;
 
   virtual std::pair<bool, unsigned> turn() = 0;

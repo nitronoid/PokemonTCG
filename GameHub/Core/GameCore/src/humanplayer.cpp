@@ -115,7 +115,9 @@ void HumanPlayer::learnCards(
     const std::vector<size_t> &_indices,
     const std::vector<std::unique_ptr<Card>> &_revealed
     )
-{}
+{
+
+}
 
 std::vector<size_t> HumanPlayer::chooseEnergy(
     const PTCG::PLAYER _owner,
@@ -126,6 +128,16 @@ std::vector<size_t> HumanPlayer::chooseEnergy(
     )
 {
   return promptChoice(_owner, "active pokemon", _action, _options, _amount);
+}
+
+std::vector<size_t> HumanPlayer::chooseConditions(
+    const PTCG::PLAYER _owner,
+    const PTCG::ACTION _action,
+    const std::vector<PTCG::CONDITION> &_options,
+    const unsigned _amount
+    )
+{
+  return promptChoice(_owner,"energy cards",_action,_options,_amount);
 }
 
 bool HumanPlayer::agree(const PTCG::ACTION _action)

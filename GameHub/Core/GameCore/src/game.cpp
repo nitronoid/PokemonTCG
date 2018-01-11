@@ -649,6 +649,17 @@ void Game::filterPile(
   filterCards(unfiltered, io_filtered, io_originalPositions, _match);
 }
 
+std::vector<size_t> Game::playerConditionChoice(
+      const PTCG::PLAYER _thinker,
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> _options,
+      const unsigned _amount
+        )
+{
+    return m_players[playerIndex(_thinker)]->chooseConditions(_owner, _action, _options, _amount);
+}
+
 std::vector<size_t> Game::playerCardChoice(
     const PTCG::PLAYER _thinker,
     const PTCG::PLAYER _owner,

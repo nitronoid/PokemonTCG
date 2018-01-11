@@ -63,10 +63,13 @@ void Game::playPokemon(PokemonCard* const _pokemon, const size_t _index)
     // Use default filter to find empty slots
     constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
     auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
+    // Check a choice was available
     if (!slotChoice.empty())
     {
+      // Move the pokemon into the slot
       pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
-      m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(_index)->setTurnPlayed(m_turnCount);
+      // Set the turn played for this slot
+      m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(slotChoice[0])->setTurnPlayed(m_turnCount);
     }
   }
 }

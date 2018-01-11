@@ -74,7 +74,11 @@ std::vector<size_t> promptChoice(
           std::cin.clear();
           std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       }
-      std::cin>>pick;
+      else
+      {
+        std::cin>>pick;
+
+      }
     }
     while(!std::cin.fail() && (picked.count(pick-1) || (pick > len)));
     --pick;

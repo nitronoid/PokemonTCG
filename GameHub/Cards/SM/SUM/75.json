@@ -8,16 +8,18 @@
     "Retreat" : 4,
     "Stage" : 0,
     "Pre evolution" : "",
-    "Attacks" : {
+    "Abilty" : {
         "Wall of Sand" : {
             "func" : "wallofSand",
             "baseDamage" : "",
             "energy" : ""
-        },
+        }
+    },
+    "Attacks" : {
         "Absorb Vitality" : {
             "func" : "absorbVitality",
             "baseDamage" : "50",
-            "energy" : "FC"
+            "energy" : "FCCC"
         }
     }
 }

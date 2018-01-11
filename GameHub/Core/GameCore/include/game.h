@@ -112,8 +112,8 @@ public:
   std::vector<size_t> nonFreeSlots(const PTCG::PLAYER _owner) const;
   void shuffleDeck(const PTCG::PLAYER _owner);
   void addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect);
-  bool activeCanRetreat(const PTCG::PLAYER &_player);
-  void setActiveCanRetreat(const PTCG::PLAYER &_player,const bool &_val = false);
+  bool canRetreat(const PTCG::PLAYER &_player);
+  void setCanRetreat(const PTCG::PLAYER &_player,const bool &_val = false);
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
   void retreat();

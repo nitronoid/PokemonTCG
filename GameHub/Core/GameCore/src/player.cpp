@@ -10,7 +10,7 @@ void Player::playCard(const size_t &_index)
 
 void Player::retreat()
 {
-    if(m_parentGame.activeCanRetreat(PTCG::PLAYER::SELF))
+    if(m_parentGame.canRetreat(PTCG::PLAYER::SELF))
         m_parentGame.retreat();
 }
 

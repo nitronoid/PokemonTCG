@@ -45,6 +45,13 @@ public:
       const unsigned _amount
       ) override;
 
+  virtual std::vector<size_t> chooseConditions(
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> &_options,
+      const unsigned _amount
+      ) override;
+
   virtual bool agree(const PTCG::ACTION _action) override;
   virtual std::pair<bool, unsigned> turn() override;
 

@@ -76,6 +76,14 @@ public:
       std::vector<size_t> _indices
       );
 
+  std::vector<size_t> playerConditionChoice(
+        const PTCG::PLAYER _thinker,
+        const PTCG::PLAYER _owner,
+        const PTCG::ACTION _action,
+        const std::vector<PTCG::CONDITION> _options,
+        const unsigned _amount
+          );
+
   bool playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action);
 
   // View card pile functions
@@ -104,8 +112,8 @@ public:
   std::vector<size_t> nonFreeSlots(const PTCG::PLAYER _owner) const;
   void shuffleDeck(const PTCG::PLAYER _owner);
   void addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect);
-  bool activeCanRetreat(const PTCG::PLAYER &_player);
-  void setActiveCanRetreat(const PTCG::PLAYER &_player,const bool &_val = false);
+  bool canRetreat(const PTCG::PLAYER &_player);
+  void setCanRetreat(const PTCG::PLAYER &_player,const bool &_val = false);
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
   void retreat();
@@ -149,7 +157,6 @@ private:
   void resolveAllEndConditions(const PTCG::PLAYER _player);
   bool resolveAttackConditions(const PTCG::PLAYER _player);
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
-
 private:
   std::vector<GuiModule*> m_guiObservers;
   std::array<Player*, 2> m_players{{nullptr, nullptr}};

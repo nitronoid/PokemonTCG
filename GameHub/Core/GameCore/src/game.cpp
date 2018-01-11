@@ -63,10 +63,13 @@ void Game::playPokemon(PokemonCard* const _pokemon, const size_t _index)
     // Use default filter to find empty slots
     constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
     auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
+    // Check a choice was available
     if (!slotChoice.empty())
     {
+      // Move the pokemon into the slot
       pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
-      m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(_index)->setTurnPlayed(m_turnCount);
+      // Set the turn played for this slot
+      m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(slotChoice[0])->setTurnPlayed(m_turnCount);
     }
   }
 }
@@ -299,6 +302,7 @@ std::vector<Ability> Game::filterEffects(const PTCG::TRIGGER _trigger)
 void Game::executeTurnEffects(const PTCG::TRIGGER _trigger)
 {
   for (const auto & effect : filterEffects(_trigger)) effect.use(*this);
+  notifyGui();
 }
 
 void Game::addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect)
@@ -553,6 +557,33 @@ std::vector<size_t> Game::freeSlots(const PTCG::PLAYER _owner) const
 std::vector<size_t> Game::nonFreeSlots(const PTCG::PLAYER _owner) const
 {
   return filterSlots(_owner, [](BoardSlot*const _slot){return _slot->active();});
+}
+
+void Game::retreat()
+{
+    constexpr auto self = PTCG::PLAYER::SELF;
+    constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
+    auto replacement = playerSlotChoice(self, self, PTCG::ACTION::MOVE, 1, filter);
+    if (!replacement.empty())
+    {
+        constexpr auto  match = [](Card* const){return true;};
+        auto slot = m_boards[playerIndex(self)].m_bench.slotAt(0);
+        auto choice = playerEnergyChoice(
+            self,
+            self,
+            PTCG::PILE::DISCARD,
+            PTCG::ACTION::DISCARD,
+            0,
+            match,
+            slot->active()->retreatCost()
+                    );
+        if (!choice.empty())
+        {
+            removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
+            switchActive(self, replacement[0]);
+            m_players[playerIndex(self)]->setRetreat(false);
+        }
+    }
 }
 
 void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
@@ -993,9 +1024,16 @@ std::vector<std::unique_ptr<Card>> Game::viewHand(const PTCG::PLAYER &_player) c
 
 bool Game::activeCanRetreat(const PTCG::PLAYER &_player)
 {
-  return m_boards[playerIndex(_player)].m_bench.activeStatus()->canRetreat();
+  auto& board = m_boards[playerIndex(_player)];
+  auto slot = board.m_bench.slotAt(0);
+  return m_players[playerIndex(_player)]->canRetreat() &&
+         board.m_bench.activeStatus()->canRetreat() &&
+         !hasCondition(_player, PTCG::CONDITION::PARALYZED) &&
+         !hasCondition(_player, PTCG::CONDITION::ASLEEP) &&
+         slot->numEnergy() >= slot->active()->retreatCost();
 }
 void Game::setActiveCanRetreat(const PTCG::PLAYER &_player, const bool &_val)
 {
   m_boards[playerIndex(_player)].m_bench.activeStatus()->setCanRetreat(_val);
 }
+

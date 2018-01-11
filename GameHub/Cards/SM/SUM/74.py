@@ -1,4 +1,4 @@
-import poke
+import poke as p
 
 def shoreUp(h):
     discard=h.viewDiscard(p.PLAYER.SELF)
@@ -11,7 +11,7 @@ def shoreUp(h):
 def sandTomb(h):
     h.dealDamage(30)
     
-
+print "needs added enemy retreat function"
 
 
 

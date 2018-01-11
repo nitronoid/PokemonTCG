@@ -8,12 +8,14 @@
     "Retreat" : 2,
     "Stage" : 0,
     "Pre evolution" : "",
-    "Attacks" : {
+    "Ability" : {
         "Instruct" : {
             "func" : "instruct",
             "baseDamage" : "",
             "energy" : ""
-        },
+        }
+    },
+    "Attacks" : {
         "Psychic" : {
             "func" : "psychic",
             "baseDamage" : "60",

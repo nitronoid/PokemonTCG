@@ -2,7 +2,7 @@ import poke as p
 
 def bearHug(h):
     h.dealDamage(40)
-
+print "needs added enemy retreat function"
 
 def superpower(h):
     damage = 80

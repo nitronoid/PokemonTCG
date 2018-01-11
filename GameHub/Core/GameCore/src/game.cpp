@@ -993,9 +993,16 @@ std::vector<std::unique_ptr<Card>> Game::viewHand(const PTCG::PLAYER &_player) c
 
 bool Game::activeCanRetreat(const PTCG::PLAYER &_player)
 {
-  return m_boards[playerIndex(_player)].m_bench.activeStatus()->canRetreat();
+  auto& board = m_boards[playerIndex(_player)];
+  auto slot = board.m_bench.slotAt(0);
+  return m_players[playerIndex(_player)]->canRetreat() &&
+         board.m_bench.activeStatus()->canRetreat() &&
+         !hasCondition(_player, PTCG::CONDITION::PARALYZED) &&
+         !hasCondition(_player, PTCG::CONDITION::ASLEEP) &&
+         slot->numEnergy() >= slot->active()->retreatCost();
 }
 void Game::setActiveCanRetreat(const PTCG::PLAYER &_player, const bool &_val)
 {
   m_boards[playerIndex(_player)].m_bench.activeStatus()->setCanRetreat(_val);
 }
+

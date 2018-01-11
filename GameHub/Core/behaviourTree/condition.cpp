@@ -7,3 +7,6 @@ bool Condition::execute()
 {
     return conditionFunction();
 }
+
+
+

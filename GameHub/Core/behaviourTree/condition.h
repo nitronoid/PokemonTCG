@@ -20,4 +20,9 @@ public:
     virtual bool conditionFunction() = 0;
 };
 
+class energyCondition : public Condition
+{
+
+};
+
 #endif // CONDITION_H

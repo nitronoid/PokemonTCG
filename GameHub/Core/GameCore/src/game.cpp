@@ -8,7 +8,7 @@ Game::Game(const Game &_original) :
   m_turnCount(_original.m_turnCount)
 {}
 
-void Game::init(const CardFactory &_factory, GuiModule * const _drawer, Player*const _playerA, Player*const _playerB)
+void Game::init(const CardFactory &_factory, Player*const _playerA, Player*const _playerB)
 {
   m_boards[0].m_deck.init(_factory.loadDeck(_playerA->deckName()));
   m_boards[0].m_deck.shuffle();
@@ -16,7 +16,6 @@ void Game::init(const CardFactory &_factory, GuiModule * const _drawer, Player*c
   m_boards[1].m_deck.shuffle();
   m_players[0] = _playerA;
   m_players[1] = _playerB;
-  m_drawer = _drawer;
 }
 
 void Game::start()
@@ -26,6 +25,25 @@ void Game::start()
   {
     nextTurn();
   }
+}
+
+void Game::notifyGui()
+{
+  for (const auto gui : m_guiObservers)
+  {
+    gui->drawBoard();
+  }
+}
+
+void Game::registerGui(GuiModule*const _gui)
+{
+  _gui->setGame(this);
+  m_guiObservers.push_back(_gui);
+}
+
+Board* Game::getBoard(const PTCG::PLAYER _owner)
+{
+  return &m_boards[playerIndex(_owner)];
 }
 
 void Game::playPokemon(PokemonCard* const _pokemon, const size_t _index)
@@ -141,6 +159,7 @@ void Game::playCard(const size_t _index)
       default: break;
     }
   }
+  notifyGui();
 }
 
 void Game::drawHand(const PTCG::PLAYER _player)
@@ -314,11 +333,7 @@ void Game::nextTurn()
   auto currentPlayer = m_players[playerId];
   Board& currentBoard = m_boards[playerId];
   // Ascii print the board
-  if (m_drawer)
-  {
-    m_drawer->drawBoard(&m_boards[playerIndex(PTCG::PLAYER::ENEMY)],false);
-    m_drawer->drawBoard(&currentBoard, true);
-  }
+  notifyGui();
   // Apply all effects that are triggered by the start of a turn
   executeTurnEffects(PTCG::TRIGGER::START);
   // The effects could have knocked out a pokemon so we check
@@ -369,6 +384,7 @@ bool Game::drawCard(const PTCG::PLAYER _player)
   if (board.m_deck.empty()) return false;
   auto topCard = board.m_deck.takeTop();
   board.m_hand.put(std::move(topCard));
+  notifyGui();
   return true;
 }
 
@@ -455,6 +471,7 @@ void Game::benchToPile(
     auto energy = slot->detachEnergy(pos);
     putToPile(_player, _dest, std::unique_ptr<Card>{energy.release()});
   }
+  notifyGui();
 }
 
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
@@ -506,6 +523,7 @@ void Game::pileToBench(
     {
       board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
     }
+    notifyGui();
   }
   else
   {
@@ -560,6 +578,7 @@ void Game::moveCards(
   std::sort(_cardIndices.begin(), _cardIndices.end(),std::greater<size_t>());
   for(const auto i : _cardIndices)
     putToPile(_owner,_destination, takeFromPile(_owner, _origin, i));
+  notifyGui();
 }
 
 void Game::filterCards(
@@ -836,6 +855,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!board.m_prizeCards.numCards())
       gameOver = true;
+    notifyGui();
   }
   return gameOver;
 }
@@ -971,4 +991,11 @@ std::vector<std::unique_ptr<Card>> Game::viewHand(const PTCG::PLAYER &_player) c
   return m_boards[playerIndex(_player)].m_hand.view();
 }
 
-
+bool Game::activeCanRetreat(const PTCG::PLAYER &_player)
+{
+  return m_boards[playerIndex(_player)].m_bench.activeStatus()->canRetreat();
+}
+void Game::setActiveCanRetreat(const PTCG::PLAYER &_player, const bool &_val)
+{
+  m_boards[playerIndex(_player)].m_bench.activeStatus()->setCanRetreat(_val);
+}

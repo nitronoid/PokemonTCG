@@ -184,6 +184,9 @@ PYBIND11_MODULE(poke, m)
       .def("flipCoin", &Game::flipCoin)
       .def("addEffect", &Game::addEffect)
       .def("drawCard", &Game::drawCard)
+      .def("setActiveCanRetreat", &Game::setActiveCanRetreat,
+           py::arg("_player"),
+           py::arg("_val") = false)
       .def("removeEnergy", &Game::removeEnergy);
 
 

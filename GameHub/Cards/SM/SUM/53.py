@@ -13,14 +13,13 @@ def defenseCurl(h):
         h.addEffect(p.PLAYER.ENEMY, 0, ability)
 
 def filter(card):
-    card.cardType() == p.CARD.ENERGY and card.type() == p.TYPE.LIGHTNING
+    return card.cardType() == p.CARD.ENERGY and card.type() == p.TYPE.LIGHTNING
 
 def discharge(h):
     # discard all electricity energies on this monster
     # for each electricity card you DISCARD
     # on pokemon
     energy = h.viewBench(p.PLAYER.SELF)[0].viewEnergy()
-    print energy
     lightingEnergy = []
     for i in range(len(energy)):
         if filter(energy[i]):

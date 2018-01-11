@@ -6,7 +6,7 @@
 #include "simpleprinter.h"
 #include "cardfactory.h"
 #include "aiplayerbt.h"
-
+#include "randomai.h"
 
 // Needed for python attack functions
 pybind11::scoped_interpreter m_python;
@@ -26,7 +26,8 @@ int main()
 
   SimplePrinter drawer;
   HumanPlayer a(test);
-  AIPlayerBT b(test);
+  AIPlayerBT c(test);
+  RandomAI b(test);
   test.init(testPool, &a, &b);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";

@@ -10,9 +10,20 @@
 class Attack : public Effect
 {
 public:
+  /// @brief default ctor
   Attack() = default;
+  /// @brief default cooy ctor
   Attack(const Attack&) = default;
+  /// @brief assignment operator for copy assignment
   Attack& operator =(const Attack&) = default;
+  /// @brief specific assignment ctor for constructing an Ability
+  /// @param [in] _attack function to be executed/used, loaded from cards
+  /// @param [in] _name name of the attack, effect or ability
+  /// @param [in] _dmgString damage display
+  /// @param [in] _trigger when the effect is triggered
+  /// @param [in] _duration how does the effect wear off/number of use
+  /// @param [in] _requirement containers of energy requirements for the attacks
+  /// @param [in] _canUse function to check if effect can be used
   Attack(
       const EffectFunc _attack,
       const std::string &_name,
@@ -26,10 +37,17 @@ public:
     m_damageString(_dmgString),
     m_requirements(_requirements)
   {}
-
+  /// @brief
+  /// @param
   inline void attack(Game& _game) const { activate(_game); }
+  /// @brief
+  /// @param
   inline bool canAttack(Game& _game) const { return canActivate(_game); }
+  /// @brief
+  /// @param
   inline std::vector<PTCG::TYPE> requirements() const { return m_requirements; }
+  /// @brief
+  /// @param
   inline std::string damageString() const { return m_damageString; }
 
 private:

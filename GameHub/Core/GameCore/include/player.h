@@ -89,6 +89,22 @@ public:
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
       ) = 0;
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief getter method for retrieving energy cards
+  /// @param [in] _owner owner of the card pile
+  /// @param [in] _action a type of action to perform
+  /// @param [in] _options conditions to choose from
+  /// @param [in] _amount amount of cards to use
+  /// @return the indices of the picked options
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual std::vector<size_t> chooseConditions(
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> &_options,
+      const unsigned _amount
+      ) = 0;
+
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief prompt player to agree to perform action or not
   /// @param [in] _action an action to evaluate

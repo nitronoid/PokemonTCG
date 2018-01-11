@@ -1,13 +1,13 @@
-#ifndef HUMANPLAYER_H
-#define HUMANPLAYER_H
+#ifndef ROARINGFLUKE_H
+#define ROARINGFLUKE_H
 
 #include "player.h"
 
-class HumanPlayer : public Player
+class RoaringFluke : public Player
 {
 public:
-  HumanPlayer(const HumanPlayer&) = default;
-  HumanPlayer(Game& _parentGame) :
+  RoaringFluke(const RoaringFluke&) = default;
+  RoaringFluke(Game& _parentGame) :
     Player(_parentGame)
   {}
 
@@ -55,13 +55,7 @@ public:
   virtual bool agree(const PTCG::ACTION _action) override;
   virtual std::pair<bool, unsigned> turn() override;
 
-  void setAttack(const unsigned _index);
-
-private:
-  unsigned m_attackID;
-  bool m_doAttack = false;
-
 };
 
 
-#endif // HUMANPLAYER_H
+#endif // ROARINGFLUKE_H

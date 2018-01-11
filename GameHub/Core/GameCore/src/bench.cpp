@@ -30,7 +30,10 @@ void Bench::switchActive(const unsigned &_sub)
 {
   //using rend to simplify index finding for the substitute
   std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';
-  std::swap(m_slots[0],m_slots[_sub]);
+  /*auto temp = m_slots[0];
+  m_slots[0] = std::move(m_slots[_sub]);
+  m_slots[_sub] = std::move(temp);*/
+  m_slots[0].swap(m_slots[_sub]);
   m_activeStatus.removeAllConditions();
 }
 

@@ -9,11 +9,11 @@ def canUse(h):
 def defenseCurl(h):
     if(h.flipCoin(1)):
         # prevent all damage done next turn
-        ability = p.Abilty(effect, p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
+        ability = p.Abilty(effect,'', p.TRIGGER.ATTACK, p.DURATION.SINGLE, canUse)
         h.addEffect(p.PLAYER.ENEMY, 0, ability)
 
 def filter(card):
-    card.cardType() == p.CARD.ENERGY and card.type() == p.TYPE.LIGHTNING
+    return card.cardType() == p.CARD.ENERGY and card.type() == p.TYPE.LIGHTNING
 
 def discharge(h):
     # discard all electricity energies on this monster

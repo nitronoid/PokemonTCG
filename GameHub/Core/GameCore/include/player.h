@@ -55,7 +55,6 @@ public:
 
   virtual std::pair<bool, unsigned> turn() = 0;
 
-protected:
   bool canPlay(const size_t &_index);
   void playCard(const size_t &_index);
   void retreat();
@@ -64,7 +63,7 @@ protected:
   std::array<BoardSlot, 6> viewBench(const PTCG::PLAYER &_owner = PTCG::PLAYER::SELF) const;
 
   Game getDummyGame() const;
-
+  bool canRetreat();
 private:
   bool m_canRetreat = true;
   Game& m_parentGame;

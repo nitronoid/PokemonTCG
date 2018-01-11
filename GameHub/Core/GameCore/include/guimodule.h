@@ -2,13 +2,18 @@
 #define GUIMODULE_H
 #include "board.h"
 
+class Game;
+
 class GuiModule
 {
 public :
   GuiModule() = default;
-  virtual ~GuiModule(){}
-  virtual void drawBoard(Board* _board, const bool _isOp)=0;
-  //_drawType == f -> current; _drawType == t -> opponent
+  virtual ~GuiModule();
+  virtual void drawBoard() = 0;
+  void setGame(Game*const _subject);
+
+protected:
+  Game* m_subject = nullptr;
 };
 
 #endif // GUIMODULE_H

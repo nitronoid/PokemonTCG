@@ -1,0 +1,23 @@
+{
+    "ID" : 113,
+    "Name" : "Oranguru",
+    "HP" : 120,
+    "Type" : "C",
+    "Weakness" : "F",
+    "Resistance" : "",
+    "Retreat" : 2,
+    "Stage" : 0,
+    "Pre evolution" : "",
+    "Attacks" : {
+        "Instruct" : {
+            "func" : "instruct",
+            "baseDamage" : "",
+            "energy" : ""
+        },
+        "Psychic" : {
+            "func" : "psychic",
+            "baseDamage" : "60",
+            "energy" : "CCC"
+        }
+    }
+}

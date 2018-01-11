@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
-SUBDIRS = GameCore PythonBindings behaviourTree
+SUBDIRS = GameCore PythonBindings
 
 PythonBindings.depend = GameCore

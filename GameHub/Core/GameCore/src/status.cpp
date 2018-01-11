@@ -61,4 +61,7 @@ void Status::setProtected(const bool &_val)
   m_protected=_val;
 }
 
-
+void Status::setCanRetreat(const bool &_val)
+{
+  m_canRetreat=_val;
+}

@@ -1,5 +1,6 @@
 #include "simpleprinter.h"
 #include "asciicards.h"
+#include "game.h"
 #include <string>
 #include <iostream>
 #include <string>
@@ -209,14 +210,17 @@ std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
 {
   std::string ret = k_sentinelSlot;
   auto active = _slot->active();
-  str_replace_sent(ret, "$ID", std::to_string(active->getID()));
-  str_replace_sent(ret, "$RH", std::to_string(_slot->getRemainingHP()));
-  str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
-  auto tool = _slot->viewTool();
-  std::string toolName = "---";
-  if (tool) toolName = tool->getName();
-  str_replace_sent(ret, "$TOOL", toolName);
-  pokemonStr(ret, active);
+  if (active)
+  {
+    str_replace_sent(ret, "$ID", std::to_string(active->getID()));
+    str_replace_sent(ret, "$RH", std::to_string(_slot->getRemainingHP()));
+    str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
+    auto tool = _slot->viewTool();
+    std::string toolName = "---";
+    if (tool) toolName = tool->getName();
+    str_replace_sent(ret, "$TOOL", toolName);
+    pokemonStr(ret, active);
+  }
   return ret;
 }
 
@@ -381,7 +385,7 @@ std::string SimplePrinter::prizeStr(PrizeCards * const _prize) const
   return ret;
 }
 
-void SimplePrinter::drawBoard(Board* _board, const bool _isOp)
+void SimplePrinter::drawSide(Board* _board, const bool _isOp)
 {
   Bench& bench = _board->m_bench;
   if(_isOp)
@@ -390,7 +394,6 @@ void SimplePrinter::drawBoard(Board* _board, const bool _isOp)
     std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
     std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
     std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
-
   }
   else
   {
@@ -398,5 +401,11 @@ void SimplePrinter::drawBoard(Board* _board, const bool _isOp)
     std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
     std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
   }
+}
+
+void SimplePrinter::drawBoard()
+{
+  drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
+  drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
 }
 

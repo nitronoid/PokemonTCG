@@ -1,5 +1,5 @@
 #include "humanplayer.h"
-#include "game.h"
+#include "playercommand.h"
 #include <ctime>
 #include <cstdlib>
 #include <random>
@@ -69,6 +69,11 @@ std::vector<size_t> promptChoice(
     do
     {
       std::cout<<"Pick a card from 1 - "<<len<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<std::endl;
+      if (std::cin.fail())
+      {
+          std::cin.clear();
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      }
       std::cin>>pick;
     }
     while(!std::cin.fail() && (picked.count(pick-1) || (pick > len)));
@@ -132,31 +137,31 @@ bool HumanPlayer::agree(const PTCG::ACTION _action)
   return (answer == "y") || (answer == "yes");
 }
 
+void HumanPlayer::setAttack(const unsigned _index)
+{
+    m_doAttack = true;
+    m_attackID = _index;
+}
+
 std::pair<bool, unsigned> HumanPlayer::turn()
 {
-  auto dummy = getDummyGame();
-//  dummy.
+    m_doAttack = false;
   // Play cards
   while (agree(PTCG::ACTION::PLAY))
   {
-    auto card = chooseCards(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, viewHand(), 1);
-    if (!card.empty()) playCard(card[0]);
-    else std::cout<<"Hand is empty."<<std::endl;
+    PlayCardCMD pccmd;
+    pccmd.execute(*this);
   }
 
   // Attack?
-  bool doAttack = agree(PTCG::ACTION::ATTACK);
-  unsigned attack = viewBench().at(0).active()->attackNum();
-  if (doAttack)
+  if (agree(PTCG::ACTION::ATTACK))
   {
-    unsigned len = attack;
-    do
-    {
-      std::cout<<"Pick an attack from 1 - "<<len<<std::endl;
-      std::cin>>attack;
-    } while (!std::cin.fail() && attack > len);
+      AttackCMD acmd;
+      acmd.execute(*this);
   }
 
   // Return the decision
-  return std::pair<bool, unsigned> {doAttack, attack-1};
+  return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
 }
+
+

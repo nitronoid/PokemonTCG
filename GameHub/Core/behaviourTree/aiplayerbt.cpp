@@ -7,7 +7,7 @@ Player* AIPlayerBT::clone() const
 
 std::string AIPlayerBT::deckName() const
 {
-
+    return "test_deck.json";
 }
 
 std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PTCG::PILE _origin, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)

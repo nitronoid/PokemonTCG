@@ -5,7 +5,7 @@
 #include "game.h"
 #include "simpleprinter.h"
 #include "cardfactory.h"
-
+#include "aiplayerbt.h"
 
 
 // Needed for python attack functions
@@ -25,7 +25,8 @@ int main()
   testPool.init();
 
   SimplePrinter drawer;
-  HumanPlayer a(test), b(test);
+  HumanPlayer a(test);
+  AIPlayerBT b(test);
   test.init(testPool, &a, &b);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";

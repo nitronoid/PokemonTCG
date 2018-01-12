@@ -561,28 +561,29 @@ std::vector<size_t> Game::nonFreeSlots(const PTCG::PLAYER _owner) const
 
 void Game::retreat()
 {
-    constexpr auto self = PTCG::PLAYER::SELF;
-    constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
-    auto replacement = playerSlotChoice(self, self, PTCG::ACTION::MOVE, 1, filter);
-    if (!replacement.empty())
+  constexpr auto self = PTCG::PLAYER::SELF;
+  const auto filter = [](BoardSlot*const _slot){return _slot->active();};
+  auto replacement = playerSlotChoice(self, self, PTCG::ACTION::MOVE, 1, filter, true);
+  if (!replacement.empty())
+  {
+    auto slot = m_boards[playerIndex(self)].m_bench.slotAt(0);
+    constexpr auto  match = [](Card* const){return true;};
+    auto choice = playerEnergyChoice(
+          self,
+          self,
+          PTCG::PILE::DISCARD,
+          PTCG::ACTION::DISCARD,
+          0,
+          match,
+          slot->active()->retreatCost()
+          );
+    if (!choice.empty())
     {
-        constexpr auto  match = [](Card* const){return true;};
-        auto slot = m_boards[playerIndex(self)].m_bench.slotAt(0);
-        auto choice = playerEnergyChoice(
-            self,
-            self,
-            PTCG::PILE::DISCARD,
-            PTCG::ACTION::DISCARD,
-            0,
-            match,
-            slot->active()->retreatCost()
-                    );
-        if (!choice.empty())
-        {
-            removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
-            switchActive(self, replacement[0]);
-        }
+      removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
+      switchActive(self, replacement[0]);
+      notifyGui();
     }
+  }
 }
 
 void Game::switchActive(const PTCG::PLAYER &_player, const size_t &_subIndex)
@@ -649,14 +650,14 @@ void Game::filterPile(
 }
 
 std::vector<size_t> Game::playerConditionChoice(
-      const PTCG::PLAYER _thinker,
-      const PTCG::PLAYER _owner,
-      const PTCG::ACTION _action,
-      const std::vector<PTCG::CONDITION> _options,
-      const unsigned _amount
-        )
+    const PTCG::PLAYER _thinker,
+    const PTCG::PLAYER _owner,
+    const PTCG::ACTION _action,
+    const std::vector<PTCG::CONDITION> _options,
+    const unsigned _amount
+    )
 {
-    return m_players[playerIndex(_thinker)]->chooseConditions(_owner, _action, _options, _amount);
+  return m_players[playerIndex(_thinker)]->chooseConditions(_owner, _action, _options, _amount);
 }
 
 std::vector<size_t> Game::playerCardChoice(
@@ -690,14 +691,15 @@ std::vector<size_t> Game::playerSlotChoice(
     const PTCG::PLAYER _owner,
     const PTCG::ACTION _action,
     const unsigned _amount,
-    std::function<bool(BoardSlot*const)> _match
+    std::function<bool(BoardSlot*const)> _match,
+    const bool _filterActive
     )
 {
   std::vector<size_t> choice;
   std::vector<size_t> positions;
   std::vector<BoardSlot> options;
   auto benchArr = viewBench(_owner);
-  for (size_t i = 0; i < benchArr.size(); ++i)
+  for (size_t i = static_cast<size_t>(_filterActive); i < benchArr.size(); ++i)
   {
     auto& slot = benchArr[i];
     if(_match(&slot))
@@ -1036,10 +1038,10 @@ bool Game::canRetreat(const PTCG::PLAYER &_player)
   auto& board = m_boards[playerIndex(_player)];
   auto slot = board.m_bench.slotAt(0);
   return m_players[playerIndex(_player)]->canRetreat() &&
-         board.m_bench.activeStatus()->canRetreat() &&
-         !hasCondition(_player, PTCG::CONDITION::PARALYZED) &&
-         !hasCondition(_player, PTCG::CONDITION::ASLEEP) &&
-         slot->numEnergy() >= slot->active()->retreatCost();
+      board.m_bench.activeStatus()->canRetreat() &&
+      !hasCondition(_player, PTCG::CONDITION::PARALYZED) &&
+      !hasCondition(_player, PTCG::CONDITION::ASLEEP) &&
+      slot->numEnergy() >= slot->active()->retreatCost();
 }
 void Game::setCanRetreat(const PTCG::PLAYER &_player, const bool &_val)
 {

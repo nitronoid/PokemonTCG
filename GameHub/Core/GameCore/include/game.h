@@ -49,7 +49,8 @@ public:
       const PTCG::PLAYER _owner,
       const PTCG::ACTION _action,
       const unsigned _amount,
-      std::function<bool(BoardSlot*const)> _match
+      std::function<bool(BoardSlot*const)> _match,
+      const bool _skipActive = false
       );
 
   void revealCards(
@@ -77,12 +78,12 @@ public:
       );
 
   std::vector<size_t> playerConditionChoice(
-        const PTCG::PLAYER _thinker,
-        const PTCG::PLAYER _owner,
-        const PTCG::ACTION _action,
-        const std::vector<PTCG::CONDITION> _options,
-        const unsigned _amount
-          );
+      const PTCG::PLAYER _thinker,
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> _options,
+      const unsigned _amount
+      );
 
   bool playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action);
 

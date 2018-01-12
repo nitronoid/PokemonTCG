@@ -3,8 +3,8 @@
     "Name" : "Energy Retrieval",
     "Trainer" : "I",
     "Ability" : {
-        "func" : "energyRetrieval",
-        "duration" : "S",
-        "phase" : "N"
+        "Func" : "energyRetrieval",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

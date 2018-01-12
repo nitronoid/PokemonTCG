@@ -3,8 +3,8 @@
     "Name" : "Ultra Ball",
     "Trainer" : "I",
     "Ability" : {
-        "func" : "ultraBall",
-        "duration" : "S",
-        "phase" : "M"
+        "Func" : "ultraBall",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

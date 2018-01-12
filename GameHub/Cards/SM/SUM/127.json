@@ -3,8 +3,8 @@
     "Name" : "Potion",
     "Trainer" : "I",
     "Ability" : {
-        "func" : "potion",
-        "duration" : "S",
-        "phase" : "M"
+        "Func" : "potion",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

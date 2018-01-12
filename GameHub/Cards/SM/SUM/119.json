@@ -3,8 +3,8 @@
     "Name" : "Great Ball",
     "Trainer" : "I",
     "Ability" : {
-        "func" : "greatBall",
-        "duration" : "S",
-        "phase" : "M"
+        "Func" : "greatBall",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

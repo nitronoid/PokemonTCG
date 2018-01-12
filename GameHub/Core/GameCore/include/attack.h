@@ -19,11 +19,11 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   Attack(const Attack&) = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief assignment operator for copy assignment
+  /// @brief default copy assignment operator
   //----------------------------------------------------------------------------------------------------------------------
   Attack& operator =(const Attack&) = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief specific assignment ctor for constructing an Ability
+  /// @brief specific assignment ctor for constructing an Attack
   /// @param [in] _attack function to be executed/used, loaded from cards
   /// @param [in] _name name of the attack, effect or ability
   /// @param [in] _dmgString damage display
@@ -60,7 +60,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   inline std::vector<PTCG::TYPE> requirements() const { return m_requirements; }
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to return damage text
+  /// @brief method to return base damage text
   //----------------------------------------------------------------------------------------------------------------------
   inline std::string damageString() const { return m_damageString; }
 

@@ -10,6 +10,16 @@ DiscardPile::DiscardPile (const DiscardPile &_original)
   }
 }
 
+DiscardPile& DiscardPile::operator=(const DiscardPile&_original)
+{
+  m_cards.reserve(_original.m_cards.size());
+  for (const auto &card : _original.m_cards)
+  {
+    m_cards.emplace_back(card->clone());
+  }
+  return *this;
+}
+
 Card* DiscardPile::cardAt(const size_t _index)
 {
   return m_cards[_index].get();

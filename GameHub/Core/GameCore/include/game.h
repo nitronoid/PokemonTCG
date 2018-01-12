@@ -87,7 +87,7 @@ public:
   bool playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action);
 
   // View card pile functions
-  // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+  std::vector<std::unique_ptr<Card>>  viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
   std::vector<std::unique_ptr<Card>>  viewDiscard(const PTCG::PLAYER &_player) const;
   std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;
@@ -126,7 +126,6 @@ private:
   void executeTurnEffects(const PTCG::TRIGGER _trigger);
   std::vector<Ability> filterEffects(const PTCG::TRIGGER _trigger);
   void clearEffects();
-  std::vector<std::unique_ptr<Card>> viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
                   std::vector<size_t> &io_originalPositions,
                   const PTCG::PLAYER _owner,

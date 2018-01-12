@@ -12,16 +12,16 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   DiscardPile() = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default copy ctor
+  /// @brief copy ctor required for cloning all cards
   //----------------------------------------------------------------------------------------------------------------------
   DiscardPile (const DiscardPile&_original);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief deleting assaignment operator
+  /// @brief copy asignment operator required for cloning all cards
   //----------------------------------------------------------------------------------------------------------------------
-  DiscardPile& operator =(const DiscardPile &) = delete;
+  DiscardPile& operator =(const DiscardPile &);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to put cards into the discard pile
-  /// @param [in] _card cards to insert
+  /// @param [in] _card card to insert
   //----------------------------------------------------------------------------------------------------------------------
   virtual void put(std::unique_ptr<Card> &&_card) override;
   //----------------------------------------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::unique_ptr<Card> take(const size_t _index) override;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method returns a card in a specific position of the pile
+  /// @brief method returns a reference pointer to a card in a specific position of the pile
   /// @param [in] _index index of the card, in discard pile, to be returned.
   //----------------------------------------------------------------------------------------------------------------------
   virtual Card* cardAt(const size_t _index) override;
@@ -39,7 +39,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<std::unique_ptr<Card>> view() const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief returns the number of cards in discard pile
+  /// @brief the number of cards in discard pile
   //----------------------------------------------------------------------------------------------------------------------
   virtual size_t numCards() const override;
 

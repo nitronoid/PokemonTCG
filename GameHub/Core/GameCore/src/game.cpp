@@ -581,7 +581,6 @@ void Game::retreat()
         {
             removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
             switchActive(self, replacement[0]);
-            m_players[playerIndex(self)]->setRetreat(false);
         }
     }
 }
@@ -799,10 +798,8 @@ bool Game::evolve(PokemonCard*const _postEvo, const size_t &_handIndex, const si
   //check if chosen card is the correct pokemon to evolve to
   if(board.m_bench.slotAt(_index)->canEvolve(_postEvo,m_turnCount))
   {
-    std::vector<size_t> hand = std::vector<size_t>(_handIndex);
-    std::vector<size_t> bench = std::vector<size_t>(_index);
     //moving post evolution card from hand to chosen slot, need pileToBench
-    pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, hand, bench);
+    pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_handIndex}, {_index});
     board.m_bench.slotAt(_index)->setTurnPlayed(m_turnCount);
     //remove conditions if evolved pokemon is an active
     if(!_index) board.m_bench.activeStatus()->removeAllConditions();

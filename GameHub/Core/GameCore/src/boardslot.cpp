@@ -164,7 +164,7 @@ bool BoardSlot::canEvolve(PokemonCard*const _card, const unsigned &_turn)
     std::cout<<"This mon cannot evolve yet."<<'\n';
     return false;
   }
-  if(active()->preEvolution().compare(_card->getName()) != 0)
+  if(active()->preEvolution() == _card->getName())
   {
     std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
     return false;

@@ -41,17 +41,17 @@ public:
   /// @brief returns the turn this active pokemon has been played on this slot
   /// @return turn number from when the top slotted pokemon is played
   //----------------------------------------------------------------------------------------------------------------------
-  inline unsigned getTurnPlayed() const { return m_turnPlayed; }
+  unsigned getTurnPlayed()  const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief return damage taken by the slotted pokemon on this bench
   /// @return damage taken by this slotted pokemon
   //----------------------------------------------------------------------------------------------------------------------
-  inline int      getDamage()     const { return m_damageTaken; }
+  int      getDamage()      const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief return slotted pokemon's Max HP - damage taken
   /// @return remaining HP of this slotted pokemon
   //----------------------------------------------------------------------------------------------------------------------
-  inline int      getRemainingHP()const { return std::max(0, active()->hp() - m_damageTaken);}
+  int      getRemainingHP() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief the pokemon on this slot takes damage
   /// @param [in] _damage damage this pokemon is about to take
@@ -121,8 +121,9 @@ public:
   /// @brief returns the set of attached energy cards
   /// @return a set of energy cards attached onto this slot
   //----------------------------------------------------------------------------------------------------------------------
-  TypeMSet energy() const;
-  //----------------------------------------------------------------------------------------------------------------------
+  TypeMSet energyMSet() const;
+  /// @brief returns the a multi-set of attached energy cards
+  std::unordered_set<PTCG::TYPE> energySet() const;
   /// @brief returns number of pokemon cards in this slot
   /// @return the number of pokemon cards attached to this slot
   //----------------------------------------------------------------------------------------------------------------------

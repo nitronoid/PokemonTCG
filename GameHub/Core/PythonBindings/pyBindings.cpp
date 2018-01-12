@@ -134,6 +134,7 @@ PYBIND11_MODULE(poke, m)
       .def("numCards", &BoardSlot::numCards)
       .def("viewEnergy", &BoardSlot::viewEnergy)
       .def("viewTool", &BoardSlot::viewTool)
+      .def("energySet", &BoardSlot::energySet)
       .def("active", &BoardSlot::active, py::return_value_policy::reference_internal);
 
   py::class_<Ability>(m, "Ability")

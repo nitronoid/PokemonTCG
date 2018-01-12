@@ -55,7 +55,7 @@ public:
   /// @brief swapping bench slots when switching pokemon
   /// @param [in] _sub the replacement slot for the new active pokemon
   //----------------------------------------------------------------------------------------------------------------------
-  void switchActive(const unsigned &_sub);
+  void switchActive(const size_t &_sub);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief puts a card into the bench with a specified bench index
   /// @param [in] _card card to be put into slot

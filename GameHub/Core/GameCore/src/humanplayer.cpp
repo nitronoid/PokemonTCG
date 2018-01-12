@@ -60,7 +60,7 @@ std::vector<size_t> promptChoice(
 {
   std::vector<size_t> choice;
   std::unordered_set<size_t> picked;
-  while (_options.size() && choice.size() < _amount)
+  while (choice.size() < std::min(_options.size(), static_cast<size_t>(_amount)))
   {
     size_t len = _options.size();
     size_t pick  = len;
@@ -161,7 +161,51 @@ void HumanPlayer::setAttack(const unsigned _index)
 
 std::pair<bool, unsigned> HumanPlayer::turn()
 {
-    m_doAttack = false;
+  bool moveOn = false;
+  m_inputStr.clear();
+  m_doAttack = false;
+  while(!moveOn)
+  {
+      std::cout<<"What do you want to do?"<<std::endl;
+      if (std::cin.fail())
+      {
+          std::cin.clear();
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      }
+      else
+      {
+        std::getline(std::cin, m_inputStr);
+      }
+      enumifyInput();
+      switch(m_command)
+      {
+      case CMD::EXIT:{/*exit the game*/moveOn=true;break;}
+      case CMD::RESTART:{/*restart the game*/moveOn=true;break;}
+      case CMD::SKIP:{moveOn=true;break;}
+      case CMD::PLAY:{PlayCardCMD pccmd; pccmd.execute(*this); break;}
+      case CMD::ATTACK:{AttackCMD acmd; acmd.execute(*this); break;}
+      case CMD::RETREAT:{RetreatCMD rcmd; rcmd.execute(*this); break;}
+      }
+  }
+  // Return the decision
+  return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
+}
+
+void HumanPlayer::enumifyInput()
+{
+    if(m_inputStr=="exit"||m_inputStr=="x"){m_command=CMD::EXIT;}
+    if(m_inputStr=="restart"||m_inputStr=="z"||m_inputStr=="re"){m_command=CMD::RESTART;}
+    if(m_inputStr=="play"||m_inputStr=="p"||m_inputStr=="pla"||m_inputStr=="pl"){m_command=CMD::PLAY;}
+    if(m_inputStr=="attack"||m_inputStr=="a"||m_inputStr=="attac"||m_inputStr=="atta"||m_inputStr=="att"||m_inputStr=="at"){m_command=CMD::EXIT;}
+    if(m_inputStr=="retreat"||m_inputStr=="r"||m_inputStr=="retrea"||m_inputStr=="retre"||m_inputStr=="retr"||m_inputStr=="ret"||m_inputStr=="re"){m_command=CMD::RETREAT;}
+    if(m_inputStr=="skip"||m_inputStr.empty()){m_command=CMD::SKIP;}
+}
+
+
+/*
+std::pair<bool, unsigned> HumanPlayer::turn()
+{
+  m_doAttack = false;
   // Play cards
   while (agree(PTCG::ACTION::PLAY))
   {
@@ -179,5 +223,5 @@ std::pair<bool, unsigned> HumanPlayer::turn()
   // Return the decision
   return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
 }
-
+*/
 

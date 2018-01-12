@@ -1,7 +1,7 @@
 import poke as p 
 
 def filter(slot):
-    return slot.active() and slot.active().getDamage()
+    return slot.active() and slot.getDamage()
 
 def canPlay(h):
     # checks if there is pokemon on bench && active && needs healing

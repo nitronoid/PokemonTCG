@@ -47,6 +47,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method loaded from cards to check if the effects can be activated before use()
   /// @param [in] _game game state to check before using ability.
+  /// @return whether the ability can be used or not
   //----------------------------------------------------------------------------------------------------------------------
   bool canUse(Game&_game) const;
 

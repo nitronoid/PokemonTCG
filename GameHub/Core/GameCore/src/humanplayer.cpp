@@ -1,15 +1,23 @@
 #include "humanplayer.h"
-#include "playercommand.h"
 #include <ctime>
 #include <cstdlib>
 #include <random>
 #include <algorithm>
+#include <unordered_map>
+
+const std::unique_ptr<Command> HumanPlayer::m_commands[] = {
+    std::unique_ptr<Command>{new PlayCardCMD},
+    std::unique_ptr<Command>{new AttackCMD},
+    std::unique_ptr<Command>{new RetreatCMD},
+    std::unique_ptr<Command>{new SkipCMD},
+    std::unique_ptr<Command>{new RestartCMD},
+    std::unique_ptr<Command>{new ExitCMD}
+  };
 
 Player* HumanPlayer::clone() const
 {
   return new HumanPlayer(*this);
 }
-
 
 std::string HumanPlayer::deckName() const
 {
@@ -71,8 +79,8 @@ std::vector<size_t> promptChoice(
       std::cout<<"Pick a card from 1 - "<<len<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<std::endl;
       if (std::cin.fail())
       {
-          std::cin.clear();
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       }
       else
       {
@@ -155,73 +163,48 @@ bool HumanPlayer::agree(const PTCG::ACTION _action)
 
 void HumanPlayer::setAttack(const unsigned _index)
 {
-    m_doAttack = true;
-    m_attackID = _index;
+  m_doAttack = true;
+  m_attackID = _index;
+}
+
+void HumanPlayer::setTurnEnd()
+{
+  m_turnFinished = true;
+}
+
+HumanPlayer::CMD HumanPlayer::enumifyInput(const std::string &_str)
+{
+  std::unordered_map<std::string, CMD> enumMap {
+    {"exit",    CMD::EXIT},   {"x",    CMD::EXIT},
+    {"restart", CMD::RESTART},{"z", CMD::RESTART},
+    {"play",    CMD::PLAY},   {"p",    CMD::PLAY},
+    {"attack",  CMD::ATTACK}, {"a",  CMD::ATTACK},
+    {"retreat", CMD::RETREAT},{"r", CMD::RETREAT},
+    {"skip",    CMD::SKIP},   {"s",    CMD::SKIP},
+  };
+  if (enumMap.count(_str)) return enumMap[_str];
+  else return CMD::SKIP;
 }
 
 std::pair<bool, unsigned> HumanPlayer::turn()
 {
-  bool moveOn = false;
-  m_inputStr.clear();
+  m_turnFinished = false;
   m_doAttack = false;
-  while(!moveOn)
+  std::string input;
+  while(!m_turnFinished)
   {
-      std::cout<<"What do you want to do?"<<std::endl;
-      if (std::cin.fail())
-      {
-          std::cin.clear();
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      }
-      else
-      {
-        std::getline(std::cin, m_inputStr);
-      }
-      enumifyInput();
-      switch(m_command)
-      {
-      case CMD::EXIT:{/*exit the game*/moveOn=true;break;}
-      case CMD::RESTART:{/*restart the game*/moveOn=true;break;}
-      case CMD::SKIP:{moveOn=true;break;}
-      case CMD::PLAY:{PlayCardCMD pccmd; pccmd.execute(*this); break;}
-      case CMD::ATTACK:{AttackCMD acmd; acmd.execute(*this); break;}
-      case CMD::RETREAT:{RetreatCMD rcmd; rcmd.execute(*this); break;}
-      }
+    std::cout<<"What do you want to do?"<<std::endl;
+    if (std::cin.fail())
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    std::cin>>input;
+    std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+    m_commands[enumifyInput(input)]->execute(*this);
   }
   // Return the decision
   return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
 }
 
-void HumanPlayer::enumifyInput()
-{
-    if(m_inputStr=="exit"||m_inputStr=="x"){m_command=CMD::EXIT;}
-    if(m_inputStr=="restart"||m_inputStr=="z"||m_inputStr=="re"){m_command=CMD::RESTART;}
-    if(m_inputStr=="play"||m_inputStr=="p"||m_inputStr=="pla"||m_inputStr=="pl"){m_command=CMD::PLAY;}
-    if(m_inputStr=="attack"||m_inputStr=="a"||m_inputStr=="attac"||m_inputStr=="atta"||m_inputStr=="att"||m_inputStr=="at"){m_command=CMD::EXIT;}
-    if(m_inputStr=="retreat"||m_inputStr=="r"||m_inputStr=="retrea"||m_inputStr=="retre"||m_inputStr=="retr"||m_inputStr=="ret"||m_inputStr=="re"){m_command=CMD::RETREAT;}
-    if(m_inputStr=="skip"||m_inputStr.empty()){m_command=CMD::SKIP;}
-}
-
-
-/*
-std::pair<bool, unsigned> HumanPlayer::turn()
-{
-  m_doAttack = false;
-  // Play cards
-  while (agree(PTCG::ACTION::PLAY))
-  {
-    PlayCardCMD pccmd;
-    pccmd.execute(*this);
-  }
-
-  // Attack?
-  if (agree(PTCG::ACTION::ATTACK))
-  {
-      AttackCMD acmd;
-      acmd.execute(*this);
-  }
-
-  // Return the decision
-  return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
-}
-*/
 

@@ -20,7 +20,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   Effect(const Effect&) = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief assignment op for copy ctor for Effect
+  /// @brief copy assignment op for Effect
   //----------------------------------------------------------------------------------------------------------------------
   Effect& operator =(const Effect&) = default;
   //----------------------------------------------------------------------------------------------------------------------
@@ -40,37 +40,38 @@ public:
     m_canUse(_canUse)
   {}
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default dtor for Effect
+  /// @brief default virtual dtor for Effect
   //----------------------------------------------------------------------------------------------------------------------
-  ~Effect() = default;
+  virtual ~Effect();
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief getter method for retrieving the trigger of the effect
-  /// @return trigger enum
+  /// @return this effects trigger
   //----------------------------------------------------------------------------------------------------------------------
-  inline PTCG::TRIGGER getTrigger() const { return  m_trigger; }
+  PTCG::TRIGGER getTrigger() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief getter method for retrieving the duration of the effect
-  /// @return duration enum
+  /// @return this effects duration
   //----------------------------------------------------------------------------------------------------------------------
-  inline PTCG::DURATION getDuration() const { return m_duration; }
+  PTCG::DURATION getDuration() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief getter method for retrieving the name of the effect
-  /// @return name string
+  /// @return this effects name
   //----------------------------------------------------------------------------------------------------------------------
-  inline std::string name() const { return m_name; }
+  std::string name() const;
+
 protected:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for activating the effect
   /// @param [in] _game reference game instance
-  /// @return none
   //----------------------------------------------------------------------------------------------------------------------
-  inline void activate(Game& _game) const { m_ability(&_game); }
+  void activate(Game& _game) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for validating the effect activation
   /// @param [in] _game reference game instance
-  /// @return true/false
+  /// @return whether this effect can be activated
   //----------------------------------------------------------------------------------------------------------------------
-  inline bool canActivate(Game&_game) const { return m_canUse(&_game);}
+  bool canActivate(Game&_game) const;
+
 private:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief the name of the effect

@@ -11,7 +11,7 @@ class Player
 {
 public:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default ctor for Player
+  /// @brief default copy ctor for Player
   //----------------------------------------------------------------------------------------------------------------------
   Player(const Player&) = default;
   //----------------------------------------------------------------------------------------------------------------------
@@ -22,11 +22,11 @@ public:
     m_parentGame(_parentGame)
   {}
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief dtor for Player
+  /// @brief virtual default dtor for Player
   //----------------------------------------------------------------------------------------------------------------------
   virtual ~Player();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief class cloning method
+  /// @brief object cloning method
   //----------------------------------------------------------------------------------------------------------------------
   virtual Player* clone() const = 0;
   //----------------------------------------------------------------------------------------------------------------------
@@ -34,12 +34,12 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::string deckName() const = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief card getter method
+  /// @brief card choice method
   /// @param [in] _player owner of the card pile
-  /// @param [in] _origin type of the card pile
-  /// @param [in] _action a type of action to perform
-  /// @param [in] _options cards to use
-  /// @param [in] _amount amount of cards to use
+  /// @param [in] _origin the card pile where the options currently are
+  /// @param [in] _action the type of action that will be performed on the choice
+  /// @param [in] _options cards to choose from
+  /// @param [in] _amount amount of cards to choose (if possible)
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseCards(
       const PTCG::PLAYER _player,
@@ -49,11 +49,11 @@ public:
       const unsigned _amount
       ) = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief slot getter method
+  /// @brief slot choice method
   /// @param [in] _owner owner of the card pile
-  /// @param [in] _action a type of action to perform
-  /// @param [in] _options target slot vector to use
-  /// @param [in] _amount amount of cards to use
+  /// @param [in] _action the type of action that will be performed on the choice
+  /// @param [in] _options slots to choose from
+  /// @param [in] _amount amount of cards to choose (if possible)
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseSlot(
       const PTCG::PLAYER _owner,
@@ -62,11 +62,11 @@ public:
       const unsigned _amount
       ) = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method to reveal cards
+  /// @brief method to reveal cards to the player
   /// @param [in] _owner owner of the card pile
-  /// @param [in] _origin type of the card pile
-  /// @param [in] _indices indices of cards to use
-  /// @param [in] _revealed a vector of revealed cards
+  /// @param [in] _origin the card pile where the cards currently are
+  /// @param [in] _indices the locations of the revealed cards in _origin
+  /// @param [in] _revealed the revealed cards
   //----------------------------------------------------------------------------------------------------------------------
   virtual void learnCards(
       const PTCG::PLAYER _owner,
@@ -75,12 +75,12 @@ public:
       const std::vector<std::unique_ptr<Card>> &_revealed
       ) = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief getter method for retrieving energy cards
+  /// @brief method for choosing energy cards attached to a pokemon
   /// @param [in] _owner owner of the card pile
-  /// @param [in] _destination type of the card pile
-  /// @param [in] _action a type of action to perform
-  /// @param [in] _options cards to use
-  /// @param [in] _amount amount of cards to use
+  /// @param [in] _destination  the card pile where the energy will be moved to
+  /// @param [in] _action  the type of action that will be performed on the choice
+  /// @param [in] _options cards to choose from
+  /// @param [in] _amount amount of cards to choose (if possible)
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseEnergy(
       const PTCG::PLAYER _owner,
@@ -89,14 +89,13 @@ public:
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
       ) = 0;
-
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief getter method for retrieving energy cards
+  /// @brief method for choosing a condition that the active pokemon is suffering from
   /// @param [in] _owner owner of the card pile
-  /// @param [in] _action a type of action to perform
+  /// @param [in] _action the type of action that will be performed on the choice
   /// @param [in] _options conditions to choose from
-  /// @param [in] _amount amount of cards to use
-  /// @return the indices of the picked options
+  /// @param [in] _amount amount of conditions to choose
+  /// @return the indices of the picked conditions, in _options
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseConditions(
       const PTCG::PLAYER _owner,
@@ -104,24 +103,23 @@ public:
       const std::vector<PTCG::CONDITION> &_options,
       const unsigned _amount
       ) = 0;
-
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief prompt player to agree to perform action or not
   /// @param [in] _action an action to evaluate
   //----------------------------------------------------------------------------------------------------------------------
   virtual bool agree(const PTCG::ACTION _action) = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief main player method for deduction, evaluation and decision making
+  /// @brief method for the players turn; decision making, card playing, attacking, retreating, etc...
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::pair<bool, unsigned> turn() = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method for validating card
-  /// @param [in] _index index of the card to evaluate
+  /// @brief method for checking if a card can be played
+  /// @param [in] _index index of the card to check
   //----------------------------------------------------------------------------------------------------------------------
   bool canPlay(const size_t &_index);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for playing a card
-  /// @param [in] _index index of the card to play
+  /// @param [in] _index index of the card in hand to play
   //----------------------------------------------------------------------------------------------------------------------
   void playCard(const size_t &_index);
   //----------------------------------------------------------------------------------------------------------------------
@@ -133,6 +131,10 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<std::unique_ptr<Card>> viewHand() const;
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief getter method for viewing the number of cards in a pile
+  //----------------------------------------------------------------------------------------------------------------------
+  size_t numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief getter method for viewing the discard pile
   /// @param [in] _owner the owner of the discard pile, defaults to self
   //----------------------------------------------------------------------------------------------------------------------
@@ -143,17 +145,14 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   std::array<BoardSlot, 6> viewBench(const PTCG::PLAYER &_owner = PTCG::PLAYER::SELF) const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method for retrieving a copy of game
+  /// @brief method for retrieving a clone of game to run turn simulations on
   //----------------------------------------------------------------------------------------------------------------------
   Game getDummyGame() const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method for checking whether a player can retreat
+  /// @brief method for checking whether this player can retreat
   //----------------------------------------------------------------------------------------------------------------------
   bool canRetreat() const;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method for setting the retreat option
-  //----------------------------------------------------------------------------------------------------------------------
-  void setRetreat(const bool _val);
+
 private:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief retreat status container

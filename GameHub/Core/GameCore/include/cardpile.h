@@ -7,8 +7,9 @@
 class CardPile
 {
 public:
+
   /// @brief virtual dtor for a cardPile
-  virtual ~CardPile(){}
+  virtual ~CardPile();
   /// @brief puting a card into a pile
   /// @param [in] _card card to put into pile
   virtual void put(std::unique_ptr<Card> &&_card)=0;

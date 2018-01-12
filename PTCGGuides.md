@@ -12,9 +12,9 @@ ___
 ## Introduction
 ___
 
-    PokeTCG is a project for our assignment to create a platform for simulating Pokemon Trading Card Game. It is coded in C++, python script and bound with [pybind11](https://pybind11.readthedocs.io/en/stable/).
+- PokeTCG is a project for our assignment to create a platform for simulating Pokemon Trading Card Game. It is coded in C++, python script and bound with [pybind11](https://pybind11.readthedocs.io/en/stable/).
 
-    The current version contains the SUM Starter Decks and is played in a terminal with ASCII-based GUI.
+- The current version contains the SUM Starter Decks and is played in a terminal with ASCII-based GUI.
 
 ___
 

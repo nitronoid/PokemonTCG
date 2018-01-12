@@ -57,14 +57,17 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to check for valid attack condition
   /// @param [in] _game current game state to check
+  /// @return whether the attack can be used or not
   //----------------------------------------------------------------------------------------------------------------------
   bool canAttack(Game& _game) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to return energy requirements of the attacks
+  /// @return a list of energy cards needed to use the attack
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<PTCG::TYPE> requirements() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to return base damage text
+  /// @return the base damage of an attack in text
   //----------------------------------------------------------------------------------------------------------------------
   std::string damageString() const;
 

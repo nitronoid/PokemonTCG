@@ -31,19 +31,23 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to take cards from discard pile
   /// @param [in] _index index of the card, in discard pile, to be taken.
+  /// @return the card to be taken
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::unique_ptr<Card> take(const size_t _index) override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method returns a reference pointer to a card in a specific position of the pile
   /// @param [in] _index index of the card, in discard pile, to be returned.
+  /// @return the card to be accessed
   //----------------------------------------------------------------------------------------------------------------------
   virtual Card* cardAt(const size_t _index) override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief viewing all cards in discard pile
+  /// @return all cards in this discard pile
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<std::unique_ptr<Card>> view() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief the number of cards in discard pile
+  /// @return the number of cards in this discard pile
   //----------------------------------------------------------------------------------------------------------------------
   virtual size_t numCards() const override;
 

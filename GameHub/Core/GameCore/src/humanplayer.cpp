@@ -60,7 +60,7 @@ std::vector<size_t> promptChoice(
 {
   std::vector<size_t> choice;
   std::unordered_set<size_t> picked;
-  while (_options.size() && choice.size() < _amount)
+  while (choice.size() < std::min(_options.size(), static_cast<size_t>(_amount)))
   {
     size_t len = _options.size();
     size_t pick  = len;

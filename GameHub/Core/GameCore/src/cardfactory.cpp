@@ -188,7 +188,8 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
       selectType(stringify(_jsonCard["Resistance"])[0]),
       intify(_jsonCard["HP"]),
       static_cast<unsigned>(intify(_jsonCard["Retreat"])),
-      static_cast<unsigned>(intify(_jsonCard["Stage"]))
+      static_cast<unsigned>(intify(_jsonCard["Stage"])),
+      stringify(_jsonCard["Pre evolution"])
       );
 }
 

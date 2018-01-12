@@ -28,11 +28,11 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   ~BoardSlot() = default;
   /// @brief returns the turn this active pokemon has been played on this slot
-  inline unsigned getTurnPlayed() const { return m_turnPlayed; }
+  unsigned getTurnPlayed()  const;
   /// @brief return damage taken by the slotted pokemon on this bench
-  inline int      getDamage()     const { return m_damageTaken; }
+  int      getDamage()      const;
   /// @brief return slotted pokemon's Max HP - damage taken
-  inline int      getRemainingHP()const { return std::max(0, active()->hp() - m_damageTaken);}
+  int      getRemainingHP() const;
   /// @brief the pokemon on this slot takes damage
   /// @param [in] _damage damage this pokemon is about to take
   void takeDamage(const int _damage);
@@ -65,8 +65,10 @@ public:
   void setPokemon(std::unique_ptr<PokemonCard> &&_pokemon);
   /// @brief return the top pokemon card on this slot
   PokemonCard* active() const;
-  /// @brief returns the set of attached energy cards
-  TypeMSet energy() const;
+  /// @brief returns the a multi-set of attached energy cards
+  TypeMSet energyMSet() const;
+  /// @brief returns the a multi-set of attached energy cards
+  std::unordered_set<PTCG::TYPE> energySet() const;
   /// @brief returns number of pokemon cards in this slot
   inline size_t numPokemon() const { return m_pokemon.size(); }
   /// @brief returns number of energy cards in this slot

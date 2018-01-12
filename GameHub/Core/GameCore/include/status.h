@@ -10,6 +10,10 @@ struct Status
 {
 public:
   Status() = default;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~Status() = default;
   inline int  getBonus(const PTCG::ORDER _order)     const { return m_bonusDamage[static_cast<size_t>(_order)]; }
   inline int  getReduction(const PTCG::ORDER _order) const { return m_damageReduction[static_cast<size_t>(_order)]; }
   inline bool isProtected()        const { return m_protected; }

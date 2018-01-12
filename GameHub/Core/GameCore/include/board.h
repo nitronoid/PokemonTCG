@@ -15,7 +15,10 @@ struct Board
   Board(const Board&) = default;
   /// @brief default assignment operator
   Board& operator=(const Board&) = default;
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor for Board
+  //----------------------------------------------------------------------------------------------------------------------
+  ~Board() = default;
   /// @brief bench on this player's board
   Bench m_bench;
   /// @brief prize cards of this player's board

@@ -13,18 +13,30 @@ struct Command
 struct PlayCardCMD : public Command
 {
   PlayCardCMD() = default;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~PlayCardCMD() = default;
   virtual void execute(HumanPlayer&_player) override;
 };
 
 struct AttackCMD : public Command
 {
   AttackCMD() = default;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~AttackCMD() = default;
   virtual void execute(HumanPlayer&_player) override;
 };
 
 struct RetreatCMD : public Command
 {
   RetreatCMD() = default;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~RetreatCMD() = default;
   virtual void execute(HumanPlayer&_player) override;
 };
 

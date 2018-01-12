@@ -46,23 +46,27 @@ public:
     m_requirements(_requirements)
   {}
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default virtual dtor for Attack
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual ~Attack();
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to call the attack effect methods
   /// @param [in] _game current game state to affect
   //----------------------------------------------------------------------------------------------------------------------
-  inline void attack(Game& _game) const { activate(_game); }
+  void attack(Game& _game) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to check for valid attack condition
   /// @param [in] _game current game state to check
   //----------------------------------------------------------------------------------------------------------------------
-  inline bool canAttack(Game& _game) const { return canActivate(_game); }
+  bool canAttack(Game& _game) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to return energy requirements of the attacks
   //----------------------------------------------------------------------------------------------------------------------
-  inline std::vector<PTCG::TYPE> requirements() const { return m_requirements; }
+  std::vector<PTCG::TYPE> requirements() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to return base damage text
   //----------------------------------------------------------------------------------------------------------------------
-  inline std::string damageString() const { return m_damageString; }
+  std::string damageString() const;
 
 private:
   //----------------------------------------------------------------------------------------------------------------------

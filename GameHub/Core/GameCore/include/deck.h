@@ -18,7 +18,10 @@ public:
   Deck(std::vector<std::unique_ptr<Card>>&& _cards) :
     m_cards(std::move(_cards))
   {}
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~Deck() = default;
   /// @brief initialses the deck such as loading cards
   /// @param [in] _cards cards to be loaded and prepared
   void init(std::vector<std::unique_ptr<Card>> &&_cards);

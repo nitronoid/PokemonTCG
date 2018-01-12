@@ -16,6 +16,10 @@ public:
     m_cardPath(_cardPath),
     m_pyLibPath(_pyLibPath)
   {}
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor for CardFactory
+  //----------------------------------------------------------------------------------------------------------------------
+  ~CardFactory() = default;
   /// @brief initialises the CardFactory, call this after construction
   void init();
   /// @brief looking through a decklist file to load cards accordingly

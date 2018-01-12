@@ -36,15 +36,19 @@ public:
     Effect (_ability, _name, _trigger, _duration, _canUse)
   {}
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default virtual dtor for Ability
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual ~Ability();
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for activing an ability to the current game state.
   /// @param [in] _game current game state to affect.
   //----------------------------------------------------------------------------------------------------------------------
-  inline void use(Game& _game) const { activate(_game); }
+  void use(Game& _game) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method loaded from cards to check if the effects can be activated before use()
   /// @param [in] _game game state to check before using ability.
   //----------------------------------------------------------------------------------------------------------------------
-  inline bool canUse(Game&_game) const { return canActivate(_game);}
+  bool canUse(Game&_game) const;
 
 };
 

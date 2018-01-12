@@ -16,7 +16,10 @@ public:
     Card(_id, _name, _ability),
     m_type(_type)
   {}
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~TrainerCard() = default;
   virtual Card* clone() override;
   virtual bool canPlay(Game &_game) const override;
   virtual PTCG::CARD cardType() const override;

@@ -21,7 +21,7 @@ public:
     m_name(_name),
     m_id(_id)
   {}
-  /// @brief virtual dtor
+  /// @brief default virtual dtor
   virtual ~Card();
   /// @brief a check if the card can be played
   virtual bool canPlay(Game&_game) const = 0;

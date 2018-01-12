@@ -23,7 +23,10 @@ public:
   BoardSlot& operator=(const BoardSlot &_original);
   /// @brief default assignment operator for move ctor
   BoardSlot& operator=(BoardSlot &&_original) = default;
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor for Board slots
+  //----------------------------------------------------------------------------------------------------------------------
+  ~BoardSlot() = default;
   /// @brief returns the turn this active pokemon has been played on this slot
   inline unsigned getTurnPlayed() const { return m_turnPlayed; }
   /// @brief return damage taken by the slotted pokemon on this bench

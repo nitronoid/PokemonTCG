@@ -7,13 +7,16 @@ class DamageHandler
 public:
   /// @brief default ctor
   DamageHandler()=default;
-  /// @brief assignment operator
+  /// @brief assignment copy operator
   DamageHandler& operator =(const DamageHandler &_original) = delete;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor for DamageHandler
+  //----------------------------------------------------------------------------------------------------------------------
+  ~DamageHandler() = default;
   /// @brief removing damage taken by a healing a pokemon
   /// @param [in] _slot pokemon on a bench slot, to be healed
   /// @param [in] _value healing amount
   bool heal(BoardSlot* _slot, const int &_value);
-
   /// @brief dealing damage to a pokemon, factor in weakness, bonus damages for active, factoring only base for benched
   /// @param [in] _attacker bench on the attacking pokemon's side
   /// @param [in] _defender bench on the defending pokemon's side

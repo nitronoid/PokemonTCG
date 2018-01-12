@@ -26,7 +26,7 @@ std::array<BoardSlot, 6> Bench::view() const
   return ret;
 }
 
-void Bench::switchActive(const unsigned &_sub)
+void Bench::switchActive(const size_t &_sub)
 {
   //using rend to simplify index finding for the substitute
   std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';

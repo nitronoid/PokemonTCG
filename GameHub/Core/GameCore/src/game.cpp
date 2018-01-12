@@ -51,8 +51,11 @@ void Game::playPokemon(PokemonCard* const _pokemon, const size_t _index)
   // Not basic
   if (_pokemon->stage())
   {
-    // Choose from slots with pokemon
-    constexpr auto filter = [](BoardSlot*const _slot){return _slot->active();};
+    // Choose from slots with pokemon, that match the pre-evolution
+    const auto filter = [name = _pokemon->preEvolution()](auto const _slot)
+    {
+      return _slot->active() && _slot->active()->getName() == name;
+    };
     auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
     if (!slotChoice.empty())
       evolve(_pokemon, _index, slotChoice[0]);
@@ -197,12 +200,9 @@ std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player, const PTCG::P
 
 std::vector<size_t> Game::chooseReplacement(const PTCG::PLAYER _player)
 {
-  constexpr auto basicFilter = [](auto _slot)
+  constexpr auto basicFilter = [](auto _slot) -> bool
   {
-    auto card = _slot->active();
-    if (card && card->cardType() == PTCG::CARD::POKEMON)
-      return !static_cast<PokemonCard*>(card)->stage();
-    return false;
+    return _slot->active();
   };
   return playerSlotChoice(
         _player,
@@ -585,7 +585,7 @@ void Game::retreat()
     }
 }
 
-void Game::switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex)
+void Game::switchActive(const PTCG::PLAYER &_player, const size_t &_subIndex)
 {
   if(_subIndex>5)
   {
@@ -890,7 +890,8 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
         gameOver = true;
     }
     //Taking a prize card in prize card.
-    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, match, 1);
+    constexpr auto prizes = [](Card* const card) -> bool {return card;};
+    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!board.m_prizeCards.numCards())
       gameOver = true;

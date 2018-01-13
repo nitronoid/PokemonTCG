@@ -6,6 +6,7 @@
 #include "simpleprinter.h"
 #include "cardfactory.h"
 #include "randomai.h"
+#include "RoaringFluke.h"
 
 
 int main()

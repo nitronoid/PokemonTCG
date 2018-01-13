@@ -4,7 +4,7 @@ def filter(card):
     return card.cardType() == p.CARD.POKEMON and card.stage()
 
 def canPlay(h):
-    return len(h.viewDeck(p.PLAYER.SELF))  0 
+    return len(h.viewDeck(p.PLAYER.SELF)) > 0 
 
 def timerBall(h):
     # std::vector<int> Game::playerChoice(PLAYER thinker, PLAYER owner, PILE origin, CARD cardType, ACTION action, int amount = 1, int range = origin.size);

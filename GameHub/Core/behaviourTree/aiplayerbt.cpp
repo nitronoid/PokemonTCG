@@ -66,21 +66,13 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
 {
     // what to do if it is your turn you have different possibilities:
     // put basic pokemon onto bench x
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    putPokemonOnBench();
+    // you can only play one energy at a time
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    playEnergy();
+
     // evolve pokemon
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-    if(checkEnergyinHand())
-        if(canPlay(indexReturn()))
-        {
-            playCard(indexReturn());
-        }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-    if(checkTrainerinHand())
-        if(canPlay(indexReturn()))
-        {
-            playCard(indexReturn());
-        }
-
     // required energies for attack 1
     // the number energy attached on card
     std::this_thread::sleep_for(std::chrono::milliseconds(1500));
@@ -91,6 +83,7 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     // play trainer cards
     // retreat your Active Pokemon
     // use abilities
+
     // check if there is energy attached to the card
     // if energy is attatched to the card, only attack if enough energy
     // else dont attack(return false)
@@ -100,28 +93,26 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     /// Game.h playCard function help and check the other funtions
 }
 
-bool AIPlayerBT::checkEnergyinHand()
+
+void AIPlayerBT::playEnergy()
 {
     for(unsigned int i=0; i<viewHand().size(); ++i)
     {
         // checks if the card in your hand is an energy card
         if(viewHand()[i]->cardType() == PTCG::CARD::ENERGY)
-        {
-            return true;
-        }
-        return false;
+            if(canPlay(i))
+                playCard(i);
     }
 }
 
-bool AIPlayerBT::checkPokinHand()
+void AIPlayerBT::putPokemonOnBench()
 {
-    for(unsigned int i = 0; i<viewHand().size(); ++i)
+    for(unsigned int i=0; i<viewHand().size(); ++i)
     {
+        // checks if the card in your hand is an energy card
         if(viewHand()[i]->cardType() == PTCG::CARD::POKEMON)
-        {
-            return true;
-        }
-        return false;
+            if(canPlay(i))
+                playCard(i);
     }
 }
 
@@ -139,19 +130,3 @@ bool AIPlayerBT::checkTrainerinHand()
     }
 }
 
-int AIPlayerBT::indexReturn()
-{
-    for(unsigned int i=0; i<viewHand().size(); ++i)
-    {
-        // checks if the card in your hand is an energy card
-        if(viewHand()[i]->cardType() == PTCG::CARD::ENERGY
-                || viewHand()[i]->cardType() == PTCG::CARD::POKEMON
-                || viewHand()[i]->cardType() == PTCG::CARD::ITEM
-                || viewHand()[i]->cardType() == PTCG::CARD::SUPPORT
-                || viewHand()[i]->cardType() == PTCG::CARD::STADIUM)
-        {
-            m_index = i;
-        }
-        return m_index;
-    }
-}

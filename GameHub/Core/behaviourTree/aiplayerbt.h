@@ -79,18 +79,16 @@ public:
   virtual bool agree(const PTCG::ACTION _action) override;
   ///-----------------------------------------------------------------------------------
   /// @build what do you do while it is your turn
+  ///
   /// return a pair with bool (attack or not), unsigned (which attack)
   ///-----------------------------------------------------------------------------------
   virtual std::pair<bool, unsigned> turn() override;
 /// @build checks if there is energy in Hand
-bool checkEnergyinHand();
+void playEnergy();
+void putPokemonOnBench();
 bool checkTrainerinHand();
-bool checkPokinHand();
-int indexReturn();
-
 
 private:
-    int m_index;
     bool m_attack = false;
 
 };

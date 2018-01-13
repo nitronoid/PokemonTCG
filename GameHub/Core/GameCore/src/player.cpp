@@ -34,7 +34,7 @@ std::vector<std::unique_ptr<Card>> Player::viewHand() const
 
 size_t Player::numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const
 {
-  return m_parentGame.viewPile(_owner, _pile).size();
+  return m_parentGame.numCards(_owner, _pile);
 }
 
 std::vector<std::unique_ptr<Card>> Player::viewDiscard(const PTCG::PLAYER &_owner) const

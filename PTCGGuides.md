@@ -23,8 +23,8 @@ ___
 **For each card:**
 
 - Prepare a .json file to store static data fields of a card. 
-- Prepare a .py file to implement function implementation as python scripts. 
-- Both files should be in the same directory as of the current version.
+- Prepare a .py file to implement the card behaviour with named functions. 
+- Both files should be in the same directory as of the current version, named after their set.
 
  **See below**
 ___
@@ -36,33 +36,33 @@ ___
 ___
 ### **Pokemon Cards:**
 > ### **Json File:**
-```cpp
-//9.json
+```json
+##9.json
 {
     "ID" : 9,               // Set ID of a Card
     "Name" : "Rowlet",      // Name of a Card
     "HP" : 60,              // HP of a Pokemon
     "Type" : "G",           // Type of a Pokemon, 
     "Weakness" : "R",       // Weakness of a Pokemon, "" if none exists
-"Resistance" : "",          // Resistance of a Pokemon, "" if none exists
+    "Resistance" : "",      // Resistance of a Pokemon, "" if none exists
     "Retreat" : 1,          // Retreat cost of a Pokemon
-    "Stage" : 0,            // Evolution Satge: 0 - Basic, 1 - Stage 1...etc
+    "Stage" : 0,            // Evolution Satge: Basic is zero, then Stage 1...etc
     "Pre evolution" : "",   // Name of the pokemon's pre-evolution, empty for stage 0 
     "Attacks" : {           
-        "Tackle" : {        // Name of attack
-            "func" : "tackle",          // name of attack function in .py file
-            "baseDamage" : "10",        // base damage text
-            "energy" : "C"              // energy requrirement C, see function acronyms 
+        "Tackle" : {        // Name of attack for static analysis
+            "Func" : "tackle",          // name of attack function in .py file
+            "BaseDamage" : "10",        // base damage text
+            "Energy" : "C"              // energy requrirement C, see energy codes
         },
         "Leafage" : {
-            "func" : "leafage",
-            "baseDamage" : "20",
-            "energy" : "GC"
+            "Func" : "leafage",
+            "BaseDamage" : "20",
+            "Energy" : "GC"
         }
     }
 }
 ```
->### **Energy Acronyms:**
+>### **Energy Codes:**
 
 - [C]olorless (Normal, Flying, older cards also Dragon)
 - [F]ighting (Fighting, Rock, Ground)
@@ -81,26 +81,31 @@ ___
 #9.py
 import poke # this is the bound cpp module to be included 
 
-def tackle(h): #h as an instance of the game state, function name matches json field
-    h.dealDamage(10,0) #calling a deal damage function to do obvious things
+'''
+h is an instance of the game state/(h)ub, 
+and the function name matches json field
+'''
+def tackle(h): 
+    #calling dealDamage to do 10 damage to the opponent
+    h.dealDamage(10) 
 
 
 def leafage(h): 
-    h.dealDamage(20,0)
+    h.dealDamage(20)
 ```
 ___
 ### **Trainer Cards:**
 > ### **Json File:**
-```cpp
-//128.json
+```json
+##128.json
 {
     "ID" : 128,
     "Name" : "Professor Kukui",
-    "Trainer" : "S",                //Type of Trainer Cards, see Trainer Type Acronyms
+    "Trainer" : "S",                //Type of Trainer Cards, see Trainer Type Codes
     "Ability" : {
-        "func" : "professorKukui",
-        "duration" : "S",           //Effect Duration, see Effect Duration
-        "phase" : "M"               //Activation phase............
+        "Func" : "professorKukui",
+        "Duration" : "S",           //Effect Duration, see Effect Duration
+        "Trigger" : "N"             //Activation phase
     }
 }
 ```
@@ -109,31 +114,34 @@ ___
 #128.py
 import poke as p 
 
-# if you need to have certain constraints on card effects such as: 
-# > "Put 2 energy cards into your deck." 
-# Check available functions in the game core for scripts and declare a function to filter cards in card piles. 
-def filter(card): 
-    return True
-# All trainer cards need a canPlay(h) for checking if the card be played or not
-# check for rulings on specific cards and implement this function
+'''
+Some card effects such as: "Put 2 energy cards into your deck.", have constraints on when they,
+can be played. You must implement a canPlay function to make sure these constraints are satisfied.
+'''
 def canPlay(h):
-    # if deck has more than two cards 
-    return len(h.viewDeck(p.PLAYER.SELF)) >= 2
+    # if deck has at least two cards 
+    return h.numCards(p.PLAYER.SELF, p.PILE.DECK) >= 2
 
 def professorKukui(h):
+    # draw two cards
     for i in range(2):
         h.drawCard(p.PLAYER.SELF)
-    # your Pokemon's attacks do 20 more damage to your opponent's 
+    # your Pokemon's attacks do 20 more damage to your opponent's,
     # active Pokemon (before applying Weakness and Resistance).	
     h.addBonusDamage(20, p.ORDER.BEFORE, p.PLAYER.SELF)
+    
 ```
->### **Trainer Type Acronyms:**
+>### **Trainer Type Codes:**
 - [I]tem
 - [T]ool
 - [S]upporter
 - St[A]dium
->### **Effect Duration:**
-
+>### **Effect Trigger Codes:**
+- [N]OW,
+- [S]TART
+- [A]TTACK,
+- [E]ND
+>### **Effect Duration Codes:**
 - [S]INGLE,
 - [M]ULTIPLE,
 - [P]ERMANENT
@@ -141,17 +149,20 @@ def professorKukui(h):
 ___
 ### **Energy Cards:**
 > ### **Json File:**
-```cpp
-//169.json
+```json
+##169.json
 {
     "ID" : 169,
     "Name" : "Fighting Energy",
-    "Type" : "F"  //See Energy Acronyms
+    "Type" : "F"  //See Energy Codes
 }
 ```
 > ### **Python Script:**
-```cpp
-//Due to time constraints, we are only allowing Basic Energy Cards in this set, therefore, function implementation for energy cards are not needed for Basic Energy Cards.
+```python
+'''
+Due to time constraints, we are only allowing Basic Energy Cards in this set. 
+Function implementation for basic energy cards are not required.
+'''
 ```
 
 ___

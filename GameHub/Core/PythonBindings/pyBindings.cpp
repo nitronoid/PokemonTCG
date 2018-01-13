@@ -188,6 +188,7 @@ PYBIND11_MODULE(poke, m)
       .def("setCanRetreat", &Game::setCanRetreat,
            py::arg("_player"),
            py::arg("_val") = false)
+      .def("numCards", &Game::numCards)
       .def("removeEnergy", &Game::removeEnergy);
 
 

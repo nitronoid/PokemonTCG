@@ -94,6 +94,7 @@ public:
   std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;
   std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player)   const;
   std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
+  size_t numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
 
   void addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
   void addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
@@ -118,6 +119,7 @@ public:
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
   void retreat();
+
 private:
   Game(const Game &_original);
   void notifyGui();

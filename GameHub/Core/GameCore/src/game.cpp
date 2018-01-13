@@ -715,6 +715,23 @@ std::vector<size_t> Game::playerSlotChoice(
   return choice;
 }
 
+size_t Game::numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const
+{
+  size_t ret = 0;
+  // Get the owners board
+  auto& board = m_boards[playerIndex(_owner)];
+  using pile = PTCG::PILE;
+  switch (_pile)
+  {
+    case pile::DECK :    {ret = board.m_deck.numCards(); break;}
+    case pile::HAND :    {ret = board.m_hand.numCards(); break;}
+    case pile::DISCARD : {ret = board.m_discardPile.numCards(); break;}
+    case pile::PRIZE :   {ret = board.m_prizeCards.numCards(); break;}
+    default: break;
+  }
+  return ret;
+}
+
 std::vector<std::unique_ptr<Card>> Game::viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const
 {
   std::vector<std::unique_ptr<Card>> ret;

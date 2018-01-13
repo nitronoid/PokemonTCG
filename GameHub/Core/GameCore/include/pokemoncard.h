@@ -4,6 +4,7 @@
 #include "card.h"
 #include "attack.h"
 #include <vector>
+#include <unordered_set>
 
 class PokemonCard : public Card
 {
@@ -38,8 +39,9 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   ~PokemonCard() = default;
 
-  // Fix this later
-  virtual bool canPlay(Game&) const override;
+  virtual bool canPlay(Game&io_game) const override;
+
+  bool canAttack(Game &_game, const size_t _attackID, std::unordered_multiset<PTCG::TYPE> _attachedEnergy);
 
   virtual Card* clone() override;
 

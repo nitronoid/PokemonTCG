@@ -198,6 +198,7 @@ virtual std::string deckName() const = 0;
   /// @param [in] _action the type of action that will be performed on the choice
   /// @param [in] _options cards to choose from
   /// @param [in] _amount amount of cards to choose (if possible)
+  /// @return the indices of the picked cards, in _options
 //--------------------------------------------------------------------------------------
 virtual std::vector<size_t> chooseCards(
       const PTCG::PLAYER _player,
@@ -208,10 +209,11 @@ virtual std::vector<size_t> chooseCards(
       ) = 0;
 //----------------------------------------------------------------------------------------
   /// @brief slot choice method
-  /// @param [in] _owner owner of the card pile
+  /// @param [in] _owner owner of the slots
   /// @param [in] _action the type of action that will be performed on the choice
   /// @param [in] _options slots to choose from
-  /// @param [in] _amount amount of cards to choose (if possible)
+  /// @param [in] _amount amount of slots to choose (if possible)
+  /// @return the indices of the picked slots, in _options
 //--------------------------------------------------------------------------------------
 virtual std::vector<size_t> chooseSlot(
       const PTCG::PLAYER _owner,
@@ -234,11 +236,12 @@ virtual void learnCards(
       ) = 0;
 //----------------------------------------------------------------------------------------
   /// @brief method for choosing energy cards attached to a pokemon
-  /// @param [in] _owner owner of the card pile
+  /// @param [in] _owner owner of the pokemon
   /// @param [in] _destination  the card pile where the energy will be moved to
   /// @param [in] _action  the type of action that will be performed on the choice
   /// @param [in] _options cards to choose from
   /// @param [in] _amount amount of cards to choose (if possible)
+  /// @return the indices of the picked energy cards, in _options
 //--------------------------------------------------------------------------------------
 virtual std::vector<size_t> chooseEnergy(
       const PTCG::PLAYER _owner,
@@ -249,7 +252,7 @@ virtual std::vector<size_t> chooseEnergy(
       ) = 0;
 //----------------------------------------------------------------------------------------
   /// @brief method for choosing a condition that the active pokemon is suffering from
-  /// @param [in] _owner owner of the card pile
+  /// @param [in] _owner owner of the pokemon
   /// @param [in] _action the type of action that will be performed on the choice
   /// @param [in] _options conditions to choose from
   /// @param [in] _amount amount of conditions to choose
@@ -264,11 +267,12 @@ virtual std::vector<size_t> chooseEnergy(
 //----------------------------------------------------------------------------------------
   /// @brief prompt player to agree to perform action or not
   /// @param [in] _action an action to evaluate
+  /// @return the decision, true for agree and false for disagree
 //--------------------------------------------------------------------------------------
 virtual bool agree(const PTCG::ACTION _action) = 0;
 //----------------------------------------------------------------------------------------
   /// @brief method for the players turn; decision making, card playing, attacking, retreating, etc...
-  /// @return bool for whether you declare attack, unsigned for which attack of the active pokemon if you do declare attack
+  /// @return a pair containing a bool for whether you want to attack, and the index of the attack if you do
 //--------------------------------------------------------------------------------------
 virtual std::pair<bool, unsigned> turn() = 0;
  ```

@@ -20,8 +20,8 @@ int main()
   testPool.init();
 
   SimplePrinter drawer;
-  HumanPlayer b(test);
-  RoaringFluke a(test);
+  HumanPlayer a(test);
+  RandomAI b(test);
   test.init(testPool, &a, &b);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";

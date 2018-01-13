@@ -171,7 +171,13 @@ PYBIND11_MODULE(poke, m)
            py::arg("_match"),
            py::arg("_amount"),
            py::arg("_range") = 0)
-      .def("playerSlotChoice", &Game::playerSlotChoice)
+      .def("playerSlotChoice", &Game::playerSlotChoice,
+           py::arg("_thinker"),
+           py::arg("_owner"),
+           py::arg("_action"),
+           py::arg("_amount"),
+           py::arg("_match"),
+           py::arg("_skipActive") = false)
       .def("playerEnergyChoice", &Game::playerEnergyChoice)
       .def("viewDeck", &Game::viewDeck)
       .def("viewDiscard", &Game::viewDiscard)

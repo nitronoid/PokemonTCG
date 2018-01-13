@@ -23,7 +23,7 @@ int main()
   HumanPlayer a(test);
   AIPlayerBT c(test);
   RandomAI b(test);
-  test.init(testPool, &a, &b);
+  test.init(testPool, &a, &c);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";
   //  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(53)));

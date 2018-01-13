@@ -3,6 +3,7 @@
 
 #include "node.h"
 
+
 class Condition : public Node
 {
 public:
@@ -22,7 +23,18 @@ public:
 
 class energyCondition : public Condition
 {
-
+public:
+    ///------------------------------------------------------------------------------
+    /// @build default constructor
+    ///------------------------------------------------------------------------------
+    energyCondition(bool function);
+    ///------------------------------------------------------------------------------
+    /// @build virtual bool condition function
+    ///------------------------------------------------------------------------------
+    virtual bool conditionFunction() override;
+private:
+    bool m_result = false;
+    bool m_function;
 };
 
 #endif // CONDITION_H

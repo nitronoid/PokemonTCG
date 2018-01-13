@@ -2,6 +2,9 @@
 #define NODE_H
 
 #include <iostream>
+#include "card.h"
+#include <vector>
+#include <memory>
 
 class Node
 {

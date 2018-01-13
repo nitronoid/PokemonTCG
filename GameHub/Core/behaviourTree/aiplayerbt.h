@@ -7,6 +7,8 @@
 #include "action.h"
 #include "condition.h"
 #include "player.h"
+#include <algorithm>
+
 
 class AIPlayerBT : public Player
 {
@@ -64,6 +66,13 @@ public:
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
       ) override;
+   /// @build chooseConditions
+   virtual std::vector<size_t> chooseConditions(
+    const PTCG::PLAYER _owner,
+    const PTCG::ACTION _action,
+    const std::vector<PTCG::CONDITION> &_options,
+    const unsigned _amount
+    ) override;
   ///-----------------------------------------------------------------------------------
   /// @build function for if you are agreeing with the action or not
   ///-----------------------------------------------------------------------------------
@@ -73,6 +82,16 @@ public:
   /// return a pair with bool (attack or not), unsigned (which attack)
   ///-----------------------------------------------------------------------------------
   virtual std::pair<bool, unsigned> turn() override;
+/// @build checks if there is energy in Hand
+bool checkEnergyinHand();
+bool checkTrainerinHand();
+bool checkPokinHand();
+int indexReturn();
+
+
+private:
+    int m_index;
+    bool m_attack = false;
 
 };
 

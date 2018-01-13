@@ -6,6 +6,7 @@
 #include "simpleprinter.h"
 #include "cardfactory.h"
 #include "randomai.h"
+#include "RoaringFluke.h"
 
 
 int main()
@@ -19,8 +20,8 @@ int main()
   testPool.init();
 
   SimplePrinter drawer;
-  HumanPlayer a(test);
-  RandomAI b(test);
+  HumanPlayer b(test);
+  RoaringFluke a(test);
   test.init(testPool, &a, &b);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";

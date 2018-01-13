@@ -117,7 +117,14 @@ void Game::playSupport(TrainerCard* const _support, const size_t _index)
 
 bool Game::canPlay(const size_t _index)
 {
-  return viewHand(PTCG::PLAYER::SELF)[_index]->canPlay(*this);
+  return m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.cardAt(_index)->canPlay(*this);
+}
+
+
+bool Game::canAttack(const size_t _index)
+{
+  auto slot = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(_index);
+  return slot->active() && slot->active()->canAttack(*this, _index, slot->energyMSet());
 }
 
 void Game::playCard(const size_t _index)
@@ -346,7 +353,7 @@ void Game::nextTurn()
   {
     // Execute the players turn function
     auto attackDecision = currentPlayer->turn();
-    if (attackDecision.first)
+    if (attackDecision.first && canAttack(attackDecision.second))
     {
       // Apply all attack triggered effects
       executeTurnEffects(PTCG::TRIGGER::ATTACK);

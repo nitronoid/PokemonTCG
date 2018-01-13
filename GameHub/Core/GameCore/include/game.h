@@ -26,6 +26,7 @@ public:
   void start();
   void playCard(const size_t _index);
   bool canPlay(const size_t _index);
+  bool canAttack(const size_t _index);
   bool drawCard(const PTCG::PLAYER _player);
   void moveCards(
       std::vector<size_t> _cardIndices,

@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <random>
 #include <algorithm>
+#include <functional>
 
 Player* RoaringFluke::clone() const
 {
@@ -77,11 +78,11 @@ bool RoaringFluke::agree(const PTCG::ACTION _action)
 }
 
 std::vector<size_t> RoaringFluke::chooseConditions(
-    const PTCG::PLAYER _owner,
-    const PTCG::ACTION _action,
-    const std::vector<PTCG::CONDITION> &_options,
-    const unsigned _amount
-    )
+        const PTCG::PLAYER _owner,
+        const PTCG::ACTION _action,
+        const std::vector<PTCG::CONDITION> &_options,
+        const unsigned _amount
+        )
 {
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
@@ -91,13 +92,63 @@ std::vector<size_t> RoaringFluke::chooseConditions(
 
 std::pair<bool, unsigned> RoaringFluke::turn()
 {
+    auto initHand = viewHand();
     // Random engine
     static std::random_device seed;
     static std::mt19937_64 eng(seed());
 
-    // Play random card from hand
-    std::uniform_int_distribution<unsigned> hgen(0, static_cast<unsigned>(viewHand().size() - 1));
-    playCard(hgen(eng));
+    using cardRefList = std::vector<std::reference_wrapper<std::unique_ptr<Card>>>;
+    cardRefList curenergyList, curpokemonList, curtrainerList;
+    std::cout<<"\nRoaring flukes Pokemon:\n\n";
+    for (int i = 0 ; i < initHand.size(); ++i)
+    {
+        auto& currentCard = initHand[i];
+        std::cout<<i+1<<" "<<currentCard->getName()<<" - "<<currentCard->getID()<<"\n";
+        if (currentCard->cardType() == PTCG::CARD::ENERGY)
+        {
+            curenergyList.push_back(currentCard);
+        }else if(currentCard->cardType() == PTCG::CARD::POKEMON)
+        {
+            curpokemonList.push_back(currentCard);
+        }else
+        {
+            curtrainerList.push_back(currentCard);
+        }
+    }
+
+
+    std::cout<<"\nNumber of Pokemon - "<<curpokemonList.size()<<".\n";
+    std::cout<<"Number of Energy - "<<curenergyList.size()<<".\n";
+    std::cout<<"Number of Trainers - "<<curtrainerList.size()<<".\n\n";
+    size_t bestPos = 0;
+    int i = 0;
+    for (auto& card : curpokemonList)
+    {
+        PokemonCard* pokemon = static_cast<PokemonCard*>(card.get().get());
+        PokemonCard* bestHealth = static_cast<PokemonCard*>(curpokemonList[bestPos].get().get());
+        if (pokemon->hp() > bestHealth->hp())
+        {
+            bestPos = i;
+        }
+        ++i;
+
+    }
+    PokemonCard* bestHealth = static_cast<PokemonCard*>(curpokemonList[bestPos].get().get());
+    if (canPlay(bestPos))
+    {
+        std::cout<<"Best Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - Playable.\n\n";
+
+        if (viewBench()[0].active()->hp() < bestHealth->hp())
+        {
+            playCard(bestPos);
+            std::cout<<"Switched out active for best Health\n";
+        }
+    }
+    else
+    {
+        std::cout<<"Best Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - NOT Playable.\n\n";
+    }
+
 
     // Should we attack?
     bool doAttack = randomishBool();

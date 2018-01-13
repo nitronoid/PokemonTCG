@@ -43,6 +43,8 @@ public:
 
   bool canAttack(Game &_game, const size_t _attackID, std::unordered_multiset<PTCG::TYPE> _attachedEnergy);
 
+  bool canAttack(Game &_game, const size_t _attackID, std::unordered_multiset<PTCG::TYPE> _attachedEnergy);
+
   virtual Card* clone() override;
 
   void attack(const unsigned &_attackIndex, Game& _game);

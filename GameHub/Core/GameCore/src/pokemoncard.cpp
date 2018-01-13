@@ -33,7 +33,11 @@ bool PokemonCard::canAttack(Game& _game, const size_t _attackID, std::unordered_
 
   // Colourless energy is a wildcard, it can fill any requirement,
   // and if the requirement asks for colourless, any type will suffice.
+<<<<<<< HEAD
   static constexpr auto wildcard = PTCG::TYPE::COLOURLESS;
+=======
+  constexpr auto wildcard = PTCG::TYPE::COLOURLESS;
+>>>>>>> d0617f24ef5eef7dbccc6ab95a1185b9e225193f
   // Get the amount of colourless requirement and remove it from the map,
   // as it needs special consideration
   size_t colourlessRequirement = requiredEnergyAmount[wildcard];

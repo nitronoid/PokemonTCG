@@ -20,18 +20,23 @@ public:
       const PTCG::TYPE _resistance,
       const int _hp,
       const unsigned _retreatCost,
-      const unsigned _stage
+      const unsigned _stage,
+      const std::string _preEvo = ""
       ) :
-
     Card(_id, _name, _ability),
     m_type(_type),
     m_weakness(_weakness),
     m_resistance(_resistance),
     m_attacks(_attacks),
+    m_preEvolution(_preEvo),
     m_hp(_hp),
     m_retreatCost(_retreatCost),
     m_stage(_stage)
   {}
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~PokemonCard() = default;
 
   // Fix this later
   virtual bool canPlay(Game&) const override;
@@ -40,7 +45,7 @@ public:
 
   void attack(const unsigned &_attackIndex, Game& _game);
 
-  virtual PTCG::CARD cardType()     const override;
+  virtual PTCG::CARD cardType() const override;
   std::string preEvolution() const;
   PTCG::TYPE  type()         const;
   PTCG::TYPE  weakness()     const;
@@ -50,7 +55,7 @@ public:
   unsigned    stage()        const;
 
   const std::vector<Attack>& attacks() const;
-  // Purely for testing
+
   unsigned    attackNum()    const;
 
 private:

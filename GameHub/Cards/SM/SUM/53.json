@@ -4,20 +4,20 @@
     "HP" : 70,
     "Type" : "L",
     "Weakness" : "F",
-    "Resistance" : "M-20",
+    "Resistance" : "M",
     "Retreat" : 1,
     "Stage" : 0,
     "Pre evolution" : "",
     "Attacks" : {
         "Defense Curl" : {
-            "func" : "defenseCurl",
-            "baseDamage" : "",
-            "energy" : "C"
+            "Func" : "defenseCurl",
+            "BaseDamage" : "",
+            "Energy" : "C"
         },
         "Discharge" : {
-            "func" : "discharge",
-            "baseDamage" : "30x",
-            "energy" : "L"
+            "Func" : "discharge",
+            "BaseDamage" : "30x",
+            "Energy" : "L"
         }
     }
 }

@@ -8,17 +8,12 @@
 #include "aiplayerbt.h"
 #include "randomai.h"
 
-// Needed for python attack functions
-pybind11::scoped_interpreter m_python;
 
 int main()
 {
+  // Needed for python attack functions
+  pybind11::scoped_interpreter m_python;
 
-//    Selector* hello = new Selector;
-//    hello->addChild(new Action);
-
-//    while(!hello->execute())
-//        std::cout<<"STOP"<<'\n';
   // Simple test
   Game test;
   CardFactory testPool("../../Cards/SM/SUM/", "../PythonBindings/");

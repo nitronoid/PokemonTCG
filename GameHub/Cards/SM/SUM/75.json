@@ -10,16 +10,16 @@
     "Pre evolution" : "",
     "Abilty" : {
         "Wall of Sand" : {
-            "func" : "wallofSand",
-            "baseDamage" : "",
-            "energy" : ""
+            "Func" : "wallofSand",
+            "BaseDamage" : "",
+            "Energy" : ""
         }
     },
     "Attacks" : {
         "Absorb Vitality" : {
-            "func" : "absorbVitality",
-            "baseDamage" : "50",
-            "energy" : "FCCC"
+            "Func" : "absorbVitality",
+            "BaseDamage" : "50",
+            "Energy" : "FCCC"
         }
     }
 }

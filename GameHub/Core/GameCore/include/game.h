@@ -50,7 +50,8 @@ public:
       const PTCG::PLAYER _owner,
       const PTCG::ACTION _action,
       const unsigned _amount,
-      std::function<bool(BoardSlot*const)> _match
+      std::function<bool(BoardSlot*const)> _match,
+      const bool _skipActive = false
       );
 
   void revealCards(
@@ -78,22 +79,23 @@ public:
       );
 
   std::vector<size_t> playerConditionChoice(
-        const PTCG::PLAYER _thinker,
-        const PTCG::PLAYER _owner,
-        const PTCG::ACTION _action,
-        const std::vector<PTCG::CONDITION> _options,
-        const unsigned _amount
-          );
+      const PTCG::PLAYER _thinker,
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> _options,
+      const unsigned _amount
+      );
 
   bool playerAgree(const PTCG::PLAYER _player, const PTCG::ACTION _action);
 
   // View card pile functions
-  // std::vector<std::unique_ptr<Card>>  viewBoard(const PTCG::PLAYER &_player, const PTCG::PILE &_target) const;
+  std::vector<std::unique_ptr<Card>>  viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   std::vector<std::unique_ptr<Card>>  viewDeck(const PTCG::PLAYER &_player)    const;
   std::vector<std::unique_ptr<Card>>  viewDiscard(const PTCG::PLAYER &_player) const;
   std::vector<std::unique_ptr<Card>>  viewHand(const PTCG::PLAYER &_player)    const;
   std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player)   const;
   std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
+  size_t numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
 
   void addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
   void addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
@@ -102,7 +104,7 @@ public:
   void removeCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
   void removeAllCondition(const PTCG::PLAYER &_target);
   inline unsigned turnCount() const {return m_turnCount;}
-  void switchActive(const PTCG::PLAYER &_player, const unsigned &_subIndex);
+  void switchActive(const PTCG::PLAYER &_player, const size_t &_subIndex);
   //player needs to choose what to move into active if _index = 0
   void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const size_t &_index=0);
   void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<size_t> _pileIndex, std::vector<size_t> _benchIndex);
@@ -118,6 +120,7 @@ public:
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
   void retreat();
+
 private:
   Game(const Game &_original);
   void notifyGui();
@@ -127,7 +130,6 @@ private:
   void executeTurnEffects(const PTCG::TRIGGER _trigger);
   std::vector<Ability> filterEffects(const PTCG::TRIGGER _trigger);
   void clearEffects();
-  std::vector<std::unique_ptr<Card>> viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
                   std::vector<size_t> &io_originalPositions,
                   const PTCG::PLAYER _owner,

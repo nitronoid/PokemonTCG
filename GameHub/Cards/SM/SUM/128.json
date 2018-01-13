@@ -3,8 +3,8 @@
     "Name" : "Professor Kukui",
     "Trainer" : "S",
     "Ability" : {
-        "func" : "professorKukui",
-        "duration" : "S",
-        "phase" : "M"
+        "Func" : "professorKukui",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

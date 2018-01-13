@@ -10,14 +10,14 @@
     "Pre evolution" : "Stufful",
     "Attacks" : {
         "Bear Hug" : {
-            "func" : "bearHug",
-            "baseDamage" : "40",
-            "energy" : "CC"
+            "Func" : "bearHug",
+            "BaseDamage" : "40",
+            "Energy" : "CC"
         },
         "Superpower" : {
-            "func" : "superpower",
-            "baseDamage" : "80",
-            "energy" : "CCC"
+            "Func" : "superpower",
+            "BaseDamage" : "80",
+            "Energy" : "CCC"
         }
     }
 }

@@ -10,9 +10,9 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Confusion Wave" : {
-            "func" : "confusionWave",
-            "baseDamage" : "",
-            "energy" : "C"
+            "Func" : "confusionWave",
+            "BaseDamage" : "",
+            "Energy" : "C"
         }
     }
 }

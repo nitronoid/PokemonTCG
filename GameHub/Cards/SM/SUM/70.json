@@ -10,14 +10,14 @@
     "Pre evolution" : "Roggenrola",
     "Attacks" : {
         "Headbutt" : {
-            "func" : "headbutt",
-            "baseDamage" : "30",
-            "energy" : "FC"
+            "Func" : "headbutt",
+            "BaseDamage" : "30",
+            "Energy" : "FC"
         },
         "Rock Hurl" : {
-            "func" : "rockHurl",
-            "baseDamage" : "50",
-            "energy" : "FCC"
+            "Func" : "rockHurl",
+            "BaseDamage" : "50",
+            "Energy" : "FCC"
         }
     }
 }

@@ -72,6 +72,21 @@ void BoardSlot::setDamage(const int _value)
   m_damageTaken = _value;
 }
 
+unsigned BoardSlot::getTurnPlayed() const
+{
+  return m_turnPlayed;
+}
+
+int BoardSlot::getDamage() const
+{
+  return m_damageTaken;
+}
+
+int BoardSlot::getRemainingHP() const
+{
+  return std::max(0, active()->hp() - m_damageTaken);
+}
+
 void BoardSlot::setTurnPlayed(const unsigned &_turn)
 {
   m_turnPlayed=_turn;
@@ -139,9 +154,21 @@ PokemonCard *BoardSlot::active() const
   return m_pokemon[m_pokemon.size() - 1].get();
 }
 
-BoardSlot::TypeMSet BoardSlot::energy() const
+BoardSlot::TypeMSet BoardSlot::energyMSet() const
 {
-  BoardSlot::TypeMSet ret;
+  TypeMSet ret;
+  ret.reserve(m_energy.size());
+  std::for_each(m_energy.begin(), m_energy.end(), [&ret](const auto & eCard)
+  {
+    ret.insert(eCard->type());
+  }
+  );
+  return ret;
+}
+
+std::unordered_set<PTCG::TYPE> BoardSlot::energySet() const
+{
+  std::unordered_set<PTCG::TYPE> ret;
   ret.reserve(m_energy.size());
   std::for_each(m_energy.begin(), m_energy.end(), [&ret](const auto & eCard)
   {
@@ -164,7 +191,7 @@ bool BoardSlot::canEvolve(PokemonCard*const _card, const unsigned &_turn)
     std::cout<<"This mon cannot evolve yet."<<'\n';
     return false;
   }
-  if(active()->preEvolution().compare(_card->getName()) != 0)
+  if(active()->preEvolution() == _card->getName())
   {
     std::cout<<"This card is not an evolution Pokemon of this Pokemon."<<'\n';
     return false;

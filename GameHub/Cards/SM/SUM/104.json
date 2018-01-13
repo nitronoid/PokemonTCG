@@ -10,14 +10,14 @@
     "Pre evolution" : "Lillipup",
     "Attacks" : {
         "Treasure Hunt" : {
-            "func" : "treasureHunt",
-            "baseDamage" : "",
-            "energy" : ""
+            "Func" : "treasureHunt",
+            "BaseDamage" : "",
+            "Energy" : ""
         },
         "Bite" : {
-            "func" : "bite",
-            "baseDamage" : "50",
-            "energy" : "CCC"
+            "Func" : "bite",
+            "BaseDamage" : "50",
+            "Energy" : "CCC"
         }
     }
 }

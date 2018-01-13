@@ -134,6 +134,7 @@ PYBIND11_MODULE(poke, m)
       .def("numCards", &BoardSlot::numCards)
       .def("viewEnergy", &BoardSlot::viewEnergy)
       .def("viewTool", &BoardSlot::viewTool)
+      .def("energySet", &BoardSlot::energySet)
       .def("active", &BoardSlot::active, py::return_value_policy::reference_internal);
 
   py::class_<Ability>(m, "Ability")
@@ -187,6 +188,7 @@ PYBIND11_MODULE(poke, m)
       .def("setCanRetreat", &Game::setCanRetreat,
            py::arg("_player"),
            py::arg("_val") = false)
+      .def("numCards", &Game::numCards)
       .def("removeEnergy", &Game::removeEnergy);
 
 

@@ -127,7 +127,7 @@ Ability loadAbility(const QJsonObject  &_jsonCard, const std::string &_canPlayNa
     if (_jsonCard.contains("Ability"))
     {
       auto jAbility = _jsonCard["Ability"].toObject();
-      auto pyAbilty = module.attr(stringify(jAbility["func"]).c_str());
+      auto pyAbilty = module.attr(stringify(jAbility["Func"]).c_str());
       auto ability = pyAbilty.cast<EffectFunc>();
 
       CanPlayFunc canPlay = [](auto){return true;};
@@ -139,8 +139,8 @@ Ability loadAbility(const QJsonObject  &_jsonCard, const std::string &_canPlayNa
       cardAbility = Ability(
             ability,
             stringify(jAbility["Name"]),
-          selectPhase(stringify(jAbility["phase"])[0]),
-          selectDuration(stringify(jAbility["duration"])[0]),
+          selectPhase(stringify(jAbility["Trigger"])[0]),
+          selectDuration(stringify(jAbility["Duration"])[0]),
           canPlay
           );
     }
@@ -166,14 +166,14 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
   {
     // Load the attack
     auto attackObj = jAttackObj[attackName].toObject();
-    auto pyfunc = module.attr(stringify(attackObj["func"]).c_str());
+    auto pyfunc = module.attr(stringify(attackObj["Func"]).c_str());
     Attack newAttack(
           pyfunc.cast<EffectFunc>(),
           attackName.toStdString(),
-          stringify(attackObj["baseDamage"]),
+          stringify(attackObj["BaseDamage"]),
         PTCG::TRIGGER::NOW,
         PTCG::DURATION::SINGLE,
-        getEnergyList(stringify(attackObj["energy"]))
+        getEnergyList(stringify(attackObj["Energy"]))
         );
     attacks.push_back(newAttack);
   }
@@ -188,7 +188,8 @@ PokemonCard* CardFactory::loadPokemonCard(const QJsonObject  &_jsonCard) const
       selectType(stringify(_jsonCard["Resistance"])[0]),
       intify(_jsonCard["HP"]),
       static_cast<unsigned>(intify(_jsonCard["Retreat"])),
-      static_cast<unsigned>(intify(_jsonCard["Stage"]))
+      static_cast<unsigned>(intify(_jsonCard["Stage"])),
+      stringify(_jsonCard["Pre evolution"])
       );
 }
 

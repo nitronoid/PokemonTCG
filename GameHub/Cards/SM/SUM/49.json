@@ -4,20 +4,20 @@
     "HP" : 70,
     "Type" : "L",
     "Weakness" : "F",
-    "Resistance" : "M-20",
+    "Resistance" : "M",
     "Retreat" : 1,
     "Stage" : 0,
     "Pre evolution" : "",
     "Attacks" : {
         "Searching Light" : {
-            "func" : "searchingLight",
-            "baseDamage" : "",
-            "energy" : "C"
+            "Func" : "searchingLight",
+            "BaseDamage" : "",
+            "Energy" : "C"
         },
         "Electro Ball" : {
-            "func" : "electroBall",
-            "baseDamage" : "30",
-            "energy" : "LCC"
+            "Func" : "electroBall",
+            "BaseDamage" : "30",
+            "Energy" : "LCC"
         }
     }
 }

@@ -10,9 +10,9 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Roost" : {
-            "func" : "roost",
-            "baseDamage" : "",
-            "energy" : "C"
+            "Func" : "roost",
+            "BaseDamage" : "",
+            "Energy" : "C"
         }
     }
 }

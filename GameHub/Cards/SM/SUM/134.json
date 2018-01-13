@@ -3,8 +3,8 @@
     "Name" : "Timer Ball",
     "Trainer" : "I",
     "Ability" : {
-        "func" : "timerBall",
-        "duration" : "S",
-        "phase" : "M"
+        "Func" : "timerBall",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

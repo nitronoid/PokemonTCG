@@ -6,7 +6,7 @@ class SimplePrinter : public GuiModule
 {
 public :
   SimplePrinter() = default;
-  virtual ~SimplePrinter(){}
+  ~SimplePrinter() = default;
   virtual void drawBoard() override;
 
 private:

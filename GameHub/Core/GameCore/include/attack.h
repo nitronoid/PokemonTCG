@@ -10,13 +10,20 @@
 class Attack : public Effect
 {
 public:
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief default ctor
+  //----------------------------------------------------------------------------------------------------------------------
   Attack() = default;
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief default cooy ctor
+  //----------------------------------------------------------------------------------------------------------------------
   Attack(const Attack&) = default;
-  /// @brief assignment operator for copy assignment
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default copy assignment operator
+  //----------------------------------------------------------------------------------------------------------------------
   Attack& operator =(const Attack&) = default;
-  /// @brief specific assignment ctor for constructing an Ability
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief specific assignment ctor for constructing an Attack
   /// @param [in] _attack function to be executed/used, loaded from cards
   /// @param [in] _name name of the attack, effect or ability
   /// @param [in] _dmgString damage display
@@ -24,6 +31,7 @@ public:
   /// @param [in] _duration how does the effect wear off/number of use
   /// @param [in] _requirement containers of energy requirements for the attacks
   /// @param [in] _canUse function to check if effect can be used
+  //----------------------------------------------------------------------------------------------------------------------
   Attack(
       const EffectFunc _attack,
       const std::string &_name,
@@ -37,21 +45,40 @@ public:
     m_damageString(_dmgString),
     m_requirements(_requirements)
   {}
-  /// @brief
-  /// @param
-  inline void attack(Game& _game) const { activate(_game); }
-  /// @brief
-  /// @param
-  inline bool canAttack(Game& _game) const { return canActivate(_game); }
-  /// @brief
-  /// @param
-  inline std::vector<PTCG::TYPE> requirements() const { return m_requirements; }
-  /// @brief
-  /// @param
-  inline std::string damageString() const { return m_damageString; }
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default virtual dtor for Attack
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual ~Attack();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief method to call the attack effect methods
+  /// @param [in] _game current game state to affect
+  //----------------------------------------------------------------------------------------------------------------------
+  void attack(Game& _game) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief method to check for valid attack condition
+  /// @param [in] _game current game state to check
+  /// @return whether the attack can be used or not
+  //----------------------------------------------------------------------------------------------------------------------
+  bool canAttack(Game& _game) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief method to return energy requirements of the attacks
+  /// @return a list of energy cards needed to use the attack
+  //----------------------------------------------------------------------------------------------------------------------
+  std::vector<PTCG::TYPE> requirements() const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief method to return base damage text
+  /// @return the base damage of an attack in text
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string damageString() const;
 
 private:
+  //----------------------------------------------------------------------------------------------------------------------
+  ///@brief base damage for the attack
+  //----------------------------------------------------------------------------------------------------------------------
   std::string m_damageString;
+  //----------------------------------------------------------------------------------------------------------------------
+  ///@brief energy requirements for the attack
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<PTCG::TYPE> m_requirements;
 };
 

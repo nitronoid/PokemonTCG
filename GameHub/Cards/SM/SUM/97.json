@@ -4,15 +4,15 @@
     "HP" : 60,
     "Type" : "C",
     "Weakness" : "L",
-    "Resistance" : "F-20",
+    "Resistance" : "F",
     "Retreat" : 1,
     "Stage" : 0,
     "Pre evolution" : "",
     "Attacks" : {
         "Peck Bugs" : {
-            "func" : "peckBugs",
-            "baseDamage" : "10+",
-            "energy" : "C"
+            "Func" : "peckBugs",
+            "BaseDamage" : "10+",
+            "Energy" : "C"
         }
     }
 }

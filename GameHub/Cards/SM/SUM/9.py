@@ -1,8 +1,8 @@
 import poke
 
 def tackle(h):
-    h.dealDamage(10,0)
+    h.dealDamage(10)
 
 
 def leafage(h): 
-    h.dealDamage(20,0)
+    h.dealDamage(20)

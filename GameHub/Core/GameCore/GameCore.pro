@@ -1,7 +1,7 @@
 # exe name
-TARGET=PokemonTCG
+TARGET = PokemonTCG
 # put the .o files in separate folder to keep it clean
-OBJECTS_DIR=obj
+OBJECTS_DIR = obj
 
 cache()
 CONFIG += console c++14
@@ -14,10 +14,10 @@ SOURCES += $$files(../GameCore/src/*.cpp)
 # Roaring Heat AI
 HEADERS += $$files(../../../RoaringHeat/include/*.h)
 SOURCES += $$files(../../../RoaringHeat/src/*.cpp)
-INCLUDEPATH+=../../../RoaringHeat/include
+INCLUDEPATH += ../../../RoaringHeat/include
 
-INCLUDEPATH+=$$PWD/include
-INCLUDEPATH+=../pybind11/include
+INCLUDEPATH += $$PWD/include
+INCLUDEPATH += ../pybind11/include
 
 linux {
     LIBS += -L /usr/local/lib/python2.7 -lpython2.7

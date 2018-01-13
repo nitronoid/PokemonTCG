@@ -15,7 +15,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   Attack() = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default cooy ctor
+  /// @brief default copy ctor
   //----------------------------------------------------------------------------------------------------------------------
   Attack(const Attack&) = default;
   //----------------------------------------------------------------------------------------------------------------------
@@ -26,11 +26,11 @@ public:
   /// @brief specific assignment ctor for constructing an Attack
   /// @param [in] _attack function to be executed/used, loaded from cards
   /// @param [in] _name name of the attack, effect or ability
-  /// @param [in] _dmgString damage display
+  /// @param [in] _dmgString base damage to display
   /// @param [in] _trigger when the effect is triggered
   /// @param [in] _duration how does the effect wear off/number of use
-  /// @param [in] _requirement containers of energy requirements for the attacks
-  /// @param [in] _canUse function to check if effect can be used
+  /// @param [in] _requirement a vector containing the required energies for using this attack
+  /// @param [in] _canUse function to check if attack can be used
   //----------------------------------------------------------------------------------------------------------------------
   Attack(
       const EffectFunc _attack,
@@ -67,7 +67,7 @@ public:
   std::vector<PTCG::TYPE> requirements() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method to return base damage text
-  /// @return the base damage of an attack in text
+  /// @return the base damage string of an attack
   //----------------------------------------------------------------------------------------------------------------------
   std::string damageString() const;
 

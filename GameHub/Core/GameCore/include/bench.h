@@ -33,7 +33,7 @@ public:
   ~Bench() = default;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief returning the current status of the active pokemon in slot 0
-  /// @return this bench's status object
+  /// @return mutable pointer to the active pokemons status object
   //----------------------------------------------------------------------------------------------------------------------
   Status *activeStatus();
   //----------------------------------------------------------------------------------------------------------------------
@@ -42,12 +42,12 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   BoardSlot *slotAt(const size_t _index);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief returns the current active pokemon on this bench (0th slot)
+  /// @brief returns the current active pokemon on this bench (0th slot), equivalent to slotAt(0)->active()
   /// @return the active pokemon of this bench, 0th index
   //----------------------------------------------------------------------------------------------------------------------
   PokemonCard *active();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief return the entire bench slot as a copy for viewing
+  /// @brief return a clone of the entire bench for viewing
   /// @return a copy of the slots in this bench
   //----------------------------------------------------------------------------------------------------------------------
   std::array<BoardSlot,6> view() const;
@@ -63,9 +63,9 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   void put(std::unique_ptr<Card> &&_card, const size_t _index);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief takes all cards from the bench
+  /// @brief takes all cards from the slot at _index
   /// @param _index index of the slot in bench to take from
-  /// @return a vector of cards to be taken
+  /// @return a vector of cards that were on the slot
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<std::unique_ptr<Card>> take(const size_t _index);
   //----------------------------------------------------------------------------------------------------------------------

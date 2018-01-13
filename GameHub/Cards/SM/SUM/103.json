@@ -10,14 +10,14 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Work Up" : {
-            "func" : "workUp",
-            "baseDamage" : "",
-            "energy" : "C"
+            "Func" : "workUp",
+            "BaseDamage" : "",
+            "Energy" : "C"
         },
         "Bite" : {
-            "func" : "bite",
-            "baseDamage" : "20",
-            "energy" : "CC"
+            "Func" : "bite",
+            "BaseDamage" : "20",
+            "Energy" : "CC"
         }
     }
 }

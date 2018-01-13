@@ -10,14 +10,14 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Punch" : {
-            "func" : "punch",
-            "baseDamage" : "20",
-            "energy" : "CC"
+            "Eunc" : "punch",
+            "BaseDamage" : "20",
+            "Energy" : "CC"
         },
         "crabhammer" : {
-            "func" : "Crabhammer",
-            "baseDamage" : "40",
-            "energy" : "FCC"
+            "Func" : "Crabhammer",
+            "BaseDamage" : "40",
+            "Energy" : "FCC"
         }
     }
 }

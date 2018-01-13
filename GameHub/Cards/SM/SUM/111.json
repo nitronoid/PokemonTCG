@@ -10,9 +10,9 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Tackle" : {
-            "func" : "tackle",
-            "baseDamage" : "30",
-            "energy" : "CC"
+            "Func" : "tackle",
+            "BaseDamage" : "30",
+            "Energy" : "CC"
         }
     }
 }

@@ -10,13 +10,13 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Shore Up" : {
-            "func" : "shoreUp",
-            "energy" : "C"
+            "Func" : "shoreUp",
+            "Energy" : "C"
         },
         "Sand Tomb" : {
-            "func" : "sandTomb",
-            "baseDamage" : "30",
-            "energy" : "FCC"
+            "Func" : "sandTomb",
+            "BaseDamage" : "30",
+            "Energy" : "FCC"
         }
     }
 }

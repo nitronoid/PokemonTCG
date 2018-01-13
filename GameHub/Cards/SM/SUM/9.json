@@ -10,14 +10,14 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Tackle" : {
-            "func" : "tackle",
-            "baseDamage" : "10",
-            "energy" : "C"
+            "Func" : "tackle",
+            "BaseDamage" : "10",
+            "Energy" : "C"
         },
         "Leafage" : {
-            "func" : "leafage",
-            "baseDamage" : "20",
-            "energy" : "GC"
+            "Func" : "leafage",
+            "BaseDamage" : "20",
+            "Energy" : "GC"
         }
     }
 }

@@ -10,14 +10,14 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Surprise Attack" : {
-            "func" : "surpriseAttack",
-            "baseDamage" : "20",
-            "energy" : "F"
+            "Func" : "surpriseAttack",
+            "BaseDamage" : "20",
+            "Energy" : "F"
         },
         "Strength" : {
-            "func" : "strength",
-            "baseDamage" : "40",
-            "energy" : "FC"
+            "Func" : "strength",
+            "BaseDamage" : "40",
+            "Energy" : "FC"
         }
     }
 }

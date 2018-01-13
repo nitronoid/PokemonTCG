@@ -10,14 +10,14 @@
     "Pre evolution" : "Psyduck",
     "Attacks" : {
         "Scratch" : {
-            "func" : "scratch",
-            "baseDamage" : "20",
-            "energy" : "C"
+            "Func" : "scratch",
+            "BaseDamage" : "20",
+            "Energy" : "C"
         },
         "Double Jet" : {
-            "func" : "doubleJet",
-            "baseDamage" : "60x",
-            "energy" : "W"
+            "Func" : "doubleJet",
+            "BaseDamage" : "60x",
+            "Energy" : "W"
         }
     }
 }

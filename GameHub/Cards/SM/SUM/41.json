@@ -10,14 +10,14 @@
     "Pre evolution" : "Brionne",
     "Attacks" : {
         "Disarming Voice" : {
-            "func" : "disarmingVoice",
-            "baseDamage" : "30",
-            "energy" : "WC"
+            "Func" : "disarmingVoice",
+            "BaseDamage" : "30",
+            "Energy" : "WC"
         },
         "Sparkling Aria" : {
-            "func" : "sparklingAria",
-            "baseDamage" : "100",
-            "energy" : "WWC"
+            "Func" : "sparklingAria",
+            "BaseDamage" : "100",
+            "Energy" : "WWC"
         }
     }
 }

@@ -10,16 +10,16 @@
     "Pre evolution" : "",
     "Ability" : {
         "Instruct" : {
-            "func" : "instruct",
-            "baseDamage" : "",
-            "energy" : ""
+            "Func" : "instruct",
+            "BaseDamage" : "",
+            "Energy" : ""
         }
     },
     "Attacks" : {
         "Psychic" : {
-            "func" : "psychic",
-            "baseDamage" : "60",
-            "energy" : "CCC"
+            "Func" : "psychic",
+            "BaseDamage" : "60",
+            "Energy" : "CCC"
         }
     }
 }

@@ -10,14 +10,14 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Fling" : {
-            "func" : "fling",
-            "baseDamage" : "30",
-            "energy" : "F"
+            "Func" : "fling",
+            "BaseDamage" : "30",
+            "Energy" : "F"
         },
         "Team Play" : {
-            "func" : "teamPlay",
-            "baseDamage" : "10",
-            "energy" : "CC"
+            "Func" : "teamPlay",
+            "BaseDamage" : "10",
+            "Energy" : "CC"
         }
     }
 }

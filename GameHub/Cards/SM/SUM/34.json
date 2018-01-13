@@ -10,14 +10,14 @@
     "Pre evolution" : "Shellder",
     "Attacks" : {
         "Headlock" : {
-            "func" : "headlock",
-            "baseDamage" : "30+",
-            "energy" : "WC"
+            "Func" : "headlock",
+            "BaseDamage" : "30+",
+            "Energy" : "WC"
         },
         "Guard Press" : {
-            "func" : "guardPress",
-            "baseDamage" : "80",
-            "energy" : "WWC"
+            "Func" : "guardPress",
+            "BaseDamage" : "80",
+            "Energy" : "WWC"
         }
     }
 }

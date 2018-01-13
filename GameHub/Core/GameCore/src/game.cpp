@@ -64,7 +64,7 @@ void Game::playPokemon(PokemonCard* const _pokemon, const size_t _index)
   else
   {
     // Use default filter to find empty slots
-    constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
+    static constexpr auto filter = [](BoardSlot*const _slot){return !_slot->active();};
     auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
     // Check a choice was available
     if (!slotChoice.empty())
@@ -79,14 +79,15 @@ void Game::playPokemon(PokemonCard* const _pokemon, const size_t _index)
 
 void Game::playItem(TrainerCard* const _item, const size_t _index)
 {
-  _item->activateAbility(*this);
+  // Need to move first as the ability could invalidate _index
   moveCards({_index}, PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::PILE::DISCARD);
+  _item->activateAbility(*this);
 }
 
 void Game::playTool(TrainerCard* const _tool, const size_t _index)
 {
   // Slots with a pokemon that has no tool attached
-  constexpr auto filter = [](BoardSlot*const _slot){ return _slot->active() && !_slot->viewTool();};
+  static constexpr auto filter = [](BoardSlot*const _slot){ return _slot->active() && !_slot->viewTool();};
   auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
   if (!slotChoice.empty())
     pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
@@ -95,7 +96,7 @@ void Game::playTool(TrainerCard* const _tool, const size_t _index)
 void Game::playEnergy(EnergyCard* const _energy, const size_t _index)
 {
   // Choose from slots with pokemon
-  constexpr auto filter = [](BoardSlot*const _slot){return _slot->active();};
+  static constexpr auto filter = [](BoardSlot*const _slot){return _slot->active();};
   auto slotChoice = playerSlotChoice(PTCG::PLAYER::SELF, PTCG::PLAYER::SELF, PTCG::ACTION::PLAY, 1, filter);
   if (!slotChoice.empty())
   {
@@ -117,7 +118,14 @@ void Game::playSupport(TrainerCard* const _support, const size_t _index)
 
 bool Game::canPlay(const size_t _index)
 {
-  return viewHand(PTCG::PLAYER::SELF)[_index]->canPlay(*this);
+  return m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.cardAt(_index)->canPlay(*this);
+}
+
+
+bool Game::canAttack(const size_t _index)
+{
+  auto slot = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0);
+  return slot->active() && slot->active()->canAttack(*this, _index, slot->energyMSet());
 }
 
 void Game::playCard(const size_t _index)
@@ -182,7 +190,7 @@ void Game::setBoard(Board& io_board, const size_t _active)
 
 std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin)
 {
-  constexpr auto basicFilter = [](auto _card)
+  static constexpr auto basicFilter = [](auto _card)
   {
     if (_card->cardType() == PTCG::CARD::POKEMON)
       return !static_cast<PokemonCard*>(_card)->stage();
@@ -200,7 +208,7 @@ std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player, const PTCG::P
 
 std::vector<size_t> Game::chooseReplacement(const PTCG::PLAYER _player)
 {
-  constexpr auto basicFilter = [](auto _slot) -> bool
+  static constexpr auto basicFilter = [](auto _slot) -> bool
   {
     return _slot->active();
   };
@@ -336,6 +344,8 @@ void Game::nextTurn()
   size_t playerId = playerIndex(PTCG::PLAYER::SELF);
   auto currentPlayer = m_players[playerId];
   Board& currentBoard = m_boards[playerId];
+  m_supportPlayed = false;
+  m_canRetreat = true;
   // Ascii print the board
   notifyGui();
   // Apply all effects that are triggered by the start of a turn
@@ -346,7 +356,7 @@ void Game::nextTurn()
   {
     // Execute the players turn function
     auto attackDecision = currentPlayer->turn();
-    if (attackDecision.first)
+    if (attackDecision.first && canAttack(attackDecision.second))
     {
       // Apply all attack triggered effects
       executeTurnEffects(PTCG::TRIGGER::ATTACK);
@@ -561,13 +571,13 @@ std::vector<size_t> Game::nonFreeSlots(const PTCG::PLAYER _owner) const
 
 void Game::retreat()
 {
-  constexpr auto self = PTCG::PLAYER::SELF;
+  static constexpr auto self = PTCG::PLAYER::SELF;
   const auto filter = [](BoardSlot*const _slot){return _slot->active();};
   auto replacement = playerSlotChoice(self, self, PTCG::ACTION::MOVE, 1, filter, true);
   if (!replacement.empty())
   {
     auto slot = m_boards[playerIndex(self)].m_bench.slotAt(0);
-    constexpr auto  match = [](Card* const){return true;};
+    static constexpr auto  match = [](Card* const){return true;};
     auto choice = playerEnergyChoice(
           self,
           self,
@@ -582,6 +592,7 @@ void Game::retreat()
       removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
       switchActive(self, replacement[0]);
       notifyGui();
+      m_canRetreat = false;
     }
   }
 }
@@ -667,6 +678,7 @@ std::vector<size_t> Game::playerCardChoice(
     const PTCG::ACTION _action,
     std::function<bool (Card * const)> _match,
     const unsigned _amount,
+    const bool _known,
     const size_t _range
     )
 {
@@ -679,6 +691,13 @@ std::vector<size_t> Game::playerCardChoice(
   // Resize based on the choice given, if one was given
   if(options.size() > _range && _range)
     options.resize(_range);
+  // If the options are not public knowledge to the thinker we replace them with blanks
+  if (!_known)
+    std::generate(
+          options.begin(),
+          options.end(),
+          [](){ return std::unique_ptr<Card>(new BlankCard); }
+    );
   // Get the players choice from our filtered options
   choice = m_players[playerIndex(_thinker)]->chooseCards(_owner, _origin, _action, options, _amount);
   // Convert the player choice to the original pile indexes
@@ -892,7 +911,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
   if(slot->active() && slot->isDefeated())
   {
     // Match all cards
-    constexpr auto match = [](Card* const){return true;};
+    static constexpr auto match = [](Card* const){return true;};
     // Discard and reset all state on that slot
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
     auto opponent = static_cast<PTCG::PLAYER>((static_cast<unsigned>(_player) + 1) % 2);
@@ -909,7 +928,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
         gameOver = true;
     }
     //Taking a prize card in prize card.
-    constexpr auto prizes = [](Card* const card) -> bool {return card;};
+    static constexpr auto prizes = [](Card* const card) -> bool {return card;};
     auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!board.m_prizeCards.numCards())
@@ -1054,7 +1073,7 @@ bool Game::canRetreat(const PTCG::PLAYER &_player)
 {
   auto& board = m_boards[playerIndex(_player)];
   auto slot = board.m_bench.slotAt(0);
-  return m_players[playerIndex(_player)]->canRetreat() &&
+  return m_canRetreat &&
       board.m_bench.activeStatus()->canRetreat() &&
       !hasCondition(_player, PTCG::CONDITION::PARALYZED) &&
       !hasCondition(_player, PTCG::CONDITION::ASLEEP) &&

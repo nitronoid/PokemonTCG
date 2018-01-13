@@ -13,7 +13,6 @@ void Player::retreat()
   if(m_parentGame.canRetreat(PTCG::PLAYER::SELF))
   {
     m_parentGame.retreat();
-    m_canRetreat = false;
   }
 }
 
@@ -47,7 +46,3 @@ std::array<BoardSlot, 6> Player::viewBench(const PTCG::PLAYER &_owner) const
   return m_parentGame.viewBench(_owner);
 }
 
-bool Player::canRetreat() const
-{
-  return m_canRetreat;
-}

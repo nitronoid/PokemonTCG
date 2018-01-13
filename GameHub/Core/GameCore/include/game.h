@@ -26,6 +26,7 @@ public:
   void start();
   void playCard(const size_t _index);
   bool canPlay(const size_t _index);
+  bool canAttack(const size_t _index);
   bool drawCard(const PTCG::PLAYER _player);
   void moveCards(
       std::vector<size_t> _cardIndices,
@@ -41,7 +42,8 @@ public:
       const PTCG::ACTION _action,
       std::function<bool(Card*const)> _match,
       const unsigned _amount,
-      const size_t _range = 0
+      const bool _known = true,
+      const size_t _range = 0//un-implemented
       );
 
   std::vector<size_t> playerSlotChoice(
@@ -171,6 +173,7 @@ private:
   bool m_rulesBroken   = false;
   bool m_gameFinished  = false;
   bool m_supportPlayed = false;
+  bool m_canRetreat    = true;
 
 
 };

@@ -5,6 +5,7 @@
 #include "game.h"
 #include "simpleprinter.h"
 #include "cardfactory.h"
+#include "aiplayerbt.h"
 #include "randomai.h"
 #include "RoaringFluke.h"
 
@@ -21,8 +22,9 @@ int main()
 
   SimplePrinter drawer;
   HumanPlayer a(test);
+  AIPlayerBT c(test);
   RandomAI b(test);
-  test.init(testPool, &a, &b);
+  test.init(testPool, &a, &c);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";
   //  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(53)));
@@ -32,6 +34,8 @@ int main()
   //  goo->activateAbility(test);
 
   test.start();
+
+
 
   return 0;
 }

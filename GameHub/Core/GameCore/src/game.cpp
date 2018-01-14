@@ -1004,8 +1004,13 @@ void Game::removeAllCondition(const PTCG::PLAYER &_target)
 unsigned Game::flipCoin(const unsigned _num)
 {
   unsigned ret = 0;
-  static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
-  for(unsigned i  = 0; i<_num;++i)
+  // Random bool generator
+  static auto gen = std::bind(
+        std::uniform_int_distribution<unsigned>(0u,1u),
+        // Use a random_device to seed
+        std::default_random_engine(std::random_device{}())
+        );
+  for(unsigned i  = 0; i < _num; ++i)
   {
     ret += gen();
   }

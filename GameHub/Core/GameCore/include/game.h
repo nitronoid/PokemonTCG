@@ -132,11 +132,17 @@ public:
 private:
   Game(const Game &_original);
 
+  // Alias to simplify template declarations
+  template<Event k_eventA, Event k_eventB>
+  using MatchEvent = typename std::enable_if_t<k_eventA == k_eventB>;
+
+  // A fallback for now, if they didn't inspect a slot
   template<Game::Event k_event, typename... Args,
            typename std::enable_if_t<k_event != Game::Event::INSPECT_SLOT>* = nullptr>
   void notifyGui(Args&&... args);
-  template<Game::Event k_event, typename... Args,
-           typename std::enable_if_t<k_event == Game::Event::INSPECT_SLOT>* = nullptr>
+
+  // For inspecting slots
+  template<Game::Event k_event, typename... Args, MatchEvent<k_event, Event::INSPECT_SLOT>* = nullptr>
   void notifyGui(Args&&... args);
 
   bool checkForKnockouts();
@@ -188,7 +194,6 @@ private:
   bool m_supportPlayed = false;
 
 };
-
 
 #include "game-inl.h" //Template implementations
 

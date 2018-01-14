@@ -363,7 +363,7 @@ void Game::nextTurn()
     if (!m_gameFinished)
     {
       // Now that damage calc is over, we remove any damage/defense bonuses
-      currentBoard.m_bench.activeStatus()->resetDamageEffects();
+      currentBoard.m_bench.activeStatus()->resetForNextTurn();
       //Resolve all between-turn status conditions
       resolveAllEndConditions(PTCG::PLAYER::SELF);
       // Apply all effects triggered by the end of a turn

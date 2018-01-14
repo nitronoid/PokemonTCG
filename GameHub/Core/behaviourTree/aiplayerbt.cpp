@@ -6,12 +6,12 @@ Player* AIPlayerBT::clone() const
 {
     return new AIPlayerBT(*this);
 }
-
+//--------------------------------------------------------------------------
 std::string AIPlayerBT::deckName() const
 {
     return "test_deck.json";
 }
-
+//--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PTCG::PILE _origin, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(1500));
@@ -20,7 +20,7 @@ std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PT
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
     return badChoice;
 }
-
+//--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseSlot(const PTCG::PLAYER _owner, const PTCG::ACTION _action, const std::vector<BoardSlot> &_options, const unsigned _amount)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(1500));
@@ -29,12 +29,12 @@ std::vector<size_t> AIPlayerBT::chooseSlot(const PTCG::PLAYER _owner, const PTCG
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
     return badChoice;
 }
-
+//--------------------------------------------------------------------------
 void AIPlayerBT::learnCards(const PTCG::PLAYER _owner, const PTCG::PILE _origin, const std::vector<size_t> &_indices, const std::vector<std::unique_ptr<Card> > &_revealed)
 {
     /// OPTIONAL
 }
-
+//--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseEnergy(const PTCG::PLAYER _owner, const PTCG::PILE _destination, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(1500));
@@ -43,7 +43,7 @@ std::vector<size_t> AIPlayerBT::chooseEnergy(const PTCG::PLAYER _owner, const PT
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
     return badChoice;
 }
-
+//--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseConditions(const PTCG::PLAYER _owner, const PTCG::ACTION _action, const std::vector<PTCG::CONDITION> &_options, const unsigned _amount)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(1500));
@@ -53,7 +53,7 @@ std::vector<size_t> AIPlayerBT::chooseConditions(const PTCG::PLAYER _owner, cons
     return badChoice;
 
 }
-
+//--------------------------------------------------------------------------
 bool AIPlayerBT::agree(const PTCG::ACTION _action)
 {
     // when do we agree to an action
@@ -61,11 +61,26 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
     // DRAW DISCARD PLAY VIEW MOVE HEAL ATTACK
     return true;
 }
-
+//--------------------------------------------------------------------------
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
     // variables
-    m_attack = false;;
+    m_attack = false;
+    // making tree
+    // root at the momement for energy pass that in the while loop
+
+    /// SOMETHING IS WRONG WITH THIS !
+    Sequence* attachEnergy = new Sequence;
+    Condition* needEnergy = new Condition(AIPlayerBT::checkIfEnergyNeeded());
+    Condition* isEnergyCard = new Condition(AIPlayerBT::checkIfCardIsEnergy());
+    attachEnergy->addChild(needEnergy);
+    attachEnergy->addChild(isEnergyCard);
+    while(!attachEnergy->execute())
+    {
+        // is FIRE not an energy?
+        // does this work?
+        std::cout<<"THIS DOES WORK"<<std::endl;
+    }
     // what to do if it is your turn you have different possibilities:
     // put basic pokemon onto bench x
 //    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
@@ -77,7 +92,7 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     // evolve pokemon
     // required energies for attack 1
     // the number energy attached on card
-    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     if(viewBench()[0].active()->attacks()[1].requirements().size() <= viewBench()[0].numEnergy())
     {
         m_attack = true;
@@ -95,8 +110,7 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
 
     /// Game.h playCard function help and check the other funtions
 }
-
-
+//--------------------------------------------------------------------------
 void AIPlayerBT::playEnergy()
 {
     for(unsigned int i=0; i<viewHand().size(); ++i)
@@ -117,7 +131,7 @@ void AIPlayerBT::playEnergy()
         }
     }
 }
-
+//--------------------------------------------------------------------------
 void AIPlayerBT::putPokemonOnBench()
 {
     for(unsigned int i=0; i<viewHand().size(); ++i)
@@ -129,7 +143,7 @@ void AIPlayerBT::putPokemonOnBench()
                 playCard(i);
     }
 }
-
+//--------------------------------------------------------------------------
 bool AIPlayerBT::checkTrainerinHand()
 {
     for(unsigned int i = 0; i<viewHand().size(); ++i)
@@ -143,7 +157,7 @@ bool AIPlayerBT::checkTrainerinHand()
         return false;
     }
 }
-
+//--------------------------------------------------------------------------
 PTCG::TYPE AIPlayerBT::typeReturnofActiveCard()
 {
     // goes through the requirement energies in attack 1
@@ -153,16 +167,35 @@ PTCG::TYPE AIPlayerBT::typeReturnofActiveCard()
         return viewBench()[0].active()->attacks()[0].requirements()[0];
     }
 }
-
-bool AIPlayerBT::testTree()
+//--------------------------------------------------------------------------
+bool AIPlayerBT::checkIfCardIsEnergy()
 {
     for(unsigned int i=0; i<viewHand().size(); ++i)
     {
         // checks if the card in your hand is an energy card
         if(viewHand()[i]->cardType() == PTCG::CARD::ENERGY)
         {
+            std::cout<<"CARD IS ENERGY"<<std::endl;
             return true;
         }
         return false;
     }
+}
+//--------------------------------------------------------------------------
+bool AIPlayerBT::checkIfEnergyNeeded()
+{
+    if(viewBench()[0].active()->attacks()[0].requirements().size()
+            + viewBench()[0].active()->attacks()[1].requirements().size()
+            >= viewBench()[0].numEnergy())
+    {
+        std::cout<<"CARD NEEDS ENERGY"<<std::endl;
+        return true;
+    }
+    return false;
+}
+//--------------------------------------------------------------------------
+bool AIPlayerBT::temp()
+{
+    std::cout<<"TRUE NODE TEMP"<<std::endl;
+    return true;
 }

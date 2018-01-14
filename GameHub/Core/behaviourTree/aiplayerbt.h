@@ -89,7 +89,10 @@ void playEnergy();
 void putPokemonOnBench();
 PTCG::TYPE typeReturnofActiveCard();
 bool checkTrainerinHand();
-bool testTree();
+bool checkIfEnergyNeeded();
+bool checkIfCardIsEnergy();
+
+bool temp();
 
 
 private:

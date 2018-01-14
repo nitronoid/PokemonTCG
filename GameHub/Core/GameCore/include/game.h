@@ -169,12 +169,8 @@ private:
   std::unordered_set<PTCG::CARD> m_playableCards;
   std::vector<std::pair<unsigned, Ability>> m_effectQueue;
   unsigned m_turnCount = 0;
-  bool m_turnFinished  = false;
-  bool m_rulesBroken   = false;
   bool m_gameFinished  = false;
   bool m_supportPlayed = false;
-  bool m_canRetreat    = true;
-
 
 };
 

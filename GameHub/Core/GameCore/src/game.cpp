@@ -345,7 +345,6 @@ void Game::nextTurn()
   auto currentPlayer = m_players[playerId];
   Board& currentBoard = m_boards[playerId];
   m_supportPlayed = false;
-  m_canRetreat = true;
   // Ascii print the board
   notifyGui();
   // Apply all effects that are triggered by the start of a turn
@@ -576,7 +575,8 @@ void Game::retreat()
   auto replacement = playerSlotChoice(self, self, PTCG::ACTION::MOVE, 1, filter, true);
   if (!replacement.empty())
   {
-    auto slot = m_boards[playerIndex(self)].m_bench.slotAt(0);
+    auto& bench = m_boards[playerIndex(self)].m_bench;
+    auto slot = bench.slotAt(0);
     static constexpr auto  match = [](Card* const){return true;};
     auto choice = playerEnergyChoice(
           self,
@@ -591,19 +591,14 @@ void Game::retreat()
     {
       removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
       switchActive(self, replacement[0]);
+      bench.activeStatus()->setCanRetreat(false);
       notifyGui();
-      m_canRetreat = false;
     }
   }
 }
 
 void Game::switchActive(const PTCG::PLAYER &_player, const size_t &_subIndex)
 {
-  if(_subIndex>5)
-  {
-    std::cout<<"Inex out of bench range when switching"<<'\n';
-    return;
-  }
   auto& board = m_boards[playerIndex(_player)];
   board.m_bench.switchActive(_subIndex);
 }
@@ -1073,8 +1068,7 @@ bool Game::canRetreat(const PTCG::PLAYER &_player)
 {
   auto& board = m_boards[playerIndex(_player)];
   auto slot = board.m_bench.slotAt(0);
-  return m_canRetreat &&
-      board.m_bench.activeStatus()->canRetreat() &&
+  return board.m_bench.activeStatus()->canRetreat() &&
       !hasCondition(_player, PTCG::CONDITION::PARALYZED) &&
       !hasCondition(_player, PTCG::CONDITION::ASLEEP) &&
       slot->numEnergy() >= slot->active()->retreatCost();

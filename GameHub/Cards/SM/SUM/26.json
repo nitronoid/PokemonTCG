@@ -6,18 +6,18 @@
     "Weakness" : "W",
     "Resistance" : "",
     "Retreat" : 3,
-    "Stage" : 0,
+    "Stage" : 2,
     "Pre evolution" : "Torracat",
     "Attacks" : {
         "Fire Fang" : {
-            "func" : "fireFang",
-            "baseDamage" : "30",
-            "energy" : "RC"
+            "Func" : "fireFang",
+            "BaseDamage" : "30",
+            "Energy" : "RC"
         },
         "Darkest Lariat" : {
-            "func" : "darkestLariat",
-            "baseDamage" : "0",
-            "energy" : "RRC"
+            "Func" : "darkestLariat",
+            "BaseDamage" : "0",
+            "Energy" : "RRC"
         }
     }
 }

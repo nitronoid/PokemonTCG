@@ -2,7 +2,7 @@
     "ID" : 69,
     "Name" : "Roggenrola",
     "HP" : 70,
-    "Trainer" : "F",
+    "Type" : "F",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 3,
@@ -10,9 +10,9 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Smack Down" : {
-            "func" : "smackDown",
-            "baseDamage" : "20",
-            "energy" : "FC"
+            "Func" : "smackDown",
+            "BaseDamage" : "20",
+            "Energy" : "FC"
         }
     }
 }

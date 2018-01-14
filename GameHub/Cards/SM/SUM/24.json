@@ -10,14 +10,14 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Bite" : {
-            "func" : "bite",
-            "baseDamage" : "10",
-            "energy" : "R"
+            "Func" : "bite",
+            "BaseDamage" : "10",
+            "Energy" : "R"
         },
         "Flare" : {
-            "func" : "flare",
-            "baseDamage" : "20",
-            "energy" : "RC"
+            "Func" : "flare",
+            "BaseDamage" : "20",
+            "Energy" : "RC"
         }
     }
 }

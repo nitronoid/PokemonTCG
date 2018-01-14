@@ -2,7 +2,7 @@
     "ID" : 36,
     "Name" : "Corsola",
     "HP" : 80,
-    "Trainer" : "W",
+    "Type" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 1,
@@ -10,14 +10,14 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Call for Family" : {
-            "func" : "callForFamily",
-            "baseDamage" : "",
-            "energy" : "C"
+            "Func" : "callForFamily",
+            "BaseDamage" : "",
+            "Energy" : "C"
         },
         "Surf" : {
-            "func" : "surf",
-            "baseDamage" : "60",
-            "energy" : "WCC"
+            "Func" : "surf",
+            "BaseDamage" : "60",
+            "Energy" : "WCC"
         }
     }
 }

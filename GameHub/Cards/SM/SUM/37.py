@@ -11,4 +11,3 @@ def roost(h):
     # next turn no retreat
     ability = p.Ability(effect, '', p.TRIGGER.START, p.DURATION.SINGLE, canUse)
     h.addEffect(p.PLAYER.SELF, 1, ability)
-

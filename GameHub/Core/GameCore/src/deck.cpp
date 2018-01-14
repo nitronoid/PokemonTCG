@@ -10,6 +10,21 @@ Deck::Deck (const Deck &_original)
   }
 }
 
+Deck& Deck::operator=(const Deck&_original)
+{
+  m_cards.reserve(_original.m_cards.size());
+  for (const auto &card : _original.m_cards)
+  {
+    m_cards.emplace_back(card->clone());
+  }
+  return *this;
+}
+
+Card* Deck::cardAt(const size_t _index)
+{
+  return m_cards[_index].get();
+}
+
 void Deck::init(std::vector<std::unique_ptr<Card>> &&_cards)
 {
   m_cards.reserve(_cards.size());
@@ -17,7 +32,6 @@ void Deck::init(std::vector<std::unique_ptr<Card>> &&_cards)
   {
     m_cards.emplace_back(card->clone());
   }
-  //m_cards = _cards;
 }
 
 std::vector<std::unique_ptr<Card>> Deck::view() const
@@ -26,7 +40,7 @@ std::vector<std::unique_ptr<Card>> Deck::view() const
   ret.reserve(m_cards.size());
   for (const auto & card : m_cards)
   {
-    std::cout<<"Card ID: "<<card->getID()<<" Card Name: "<<card->getName()<<'\n';
+    //std::cout<<"Card ID: "<<card->getID()<<" Card Name: "<<card->getName()<<'\n';
     ret.emplace_back(card->clone());
   }
   return ret;
@@ -42,7 +56,7 @@ void Deck::shuffle()
 
 void Deck::put(std::unique_ptr<Card> &&_card)
 {
-  std::cout<<_card->getName()<<" has been put into the deck."<<'\n';
+  //std::cout<<_card->getName()<<" has been put into the deck."<<'\n';
   m_cards.push_back(std::move(_card));
 }
 
@@ -60,4 +74,7 @@ std::unique_ptr<Card> Deck::takeTop()
   return take(m_cards.size() - 1);
 }
 
-
+size_t Deck::numCards() const
+{
+  return m_cards.size();
+}

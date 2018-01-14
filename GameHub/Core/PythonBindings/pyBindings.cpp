@@ -45,6 +45,7 @@ PYBIND11_MODULE(poke, m)
       .value("PERMANENT", PTCG::DURATION::PERMANENT);
 
   py::enum_<PTCG::CARD>(m, "CARD")
+      .value("BLANK",     PTCG::CARD::BLANK)
       .value("ENERGY",    PTCG::CARD::ENERGY)
       .value("POKEMON",   PTCG::CARD::POKEMON)
       .value("ITEM",      PTCG::CARD::ITEM)
@@ -133,6 +134,7 @@ PYBIND11_MODULE(poke, m)
       .def("numCards", &BoardSlot::numCards)
       .def("viewEnergy", &BoardSlot::viewEnergy)
       .def("viewTool", &BoardSlot::viewTool)
+      .def("energySet", &BoardSlot::energySet)
       .def("active", &BoardSlot::active, py::return_value_policy::reference_internal);
 
   py::class_<Ability>(m, "Ability")
@@ -154,6 +156,8 @@ PYBIND11_MODULE(poke, m)
            py::arg("_player") = PTCG::PLAYER::ENEMY,
            py::arg("_id") = 0u
       )
+      .def("addBonusDamage", &Game::addBonusDamage)
+      .def("addBonusDefense", &Game::addBonusDefense)
       .def("healDamage", &Game::healDamage, py::arg("_heal"), py::arg("_id") = 0u)
       .def("applyCondition", &Game::applyCondition)
       .def("removeCondition", &Game::removeCondition)
@@ -166,8 +170,15 @@ PYBIND11_MODULE(poke, m)
            py::arg("_action"),
            py::arg("_match"),
            py::arg("_amount"),
+           py::arg("_known") = true,
            py::arg("_range") = 0)
-      .def("playerSlotChoice", &Game::playerSlotChoice)
+      .def("playerSlotChoice", &Game::playerSlotChoice,
+           py::arg("_thinker"),
+           py::arg("_owner"),
+           py::arg("_action"),
+           py::arg("_amount"),
+           py::arg("_match"),
+           py::arg("_skipActive") = false)
       .def("playerEnergyChoice", &Game::playerEnergyChoice)
       .def("viewDeck", &Game::viewDeck)
       .def("viewDiscard", &Game::viewDiscard)
@@ -180,6 +191,12 @@ PYBIND11_MODULE(poke, m)
       .def("shuffleDeck", &Game::shuffleDeck)
       .def("flipCoin", &Game::flipCoin)
       .def("addEffect", &Game::addEffect)
+      .def("drawCard", &Game::drawCard)
+      .def("setCanRetreat", &Game::setCanRetreat,
+           py::arg("_player"),
+           py::arg("_val") = false)
+      .def("numCards", &Game::numCards)
       .def("removeEnergy", &Game::removeEnergy);
+
 
 }

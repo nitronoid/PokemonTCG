@@ -2,7 +2,7 @@
     "ID" : 39,
     "Name" : "Popplio",
     "HP" : 70,
-    "Trainer" : "W",
+    "Type" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 1,
@@ -10,14 +10,14 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Pound" : {
-            "func" : "pound",
-            "baseDamage" : "10",
-            "energy" : "W"
+            "Func" : "pound",
+            "BaseDamage" : "10",
+            "Energy" : "W"
         },
         "Water Gun" : {
-            "func" : "waterGun",
-            "baseDamage" : "20",
-            "energy" : "WC"
+            "Func" : "waterGun",
+            "BaseDamage" : "20",
+            "Energy" : "WC"
         }
     }
 }

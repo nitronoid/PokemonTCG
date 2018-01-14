@@ -2,7 +2,7 @@
     "ID" : 40,
     "Name" : "Brionne",
     "HP" : 90,
-    "Trainer" : "W",
+    "Type" : "W",
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 2,
@@ -10,14 +10,14 @@
     "Pre evolution" : "Popplio",
     "Attacks" : {
         "Wave Splash" : {
-            "func" : "waveSplash",
-            "baseDamage" : "30",
-            "energy" : "WC"
+            "Func" : "waveSplash",
+            "BaseDamage" : "30",
+            "Energy" : "WC"
         },
         "Disarming Voice" : {
-            "func" : "disarmingVoice",
-            "baseDamage" : "50",
-            "energy" : "WWC"
+            "Func" : "disarmingVoice",
+            "BaseDamage" : "50",
+            "Energy" : "WWC"
         }
     }
 }

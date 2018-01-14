@@ -10,14 +10,14 @@
     "Pre evolution" : "Litten",
     "Attacks" : {
         "Fury Swipes" : {
-            "func" : "furySwipes",
-            "baseDamage" : "0",
-            "energy" : "R"
+            "Func" : "furySwipes",
+            "BaseDamage" : "0",
+            "Energy" : "R"
         },
         "Flamethrower" : {
-            "func" : "flamethrower",
-            "baseDamage" : "90",
-            "energy" : "RC"
+            "Func" : "flamethrower",
+            "BaseDamage" : "90",
+            "Energy" : "RC"
         }
     }
 }

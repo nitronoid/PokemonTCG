@@ -52,8 +52,8 @@ bool Status::hasCondition(const PTCG::CONDITION _condition) const
 
 std::vector<PTCG::CONDITION> Status::conditions() const
 {
-    std::vector<PTCG::CONDITION> cond(m_conditions.begin(), m_conditions.end());
-    return cond;
+  std::vector<PTCG::CONDITION> cond(m_conditions.begin(), m_conditions.end());
+  return cond;
 }
 
 void Status::setProtected(const bool &_val)
@@ -61,4 +61,7 @@ void Status::setProtected(const bool &_val)
   m_protected=_val;
 }
 
-
+void Status::setCanRetreat(const bool &_val)
+{
+  m_canRetreat=_val;
+}

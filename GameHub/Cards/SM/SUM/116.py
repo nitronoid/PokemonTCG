@@ -10,7 +10,7 @@ def canPlay(h):
     cards = h.viewDiscard(p.PLAYER.SELF)
     amountOfTypeCards = 0
     for card in cards:
-        if(card.type() == p.CARD.ENERGY):
+        if(card.cardType() == p.CARD.ENERGY):
             amountOfTypeCards += 1
     return amountOfTypeCards > 1
             

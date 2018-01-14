@@ -2,22 +2,22 @@
     "ID" : 50,
     "Name" : "Lanturn",
     "HP" : 110,
-    "Trainer" : "L",
+    "Type" : "L",
     "Weakness" : "F",
-    "Resistance" : "M-20",
+    "Resistance" : "M",
     "Retreat" : 2,
     "Stage" : 1,
     "Pre evolution" : "Chinchou",
     "Attacks" : {
         "Confuse Ray" : {
-            "func" : "confuseRay",
-            "baseDamage" : "",
-            "energy" : "C"
+            "Func" : "confuseRay",
+            "BaseDamage" : "",
+            "Energy" : "C"
         },
         "Aqua Spark" : {
-            "func" : "aquaSpark",
-            "baseDamage" : "60+",
-            "energy" : "LCC"
+            "Func" : "aquaSpark",
+            "BaseDamage" : "60+",
+            "Energy" : "LCC"
         }
     }
 }

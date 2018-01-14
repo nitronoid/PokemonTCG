@@ -3,8 +3,8 @@
     "Name" : "Nest Ball",
     "Trainer" : "I",
     "Ability" : {
-        "func" : "nestBall",
-        "duration" : "S",
-        "phase" : "N"
+        "Func" : "nestBall",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

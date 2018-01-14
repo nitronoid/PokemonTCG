@@ -3,8 +3,8 @@
     "Name" : "Hau",
     "Trainer" : "S",
     "Ability" : {
-        "func" : "hau",
-        "duration" : "S",
-        "phase" : "M"
+        "Func" : "hau",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

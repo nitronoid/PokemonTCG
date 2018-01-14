@@ -1,5 +1,6 @@
 #include "simpleprinter.h"
 #include "asciicards.h"
+#include "game.h"
 #include <string>
 #include <iostream>
 #include <string>
@@ -73,6 +74,42 @@ char charify(PTCG::CONDITION _in)
   return ret;
 }
 
+std::string stringifyChar(char _in, bool _isType=false)
+{
+  std::string ret;
+  if(_isType)
+  {
+    switch(_in)
+    {
+      case 'C' :{ret = "COLOURLESS";break;}
+      case 'D' :{ret = "DARKNESS";break;}
+      case 'N' :{ret = "DRAGON";break;}
+      case 'Y' :{ret = "FAIRY";break;}
+      case 'F' :{ret = "FIGHTING";break;}
+      case 'R' :{ret = "FIRE";break;}
+      case 'G' :{ret = "GRASS";break;}
+      case 'L' :{ret = "LIGHTNING";break;}
+      case 'M' :{ret = "METAL";break;}
+      case 'P' :{ret = "PSYCHIC";break;}
+      case 'W' :{ret = "WATER";break;}
+      default : break;
+    }
+  }
+  else
+  {
+    switch(_in)
+    {
+      case 'A' :{ret = "ASLEEP";break;}
+      case 'B' :{ret = "BURNED";break;}
+      case 'C' :{ret = "CONFUSED";break;}
+      case 'R' :{ret = "PARALYZED";break;}
+      case 'P' :{ret = "POISONED";break;}
+      default : break;
+    }
+  }
+  return ret;
+}
+
 std::string stringify(PTCG::CARD _in)
 {
   std::string ret;
@@ -111,7 +148,7 @@ void addVec(std::vector<std::string> &_lhs, const std::vector<std::string> &_rhs
   }
 }
 
-std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
+std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus) const
 {
   std::string ret = k_sentinelSlot;
   auto active = _slot->active();
@@ -122,7 +159,68 @@ std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
   std::string toolName = "---";
   if (tool) toolName = tool->getName();
   str_replace_sent(ret, "$TOOL", toolName);
-  pokemonStr(ret, active);
+  //pokemonStr(ret, active);
+  str_replace_sent(ret, "$HP", std::to_string(_slot->active()->hp()));
+  str_replace_sent(ret, "$NAME", _slot->active()->getName(), false);
+  str_replace_sent(ret, "$T", stringifyChar(charify(_slot->active()->type()),true));
+
+  int i = 0;
+  for (const auto& attack : _slot->active()->attacks())
+  {
+    str_replace_sent(ret, "$A"  + std::to_string(i), attack.name(), false);
+    str_replace_sent(ret, "$D"  + std::to_string(i), attack.damageString());
+    std::string requirements;
+    for (const auto r : attack.requirements()) requirements += charify(r);
+    str_replace_sent(ret, "$AR" + std::to_string(i), requirements);
+    //ADD ATTACK DESCRIPTION PLACEMENT HERE <--
+    ++i;
+  }
+  for (; i < 2; ++i)
+  {
+    str_replace_sent(ret, "$A"  + std::to_string(i), "", false);
+    str_replace_sent(ret, "$D"  + std::to_string(i), "");
+    str_replace_sent(ret, "$AR" + std::to_string(i), "");
+  }
+  std::string tmpa = std::string{charify(_slot->active()->weakness())};
+  str_replace_sent(ret, "$W", tmpa);
+  if(tmpa.length()!=0){str_replace_sent(ret, "$WA", "x2");}else{str_replace_sent(ret, "$WA", "");}
+  tmpa = std::string{charify(_slot->active()->resistance())};
+  str_replace_sent(ret, "$R", tmpa);
+  if(tmpa.length()!=0){str_replace_sent(ret, "$RA", "-20");}else{str_replace_sent(ret, "$RA", "");}
+  str_replace_sent(ret, "$C", std::to_string(_slot->active()->retreatCost()));
+  str_replace_sent(ret, "$ST", std::to_string(_slot->active()->stage()));
+  str_replace_sent(ret, "$EVO", _slot->active()->preEvolution());
+  int n=_activeStatus->conditions().size();
+  i=0;
+  for (; i<3; ++i)
+  {
+    if(n>=i)
+    {
+      str_replace_sent(ret, "$COND"+std::to_string(i), stringifyChar(charify(_activeStatus->conditions().at(i))));
+    }
+    else
+    {
+      str_replace_sent(ret, "$COND"+std::to_string(i), "");
+    }
+  }
+  return ret;
+}
+
+std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
+{
+  std::string ret = k_sentinelSlot;
+  auto active = _slot->active();
+  if (active)
+  {
+    str_replace_sent(ret, "$ID", std::to_string(active->getID()));
+    str_replace_sent(ret, "$RH", std::to_string(_slot->getRemainingHP()));
+    str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
+    auto tool = _slot->viewTool();
+    std::string toolName = "---";
+    if (tool) toolName = tool->getName();
+    str_replace_sent(ret, "$TOOL", toolName);
+    pokemonStr(ret, active);
+  }
   return ret;
 }
 
@@ -168,6 +266,7 @@ void SimplePrinter::pokemonStr(std::string &_str, PokemonCard * const _card) con
     std::string requirements;
     for (const auto r : attack.requirements()) requirements += charify(r);
     str_replace_sent(_str, "$AR" + std::to_string(i), requirements);
+    //ADD ATTACK DESCRIPTION PLACEMENT HERE <--
     ++i;
   }
   for (; i < 2; ++i)
@@ -286,12 +385,27 @@ std::string SimplePrinter::prizeStr(PrizeCards * const _prize) const
   return ret;
 }
 
-void SimplePrinter::drawBoard(Board* _board, const bool _isOp)
+void SimplePrinter::drawSide(Board* _board, const bool _isOp)
 {
   Bench& bench = _board->m_bench;
-  std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
-  std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
-  std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
-  std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
+  if(_isOp)
+  {
+    std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
+    std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
+    std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
+    std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
+  }
+  else
+  {
+    std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
+    std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
+    std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
+  }
+}
+
+void SimplePrinter::drawBoard()
+{
+  drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
+  drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
 }
 

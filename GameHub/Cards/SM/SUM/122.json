@@ -3,8 +3,8 @@
     "Name" : "Lillie",
     "Trainer" : "S",
     "Ability" : {
-        "func" : "lillie",
-        "duration" : "S",
-        "phase" : "M"
+        "Func" : "lillie",
+        "Duration" : "S",
+        "Trigger" : "N"
     }
 }

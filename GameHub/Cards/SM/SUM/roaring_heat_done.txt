@@ -28,31 +28,33 @@ Cards to be done:
 73
 72
 70
+114.json 114.py 
 
 Total cards:
-169
-165
-135
-134
-128
-127
-123
-122
-120
-116
-114
-113
-112
-111
-75
-74
-73
-72
-70
-69
-67
-26
-25
-24
-23
+169 smiley face
+165 smiley face
+135 smiley face
+134 smiley face
+128 smiley face
+127 smiley face
+123 smiley face
+122 smiley face
+120 smiley face
+116 smiley face
+114 x tweek "need to implement remove special condition function"
+113 smiley face
+112 x tweek "needs added enemy retreat function"
+111 smiley face
+75  smiley face
+74  x tweek "needs added enemy retreat function"
+73  smiley face
+72  smiley face
+70  smiley face
+69  smiley face
+67  smiley face
+26  smiley face
+25  smiley face
+24  smiley face
+23  smiley face
 
+169* 165* 135* 134* 128* 127* 123* 122* 120* 116* 114* 113* 112* 111* 75* 74* 73* 72* 70* 69* 67* 26* 25* 24* 23*

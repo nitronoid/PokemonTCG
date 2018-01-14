@@ -3,10 +3,25 @@
 #include <cstdlib>
 #include <random>
 #include <algorithm>
+#include <unordered_map>
+
+const std::unique_ptr<Command> HumanPlayer::m_commands[] = {
+    std::unique_ptr<Command>{new PlayCardCMD},
+    std::unique_ptr<Command>{new AttackCMD},
+    std::unique_ptr<Command>{new RetreatCMD},
+    std::unique_ptr<Command>{new SkipCMD},
+    std::unique_ptr<Command>{new RestartCMD},
+    std::unique_ptr<Command>{new ExitCMD}
+  };
 
 Player* HumanPlayer::clone() const
 {
   return new HumanPlayer(*this);
+}
+
+std::string HumanPlayer::deckName() const
+{
+  return "test_deck.json";
 }
 
 std::string actionStr(const PTCG::ACTION _action)
@@ -53,7 +68,7 @@ std::vector<size_t> promptChoice(
 {
   std::vector<size_t> choice;
   std::unordered_set<size_t> picked;
-  while (_options.size() && choice.size() < _amount)
+  while (choice.size() < std::min(_options.size(), static_cast<size_t>(_amount)))
   {
     size_t len = _options.size();
     size_t pick  = len;
@@ -61,10 +76,20 @@ std::vector<size_t> promptChoice(
     if (_player == PTCG::PLAYER::ENEMY) owner = "enemies ";
     do
     {
-        std::cout<<"Pick a card from 0 - "<<len-1<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<"?"<<std::endl;
+      std::cout<<"Pick a card from 1 - "<<len<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<std::endl;
+      if (std::cin.fail())
+      {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      }
+      else
+      {
         std::cin>>pick;
+
+      }
     }
-    while(!std::cin.fail() && (picked.count(pick) || (pick > (len -1))));
+    while(!std::cin.fail() && (picked.count(pick-1) || (pick > len)));
+    --pick;
     choice.push_back(pick);
     picked.insert(pick);
   }
@@ -98,7 +123,9 @@ void HumanPlayer::learnCards(
     const std::vector<size_t> &_indices,
     const std::vector<std::unique_ptr<Card>> &_revealed
     )
-{}
+{
+
+}
 
 std::vector<size_t> HumanPlayer::chooseEnergy(
     const PTCG::PLAYER _owner,
@@ -111,42 +138,73 @@ std::vector<size_t> HumanPlayer::chooseEnergy(
   return promptChoice(_owner, "active pokemon", _action, _options, _amount);
 }
 
+std::vector<size_t> HumanPlayer::chooseConditions(
+    const PTCG::PLAYER _owner,
+    const PTCG::ACTION _action,
+    const std::vector<PTCG::CONDITION> &_options,
+    const unsigned _amount
+    )
+{
+  return promptChoice(_owner,"energy cards",_action,_options,_amount);
+}
+
 bool HumanPlayer::agree(const PTCG::ACTION _action)
 {
   std::string answer;
   do
   {
-      std::cout<<"Do you want to "<<actionStr(_action)<<"?[y/n]";
-      std::cin>>answer;
-      std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
+    std::cout<<"Do you want to "<<actionStr(_action)<<"?[y/n]";
+    std::cin>>answer;
+    std::transform(answer.begin(), answer.end(), answer.begin(), ::tolower);
   }
   while(!std::cin.fail() && answer!="y" && answer!="yes" && answer!="n" && answer!="no" );
   return (answer == "y") || (answer == "yes");
 }
 
+void HumanPlayer::setAttack(const unsigned _index)
+{
+  m_doAttack = true;
+  m_attackID = _index;
+}
+
+void HumanPlayer::setTurnEnd()
+{
+  m_turnFinished = true;
+}
+
+HumanPlayer::CMD HumanPlayer::enumifyInput(const std::string &_str)
+{
+  std::unordered_map<std::string, CMD> enumMap {
+    {"exit",    CMD::EXIT},   {"x",    CMD::EXIT},
+    {"restart", CMD::RESTART},{"z", CMD::RESTART},
+    {"play",    CMD::PLAY},   {"p",    CMD::PLAY},
+    {"attack",  CMD::ATTACK}, {"a",  CMD::ATTACK},
+    {"retreat", CMD::RETREAT},{"r", CMD::RETREAT},
+    {"skip",    CMD::SKIP},   {"s",    CMD::SKIP},
+  };
+  if (enumMap.count(_str)) return enumMap[_str];
+  else return CMD::SKIP;
+}
+
 std::pair<bool, unsigned> HumanPlayer::turn()
 {
-  // Play cards
-  while (agree(PTCG::ACTION::PLAY))
+  m_turnFinished = false;
+  m_doAttack = false;
+  std::string input;
+  while(!m_turnFinished)
   {
-    auto card = chooseCards(PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::ACTION::PLAY, viewHand(), 1);
-    if (!card.empty()) playCard(card[0]);
-    else std::cout<<"Hand is empty."<<std::endl;
-  }
-
-  // Attack?
-  bool doAttack = agree(PTCG::ACTION::ATTACK);
-  unsigned attack = viewBench().at(0).active()->attackNum();
-  if (doAttack)
-  {
-    unsigned len = attack - 1;
-    do
+    std::cout<<"What do you want to do?"<<std::endl;
+    if (std::cin.fail())
     {
-      std::cout<<"Pick an attack from 0 - "<<len<<std::endl;
-      std::cin>>attack;
-    } while (!std::cin.fail() && attack > len);
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    std::cin>>input;
+    std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+    m_commands[enumifyInput(input)]->execute(*this);
   }
-
   // Return the decision
-  return std::pair<bool, unsigned> {doAttack, attack};
+  return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
 }
+
+

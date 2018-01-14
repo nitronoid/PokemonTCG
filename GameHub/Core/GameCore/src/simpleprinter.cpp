@@ -403,7 +403,13 @@ void SimplePrinter::drawSide(Board* _board, const bool _isOp)
   }
 }
 
-void SimplePrinter::drawBoard(const Event _event)
+void SimplePrinter::inspectSlot(const PTCG::PLAYER _player, const size_t _index)
+{
+  auto bench = m_subject->getBoard(_player)->m_bench;
+  std::cout<<bigSlotStr(bench.slotAt(_index), bench.activeStatus())<<'\n';
+}
+
+void SimplePrinter::drawBoard()
 {
   drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
   drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);

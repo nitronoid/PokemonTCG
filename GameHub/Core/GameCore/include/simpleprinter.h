@@ -16,7 +16,12 @@ public :
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief main draw method, draws entire thing
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void drawBoard(const Event _event) override;
+  virtual void drawBoard() override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for inspecting a board slot
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void inspectSlot(const PTCG::PLAYER _player, const size_t _index) override;
+
 private:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief draw one side of board, self and opponent are handled differently

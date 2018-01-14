@@ -27,14 +27,6 @@ void Game::start()
   }
 }
 
-void Game::notifyGui(const GuiModule::Event _event)
-{
-  for (const auto gui : m_guiObservers)
-  {
-    gui->drawBoard(_event);
-  }
-}
-
 void Game::registerGui(GuiModule*const _gui)
 {
   _gui->setGame(this);
@@ -173,7 +165,7 @@ void Game::playCard(const size_t _index)
       default: break;
     }
   }
-  notifyGui(GuiModule::Event::MOVE_CARD);
+  notifyGui<Event::MOVE_CARD>();
 }
 
 void Game::drawHand(const PTCG::PLAYER _player)
@@ -310,7 +302,7 @@ std::vector<Ability> Game::filterEffects(const PTCG::TRIGGER _trigger)
 void Game::executeTurnEffects(const PTCG::TRIGGER _trigger)
 {
   for (const auto & effect : filterEffects(_trigger)) effect.use(*this);
-  notifyGui(GuiModule::Event::EFFECT_USED);
+  notifyGui<Event::EFFECT_USED>();
 }
 
 void Game::addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect)
@@ -346,7 +338,7 @@ void Game::nextTurn()
   Board& currentBoard = m_boards[playerId];
   m_supportPlayed = false;
   // Ascii print the board
-  notifyGui(GuiModule::Event::START_TURN);
+  notifyGui<Event::START_TURN>();
   // Apply all effects that are triggered by the start of a turn
   executeTurnEffects(PTCG::TRIGGER::START);
   // The effects could have knocked out a pokemon so we check
@@ -397,7 +389,7 @@ bool Game::drawCard(const PTCG::PLAYER _player)
   if (board.m_deck.empty()) return false;
   auto topCard = board.m_deck.takeTop();
   board.m_hand.put(std::move(topCard));
-  notifyGui(GuiModule::Event::MOVE_CARD);
+  notifyGui<Event::MOVE_CARD>();
   return true;
 }
 
@@ -484,7 +476,7 @@ void Game::benchToPile(
     auto energy = slot->detachEnergy(pos);
     putToPile(_player, _dest, std::unique_ptr<Card>{energy.release()});
   }
-  notifyGui(GuiModule::Event::MOVE_CARD);
+  notifyGui<Event::MOVE_CARD>();
 }
 
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
@@ -536,7 +528,7 @@ void Game::pileToBench(
     {
       board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
     }
-    notifyGui(GuiModule::Event::MOVE_CARD);
+    notifyGui<Event::MOVE_CARD>();
   }
   else
   {
@@ -592,7 +584,7 @@ void Game::retreat()
       removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
       switchActive(self, replacement[0]);
       bench.activeStatus()->setCanRetreat(false);
-      notifyGui(GuiModule::Event::MOVE_CARD);
+      notifyGui<Event::MOVE_CARD>();
     }
   }
 }
@@ -615,7 +607,7 @@ void Game::moveCards(
   std::sort(_cardIndices.begin(), _cardIndices.end(),std::greater<size_t>());
   for(const auto i : _cardIndices)
     putToPile(_owner,_destination, takeFromPile(_owner, _origin, i));
-  notifyGui(GuiModule::Event::MOVE_CARD);
+  notifyGui<Event::MOVE_CARD>();
 }
 
 void Game::filterCards(
@@ -928,7 +920,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!board.m_prizeCards.numCards())
       gameOver = true;
-    notifyGui(GuiModule::Event::KNOCK_OUT);
+    notifyGui<Event::KNOCK_OUT>();
   }
   return gameOver;
 }

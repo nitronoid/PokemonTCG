@@ -19,6 +19,7 @@ INCLUDEPATH += ../../../RoaringHeat/include
 INCLUDEPATH += $$PWD/include
 INCLUDEPATH += ../pybind11/include
 
+
 linux: {
     LIBS += -L /usr/local/lib/python2.7 -lpython2.7
     INCLUDEPATH += /usr/include/python2.7

@@ -11,6 +11,12 @@
 
 class Game
 {
+private:
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief Event enum to communicate what has happened to an observer
+  //----------------------------------------------------------------------------------------------------------------------
+  enum class Event { START_TURN, EFFECT_USED, MOVE_CARD, KNOCK_OUT, INSPECT_SLOT };
+
 public:
   Game() = default;
   Game(Game&&_original) = default;
@@ -124,7 +130,14 @@ public:
 
 private:
   Game(const Game &_original);
-  void notifyGui(const GuiModule::Event _event);
+
+  template<Game::Event k_event, typename... Args,
+           typename std::enable_if_t<k_event != Game::Event::INSPECT_SLOT>* = nullptr>
+  void notifyGui(Args&&... args);
+  template<Game::Event k_event, typename... Args,
+           typename std::enable_if_t<k_event == Game::Event::INSPECT_SLOT>* = nullptr>
+  void notifyGui(Args&&... args);
+
   bool checkForKnockouts();
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin = PTCG::PILE::HAND);
   std::vector<size_t> chooseReplacement(const PTCG::PLAYER _player);
@@ -161,6 +174,7 @@ private:
   void resolveAllEndConditions(const PTCG::PLAYER _player);
   bool resolveAttackConditions(const PTCG::PLAYER _player);
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
+
 private:
   std::vector<GuiModule*> m_guiObservers;
   std::array<Player*, 2> m_players{{nullptr, nullptr}};
@@ -173,5 +187,27 @@ private:
   bool m_supportPlayed = false;
 
 };
+
+
+///-----MOVE TO INL------------------
+template<Game::Event k_event, typename... Args,
+         typename std::enable_if_t<k_event == Game::Event::INSPECT_SLOT>*>
+void Game::notifyGui(Args&&... args)
+{
+  for (const auto gui : m_guiObservers)
+  {
+    gui->inspectSlot(std::forward(args)...);
+  }
+}
+
+template<Game::Event k_event, typename... Args,
+         typename std::enable_if_t<k_event != Game::Event::INSPECT_SLOT>*>
+void Game::notifyGui(Args&&... args)
+{
+  for (const auto gui : m_guiObservers)
+  {
+    gui->drawBoard(std::forward(args)...);
+  }
+}
 
 #endif // GAME_H

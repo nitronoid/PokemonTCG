@@ -15,10 +15,6 @@ public:
     /// @build execute override function
     ///------------------------------------------------------------------------------
     virtual bool execute() override;
-    ///------------------------------------------------------------------------------
-    /// @build virtual bool condition function
-    ///------------------------------------------------------------------------------
-    virtual bool conditionFunction() = 0;
 };
 
 class energyCondition : public Condition
@@ -27,13 +23,12 @@ public:
     ///------------------------------------------------------------------------------
     /// @build default constructor
     ///------------------------------------------------------------------------------
-    energyCondition(bool function);
+    energyCondition();
     ///------------------------------------------------------------------------------
     /// @build virtual bool condition function
     ///------------------------------------------------------------------------------
-    virtual bool conditionFunction() override;
+    virtual bool execute() override;
 private:
-    bool m_result = false;
     bool m_function;
 };
 

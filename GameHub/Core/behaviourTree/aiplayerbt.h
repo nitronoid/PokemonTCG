@@ -9,6 +9,7 @@
 #include "player.h"
 #include <algorithm>
 
+#define LEAF 0
 
 class AIPlayerBT : public Player
 {
@@ -86,9 +87,13 @@ public:
 /// @build checks if there is energy in Hand
 void playEnergy();
 void putPokemonOnBench();
+PTCG::TYPE typeReturnofActiveCard();
 bool checkTrainerinHand();
+bool testTree();
+
 
 private:
+
     bool m_attack = false;
 
 };

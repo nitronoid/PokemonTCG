@@ -64,10 +64,12 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
 
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
+    // variables
+    m_attack = false;;
     // what to do if it is your turn you have different possibilities:
     // put basic pokemon onto bench x
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-    putPokemonOnBench();
+//    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+//    putPokemonOnBench();
     // you can only play one energy at a time
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
     playEnergy();
@@ -76,10 +78,11 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     // required energies for attack 1
     // the number energy attached on card
     std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-    if(viewBench()[0].active()->attacks()[0].requirements().size() < viewBench()[0].numEnergy())
+    if(viewBench()[0].active()->attacks()[1].requirements().size() <= viewBench()[0].numEnergy())
     {
         m_attack = true;
     }
+
     // play trainer cards
     // retreat your Active Pokemon
     // use abilities
@@ -100,8 +103,18 @@ void AIPlayerBT::playEnergy()
     {
         // checks if the card in your hand is an energy card
         if(viewHand()[i]->cardType() == PTCG::CARD::ENERGY)
-            if(canPlay(i))
-                playCard(i);
+        {   // make a card energy from your hand
+            EnergyCard* typeOfEnergyHand = static_cast<EnergyCard*>(viewHand()[i].get());
+            // if that card energy == requirements
+            if(typeOfEnergyHand->type() == typeReturnofActiveCard()
+                    // this is wrong
+                    || typeReturnofActiveCard() == PTCG::TYPE::COLOURLESS)
+            {
+                if(canPlay(i))
+                    playCard(i);
+            }
+
+        }
     }
 }
 
@@ -111,6 +124,7 @@ void AIPlayerBT::putPokemonOnBench()
     {
         // checks if the card in your hand is an energy card
         if(viewHand()[i]->cardType() == PTCG::CARD::POKEMON)
+            //EnergyCard* pokemon = static_cast<EnergyCard*>(viewHand()[i].get());
             if(canPlay(i))
                 playCard(i);
     }
@@ -130,3 +144,25 @@ bool AIPlayerBT::checkTrainerinHand()
     }
 }
 
+PTCG::TYPE AIPlayerBT::typeReturnofActiveCard()
+{
+    // goes through the requirement energies in attack 1
+    for(int i = 0; i < viewBench()[0].active()->attacks()[0].requirements().size(); ++i)
+    {
+        // return the energy needed for attack one
+        return viewBench()[0].active()->attacks()[0].requirements()[0];
+    }
+}
+
+bool AIPlayerBT::testTree()
+{
+    for(unsigned int i=0; i<viewHand().size(); ++i)
+    {
+        // checks if the card in your hand is an energy card
+        if(viewHand()[i]->cardType() == PTCG::CARD::ENERGY)
+        {
+            return true;
+        }
+        return false;
+    }
+}

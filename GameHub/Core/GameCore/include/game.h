@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include "pokemoncard.h"
 #include "humanplayer.h"
-#include "aiplayerbt.h"
+//#include "aiplayerbt.h"
 #include "cardfactory.h"
 #include "board.h"
 #include "damagehandler.h"

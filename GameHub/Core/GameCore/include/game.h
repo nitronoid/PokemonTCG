@@ -127,6 +127,7 @@ public:
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
   void retreat();
+  void inspectSlot(const PTCG::PLAYER _owner, const size_t _index);
 
 private:
   Game(const Game &_original);
@@ -189,25 +190,6 @@ private:
 };
 
 
-///-----MOVE TO INL------------------
-template<Game::Event k_event, typename... Args,
-         typename std::enable_if_t<k_event == Game::Event::INSPECT_SLOT>*>
-void Game::notifyGui(Args&&... args)
-{
-  for (const auto gui : m_guiObservers)
-  {
-    gui->inspectSlot(std::forward(args)...);
-  }
-}
-
-template<Game::Event k_event, typename... Args,
-         typename std::enable_if_t<k_event != Game::Event::INSPECT_SLOT>*>
-void Game::notifyGui(Args&&... args)
-{
-  for (const auto gui : m_guiObservers)
-  {
-    gui->drawBoard(std::forward(args)...);
-  }
-}
+#include "game-inl.h" //Template implementations
 
 #endif // GAME_H

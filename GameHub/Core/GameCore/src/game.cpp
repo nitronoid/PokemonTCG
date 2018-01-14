@@ -33,6 +33,11 @@ void Game::registerGui(GuiModule*const _gui)
   m_guiObservers.push_back(_gui);
 }
 
+void Game::inspectSlot(const PTCG::PLAYER _owner, const size_t _index)
+{
+  notifyGui<Event::INSPECT_SLOT>(_owner, _index);
+}
+
 Board* Game::getBoard(const PTCG::PLAYER _owner)
 {
   return &m_boards[playerIndex(_owner)];

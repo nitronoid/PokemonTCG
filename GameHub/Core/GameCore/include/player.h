@@ -128,7 +128,8 @@ public:
   /// @brief method for playing a card
   /// @param [in] _index index of the card in hand to play
   //----------------------------------------------------------------------------------------------------------------------
-  void playCard(const size_t &_index);
+  void playCard(const size_t _index);
+  void inspectSlot(const PTCG::PLAYER _owner, const size_t _index);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for retreating
   //----------------------------------------------------------------------------------------------------------------------

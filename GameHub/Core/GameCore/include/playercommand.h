@@ -70,4 +70,14 @@ struct SkipCMD : public Command
   virtual void execute(HumanPlayer&_player) override;
 };
 
+struct InspectSlotCMD : public Command
+{
+  InspectSlotCMD() = default;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~InspectSlotCMD() = default;
+  virtual void execute(HumanPlayer&_player) override;
+};
+
 #endif // PLAYERCOMMAND_H

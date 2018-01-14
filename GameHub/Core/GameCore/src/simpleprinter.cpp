@@ -18,7 +18,7 @@ std::string str_pad(std::string o_str, const size_t _len, const bool _front = tr
 
 std::string sentinalFromID(const std::string &_str, const std::string &_id)
 {
-  size_t start = _str.find(_id);
+  size_t start = _str.find(_id+'$');
   size_t end = start + _id.size();
   end = _str.find_first_not_of('$', end);
   return  _str.substr(start, end - start);
@@ -150,18 +150,19 @@ void addVec(std::vector<std::string> &_lhs, const std::vector<std::string> &_rhs
 
 std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus) const
 {
-  std::string ret = k_sentinelSlot;
+  std::string ret = k_bigPokeSlot;
   auto active = _slot->active();
   str_replace_sent(ret, "$ID", std::to_string(active->getID()));
-  str_replace_sent(ret, "$RH", std::to_string(_slot->getRemainingHP()));
+  str_replace_sent(ret, "$L", std::to_string(_slot->getRemainingHP()));
   str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
-  auto tool = _slot->viewTool();
+
   std::string toolName = "---";
-  if (tool) toolName = tool->getName();
-  str_replace_sent(ret, "$TOOL", toolName);
-  //pokemonStr(ret, active);
+  if (auto tool = _slot->viewTool())
+    toolName = tool->getName();
+  str_replace_sent(ret, "$TOOL", toolName, true);
+
   str_replace_sent(ret, "$HP", std::to_string(_slot->active()->hp()));
-  str_replace_sent(ret, "$NAME", _slot->active()->getName(), false);
+  str_replace_sent(ret, "$NAME", _slot->active()->getName(), true);
   str_replace_sent(ret, "$T", stringifyChar(charify(_slot->active()->type()),true));
 
   int i = 0;
@@ -175,33 +176,32 @@ std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _act
     //ADD ATTACK DESCRIPTION PLACEMENT HERE <--
     ++i;
   }
-  for (; i < 2; ++i)
+  for (; i < 3; ++i)
   {
     str_replace_sent(ret, "$A"  + std::to_string(i), "", false);
     str_replace_sent(ret, "$D"  + std::to_string(i), "");
     str_replace_sent(ret, "$AR" + std::to_string(i), "");
   }
+
   std::string tmpa = std::string{charify(_slot->active()->weakness())};
   str_replace_sent(ret, "$W", tmpa);
-  if(tmpa.length()!=0){str_replace_sent(ret, "$WA", "x2");}else{str_replace_sent(ret, "$WA", "");}
+  if(tmpa.length()){str_replace_sent(ret, "$WA", "x2");}else{str_replace_sent(ret, "$WA", "");}
   tmpa = std::string{charify(_slot->active()->resistance())};
   str_replace_sent(ret, "$R", tmpa);
-  if(tmpa.length()!=0){str_replace_sent(ret, "$RA", "-20");}else{str_replace_sent(ret, "$RA", "");}
+  if(tmpa.length()){str_replace_sent(ret, "$RA", "-20");}else{str_replace_sent(ret, "$RA", "");}
   str_replace_sent(ret, "$C", std::to_string(_slot->active()->retreatCost()));
   str_replace_sent(ret, "$ST", std::to_string(_slot->active()->stage()));
   str_replace_sent(ret, "$EVO", _slot->active()->preEvolution());
-  int n=_activeStatus->conditions().size();
+
   i=0;
+  for (const auto& cond : _activeStatus->conditions())
+  {
+    str_replace_sent(ret, "$COND"+std::to_string(i), stringifyChar(charify(cond)));
+    ++i;
+  }
   for (; i<3; ++i)
   {
-    if(n>=i)
-    {
-      str_replace_sent(ret, "$COND"+std::to_string(i), stringifyChar(charify(_activeStatus->conditions().at(i))));
-    }
-    else
-    {
-      str_replace_sent(ret, "$COND"+std::to_string(i), "");
-    }
+    str_replace_sent(ret, "$COND"+std::to_string(i), "");
   }
   return ret;
 }
@@ -213,7 +213,7 @@ std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
   if (active)
   {
     str_replace_sent(ret, "$ID", std::to_string(active->getID()));
-    str_replace_sent(ret, "$RH", std::to_string(_slot->getRemainingHP()));
+    str_replace_sent(ret, "$L", std::to_string(_slot->getRemainingHP()));
     str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
     auto tool = _slot->viewTool();
     std::string toolName = "---";
@@ -356,7 +356,7 @@ std::string SimplePrinter::handStr(Hand * const _hand) const
     addVec(handVec, split(cardStr(card.get())));
   }
   // The max width of the hand is 10 cards
-  size_t line = 1, len = (15 * 10);
+  size_t line = 1, len = (16 * 10);
   // We reline the cards until there are no lines longer than 10
   while ((handVec.end()-1)->size() > len)
   {

@@ -403,7 +403,7 @@ void SimplePrinter::drawSide(Board* _board, const bool _isOp)
   }
 }
 
-void SimplePrinter::drawBoard()
+void SimplePrinter::drawBoard(const Event _event)
 {
   drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
   drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);

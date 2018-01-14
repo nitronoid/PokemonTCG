@@ -124,7 +124,7 @@ public:
 
 private:
   Game(const Game &_original);
-  void notifyGui();
+  void notifyGui(const GuiModule::Event _event);
   bool checkForKnockouts();
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin = PTCG::PILE::HAND);
   std::vector<size_t> chooseReplacement(const PTCG::PLAYER _player);

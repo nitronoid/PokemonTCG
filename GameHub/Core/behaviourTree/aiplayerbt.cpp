@@ -70,20 +70,28 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
 
     // you can only play one energy at a time
     setTime(3000);
-    if(checkIfEnergyNeeded())
-        // check if the string is not empty , or has a +/x ]
-        // cast it to an int
-        //if(viewBench()[0].active()->hp() - viewBench(PTCG::PLAYER::ENEMY)[0].active()->attacks)
-        playEnergy();
+    if(viewBench()[0].active()->attacks().size() < 2)
+    {
+        std::cout<<"ONLY ONE ATTACK"<<std::endl;
+    }
+    else
+    {
+        std::cout<<"TWO ATTACKS"<<std::endl;
+    }
+//    if(checkIfEnergyNeeded())
+//        // check if the string is not empty , or has a +/x ]
+//        // cast it to an int
+//        //if(viewBench()[0].active()->hp() - viewBench(PTCG::PLAYER::ENEMY)[0].active()->attacks)
+//        playEnergy();
 
     // required energies for attack 1
     // the number energy attached on card
-    setTime(3000);
-    if(viewBench()[0].active()->attacks()[1].requirements().size() <= viewBench()[0].numEnergy())
-    {
-        m_chooseAttack = 0;
-        m_attack = true;
-    }
+//    setTime(3000);
+//    if(viewBench()[0].active()->attacks()[1].requirements().size() <= viewBench()[0].numEnergy())
+//    {
+//        m_chooseAttack = 0;
+//        m_attack = true;
+//    }
 
     return std::pair<bool, unsigned> {m_attack, m_chooseAttack};
 

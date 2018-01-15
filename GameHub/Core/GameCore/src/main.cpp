@@ -21,14 +21,8 @@ int main()
   testPool.init();
 
   SimplePrinter drawer;
-<<<<<<< HEAD
-  HumanPlayer a(test);
-  //RandomAI b(test);
-  AIPlayerBT b(test);
-=======
   HumanPlayer a(&test);
   RandomAI b(&test);
->>>>>>> b0b823e931ab4ba399a734308544136c615a1926
   test.init(testPool, &a, &b);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";

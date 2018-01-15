@@ -15,7 +15,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief Event enum to communicate what has happened to an observer
   //----------------------------------------------------------------------------------------------------------------------
-  enum class Event { START_TURN, EFFECT_USED, MOVE_CARD, KNOCK_OUT, INSPECT_SLOT };
+  enum class Event { START_TURN, EFFECT_USED, PLAY_CARD, SWAP_SLOT, MOVE_CARD, KNOCK_OUT, INSPECT_SLOT, INSPECT_CARD };
 
 public:
   //----------------------------------------------------------------------------------------------------------------------
@@ -242,6 +242,7 @@ public:
 
   //Card playing
   void inspectSlot(const PTCG::PLAYER _owner, const size_t _index);
+  void inspectCard(const PTCG::PLAYER _owner, const PTCG::PILE _pile,  const size_t _index);
   void playCard(const size_t _index);
   bool canPlay(const size_t _index);
   bool canPlay(Card*const _card);
@@ -290,7 +291,6 @@ public:
   //Effectors
   void addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect);
 
-  PTCG::PLAYER ownerFromThinker(const PTCG::PLAYER _thinker, const PTCG::PLAYER _owner);
   inline unsigned turnCount() const {return m_turnCount;}
 
   //----------------------------------------------------------------------------------------------------------------------

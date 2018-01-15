@@ -457,15 +457,52 @@ void SimplePrinter::drawSide(Board* _board, const bool _isOp)
   }
 }
 
+void SimplePrinter::drawBoard()
+{
+  drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
+  drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
+}
+
+void SimplePrinter::startTurn()
+{
+  drawBoard();
+}
+
+void SimplePrinter::effectUsed()
+{
+  drawBoard();
+}
+
+void SimplePrinter::playCard(const PTCG::PILE, Card * const)
+{
+  drawBoard();
+}
+
+void SimplePrinter::moveCard(const PTCG::PILE, const PTCG::PILE, Card * const)
+{
+  drawBoard();
+}
+
+void SimplePrinter::knockOut(const PTCG::PLAYER, const size_t)
+{
+  drawBoard();
+}
+
+void SimplePrinter::swapSlot(const PTCG::PLAYER, const size_t)
+{
+
+}
+
 void SimplePrinter::inspectSlot(const PTCG::PLAYER _player, const size_t _index)
 {
   auto bench = m_subject->getBoard(_player)->m_bench;
   std::cout<<bigSlotStr(bench.slotAt(_index), bench.activeStatus())<<'\n';
 }
 
-void SimplePrinter::drawBoard()
+void SimplePrinter::inspectCard(const PTCG::PLAYER _player, const PTCG::PILE _pile, const size_t _index)
 {
-  drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
-  drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
+  auto pile = m_subject->viewPile(_player, _pile);
+  std::cout<<bigCardStr(pile[_index].get())<<'\n';
 }
+
 

@@ -38,6 +38,11 @@ void Game::inspectSlot(const PTCG::PLAYER _owner, const size_t _index)
   notify<Event::INSPECT_SLOT>(_owner, _index);
 }
 
+void Game::inspectCard(const PTCG::PLAYER _owner, const PTCG::PILE _pile,  const size_t _index)
+{
+  notify<Event::INSPECT_CARD>(_owner, _pile, _index);
+}
+
 Board* Game::getBoard(const PTCG::PLAYER _owner)
 {
   return &m_boards[playerIndex(_owner)];
@@ -134,7 +139,7 @@ void Game::playCard(const size_t _index)
   if (canPlay(chosenCard))
   {
     chosenCard->playCard(*this, _index);
-    notify<Event::MOVE_CARD>();
+    notify<Event::PLAY_CARD>(PTCG::PILE::HAND, chosenCard);
   }
 }
 
@@ -367,8 +372,9 @@ bool Game::drawCard(const PTCG::PLAYER _player)
   auto deck = board.deck();
   if (deck->empty()) return false;
   auto topCard = deck->takeTop();
+  auto topRaw = topCard.get();
   board.hand()->put(std::move(topCard));
-  notify<Event::MOVE_CARD>();
+  notify<Event::MOVE_CARD>(PTCG::PILE::DECK, PTCG::PILE::HAND, topRaw);
   return true;
 }
 
@@ -423,7 +429,6 @@ void Game::benchToPile(
     auto energy = slot->detachEnergy(pos);
     putToPile(_owner, _dest, std::unique_ptr<Card>{energy.release()});
   }
-  notify<Event::MOVE_CARD>();
 }
 
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
@@ -475,7 +480,6 @@ void Game::pileToBench(
     {
       board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
     }
-    notify<Event::MOVE_CARD>();
   }
   else
   {
@@ -531,7 +535,7 @@ void Game::retreat()
       removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
       switchActive(self, replacement[0]);
       bench.activeStatus()->setCanRetreat(false);
-      notify<Event::MOVE_CARD>();
+      notify<Event::SWAP_SLOT>(self, replacement[0]);
     }
   }
 }
@@ -553,8 +557,12 @@ void Game::moveCards(
   //sort the input indices to avoid affecting take order in a vector
   std::sort(_cardIndices.begin(), _cardIndices.end(),std::greater<size_t>());
   for(const auto i : _cardIndices)
-    putToPile(_owner,_destination, takeFromPile(_owner, _origin, i));
-  notify<Event::MOVE_CARD>();
+  {
+    auto taken = takeFromPile(_owner, _origin, i);
+    auto takenRaw = taken.get();
+    putToPile(_owner,_destination, std::move(taken));
+    notify<Event::MOVE_CARD>(_origin, _destination, takenRaw);
+  }
 }
 
 void Game::filterCards(
@@ -828,6 +836,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
   auto slot = bench.slotAt(_index);
   if(slot->active() && slot->isDefeated())
   {
+    notify<Event::KNOCK_OUT>(_player, _index);
     // Match all cards
     static constexpr auto match = [](Card* const){return true;};
     // Discard and reset all state on that slot
@@ -852,7 +861,6 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!m_boards[opponentIndex].prizeCards()->numCards())
       gameOver = true;
-    notify<Event::KNOCK_OUT>();
   }
   return gameOver;
 }

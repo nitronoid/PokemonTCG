@@ -526,7 +526,11 @@ Plays a card from hand, you can attach an index of the card in hand after play t
 
 If you type "play" with no extensions, the game will prompt you with the selections.
 
-Sometimes if you attach cards onto the bench, you can also put an index for which bench to attach the card to (%optionIndex%) AFTER %cardIndexInHand%. Remember that it's not necessarily bench index, it is the index of the playable slots.
+Sometimes if you attach cards onto the bench. 
+
+You can also put an index for which bench to attach the card to 
+
+(%optionIndex%) AFTER %cardIndexInHand%. Remember that it's not necessarily bench index, it is the index of the playable slots.
 
                                                   _________________
 
@@ -546,7 +550,11 @@ Lightning Energy has been discarded.
 
 - attack / attack %attackIndex%
 
-You either end your turn with an attack or a "skip". If you type "attack", the game prompts you to use which attack on your Active Pokemon or you can call attack with a decided attackIndex. Index increases rom the top to the bottom.
+You either end your turn with an attack or a "skip". 
+
+If you type "attack", the game prompts you to use which attack on your Active Pokemon or you can call attack with a decided attackIndex. 
+
+Index increases rom the top to the bottom.
                                                   _________________
 
 - skip 

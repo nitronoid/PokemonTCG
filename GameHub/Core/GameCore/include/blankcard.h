@@ -27,6 +27,8 @@ public:
   /// @return whether this card can be played
   //----------------------------------------------------------------------------------------------------------------------
   virtual bool canPlay(Game&) const override;
+
+  virtual void playCard(Game&, size_t) override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief gets a copy of this card
   /// @return copy of this card

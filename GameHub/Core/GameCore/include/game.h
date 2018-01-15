@@ -23,6 +23,7 @@ public:
 
   Game clone() const;
   void init(const CardFactory &_factory, Player * const _playerA, Player * const _playerB);
+  void resetPlayable();
 
   void dealDamage(const int _damage, const size_t _id = 0, const bool &_applyWeak = true);
   void addDamageCounter(const int _damage, const PTCG::PLAYER _player = PTCG::PLAYER::ENEMY, const unsigned _id = 0);
@@ -30,8 +31,16 @@ public:
   unsigned flipCoin(const unsigned _num);
 
   void start();
+
   void playCard(const size_t _index);
   bool canPlay(const size_t _index);
+  bool canPlay(Card*const _card);
+  void playPokemon(PokemonCard* const _pokemon, const size_t _index);
+  void playItem(TrainerCard* const _item, const size_t _index);
+  void playTool(TrainerCard* const, const size_t _index);
+  void playSupport(TrainerCard* const _support, const size_t _index);
+  void playEnergy(EnergyCard* const, const size_t _index);
+
   bool canAttack(const size_t _index);
   bool drawCard(const PTCG::PLAYER _player);
   void moveCards(
@@ -163,11 +172,6 @@ private:
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
   bool handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
-  void playPokemon(PokemonCard* const _pokemon, const size_t _index);
-  void playItem(TrainerCard* const _item, const size_t _index);
-  void playTool(TrainerCard* const, const size_t _index);
-  void playSupport(TrainerCard* const _support, const size_t _index);
-  void playEnergy(EnergyCard* const, const size_t _index);
   void resolveAllEndConditions(const PTCG::PLAYER _player);
   bool resolveAttackConditions(const PTCG::PLAYER _player);
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);

@@ -332,6 +332,7 @@ bool Game::checkForKnockouts()
         gameOver = gameOver || handleKnockOut(p, j);
     }
   }
+  m_gameFinished = gameOver;
   return gameOver;
 }
 
@@ -358,7 +359,7 @@ void Game::nextTurn()
       executeTurnEffects(PTCG::TRIGGER::ATTACK);
       attack(currentBoard.m_bench.active(), attackDecision.second);
       // The effects/attack could have knocked out a pokemon so we check
-      m_gameFinished = checkForKnockouts();
+      checkForKnockouts();
     }
     if (!m_gameFinished)
     {
@@ -369,7 +370,7 @@ void Game::nextTurn()
       // Apply all effects triggered by the end of a turn
       executeTurnEffects(PTCG::TRIGGER::END);
       // The effects could have knocked out a pokemon so we check
-      m_gameFinished = checkForKnockouts();
+      checkForKnockouts();
       // Remove all the effects for this turn from the queue, now that we executed them all
       clearEffects();
     }
@@ -906,7 +907,6 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     static constexpr auto match = [](Card* const){return true;};
     // Discard and reset all state on that slot
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
-    auto opponent = static_cast<PTCG::PLAYER>((static_cast<unsigned>(_player) + 1) % 2);
     slot->setDamage(0);
     // If it was the active we need to reset the active condition
     if(!_index)
@@ -919,11 +919,13 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
       else
         gameOver = true;
     }
+    size_t opponentIndex = (static_cast<unsigned>(_player) + 1) % 2;
+    auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
     //Taking a prize card in prize card.
     static constexpr auto prizes = [](Card* const card) -> bool {return card;};
     auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
-    if (!board.m_prizeCards.numCards())
+    if (!m_boards[opponentIndex].m_prizeCards.numCards())
       gameOver = true;
     notifyGui<Event::KNOCK_OUT>();
   }

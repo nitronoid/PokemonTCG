@@ -1,8 +1,23 @@
 #include "blankcard.h"
 
 
-bool BlankCard::canPlay(Game&) const { return true; }
+bool BlankCard::canPlay(Game&) const
+{
+  return false;
+}
 
-Card* BlankCard::clone() { return new BlankCard(*this); }
 
-PTCG::CARD BlankCard::cardType() const{ return PTCG::CARD::BLANK;}
+void BlankCard::playCard(Game&, size_t)
+{
+  // nothing
+}
+
+Card* BlankCard::clone()
+{
+  return new BlankCard(*this);
+}
+
+PTCG::CARD BlankCard::cardType() const
+{
+  return PTCG::CARD::BLANK;
+}

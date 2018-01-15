@@ -37,6 +37,8 @@ public:
   /// @return true/false
   //----------------------------------------------------------------------------------------------------------------------
   virtual bool canPlay(Game &_game) const override;
+
+  virtual void playCard(Game&_game, const size_t _index) override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief get card type
   /// @return card type

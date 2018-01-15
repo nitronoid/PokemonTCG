@@ -37,6 +37,8 @@ public:
   /// @return whether the card can be played
   //----------------------------------------------------------------------------------------------------------------------
   virtual bool canPlay(Game&_game) const = 0;
+
+  virtual void playCard(Game&_game, const size_t _index) = 0;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief returns the clone of the card
   /// @return this card's copy

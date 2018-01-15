@@ -47,7 +47,14 @@ void InspectSlotCMD::execute(HumanPlayer &_player)
 {
   static constexpr auto self = PTCG::PLAYER::SELF;
   auto optionArr = _player.viewBench(self);
-  std::vector<BoardSlot> options(optionArr.begin(), optionArr.end());
+  // Copy across the slots into option if they are occupied
+  std::vector<BoardSlot> options;
+  std::copy_if(
+        optionArr.begin(),
+        optionArr.end(),
+        std::back_inserter(options),
+        [](auto& slot){ return slot.active(); }
+  );
   auto choice = _player.chooseSlot(self, PTCG::ACTION::VIEW, options, 1);
   _player.inspectSlot(self, choice[0]);
 }

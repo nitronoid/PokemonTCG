@@ -105,17 +105,23 @@ void Game::playEnergy(EnergyCard* const, const size_t _index)
 void Game::playSupport(TrainerCard* const _support, const size_t _index)
 {
   //need to check if a supporter card has already been played this turn
-  if (!m_supportPlayed)
+  if (!m_playableCards.count(PTCG::CARD::SUPPORT))
   {
     _support->activateAbility(*this);
     moveCards({_index}, PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::PILE::DISCARD);
-    m_supportPlayed = true;
+    m_playableCards.erase(PTCG::CARD::SUPPORT);
   }
 }
 
 bool Game::canPlay(const size_t _index)
 {
-  return m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.cardAt(_index)->canPlay(*this);
+  auto card = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.cardAt(_index);
+  return canPlay(card);
+}
+
+bool Game::canPlay(Card*const _card)
+{
+  return _card->canPlay(*this) && m_playableCards.count(_card->cardType());
 }
 
 
@@ -127,50 +133,12 @@ bool Game::canAttack(const size_t _index)
 
 void Game::playCard(const size_t _index)
 {
-  // MUST store the COPY of the hand here, rather than retrieve the card in one line
-  // Otherwise the copy is temp and gets destructed, which null's our card
-  auto hand = viewHand(PTCG::PLAYER::SELF);
-  auto chosenCard = hand[_index].get();
-  using card = PTCG::CARD;
-  if (chosenCard->canPlay(*this))
+  auto chosenCard = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.cardAt(_index);
+  if (canPlay(chosenCard))
   {
-    switch (chosenCard->cardType())
-    {
-      case card::ENERGY:
-      {
-        //attach energy to occupied slots
-        playEnergy(static_cast<EnergyCard*>(chosenCard), _index);
-        break;
-      }
-      case card::POKEMON:
-      {
-        playPokemon(static_cast<PokemonCard*>(chosenCard), _index);
-        break;
-      }
-      case card::ITEM:
-      {
-        playItem(static_cast<TrainerCard*>(chosenCard), _index);
-        break;
-      }
-      case card::TOOL:
-      {
-        playTool(static_cast<TrainerCard*>(chosenCard), _index);
-        break;
-      }
-      case card::SUPPORT:
-      {
-        playSupport(static_cast<TrainerCard*>(chosenCard), _index);
-        break;
-      }
-      case card::STADIUM:
-      {
-        //WILL IMPLEMENT STADIUM LATER WHEN IT IS INCLUDED IN OUR SET
-        break;
-      }
-      default: break;
-    }
+    chosenCard->playCard(*this, _index);
+    notifyGui<Event::MOVE_CARD>();
   }
-  notifyGui<Event::MOVE_CARD>();
 }
 
 void Game::drawHand(const PTCG::PLAYER _player)
@@ -336,13 +304,20 @@ bool Game::checkForKnockouts()
   return gameOver;
 }
 
+void Game::resetPlayable()
+{
+  using crd = PTCG::CARD;
+  m_playableCards.insert({crd::ENERGY, crd::ITEM, crd::POKEMON, crd::STADIUM, crd::SUPPORT, crd::TOOL});
+}
+
+
 void Game::nextTurn()
 {
   // Get the current player
   size_t playerId = playerIndex(PTCG::PLAYER::SELF);
   auto currentPlayer = m_players[playerId];
   Board& currentBoard = m_boards[playerId];
-  m_supportPlayed = false;
+  resetPlayable();
   // Ascii print the board
   notifyGui<Event::START_TURN>();
   // Apply all effects that are triggered by the start of a turn

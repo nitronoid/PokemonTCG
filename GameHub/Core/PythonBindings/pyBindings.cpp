@@ -170,6 +170,7 @@ PYBIND11_MODULE(poke, m)
            py::arg("_action"),
            py::arg("_match"),
            py::arg("_amount"),
+           py::arg("_known") = true,
            py::arg("_range") = 0)
       .def("playerSlotChoice", &Game::playerSlotChoice,
            py::arg("_thinker"),

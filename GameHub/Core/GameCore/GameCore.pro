@@ -19,8 +19,14 @@ INCLUDEPATH += ../../../RoaringHeat/include
 INCLUDEPATH += $$PWD/include
 INCLUDEPATH += ../pybind11/include
 
-linux {
+
+linux: {
     LIBS += -L /usr/local/lib/python2.7 -lpython2.7
     INCLUDEPATH += /usr/include/python2.7
     DEPENDPATH += /usr/include/python2.7
+}
+macx: {
+    LIBS += -L /usr/bin/python2.7 -lpython2.7
+    INCLUDEPATH += /Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
+    DEPENDPATH += /Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
 }

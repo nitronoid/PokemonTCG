@@ -1,7 +1,7 @@
 # PokeTCG User Guides
 ___
 
-## Content
+## **Content**
 ___
 ### 1. **[Introduction](#introduction)**
 ### 2. **[How do I make a card and a deck for PokeTCG?](#making-cards-and-decks)**
@@ -9,7 +9,7 @@ ___
 ### 4. **More to come in the future.**
 ___
 
-## Introduction
+## **Introduction**
 ___
 
 - PokeTCG is a project for our assignment to create a platform for simulating Pokemon Trading Card Game. It is coded in C++, python script and bound with [pybind11](https://pybind11.readthedocs.io/en/stable/).
@@ -18,7 +18,7 @@ ___
 
 ___
 
-## Making cards and decks
+## **Making cards and decks**
 ___
 **For each card:**
 
@@ -105,7 +105,7 @@ ___
     "Ability" : {
         "Func" : "professorKukui",
         "Duration" : "S",           //Effect Duration, see Effect Duration
-        "Trigger" : "N"             //Activation phase
+        "Trigger" : "N"             //Activation phase, see effect trigger codes
     }
 }
 ```
@@ -164,10 +164,164 @@ Due to time constraints, we are only allowing Basic Energy Cards in this set.
 Function implementation for basic energy cards are not required.
 '''
 ```
-
+**[Back To Top](#poketcg-user-guides)**
 ___
 
-## Making AIs
+## **Making AIs**
 ___
 
-- I'm lazy, break time.
+- **[Examples](#example)**
+___
+
+### **Ai Concepts**
+
+- You might want to check out our Documentations on Game, Player Class and any of their children.
+
+- The Game Core will call certain Player methods when actions are needed such as "selecting cards to act upon".
+
+**See Below** 
+- These are the functions you **have** to define inside your Ai for the Game to communicate:
+
+ ```cpp
+//----------------------------------------------------------------------------------------
+  /// @brief object cloning method
+//--------------------------------------------------------------------------------------
+virtual Player* clone() const = 0;  
+//----------------------------------------------------------------------------------------  
+  /// @brief getter method for retrieving the name of the deck
+//--------------------------------------------------------------------------------------
+virtual std::string deckName() const = 0;
+//----------------------------------------------------------------------------------------
+  /// @brief card choice method
+  /// @param [in] _player owner of the card pile
+  /// @param [in] _origin the card pile where the options currently are
+  /// @param [in] _action the type of action that will be performed on the choice
+  /// @param [in] _options cards to choose from
+  /// @param [in] _amount amount of cards to choose (if possible)
+  /// @return the indices of the picked cards, in _options
+//--------------------------------------------------------------------------------------
+virtual std::vector<size_t> chooseCards(
+      const PTCG::PLAYER _player,
+      const PTCG::PILE _origin,
+      const PTCG::ACTION _action,
+      const std::vector<std::unique_ptr<Card>> &_options,
+      const unsigned _amount
+      ) = 0;
+//----------------------------------------------------------------------------------------
+  /// @brief slot choice method
+  /// @param [in] _owner owner of the slots
+  /// @param [in] _action the type of action that will be performed on the choice
+  /// @param [in] _options slots to choose from
+  /// @param [in] _amount amount of slots to choose (if possible)
+  /// @return the indices of the picked slots, in _options
+//--------------------------------------------------------------------------------------
+virtual std::vector<size_t> chooseSlot(
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<BoardSlot> &_options,
+      const unsigned _amount
+      ) = 0;
+//----------------------------------------------------------------------------------------
+  /// @brief method to reveal cards to the player
+  /// @param [in] _owner owner of the card pile
+  /// @param [in] _origin the card pile where the cards currently are
+  /// @param [in] _indices the locations of the revealed cards in _origin
+  /// @param [in] _revealed the revealed cards
+//--------------------------------------------------------------------------------------
+virtual void learnCards(
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _origin,
+      const std::vector<size_t> &_indices,
+      const std::vector<std::unique_ptr<Card>> &_revealed
+      ) = 0;
+//----------------------------------------------------------------------------------------
+  /// @brief method for choosing energy cards attached to a pokemon
+  /// @param [in] _owner owner of the pokemon
+  /// @param [in] _destination  the card pile where the energy will be moved to
+  /// @param [in] _action  the type of action that will be performed on the choice
+  /// @param [in] _options cards to choose from
+  /// @param [in] _amount amount of cards to choose (if possible)
+  /// @return the indices of the picked energy cards, in _options
+//--------------------------------------------------------------------------------------
+virtual std::vector<size_t> chooseEnergy(
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _destination,
+      const PTCG::ACTION _action,
+      const std::vector<std::unique_ptr<Card>> &_options,
+      const unsigned _amount
+      ) = 0;
+//----------------------------------------------------------------------------------------
+  /// @brief method for choosing a condition that the active pokemon is suffering from
+  /// @param [in] _owner owner of the pokemon
+  /// @param [in] _action the type of action that will be performed on the choice
+  /// @param [in] _options conditions to choose from
+  /// @param [in] _amount amount of conditions to choose
+  /// @return the indices of the picked conditions, in _options
+//--------------------------------------------------------------------------------------
+ virtual std::vector<size_t> chooseConditions(
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> &_options,
+      const unsigned _amount
+      ) = 0;
+//----------------------------------------------------------------------------------------
+  /// @brief prompt player to agree to perform action or not
+  /// @param [in] _action an action to evaluate
+  /// @return the decision, true for agree and false for disagree
+//--------------------------------------------------------------------------------------
+virtual bool agree(const PTCG::ACTION _action) = 0;
+//----------------------------------------------------------------------------------------
+  /// @brief method for the players turn; decision making, card playing, attacking, retreating, etc...
+  /// @return a pair containing a bool for whether you want to attack, and the index of the attack if you do
+//--------------------------------------------------------------------------------------
+virtual std::pair<bool, unsigned> turn() = 0;
+ ```
+ ___
+### **Example:**
+```
+Clone usually is the same for Ai codes
+```
+```cpp
+Player* SomeAi::clone() const
+{
+  return new SomeAi(*this);
+}
+```
+___
+```
+You can use these parameters passed from the Game Core to determine the selection of cards and slots in different situations.
+
+It's usually preferred to define another logs function outside of the overriden methods to keep this function clean.
+```
+```cpp
+std::vector<size_t> SomeAi::chooseCards(
+    const PTCG::PLAYER _player, 
+    const PTCG::PILE _origin,
+    const PTCG::ACTION _action,
+    const std::vector<std::unique_ptr<Card>> &_options,
+    const unsigned _amount
+    )
+{
+  return yourImplementedLogics(...);
+}
+```
+```cpp
+std::pair<bool, unsigned> SomeAi::turn()
+{
+  m_turnFinished = false;
+  m_doAttack = false;
+  while(!m_turnFinished)
+  {  
+    /*
+    Do all the thinking and actions in here and finish when your Ai thinks it's enough.
+    Remeber to implement the complex logics in other methods to keep this turn loop clean.
+    */
+    auto decision = think(...);
+    m_parentGame.playCard(...);
+    m_turnFinished = finished(...);
+  }
+  // Return the decision
+  return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
+}
+```
+**[Back To Top](#poketcg-user-guides)**

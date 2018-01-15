@@ -13,6 +13,12 @@
 class Game
 {
 public:
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief Event enum to communicate what has happened to an observer
+  //----------------------------------------------------------------------------------------------------------------------
+  enum class Event { START_TURN, EFFECT_USED, MOVE_CARD, KNOCK_OUT, INSPECT_SLOT };
+
+public:
   Game() = default;
   Game(Game&&_original) = default;
 
@@ -27,6 +33,7 @@ public:
   void start();
   void playCard(const size_t _index);
   bool canPlay(const size_t _index);
+  bool canAttack(const size_t _index);
   bool drawCard(const PTCG::PLAYER _player);
   void moveCards(
       std::vector<size_t> _cardIndices,
@@ -42,7 +49,8 @@ public:
       const PTCG::ACTION _action,
       std::function<bool(Card*const)> _match,
       const unsigned _amount,
-      const size_t _range = 0
+      const bool _known = true,
+      const size_t _range = 0//un-implemented
       );
 
   std::vector<size_t> playerSlotChoice(
@@ -120,10 +128,14 @@ public:
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
   void retreat();
+  void inspectSlot(const PTCG::PLAYER _owner, const size_t _index);
 
 private:
   Game(const Game &_original);
-  void notifyGui();
+
+  template<Game::Event k_event, typename... Args>
+  void notifyGui(Args&&... args);
+
   bool checkForKnockouts();
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin = PTCG::PILE::HAND);
   std::vector<size_t> chooseReplacement(const PTCG::PLAYER _player);
@@ -154,12 +166,13 @@ private:
   bool handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
   void playPokemon(PokemonCard* const _pokemon, const size_t _index);
   void playItem(TrainerCard* const _item, const size_t _index);
-  void playTool(TrainerCard* const _tool, const size_t _index);
+  void playTool(TrainerCard* const, const size_t _index);
   void playSupport(TrainerCard* const _support, const size_t _index);
-  void playEnergy(EnergyCard* const _energy, const size_t _index);
+  void playEnergy(EnergyCard* const, const size_t _index);
   void resolveAllEndConditions(const PTCG::PLAYER _player);
   bool resolveAttackConditions(const PTCG::PLAYER _player);
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
+
 private:
   std::vector<GuiModule*> m_guiObservers;
   std::array<Player*, 2> m_players{{nullptr, nullptr}};
@@ -168,12 +181,11 @@ private:
   std::unordered_set<PTCG::CARD> m_playableCards;
   std::vector<std::pair<unsigned, Ability>> m_effectQueue;
   unsigned m_turnCount = 0;
-  bool m_turnFinished  = false;
-  bool m_rulesBroken   = false;
   bool m_gameFinished  = false;
   bool m_supportPlayed = false;
 
-
 };
+
+#include "game-inl.h" //Template implementations
 
 #endif // GAME_H

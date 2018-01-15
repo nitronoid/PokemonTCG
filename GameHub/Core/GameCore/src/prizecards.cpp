@@ -16,20 +16,18 @@ Card* PrizeCards::cardAt(const size_t _index)
 
 std::array<std::unique_ptr<Card>,6> PrizeCards::view() const
 {
-  std::array<std::unique_ptr<Card>,6> ret;
+  decltype (m_cards) ret;
   for (size_t i = 0; i < m_cards.size(); ++i)
   {
     if(m_cards[i])
-    {
-      //std::cout<<"Card ID: "<<m_cards.at(i)->getID()<<" Card Name: "<<m_cards.at(i)->getName()<<'\n';
       ret[i].reset(m_cards[i]->clone());
-    }
   }
   return ret;
 }
 
 void PrizeCards::put(std::unique_ptr<Card> &&_card)
 {
+  // Puts the card in the first free spot
   auto pos = std::find(m_cards.begin(), m_cards.end(), nullptr);
   if (pos != m_cards.end())
   {
@@ -39,12 +37,12 @@ void PrizeCards::put(std::unique_ptr<Card> &&_card)
 
 size_t PrizeCards::numCards() const
 {
-  constexpr auto filter = [](const auto& card){ return card!=nullptr; };
-  return std::count_if(m_cards.begin(), m_cards.end(), filter);
+  // Get all non-null cards
+  static constexpr auto filter = [](const auto& card)->bool { return card.get(); };
+  return static_cast<size_t>(std::count_if(m_cards.begin(), m_cards.end(), filter));
 }
 
 std::unique_ptr<Card> PrizeCards::take(const size_t _index)
 {
-  if (_index > m_cards.size() - 1) return nullptr;
   return std::move(m_cards[_index]);
 }

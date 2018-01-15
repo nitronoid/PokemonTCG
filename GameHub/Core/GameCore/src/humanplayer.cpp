@@ -11,7 +11,8 @@ const std::unique_ptr<Command> HumanPlayer::m_commands[] = {
     std::unique_ptr<Command>{new RetreatCMD},
     std::unique_ptr<Command>{new SkipCMD},
     std::unique_ptr<Command>{new RestartCMD},
-    std::unique_ptr<Command>{new ExitCMD}
+    std::unique_ptr<Command>{new ExitCMD},
+    std::unique_ptr<Command>{new InspectSlotCMD}
   };
 
 Player* HumanPlayer::clone() const
@@ -97,14 +98,14 @@ std::vector<size_t> promptChoice(
 }
 
 std::vector<size_t> HumanPlayer::chooseCards(
-    const PTCG::PLAYER _player,
+    const PTCG::PLAYER _owner,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,
     const std::vector<std::unique_ptr<Card>> &_options,
     const unsigned _amount
     )
 {
-  return promptChoice(_player, pileStr(_origin), _action, _options, _amount);
+  return promptChoice(_owner, pileStr(_origin), _action, _options, _amount);
 }
 
 std::vector<size_t> HumanPlayer::chooseSlot(
@@ -129,7 +130,7 @@ void HumanPlayer::learnCards(
 
 std::vector<size_t> HumanPlayer::chooseEnergy(
     const PTCG::PLAYER _owner,
-    const PTCG::PILE _destination,
+    const PTCG::PILE,
     const PTCG::ACTION _action,
     const std::vector<std::unique_ptr<Card> > &_options,
     const unsigned _amount
@@ -175,12 +176,13 @@ void HumanPlayer::setTurnEnd()
 HumanPlayer::CMD HumanPlayer::enumifyInput(const std::string &_str)
 {
   std::unordered_map<std::string, CMD> enumMap {
-    {"exit",    CMD::EXIT},   {"x",    CMD::EXIT},
-    {"restart", CMD::RESTART},{"z", CMD::RESTART},
-    {"play",    CMD::PLAY},   {"p",    CMD::PLAY},
-    {"attack",  CMD::ATTACK}, {"a",  CMD::ATTACK},
-    {"retreat", CMD::RETREAT},{"r", CMD::RETREAT},
-    {"skip",    CMD::SKIP},   {"s",    CMD::SKIP},
+    {"exit",    CMD::EXIT},    {"x", CMD::EXIT},
+    {"restart", CMD::RESTART}, {"z", CMD::RESTART},
+    {"play",    CMD::PLAY},    {"p", CMD::PLAY},
+    {"attack",  CMD::ATTACK},  {"a", CMD::ATTACK},
+    {"retreat", CMD::RETREAT}, {"r", CMD::RETREAT},
+    {"skip",    CMD::SKIP},    {"s", CMD::SKIP},
+    {"inspect", CMD::INSPECT}, {"i", CMD::INSPECT},
   };
   if (enumMap.count(_str)) return enumMap[_str];
   else return CMD::SKIP;

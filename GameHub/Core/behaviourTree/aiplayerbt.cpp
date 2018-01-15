@@ -9,7 +9,7 @@ Player* AIPlayerBT::clone() const
 //--------------------------------------------------------------------------
 std::string AIPlayerBT::deckName() const
 {
-    return "test_deck.json";
+    return "bright_tide_deck.json";
 }
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PTCG::PILE _origin, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
@@ -71,6 +71,9 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     // you can only play one energy at a time
     setTime(3000);
     if(checkIfEnergyNeeded())
+        // check if the string is not empty , or has a +/x ]
+        // cast it to an int
+        //if(viewBench()[0].active()->hp() - viewBench(PTCG::PLAYER::ENEMY)[0].active()->attacks)
         playEnergy();
 
     // required energies for attack 1
@@ -172,3 +175,4 @@ void AIPlayerBT::setTime(int _amountMilliSeconds)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(_amountMilliSeconds));
 }
+//--------------------------------------------------------------------------

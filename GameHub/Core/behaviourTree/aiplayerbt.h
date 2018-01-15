@@ -9,6 +9,7 @@
 #include "player.h"
 #include <algorithm>
 
+
 /// TODO
 /// when to put a basic pokemon onto the bench, and which pokemon
 /// when to play trainer cards?
@@ -16,6 +17,9 @@
 /// when to use abilities?
 /// when to attack?
 /// when to evolve a pokemon?
+///
+/// need a function that returns an int for the enemy attack
+/// need a function that returns if attack is an int (not a x,+ or empty)
 
 class AIPlayerBT : public Player
 {
@@ -96,7 +100,7 @@ public:
     void playEnergy();
     /// @build puts a pokemon on the bench
     void putPokemonOnBench();
-    /// @build ?
+    /// @build returns the type of energy needed (temp) for attack 0 on the active card
     PTCG::TYPE typeReturnofActiveCard();
     /// @build checks is the card needs energy
     bool checkIfEnergyNeeded();
@@ -105,8 +109,8 @@ public:
     /// @build timer (think)
     void setTime(int _amountMilliSeconds);
 
-bool temp();
 
+bool temp();
 
 private:
     /// @build this decides if you attack or not

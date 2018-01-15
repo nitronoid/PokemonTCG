@@ -245,8 +245,8 @@ std::string SimplePrinter::bigECStr(EnergyCard* const _card) const
 std::string SimplePrinter::bigTCStr(TrainerCard* const _card) const
 {
     std::string ret = k_bigPokeSlot;
-    str_replace_sent(_ret, "$TYPE", stringify(_card->cardType()));
-    str_replace_sent(_ret, "$NAME", _card->getName());
+    str_replace_sent(ret, "$TYPE", stringify(_card->cardType()));
+    str_replace_sent(ret, "$NAME", _card->getName());
     //NEED TO ACCESS ABILITY
     return ret;
 }

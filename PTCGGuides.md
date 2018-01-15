@@ -33,6 +33,8 @@ ___
 > **[Trainer Cards](#trainer-cards)**
 
 > **[Energy Cards](#energy-cards)**
+
+> **[Decklist](#decklist)**
 ___
 ### **Pokemon Cards:**
 > ### **Json File:**
@@ -164,6 +166,80 @@ Due to time constraints, we are only allowing Basic Energy Cards in this set.
 Function implementation for basic energy cards are not required.
 '''
 ```
+___
+### **Decklist**
+
+- **A decklist contains all cards' set ID including duplicates:**
+
+```json
+{
+    "Name" : "Bright Tide",
+    "Deck" : [
+       41,
+       41,
+       40,
+       40,
+       39,
+       39,
+       39,
+       29,
+       28,
+       28,
+       34,
+       37,
+       37,
+       36,
+       36,
+       33,
+       33,
+       50,
+       49,
+       49,
+       53,
+       53,
+       104,
+       104,
+       103,
+       103,
+       97,
+       97,
+       116,
+       120,
+       120,
+       122,
+       123,
+       123,
+       127,
+       127,
+       128,
+       134,
+       134,
+       135,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       167,
+       167,
+       167,
+       167,
+       167,
+       167,
+       167,
+       167
+    ]
+}
+
+```
+
 **[Back To Top](#poketcg-user-guides)**
 ___
 

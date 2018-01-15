@@ -24,12 +24,5 @@ def hau(h):
     # destination - where the cards goes (DECK/HAND/DISCARD/BENCH/PRIZE)
     # reveal - whether the enemy sees the card (True/False)
 
-    cards = h.playerCardChoice(
-        p.PLAYER.SELF, 
-        p.PLAYER.SELF, 
-        p.PILE.DECK, 
-        p.ACTION.DRAW, 
-        filter, 
-        3)
-
-    h.moveCards(cards, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
+    for i in range(3):
+        h.drawCard(p.PLAYER.SELF)

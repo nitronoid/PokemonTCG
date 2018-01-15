@@ -10,9 +10,52 @@ namespace _PTCG_DETAIL
 template<Game::Event k_eventA, Game::Event k_eventB>
 using MatchEvent = typename std::enable_if_t<k_eventA == k_eventB>;
 
-// guiSwitch can be thought of like a switch statement. Every overload is a different case.
+// observerCase can be thought of like a case in a switch statement. Every overload is a different case.
 // The defaulted template arg is used to enable and disable the overloads based on the passed event.
 // First arg is the Event enum, second is a list of args to be forwarded to the guimodule call.
+
+// This case is compiled when the passed Event was START_TURN
+template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::START_TURN>* = nullptr>
+void observerCase(GameObserver*io_observer, Args&&...args)
+{
+  io_observer->startTurn(std::forward<Args>(args)...);
+}
+
+// This case is compiled when the passed Event was EFFECT_USED
+template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::EFFECT_USED>* = nullptr>
+void observerCase(GameObserver*io_observer, Args&&...args)
+{
+  io_observer->effectUsed(std::forward<Args>(args)...);
+}
+
+// This case is compiled when the passed Event was PLAY_CARD
+template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::PLAY_CARD>* = nullptr>
+void observerCase(GameObserver*io_observer, Args&&...args)
+{
+  io_observer->playCard(std::forward<Args>(args)...);
+}
+
+// This case is compiled when the passed Event was SWAP_SLOT
+template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::SWAP_SLOT>* = nullptr>
+void observerCase(GameObserver*io_observer, Args&&...args)
+{
+  io_observer->swapSlot(std::forward<Args>(args)...);
+}
+
+// This case is compiled when the passed Event was MOVE_CARD
+template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::MOVE_CARD>* = nullptr>
+void observerCase(GameObserver*io_observer, Args&&...args)
+{
+  io_observer->moveCard(std::forward<Args>(args)...);
+}
+
+// This case is compiled when the passed Event was KNOCK_OUT
+template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::KNOCK_OUT>* = nullptr>
+void observerCase(GameObserver*io_observer, Args&&...args)
+{
+  io_observer->knockOut(std::forward<Args>(args)...);
+}
+
 // This case is compiled when the passed Event was INSPECT_SLOT
 template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::INSPECT_SLOT>* = nullptr>
 void observerCase(GameObserver*io_observer, Args&&...args)
@@ -20,12 +63,13 @@ void observerCase(GameObserver*io_observer, Args&&...args)
   io_observer->inspectSlot(std::forward<Args>(args)...);
 }
 
-// This currently acts like a deafult case, when they didn't wan't to inspect a slot
-template<Game::Event k_event, typename... Args,  typename std::enable_if_t<k_event != Game::Event::INSPECT_SLOT>* = nullptr>
+// This case is compiled when the passed Event was INSPECT_CARD
+template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::INSPECT_CARD>* = nullptr>
 void observerCase(GameObserver*io_observer, Args&&...args)
 {
-  io_observer->drawBoard(std::forward<Args>(args)...);
+  io_observer->inspectCard(std::forward<Args>(args)...);
 }
+
 }
 
 

@@ -152,12 +152,22 @@ std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _act
 {
   std::string ret = k_bigPokeSlot;
   str_replace_sent(ret, "$L", std::to_string(_slot->getRemainingHP()));
-  str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
+  std::string tmpen;
+  int i = 0;
+  auto mset = _slot->energyMSet();
+  size_t waterCount = mset.count(PTCG::TYPE::WATER);
+  size_t fireCount = mset.count(PTCG::TYPE::FIRE);
+  size_t electricCount = mset.count(PTCG::TYPE::LIGHTNING);
+  if(waterCount>0){tmpen.append("WATER: "+std::to_string(waterCount)+"; ");}
+  if(fireCount>0){tmpen.append("FIRE: "+std::to_string(fireCount)+"; ");}
+  if(electricCount>0){tmpen.append("ELECTRIC: "+std::to_string(electricCount)+";");}
+  str_replace_sent(ret, "$E", tmpen);
+
   std::string toolName = "---";
   if (auto tool = _slot->viewTool())
     toolName = tool->getName();
   str_replace_sent(ret, "$TOOL", toolName, true);
-  int i = 0;
+  i = 0;
   for (const auto& cond : _activeStatus->conditions())
   {
     str_replace_sent(ret, "$COND"+std::to_string(i), stringifyChar(charify(cond)));
@@ -214,12 +224,12 @@ std::string SimplePrinter::bigPCStr(PokemonCard* const _card, std::string _ret) 
       str_replace_sent(_ret, "$D"  + std::to_string(i), "");
       str_replace_sent(_ret, "$AR" + std::to_string(i), "");
     }
-    std::string tmpa = std::string{charify(_card->weakness())};
-    str_replace_sent(_ret, "$W", tmpa);
-    if(tmpa.length()){str_replace_sent(_ret, "$WA", "x2");}else{str_replace_sent(_ret, "$WA", "");}
+    std::string tmpa = stringifyChar(charify(_card->weakness()),true);
+    str_replace_sent(_ret, "$W", tmpa, false);
+    if(!tmpa.empty() && tmpa.at(0)!='-'){str_replace_sent(_ret, "$WA", "x2");}else{str_replace_sent(_ret, "$WA", "-");}
     tmpa = std::string{charify(_card->resistance())};
     str_replace_sent(_ret, "$R", tmpa);
-    if(tmpa.length()){str_replace_sent(_ret, "$RA", "-20");}else{str_replace_sent(_ret, "$RA", "");}
+    if(!tmpa.empty() && tmpa.at(0)!='-'){str_replace_sent(_ret, "$RA", "-20");}else{str_replace_sent(_ret, "$RA", "-");}
     str_replace_sent(_ret, "$C", std::to_string(_card->retreatCost()));
     str_replace_sent(_ret, "$ST", std::to_string(_card->stage()));
     str_replace_sent(_ret, "$EVO", _card->preEvolution());

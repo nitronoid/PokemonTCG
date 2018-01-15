@@ -105,13 +105,9 @@ void Game::playEnergy(EnergyCard* const, const size_t _index)
 
 void Game::playSupport(TrainerCard* const _support, const size_t _index)
 {
-  //need to check if a supporter card has already been played this turn
-  if (m_playableCards.count(PTCG::CARD::SUPPORT))
-  {
-    _support->activateAbility(*this);
-    moveCards({_index}, PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::PILE::DISCARD);
-    m_playableCards.erase(PTCG::CARD::SUPPORT);
-  }
+  _support->activateAbility(*this);
+  moveCards({_index}, PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::PILE::DISCARD);
+  m_playableCards.erase(PTCG::CARD::SUPPORT);
 }
 
 bool Game::canPlay(const size_t _index)
@@ -403,11 +399,6 @@ void Game::benchToPile(
     // Move all the attached pokemon
     for (auto& poke : slot->detachPokemon())
       putToPile(_owner,_dest, std::unique_ptr<Card>{poke.release()});
-    if (!_index && !slot->active())
-    {
-      auto newActive = chooseReplacement(_owner);
-      switchActive(_owner, newActive[0]);
-    }
   }
   // Check the slot has a tool before filtering
   auto rawTool = slot->viewTool().get();
@@ -611,7 +602,8 @@ std::vector<size_t> Game::playerConditionChoice(
     const unsigned _amount
     )
 {
-  return m_players[playerIndex(_thinker)]->chooseConditions(_owner, _action, _options, _amount);
+  auto relOwner = relativeOwner(_thinker, _owner);
+  return m_players[playerIndex(_thinker)]->chooseConditions(relOwner, _action, _options, _amount);
 }
 
 std::vector<size_t> Game::playerCardChoice(
@@ -641,11 +633,19 @@ std::vector<size_t> Game::playerCardChoice(
           options.end(),
           [](){ return std::unique_ptr<Card>(new BlankCard); }
     );
+  auto relOwner = relativeOwner(_thinker, _owner);
   // Get the players choice from our filtered options
-  choice = m_players[playerIndex(_thinker)]->chooseCards(_owner, _origin, _action, options, _amount);
+  choice = m_players[playerIndex(_thinker)]->chooseCards(relOwner, _origin, _action, options, _amount);
   // Convert the player choice to the original pile indexes
   for (auto& pick : choice) pick = positions[pick];
   return choice;
+}
+
+PTCG::PLAYER Game::relativeOwner(const PTCG::PLAYER _thinker, const PTCG::PLAYER _owner)
+{
+  size_t thinker = static_cast<size_t>(_thinker);
+  size_t owner = static_cast<size_t>(_owner);
+  return static_cast<PTCG::PLAYER>(thinker ^ owner);
 }
 
 std::vector<size_t> Game::playerSlotChoice(
@@ -670,8 +670,8 @@ std::vector<size_t> Game::playerSlotChoice(
       positions.push_back(i);
     }
   }
-
-  choice = m_players[playerIndex(_thinker)]->chooseSlot(_owner, _action, options, _amount);
+  auto relOwner = relativeOwner(_thinker, _owner);
+  choice = m_players[playerIndex(_thinker)]->chooseSlot(relOwner, _action, options, _amount);
   // Convert the player choice to the original pile indexes
   for (auto& pick : choice) pick = positions[pick];
   return choice;
@@ -794,8 +794,9 @@ std::vector<size_t> Game::playerEnergyChoice(
   std::vector<size_t> positions;
   // Filter the energies
   filterCards(energy, filteredEnergy, positions, _match);
+  auto relOwner = relativeOwner(_thinker, _owner);
   // Ask for the players pick of those filtered energies
-  auto choice = player->chooseEnergy(_owner, _destination, _action, filteredEnergy, _amount);
+  auto choice = player->chooseEnergy(relOwner, _destination, _action, filteredEnergy, _amount);
   // Convert the choices to their original index
   for (auto& pick : choice) pick = positions[pick];
   return choice;

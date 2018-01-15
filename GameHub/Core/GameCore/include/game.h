@@ -290,7 +290,7 @@ public:
   //Effectors
   void addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect);
 
-
+  PTCG::PLAYER ownerFromThinker(const PTCG::PLAYER _thinker, const PTCG::PLAYER _owner);
   inline unsigned turnCount() const {return m_turnCount;}
 
   //----------------------------------------------------------------------------------------------------------------------

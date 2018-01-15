@@ -351,6 +351,7 @@ private:
   void resolveAllEndConditions(const PTCG::PLAYER _player);
   bool resolveAttackConditions(const PTCG::PLAYER _player);
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
+  PTCG::PLAYER relativeOwner(const PTCG::PLAYER _thinker, const PTCG::PLAYER _owner);
 
 private:
   std::vector<GameObserver*> m_observers;

@@ -12,7 +12,7 @@
 
 class Game
 {
-private:
+public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief Event enum to communicate what has happened to an observer
   //----------------------------------------------------------------------------------------------------------------------
@@ -133,17 +133,7 @@ public:
 private:
   Game(const Game &_original);
 
-  // Alias to simplify template declarations
-  template<Event k_eventA, Event k_eventB>
-  using MatchEvent = typename std::enable_if_t<k_eventA == k_eventB>;
-
-  // A fallback for now, if they didn't inspect a slot
-  template<Game::Event k_event, typename... Args,
-           typename std::enable_if_t<k_event != Game::Event::INSPECT_SLOT>* = nullptr>
-  void notifyGui(Args&&... args);
-
-  // For inspecting slots
-  template<Game::Event k_event, typename... Args, MatchEvent<k_event, Event::INSPECT_SLOT>* = nullptr>
+  template<Game::Event k_event, typename... Args>
   void notifyGui(Args&&... args);
 
   bool checkForKnockouts();
@@ -176,9 +166,9 @@ private:
   bool handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
   void playPokemon(PokemonCard* const _pokemon, const size_t _index);
   void playItem(TrainerCard* const _item, const size_t _index);
-  void playTool(TrainerCard* const _tool, const size_t _index);
+  void playTool(TrainerCard* const, const size_t _index);
   void playSupport(TrainerCard* const _support, const size_t _index);
-  void playEnergy(EnergyCard* const _energy, const size_t _index);
+  void playEnergy(EnergyCard* const, const size_t _index);
   void resolveAllEndConditions(const PTCG::PLAYER _player);
   bool resolveAttackConditions(const PTCG::PLAYER _player);
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);

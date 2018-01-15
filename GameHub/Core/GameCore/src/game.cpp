@@ -81,7 +81,7 @@ void Game::playItem(TrainerCard* const _item, const size_t _index)
   _item->activateAbility(*this);
 }
 
-void Game::playTool(TrainerCard* const _tool, const size_t _index)
+void Game::playTool(TrainerCard* const, const size_t _index)
 {
   // Slots with a pokemon that has no tool attached
   static constexpr auto filter = [](BoardSlot*const _slot){ return _slot->active() && !_slot->viewTool();};
@@ -90,7 +90,7 @@ void Game::playTool(TrainerCard* const _tool, const size_t _index)
     pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
 }
 
-void Game::playEnergy(EnergyCard* const _energy, const size_t _index)
+void Game::playEnergy(EnergyCard* const, const size_t _index)
 {
   // Choose from slots with pokemon
   static constexpr auto filter = [](BoardSlot*const _slot){return _slot->active();};

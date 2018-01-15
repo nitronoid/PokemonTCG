@@ -703,9 +703,10 @@ void Game::revealCards(
   revealed.reserve(_indices.size());
   // Place the requested cards in our vector
   for (const auto i : _indices) revealed.push_back(std::move(pile[i]));
+  auto relOwner = relativeOwner(_learner, _owner);
   // Triger the players callback for learning cards
   m_players[playerIndex(_learner)]->learnCards(
-        _owner,
+        relOwner,
         _origin,
         _indices,
         revealed

@@ -7,7 +7,7 @@
 #include "cardfactory.h"
 #include "board.h"
 #include "damagehandler.h"
-#include "guimodule.h"
+#include "gameobserver.h"
 
 class Game
 {
@@ -183,14 +183,14 @@ public:
   std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function that moves the top card of the players deck to their hand
-  /// @param [in] _owner is the player who will draw a card
+  /// @param [in] _player is the player who will draw a card
   /// @return whether or not the player could draw a card
   //----------------------------------------------------------------------------------------------------------------------
   bool drawCard(const PTCG::PLAYER _player);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function that moves cards from one pile to another
   /// @param [in] _cardIndices are the positions of the cards to move from the _origin pile
-  /// @param [in] _owner is the player who owns the deck
+  /// @param [in] _owner is the player who owns the cards
   /// @param [in] _origin is the pile that contains the cards prior to this call
   /// @param [in] _destination is the pile to move the cards to
   //----------------------------------------------------------------------------------------------------------------------
@@ -200,15 +200,39 @@ public:
       const PTCG::PILE _origin,
       const PTCG::PILE _destination
       );
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function that removes energy card(s) from a slot and moves them to a card pile
+  /// @param [in] _owner is the player who owns the slot and energy
+  /// @param [in] _destination is the pile to move the cards to
+  /// @param [in] _slotIndex is the index of the slot to remove energies from
+  /// @param [in] _indices are the indices of the energy to move from the _origin pile
+  //----------------------------------------------------------------------------------------------------------------------
   void removeEnergy(
       const PTCG::PLAYER _owner,
       const PTCG::PILE _destination,
       const size_t _slotIndex,
       std::vector<size_t> _indices
       );
-  //player needs to choose what to move into active if _index = 0
-  void benchToPile(const PTCG::PLAYER &_player, const PTCG::PILE &_dest, std::function<bool(Card*const)> _match, const size_t &_index=0);
-  void pileToBench(const PTCG::PLAYER &_player, const PTCG::PILE &_origin, std::vector<size_t> _pileIndex, std::vector<size_t> _benchIndex);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function that moves cards from a bench slot to a card pile, using a match function to filter. If the slot
+  /// index is zero, the player will be asked to choose a replacement pokemon.
+  /// @param [in] _owner is the player who owns the slot
+  /// @param [in] _dest is the pile to move the cards to
+  /// @param [in] _match is the function used to filter cards on the slot
+  /// @param [in] _index is the slot to move cards from
+  //----------------------------------------------------------------------------------------------------------------------
+  void benchToPile(
+      const PTCG::PLAYER &_owner,
+      const PTCG::PILE &_dest,
+      std::function<bool(Card*const)> _match,
+      const size_t &_index=0
+      );
+  void pileToBench(
+      const PTCG::PLAYER &_player,
+      const PTCG::PILE &_origin,
+      std::vector<size_t> _pileIndex,
+      std::vector<size_t> _benchIndex
+      );
   void switchActive(const PTCG::PLAYER &_player, const size_t &_subIndex);
   size_t numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   //Slots
@@ -281,7 +305,7 @@ public:
 
 
   Board* getBoard(const PTCG::PLAYER _owner);
-  void registerGui(GuiModule*const _gui);
+  void registerGui(GameObserver*const _gui);
 
 
 
@@ -328,7 +352,7 @@ private:
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
 
 private:
-  std::vector<GuiModule*> m_observers;
+  std::vector<GameObserver*> m_observers;
   std::array<Player*, 2> m_players{{nullptr, nullptr}};
   std::array<Board, 2> m_boards;
   DamageHandler m_damageHandler;

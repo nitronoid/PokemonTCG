@@ -27,7 +27,7 @@ void Game::start()
   }
 }
 
-void Game::registerGui(GuiModule*const _gui)
+void Game::registerGui(GameObserver*const _gui)
 {
   _gui->setGame(this);
   m_observers.push_back(_gui);
@@ -419,21 +419,26 @@ std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _
   return ret;
 }
 void Game::benchToPile(
-    const PTCG::PLAYER &_player,
+    const PTCG::PLAYER &_owner,
     const PTCG::PILE &_dest,
     std::function<bool(Card*const)> _match,
     const size_t &_index
     )
 {
   // Get the slot that we are moving from
-  auto slot = m_boards[playerIndex(_player)].m_bench.slotAt(_index);
+  auto slot = m_boards[playerIndex(_owner)].m_bench.slotAt(_index);
   // Check the slot has a pokemon before filtering
   auto rawPokemon = slot->active();
   if(rawPokemon && _match(rawPokemon))
   {
     // Move all the attached pokemon
     for (auto& poke : slot->detachPokemon())
-      putToPile(_player,_dest, std::unique_ptr<Card>{poke.release()});
+      putToPile(_owner,_dest, std::unique_ptr<Card>{poke.release()});
+    if (!_index && !slot->active())
+    {
+      auto newActive = chooseReplacement(_owner);
+      switchActive(_owner, newActive[0]);
+    }
   }
   // Check the slot has a tool before filtering
   auto rawTool = slot->viewTool().get();
@@ -441,7 +446,7 @@ void Game::benchToPile(
   {
     // Detatch and move the tool card
     auto tool = slot->detachTool();
-    putToPile(_player, _dest, std::unique_ptr<Card>{tool.release()});
+    putToPile(_owner, _dest, std::unique_ptr<Card>{tool.release()});
   }
   // Get the card energy
   auto unfilteredEnergy = slot->viewEnergy();
@@ -456,10 +461,8 @@ void Game::benchToPile(
   {
     // Move all the energy
     auto energy = slot->detachEnergy(pos);
-    putToPile(_player, _dest, std::unique_ptr<Card>{energy.release()});
+    putToPile(_owner, _dest, std::unique_ptr<Card>{energy.release()});
   }
-  if (!_index)
-    chooseReplacement(_player);
   notify<Event::MOVE_CARD>();
 }
 

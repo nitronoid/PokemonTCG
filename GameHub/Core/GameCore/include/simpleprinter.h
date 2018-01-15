@@ -1,8 +1,8 @@
 #ifndef SIMPLEPRINTER_H
 #define SIMPLEPRINTER_H
-#include "guimodule.h"
+#include "gameobserver.h"
 
-class SimplePrinter : public GuiModule
+class SimplePrinter : public GameObserver
 {
 public :
   //----------------------------------------------------------------------------------------------------------------------

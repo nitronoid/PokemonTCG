@@ -10,10 +10,10 @@ Game::Game(const Game &_original) :
 
 void Game::init(const CardFactory &_factory, Player*const io_playerA, Player*const io_playerB)
 {
-  m_boards[0].m_deck.init(_factory.loadDeck(io_playerA->deckName()));
-  m_boards[0].m_deck.shuffle();
-  m_boards[1].m_deck.init(_factory.loadDeck(io_playerB->deckName()));
-  m_boards[1].m_deck.shuffle();
+  m_boards[0].deck()->init(_factory.loadDeck(io_playerA->deckName()));
+  m_boards[0].deck()->shuffle();
+  m_boards[1].deck()->init(_factory.loadDeck(io_playerB->deckName()));
+  m_boards[1].deck()->shuffle();
   m_players[0] = io_playerA;
   m_players[1] = io_playerB;
 }
@@ -106,7 +106,7 @@ void Game::playEnergy(EnergyCard* const, const size_t _index)
 void Game::playSupport(TrainerCard* const _support, const size_t _index)
 {
   //need to check if a supporter card has already been played this turn
-  if (!m_playableCards.count(PTCG::CARD::SUPPORT))
+  if (m_playableCards.count(PTCG::CARD::SUPPORT))
   {
     _support->activateAbility(*this);
     moveCards({_index}, PTCG::PLAYER::SELF, PTCG::PILE::HAND, PTCG::PILE::DISCARD);
@@ -116,7 +116,7 @@ void Game::playSupport(TrainerCard* const _support, const size_t _index)
 
 bool Game::canPlay(const size_t _index)
 {
-  auto card = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.cardAt(_index);
+  auto card = m_boards[playerIndex(PTCG::PLAYER::SELF)].hand()->cardAt(_index);
   return canPlay(card);
 }
 
@@ -134,7 +134,7 @@ bool Game::canAttack(const size_t _index)
 
 void Game::playCard(const size_t _index)
 {
-  auto chosenCard = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_hand.cardAt(_index);
+  auto chosenCard = m_boards[playerIndex(PTCG::PLAYER::SELF)].hand()->cardAt(_index);
   if (canPlay(chosenCard))
   {
     chosenCard->playCard(*this, _index);
@@ -149,9 +149,9 @@ void Game::drawHand(const PTCG::PLAYER _player)
 
 void Game::setBoard(Board& io_board, const size_t _active)
 {
-  io_board.m_bench.put(io_board.m_hand.take(_active), 0);
+  io_board.m_bench.put(io_board.hand()->take(_active), 0);
   for (int i = 0; i < 6; ++i)
-    io_board.m_prizeCards.put(io_board.m_deck.takeTop());
+    io_board.prizeCards()->put(io_board.deck()->takeTop());
 }
 
 std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin)
@@ -219,7 +219,7 @@ void Game::doMulligans(std::vector<size_t> &io_mulligans)
     auto currentPlayer = static_cast<PTCG::PLAYER>(index);
     auto enemyPlayer = static_cast<PTCG::PLAYER>((index+1)%2);
     // Generate consecutive integers for range of hand
-    std::vector<size_t> indices(currentPlayerBoard.m_hand.view().size());
+    std::vector<size_t> indices(currentPlayerBoard.hand()->numCards());
     std::iota (std::begin(indices), std::end(indices), 0);
     // Reveal the Hand
     revealCards(enemyPlayer, currentPlayer, PTCG::PILE::HAND, indices);
@@ -368,9 +368,10 @@ void Game::addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, co
 bool Game::drawCard(const PTCG::PLAYER _player)
 {
   Board& board = m_boards[playerIndex(_player)];
-  if (board.m_deck.empty()) return false;
-  auto topCard = board.m_deck.takeTop();
-  board.m_hand.put(std::move(topCard));
+  auto deck = board.deck();
+  if (deck->empty()) return false;
+  auto topCard = deck->takeTop();
+  board.hand()->put(std::move(topCard));
   notify<Event::MOVE_CARD>();
   return true;
 }
@@ -378,45 +379,13 @@ bool Game::drawCard(const PTCG::PLAYER _player)
 void Game::putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, std::unique_ptr<Card> &&_card)
 {
   auto& board = m_boards[playerIndex(_owner)];
-  switch (_dest)
-  {
-    case PTCG::PILE::DECK:
-      board.m_deck.put(std::move(_card));
-      break;
-    case PTCG::PILE::DISCARD:
-      board.m_discardPile.put(std::move(_card));
-      break;
-    case PTCG::PILE::HAND:
-      board.m_hand.put(std::move(_card));
-      break;
-    case PTCG::PILE::PRIZE:
-      board.m_prizeCards.put(std::move(_card));
-      break;
-    default: break;
-  }
+  board.pile(_dest)->put(std::move(_card));
 }
 
 std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const size_t _index)
 {
   auto& board = m_boards[playerIndex(_owner)];
-  std::unique_ptr<Card> ret;
-  switch (_dest)
-  {
-    case PTCG::PILE::DECK:
-      ret = board.m_deck.take(_index);
-      break;
-    case PTCG::PILE::DISCARD:
-      ret = board.m_discardPile.take(_index);
-      break;
-    case PTCG::PILE::HAND:
-      ret = board.m_hand.take(_index);
-      break;
-    case PTCG::PILE::PRIZE:
-      ret = board.m_prizeCards.take(_index);
-      break;
-    default: break;
-  }
-  return ret;
+  return board.pile(_dest)->take(_index);
 }
 void Game::benchToPile(
     const PTCG::PLAYER &_owner,
@@ -468,7 +437,7 @@ void Game::benchToPile(
 
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
 {
-  m_boards[playerIndex(_owner)].m_deck.shuffle();
+  m_boards[playerIndex(_owner)].deck()->shuffle();
 }
 
 template<typename T>
@@ -710,41 +679,14 @@ std::vector<size_t> Game::playerSlotChoice(
 
 size_t Game::numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const
 {
-  size_t ret = 0;
-  // Get the owners board
   auto& board = m_boards[playerIndex(_owner)];
-  using pile = PTCG::PILE;
-  switch (_pile)
-  {
-    case pile::DECK :    {ret = board.m_deck.numCards(); break;}
-    case pile::HAND :    {ret = board.m_hand.numCards(); break;}
-    case pile::DISCARD : {ret = board.m_discardPile.numCards(); break;}
-    case pile::PRIZE :   {ret = board.m_prizeCards.numCards(); break;}
-    default: break;
-  }
-  return ret;
+  return board.pile(_pile)->numCards();
 }
 
 std::vector<std::unique_ptr<Card>> Game::viewPile(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const
 {
-  std::vector<std::unique_ptr<Card>> ret;
-  // Get the owners board
   auto& board = m_boards[playerIndex(_owner)];
-  using pile = PTCG::PILE;
-  switch (_pile)
-  {
-    case pile::DECK :    {ret = board.m_deck.view(); break;}
-    case pile::HAND :    {ret = board.m_hand.view(); break;}
-    case pile::DISCARD : {ret = board.m_discardPile.view(); break;}
-    case pile::PRIZE :
-    {
-      // Prize needs to be converted from an array to a vector
-      for (auto& card : board.m_prizeCards.view()) ret.push_back(std::move(card));
-      break;
-    }
-    default: break;
-  }
-  return ret;
+  return board.pile(_pile)->view();
 }
 
 void Game::revealCards(
@@ -829,7 +771,7 @@ bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
     std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
     return false;
   }
-  board.m_hand.put(std::unique_ptr<Card>(board.m_bench.slotAt(_index)->devolvePokemon().release()));
+  board.hand()->put(std::unique_ptr<Card>(board.m_bench.slotAt(_index)->devolvePokemon().release()));
   return true;
 }
 
@@ -906,7 +848,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     static constexpr auto prizes = [](Card* const card) -> bool {return card;};
     auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
-    if (!m_boards[opponentIndex].m_prizeCards.numCards())
+    if (!m_boards[opponentIndex].prizeCards()->numCards())
       gameOver = true;
     notify<Event::KNOCK_OUT>();
   }
@@ -1013,9 +955,9 @@ Game Game::dummyClone() const
   Game copy = *this;
   auto& copySelfBoard   = copy.m_boards[playerIndex(PTCG::PLAYER::SELF)];
   auto& copyEnemyBoard  = copy.m_boards[playerIndex(PTCG::PLAYER::ENEMY)];
-  copySelfBoard.m_deck  = Deck(blankCardVector(copySelfBoard.m_hand.numCards()));
-  copyEnemyBoard.m_hand = Hand(blankCardVector(copyEnemyBoard.m_hand.numCards()));
-  copyEnemyBoard.m_deck = Deck(blankCardVector(copyEnemyBoard.m_hand.numCards()));
+  *copySelfBoard.deck()  = Deck(blankCardVector(copySelfBoard.deck()->numCards()));
+  *copyEnemyBoard.hand() = Hand(blankCardVector(copyEnemyBoard.hand()->numCards()));
+  *copyEnemyBoard.deck() = Deck(blankCardVector(copyEnemyBoard.deck()->numCards()));
   return copy;
 }
 
@@ -1024,19 +966,19 @@ size_t Game::playerIndex(const PTCG::PLAYER &_player) const
   return (m_turnCount+static_cast<size_t>(_player)) % 2;
 }
 
-std::array<std::unique_ptr<Card>,6> Game::viewPrize(const PTCG::PLAYER &_player) const
+std::vector<std::unique_ptr<Card>> Game::viewPrize(const PTCG::PLAYER &_player) const
 {
-  return m_boards[playerIndex(_player)].m_prizeCards.view();
+  return m_boards[playerIndex(_player)].prizeCards()->view();
 }
 
 std::vector<std::unique_ptr<Card>> Game::viewDeck(const PTCG::PLAYER &_player) const
 {
-  return m_boards[playerIndex(_player)].m_deck.view();
+  return m_boards[playerIndex(_player)].deck()->view();
 }
 
 std::vector<std::unique_ptr<Card>> Game::viewDiscard(const PTCG::PLAYER &_player) const
 {
-  return m_boards[playerIndex(_player)].m_discardPile.view();
+  return m_boards[playerIndex(_player)].discardPile()->view();
 }
 
 std::array<BoardSlot, 6> Game::viewBench(const PTCG::PLAYER &_player) const
@@ -1046,7 +988,7 @@ std::array<BoardSlot, 6> Game::viewBench(const PTCG::PLAYER &_player) const
 
 std::vector<std::unique_ptr<Card>> Game::viewHand(const PTCG::PLAYER &_player) const
 {
-  return m_boards[playerIndex(_player)].m_hand.view();
+  return m_boards[playerIndex(_player)].hand()->view();
 }
 
 bool Game::canRetreat(const PTCG::PLAYER &_player)

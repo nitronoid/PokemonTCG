@@ -61,7 +61,7 @@ public:
   /// @brief viewing all cards in this deck
   /// @return all cards in the deck
   //----------------------------------------------------------------------------------------------------------------------
-  std::vector<std::unique_ptr<Card>> view() const;
+  virtual std::vector<std::unique_ptr<Card>> view() const override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief check if deck is empty
   /// @return whether this deck is empty

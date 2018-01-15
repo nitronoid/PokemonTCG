@@ -174,7 +174,7 @@ public:
   /// @param [in] _owner is the player who owns the prize cards
   /// @return a copy of all prize cards
   //----------------------------------------------------------------------------------------------------------------------
-  std::array<std::unique_ptr<Card>,6> viewPrize(const PTCG::PLAYER &_player)   const;
+  std::vector<std::unique_ptr<Card> > viewPrize(const PTCG::PLAYER &_player)   const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function that copies and returns all slots on the bench including the active
   /// @param [in] _owner is the player who owns the bench

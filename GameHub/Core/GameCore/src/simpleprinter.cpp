@@ -446,12 +446,12 @@ void SimplePrinter::drawSide(Board* _board, const bool _isOp)
   {
     std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
     std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
-    std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
-    std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
+    std::cout<<"HAND:\n"<<handStr(_board->hand());
+    std::cout<<"PRIZE:\n"<<prizeStr(_board->prizeCards());
   }
   else
   {
-    std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
+    std::cout<<"PRIZE:\n"<<prizeStr(_board->prizeCards());
     std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
     std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
   }

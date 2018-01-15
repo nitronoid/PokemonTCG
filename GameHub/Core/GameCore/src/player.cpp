@@ -28,7 +28,7 @@ bool Player::canPlay(const size_t &_index)
 
 Game Player::getDummyGame() const
 {
-  return m_subjectGame->clone();
+  return m_subjectGame->dummyClone();
 }
 
 void Player::attachToGame(Game*const _newSubject)

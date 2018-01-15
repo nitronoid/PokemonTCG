@@ -193,8 +193,11 @@ PYBIND11_MODULE(poke, m)
       .def("addEffect", &Game::addEffect)
       .def("drawCard", &Game::drawCard)
       .def("setCanRetreat", &Game::setCanRetreat,
-           py::arg("_player"),
+           py::arg("_affected"),
            py::arg("_val") = false)
+      .def("setProtected", &Game::setProtected,
+           py::arg("_affected"),
+           py::arg("_val") = true)
       .def("numCards", &Game::numCards)
       .def("removeEnergy", &Game::removeEnergy);
 

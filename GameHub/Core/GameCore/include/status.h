@@ -56,6 +56,7 @@ public:
   std::vector<PTCG::CONDITION> conditions() const;
   void setProtected(const bool &_val);
   void setCanRetreat(const bool &_val);
+
 private:
   std::unordered_set<PTCG::CONDITION> m_conditions;
   std::array<int, 2> m_bonusDamage     = {{0, 0}};

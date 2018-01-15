@@ -106,6 +106,10 @@ public:
     bool checkIfEnergyNeeded();
     /// @build checks if the card is an energy card
     bool checkIfCardIsEnergy();
+    /// @build checks if the card is evolution pokemon card
+    bool checkIfCardIsEvolution();
+    /// @build play the evolution pokemon card (pokemon evolve to the next stage)
+    bool playEvolutionCard();
     /// @build timer (think)
     void setTime(int _amountMilliSeconds);
 

@@ -9,7 +9,13 @@
 #include "player.h"
 #include <algorithm>
 
-#define LEAF 0
+/// TODO
+/// when to put a basic pokemon onto the bench, and which pokemon
+/// when to play trainer cards?
+/// when to retreat active card?
+/// when to use abilities?
+/// when to attack?
+/// when to evolve a pokemon?
 
 class AIPlayerBT : public Player
 {
@@ -84,20 +90,29 @@ public:
   /// return a pair with bool (attack or not), unsigned (which attack)
   ///-----------------------------------------------------------------------------------
   virtual std::pair<bool, unsigned> turn() override;
-/// @build checks if there is energy in Hand
-void playEnergy();
-void putPokemonOnBench();
-PTCG::TYPE typeReturnofActiveCard();
-bool checkTrainerinHand();
-bool checkIfEnergyNeeded();
-bool checkIfCardIsEnergy();
+
+
+    /// @build play energy function
+    void playEnergy();
+    /// @build puts a pokemon on the bench
+    void putPokemonOnBench();
+    /// @build ?
+    PTCG::TYPE typeReturnofActiveCard();
+    /// @build checks is the card needs energy
+    bool checkIfEnergyNeeded();
+    /// @build checks if the card is an energy card
+    bool checkIfCardIsEnergy();
+    /// @build timer (think)
+    void setTime(int _amountMilliSeconds);
 
 bool temp();
 
 
 private:
-
+    /// @build this decides if you attack or not
     bool m_attack = false;
+    /// @build this decides which attack you are choosing first(0) or second(1)
+    int m_chooseAttack = 0;
 
 };
 

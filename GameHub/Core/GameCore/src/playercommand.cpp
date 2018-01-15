@@ -42,3 +42,12 @@ void RestartCMD::execute(HumanPlayer &_player)
 {
   _player.setTurnEnd();
 }
+
+void InspectSlotCMD::execute(HumanPlayer &_player)
+{
+  static constexpr auto self = PTCG::PLAYER::SELF;
+  auto optionArr = _player.viewBench(self);
+  std::vector<BoardSlot> options(optionArr.begin(), optionArr.end());
+  auto choice = _player.chooseSlot(self, PTCG::ACTION::VIEW, options, 1);
+  _player.inspectSlot(self, choice[0]);
+}

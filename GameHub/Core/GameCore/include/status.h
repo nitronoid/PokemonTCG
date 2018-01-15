@@ -20,17 +20,16 @@ public:
   inline bool canRetreat()         const { return m_canRetreat; }
   void resetAll()
   {
-    resetDamageEffects();
+    resetForNextTurn();
     removeAllConditions();
-    setCanRetreat(true);
-    setProtected(false);
   }
 
-  void resetDamageEffects()
+  void resetForNextTurn()
   {
     resetAllDamageBonuses();
     resetAllDefenseBonuses();
     m_protected = false;
+    m_canRetreat = true;
   }
 
   void resetAllDamageBonuses()

@@ -138,6 +138,7 @@ private:
     SKIP,
     RESTART,
     EXIT,
+    INSPECT
   };
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for converting string input into enum

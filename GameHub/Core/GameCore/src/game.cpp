@@ -27,18 +27,15 @@ void Game::start()
   }
 }
 
-void Game::notifyGui()
-{
-  for (const auto gui : m_guiObservers)
-  {
-    gui->drawBoard();
-  }
-}
-
 void Game::registerGui(GuiModule*const _gui)
 {
   _gui->setGame(this);
   m_guiObservers.push_back(_gui);
+}
+
+void Game::inspectSlot(const PTCG::PLAYER _owner, const size_t _index)
+{
+  notifyGui<Event::INSPECT_SLOT>(_owner, _index);
 }
 
 Board* Game::getBoard(const PTCG::PLAYER _owner)
@@ -173,7 +170,7 @@ void Game::playCard(const size_t _index)
       default: break;
     }
   }
-  notifyGui();
+  notifyGui<Event::MOVE_CARD>();
 }
 
 void Game::drawHand(const PTCG::PLAYER _player)
@@ -310,7 +307,7 @@ std::vector<Ability> Game::filterEffects(const PTCG::TRIGGER _trigger)
 void Game::executeTurnEffects(const PTCG::TRIGGER _trigger)
 {
   for (const auto & effect : filterEffects(_trigger)) effect.use(*this);
-  notifyGui();
+  notifyGui<Event::EFFECT_USED>();
 }
 
 void Game::addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect)
@@ -335,6 +332,7 @@ bool Game::checkForKnockouts()
         gameOver = gameOver || handleKnockOut(p, j);
     }
   }
+  m_gameFinished = gameOver;
   return gameOver;
 }
 
@@ -346,7 +344,7 @@ void Game::nextTurn()
   Board& currentBoard = m_boards[playerId];
   m_supportPlayed = false;
   // Ascii print the board
-  notifyGui();
+  notifyGui<Event::START_TURN>();
   // Apply all effects that are triggered by the start of a turn
   executeTurnEffects(PTCG::TRIGGER::START);
   // The effects could have knocked out a pokemon so we check
@@ -361,18 +359,18 @@ void Game::nextTurn()
       executeTurnEffects(PTCG::TRIGGER::ATTACK);
       attack(currentBoard.m_bench.active(), attackDecision.second);
       // The effects/attack could have knocked out a pokemon so we check
-      m_gameFinished = checkForKnockouts();
+      checkForKnockouts();
     }
     if (!m_gameFinished)
     {
       // Now that damage calc is over, we remove any damage/defense bonuses
-      currentBoard.m_bench.activeStatus()->resetDamageEffects();
+      currentBoard.m_bench.activeStatus()->resetForNextTurn();
       //Resolve all between-turn status conditions
       resolveAllEndConditions(PTCG::PLAYER::SELF);
       // Apply all effects triggered by the end of a turn
       executeTurnEffects(PTCG::TRIGGER::END);
       // The effects could have knocked out a pokemon so we check
-      m_gameFinished = checkForKnockouts();
+      checkForKnockouts();
       // Remove all the effects for this turn from the queue, now that we executed them all
       clearEffects();
     }
@@ -397,7 +395,7 @@ bool Game::drawCard(const PTCG::PLAYER _player)
   if (board.m_deck.empty()) return false;
   auto topCard = board.m_deck.takeTop();
   board.m_hand.put(std::move(topCard));
-  notifyGui();
+  notifyGui<Event::MOVE_CARD>();
   return true;
 }
 
@@ -484,7 +482,7 @@ void Game::benchToPile(
     auto energy = slot->detachEnergy(pos);
     putToPile(_player, _dest, std::unique_ptr<Card>{energy.release()});
   }
-  notifyGui();
+  notifyGui<Event::MOVE_CARD>();
 }
 
 void Game::shuffleDeck(const PTCG::PLAYER _owner)
@@ -536,7 +534,7 @@ void Game::pileToBench(
     {
       board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
     }
-    notifyGui();
+    notifyGui<Event::MOVE_CARD>();
   }
   else
   {
@@ -592,7 +590,7 @@ void Game::retreat()
       removeEnergy(self, PTCG::PILE::DISCARD, 0, choice);
       switchActive(self, replacement[0]);
       bench.activeStatus()->setCanRetreat(false);
-      notifyGui();
+      notifyGui<Event::MOVE_CARD>();
     }
   }
 }
@@ -615,7 +613,7 @@ void Game::moveCards(
   std::sort(_cardIndices.begin(), _cardIndices.end(),std::greater<size_t>());
   for(const auto i : _cardIndices)
     putToPile(_owner,_destination, takeFromPile(_owner, _origin, i));
-  notifyGui();
+  notifyGui<Event::MOVE_CARD>();
 }
 
 void Game::filterCards(
@@ -909,7 +907,6 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     static constexpr auto match = [](Card* const){return true;};
     // Discard and reset all state on that slot
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
-    auto opponent = static_cast<PTCG::PLAYER>((static_cast<unsigned>(_player) + 1) % 2);
     slot->setDamage(0);
     // If it was the active we need to reset the active condition
     if(!_index)
@@ -922,13 +919,15 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
       else
         gameOver = true;
     }
+    size_t opponentIndex = (static_cast<unsigned>(_player) + 1) % 2;
+    auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
     //Taking a prize card in prize card.
     static constexpr auto prizes = [](Card* const card) -> bool {return card;};
     auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
-    if (!board.m_prizeCards.numCards())
+    if (!m_boards[opponentIndex].m_prizeCards.numCards())
       gameOver = true;
-    notifyGui();
+    notifyGui<Event::KNOCK_OUT>();
   }
   return gameOver;
 }
@@ -1007,8 +1006,13 @@ void Game::removeAllCondition(const PTCG::PLAYER &_target)
 unsigned Game::flipCoin(const unsigned _num)
 {
   unsigned ret = 0;
-  static auto gen = std::bind(std::uniform_int_distribution<>(0,1),std::default_random_engine());
-  for(unsigned i  = 0; i<_num;++i)
+  // Random bool generator
+  static auto gen = std::bind(
+        std::uniform_int_distribution<unsigned>(0u,1u),
+        // Use a random_device to seed
+        std::default_random_engine(std::random_device{}())
+        );
+  for(unsigned i  = 0; i < _num; ++i)
   {
     ret += gen();
   }

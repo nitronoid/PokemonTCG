@@ -3,9 +3,14 @@
 
 Player::~Player() = default;
 
-void Player::playCard(const size_t &_index)
+void Player::playCard(const size_t _index)
 {
   m_parentGame.playCard(_index);
+}
+
+void Player::inspectSlot(const PTCG::PLAYER _owner, const size_t _index)
+{
+  m_parentGame.inspectSlot(_owner, _index);
 }
 
 void Player::retreat()

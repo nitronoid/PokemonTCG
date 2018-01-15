@@ -12,6 +12,12 @@
 
 class Game
 {
+private:
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief Event enum to communicate what has happened to an observer
+  //----------------------------------------------------------------------------------------------------------------------
+  enum class Event { START_TURN, EFFECT_USED, MOVE_CARD, KNOCK_OUT, INSPECT_SLOT };
+
 public:
   Game() = default;
   Game(Game&&_original) = default;
@@ -122,10 +128,24 @@ public:
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
   void retreat();
+  void inspectSlot(const PTCG::PLAYER _owner, const size_t _index);
 
 private:
   Game(const Game &_original);
-  void notifyGui();
+
+  // Alias to simplify template declarations
+  template<Event k_eventA, Event k_eventB>
+  using MatchEvent = typename std::enable_if_t<k_eventA == k_eventB>;
+
+  // A fallback for now, if they didn't inspect a slot
+  template<Game::Event k_event, typename... Args,
+           typename std::enable_if_t<k_event != Game::Event::INSPECT_SLOT>* = nullptr>
+  void notifyGui(Args&&... args);
+
+  // For inspecting slots
+  template<Game::Event k_event, typename... Args, MatchEvent<k_event, Event::INSPECT_SLOT>* = nullptr>
+  void notifyGui(Args&&... args);
+
   bool checkForKnockouts();
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin = PTCG::PILE::HAND);
   std::vector<size_t> chooseReplacement(const PTCG::PLAYER _player);
@@ -162,6 +182,7 @@ private:
   void resolveAllEndConditions(const PTCG::PLAYER _player);
   bool resolveAttackConditions(const PTCG::PLAYER _player);
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
+
 private:
   std::vector<GuiModule*> m_guiObservers;
   std::array<Player*, 2> m_players{{nullptr, nullptr}};
@@ -174,5 +195,7 @@ private:
   bool m_supportPlayed = false;
 
 };
+
+#include "game-inl.h" //Template implementations
 
 #endif // GAME_H

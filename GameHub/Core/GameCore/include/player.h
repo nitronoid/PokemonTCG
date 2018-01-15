@@ -18,8 +18,8 @@ public:
   /// @brief ctor for Player
   /// @param [in] _parentGame the parent game to the player
   //----------------------------------------------------------------------------------------------------------------------
-  Player(Game& _parentGame) :
-    m_parentGame(_parentGame)
+  Player(Game* _subjectGame) :
+    m_subjectGame(_subjectGame)
   {}
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief virtual default dtor for Player
@@ -37,7 +37,7 @@ public:
   virtual std::string deckName() const = 0;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief card choice method
-  /// @param [in] _player owner of the card pile
+  /// @param [in] _owner owner of the card pile
   /// @param [in] _origin the card pile where the options currently are
   /// @param [in] _action the type of action that will be performed on the choice
   /// @param [in] _options cards to choose from
@@ -45,7 +45,7 @@ public:
   /// @return the indices of the picked cards, in _options
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseCards(
-      const PTCG::PLAYER _player,
+      const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
       const PTCG::ACTION _action,
       const std::vector<std::unique_ptr<Card>> &_options,
@@ -129,13 +129,18 @@ public:
   /// @param [in] _index index of the card in hand to play
   //----------------------------------------------------------------------------------------------------------------------
   void playCard(const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief method for inspecting a board slot
+  /// @param [in] _owner owner of the slot to inspect
+  /// @param [in] _index index of the slot to inspect
+  //----------------------------------------------------------------------------------------------------------------------
   void inspectSlot(const PTCG::PLAYER _owner, const size_t _index);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for retreating
   //----------------------------------------------------------------------------------------------------------------------
   void retreat();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief getter method for viewing the hand
+  /// @brief getter method for viewing a copy of the hand
   //----------------------------------------------------------------------------------------------------------------------
   std::vector<std::unique_ptr<Card>> viewHand() const;
   //----------------------------------------------------------------------------------------------------------------------
@@ -156,12 +161,16 @@ public:
   /// @brief method for retrieving a clone of game to run turn simulations on
   //----------------------------------------------------------------------------------------------------------------------
   Game getDummyGame() const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief method that attaches this player to a new game, by setting the member pointer
+  //----------------------------------------------------------------------------------------------------------------------
+  void attachToGame(Game*const _newSubject);
 
 private:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief parent game of this player
+  /// @brief the game this player is currently participating in.
   //----------------------------------------------------------------------------------------------------------------------
-  Game& m_parentGame;
+  Game* m_subjectGame;
 };
 
 #endif // PLAYER_H

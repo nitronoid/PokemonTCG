@@ -7,7 +7,7 @@ class RoaringFluke : public Player
 {
 public:
   RoaringFluke(const RoaringFluke&) = default;
-  RoaringFluke(Game& _parentGame) :
+  RoaringFluke(Game* _parentGame) :
     Player(_parentGame)
   {}
 

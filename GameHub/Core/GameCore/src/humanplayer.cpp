@@ -98,14 +98,14 @@ std::vector<size_t> promptChoice(
 }
 
 std::vector<size_t> HumanPlayer::chooseCards(
-    const PTCG::PLAYER _player,
+    const PTCG::PLAYER _owner,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,
     const std::vector<std::unique_ptr<Card>> &_options,
     const unsigned _amount
     )
 {
-  return promptChoice(_player, pileStr(_origin), _action, _options, _amount);
+  return promptChoice(_owner, pileStr(_origin), _action, _options, _amount);
 }
 
 std::vector<size_t> HumanPlayer::chooseSlot(

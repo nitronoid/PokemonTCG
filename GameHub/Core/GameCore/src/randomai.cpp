@@ -17,9 +17,9 @@ std::string RandomAI::deckName() const
 }
 
 std::vector<size_t> RandomAI::chooseCards(
-    const PTCG::PLAYER _player,
-    const PTCG::PILE _origin,
-    const PTCG::ACTION _action,
+    const PTCG::PLAYER,
+    const PTCG::PILE,
+    const PTCG::ACTION,
     const std::vector<std::unique_ptr<Card>> &_options,
     const unsigned _amount
     )
@@ -31,8 +31,8 @@ std::vector<size_t> RandomAI::chooseCards(
 }
 
 std::vector<size_t> RandomAI::chooseSlot(
-    const PTCG::PLAYER _owner,
-    const PTCG::ACTION _action,
+    const PTCG::PLAYER,
+    const PTCG::ACTION,
     const std::vector<BoardSlot> &_options,
     const unsigned _amount
     )
@@ -44,17 +44,17 @@ std::vector<size_t> RandomAI::chooseSlot(
 }
 
 void RandomAI::learnCards(
-    const PTCG::PLAYER _owner,
-    const PTCG::PILE _origin,
-    const std::vector<size_t> &_indices,
-    const std::vector<std::unique_ptr<Card>> &_revealed
+    const PTCG::PLAYER,
+    const PTCG::PILE,
+    const std::vector<size_t> &,
+    const std::vector<std::unique_ptr<Card>> &
     )
 {}
 
 std::vector<size_t> RandomAI::chooseEnergy(
-    const PTCG::PLAYER _owner,
-    const PTCG::PILE _destination,
-    const PTCG::ACTION _action,
+    const PTCG::PLAYER,
+    const PTCG::PILE,
+    const PTCG::ACTION,
     const std::vector<std::unique_ptr<Card> > &_options,
     const unsigned _amount
     )
@@ -76,14 +76,14 @@ bool randomBool()
   return gen();
 }
 
-bool RandomAI::agree(const PTCG::ACTION _action)
+bool RandomAI::agree(const PTCG::ACTION)
 {
   return randomBool();
 }
 
 std::vector<size_t> RandomAI::chooseConditions(
-    const PTCG::PLAYER _owner,
-    const PTCG::ACTION _action,
+    const PTCG::PLAYER,
+    const PTCG::ACTION,
     const std::vector<PTCG::CONDITION> &_options,
     const unsigned _amount
     )

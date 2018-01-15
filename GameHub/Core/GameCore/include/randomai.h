@@ -40,9 +40,9 @@ public:
   /// @return a vector of pointers to cards
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseCards(
-      const PTCG::PLAYER _player,
-      const PTCG::PILE _origin,
-      const PTCG::ACTION _action,
+      const PTCG::PLAYER,
+      const PTCG::PILE,
+      const PTCG::ACTION,
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
       ) override;
@@ -55,8 +55,8 @@ public:
   /// @return a vector of pointers to slots
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseSlot(
-      const PTCG::PLAYER _owner,
-      const PTCG::ACTION _action,
+      const PTCG::PLAYER,
+      const PTCG::ACTION,
       const std::vector<BoardSlot> &_options,
       const unsigned _amount
       ) override;
@@ -68,10 +68,10 @@ public:
   /// @param [in] the cards to choose from
   //----------------------------------------------------------------------------------------------------------------------
   virtual void learnCards(
-      const PTCG::PLAYER _owner,
-      const PTCG::PILE _origin,
-      const std::vector<size_t> &_indices,
-      const std::vector<std::unique_ptr<Card>> &_revealed
+      const PTCG::PLAYER,
+      const PTCG::PILE,
+      const std::vector<size_t> &,
+      const std::vector<std::unique_ptr<Card>> &
       ) override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief choose energy cards
@@ -83,9 +83,9 @@ public:
   /// @return a vector of pointers to cards
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseEnergy(
-      const PTCG::PLAYER _owner,
-      const PTCG::PILE _destination,
-      const PTCG::ACTION _action,
+      const PTCG::PLAYER,
+      const PTCG::PILE,
+      const PTCG::ACTION,
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
       ) override;
@@ -98,8 +98,8 @@ public:
   /// @return a vector of conditions
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseConditions(
-      const PTCG::PLAYER _owner,
-      const PTCG::ACTION _action,
+      const PTCG::PLAYER,
+      const PTCG::ACTION,
       const std::vector<PTCG::CONDITION> &_options,
       const unsigned _amount
       ) override;
@@ -108,7 +108,7 @@ public:
   /// @param [in] the type of action to validate
   /// @return true/false
   //----------------------------------------------------------------------------------------------------------------------
-  virtual bool agree(const PTCG::ACTION _action) override;
+  virtual bool agree(const PTCG::ACTION) override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for the players turn; decision making, card playing, attacking, retreating, etc...
   /// @return a pair of a bool(attack or not) and a card id

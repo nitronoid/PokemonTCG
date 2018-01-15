@@ -566,7 +566,7 @@ ___
 ### **Rules**
 ___
 
-The rules are based on the current PTCG Ruling which you can find [here](#https://www.pokemon.com/uk/pokemon-tcg/rules).
+The rules are based on the current PTCG Ruling which you can find [here](#https://www.pokemon.com/uk/pokemon-tcg/).
 
 **[Back To Top](#poketcg-user-guides)**
 ___

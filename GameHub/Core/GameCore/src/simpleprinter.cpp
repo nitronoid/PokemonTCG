@@ -158,13 +158,6 @@ std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _act
     toolName = tool->getName();
   str_replace_sent(ret, "$TOOL", toolName, true);
   int i = 0;
-  for (; i < 3; ++i)
-  {
-    str_replace_sent(ret, "$A"  + std::to_string(i), "", false);
-    str_replace_sent(ret, "$D"  + std::to_string(i), "");
-    str_replace_sent(ret, "$AR" + std::to_string(i), "");
-  }
-  i=0;
   for (const auto& cond : _activeStatus->conditions())
   {
     str_replace_sent(ret, "$COND"+std::to_string(i), stringifyChar(charify(cond)));
@@ -214,6 +207,12 @@ std::string SimplePrinter::bigPCStr(PokemonCard* const _card, std::string _ret) 
       str_replace_sent(_ret, "$AR" + std::to_string(i), requirements);
       //ADD ATTACK DESCRIPTION PLACEMENT HERE <--
       ++i;
+    }
+    for (; i < 3; ++i)
+    {
+      str_replace_sent(_ret, "$A"  + std::to_string(i), "", false);
+      str_replace_sent(_ret, "$D"  + std::to_string(i), "");
+      str_replace_sent(_ret, "$AR" + std::to_string(i), "");
     }
     std::string tmpa = std::string{charify(_card->weakness())};
     str_replace_sent(_ret, "$W", tmpa);

@@ -183,8 +183,8 @@ HumanPlayer::CMD HumanPlayer::enumifyInput(const std::string &_str)
     {"attack",       CMD::ATTACK},       {"a",  CMD::ATTACK},
     {"retreat",      CMD::RETREAT},      {"r",  CMD::RETREAT},
     {"skip",         CMD::SKIP},         {"s",  CMD::SKIP},
-    {"inspect slot", CMD::INSPECT_SLOT}, {"is", CMD::INSPECT_SLOT},
-    {"inspect card", CMD::INSPECT_CARD}, {"ic", CMD::INSPECT_CARD}
+    {"inspect_slot", CMD::INSPECT_SLOT}, {"is", CMD::INSPECT_SLOT},
+    {"inspect_card", CMD::INSPECT_CARD}, {"ic", CMD::INSPECT_CARD}
   };
   if (enumMap.count(_str)) return enumMap[_str];
   else return CMD::SKIP;

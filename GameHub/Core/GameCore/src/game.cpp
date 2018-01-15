@@ -99,6 +99,7 @@ void Game::playEnergy(EnergyCard* const, const size_t _index)
   {
     //_energy->activateAbility(*this);
     pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
+    m_playableCards.erase(PTCG::CARD::ENERGY);
   }
 }
 
@@ -1052,8 +1053,13 @@ bool Game::canRetreat(const PTCG::PLAYER &_player)
       !hasCondition(_player, PTCG::CONDITION::ASLEEP) &&
       slot->numEnergy() >= slot->active()->retreatCost();
 }
-void Game::setCanRetreat(const PTCG::PLAYER &_player, const bool &_val)
+
+void Game::setCanRetreat(const PTCG::PLAYER &_affected, const bool _val)
 {
-  m_boards[playerIndex(_player)].m_bench.activeStatus()->setCanRetreat(_val);
+  m_boards[playerIndex(_affected)].m_bench.activeStatus()->setCanRetreat(_val);
 }
 
+void Game::setProtected(const PTCG::PLAYER &_affected, const bool _val)
+{
+  m_boards[playerIndex(_affected)].m_bench.activeStatus()->setProtected(_val);
+}

@@ -132,7 +132,8 @@ public:
   void shuffleDeck(const PTCG::PLAYER _owner);
   void addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect);
   bool canRetreat(const PTCG::PLAYER &_player);
-  void setCanRetreat(const PTCG::PLAYER &_player,const bool &_val = false);
+  void setCanRetreat(const PTCG::PLAYER &_affected, const bool _val = false);
+  void setProtected(const PTCG::PLAYER &_affected, const bool _val = true);
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerGui(GuiModule*const _gui);
   void retreat();

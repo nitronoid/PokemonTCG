@@ -11,7 +11,7 @@
 
 
 /// TODO
-/// when to put a basic pokemon onto the bench, and which pokemon
+/// when to put a pokemon onto the bench, and which pokemon
 /// when to play trainer cards?
 /// when to retreat active card?
 /// when to use abilities?
@@ -25,7 +25,7 @@ class AIPlayerBT : public Player
 {
 public:
     AIPlayerBT(const AIPlayerBT&) = default;
-    AIPlayerBT(Game& _parentGame) :
+    AIPlayerBT(Game* _parentGame) :
       Player(_parentGame)
     {}
 

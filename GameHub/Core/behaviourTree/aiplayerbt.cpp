@@ -9,7 +9,7 @@ Player* AIPlayerBT::clone() const
 //--------------------------------------------------------------------------
 std::string AIPlayerBT::deckName() const
 {
-    return "bright_tide_deck.json";
+    return "test_deck.json";
 }
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PTCG::PILE _origin, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
@@ -70,28 +70,41 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
 
     // you can only play one energy at a time
     setTime(3000);
-    if(viewBench()[0].active()->attacks().size() < 2)
-    {
-        std::cout<<"ONLY ONE ATTACK"<<std::endl;
-    }
-    else
-    {
-        std::cout<<"TWO ATTACKS"<<std::endl;
-    }
-//    if(checkIfEnergyNeeded())
-//        // check if the string is not empty , or has a +/x ]
-//        // cast it to an int
-//        //if(viewBench()[0].active()->hp() - viewBench(PTCG::PLAYER::ENEMY)[0].active()->attacks)
-//        playEnergy();
+//    if(viewBench()[0].active()->attacks().size()<2)
+//    {
+//        std::cout<<"ONE ATTACK"<<std::endl;
+//    }
+//    else
+//    {
+//         std::cout<<"TWO ATTACKS"<<std::endl;
+//         if(viewBench()[0].active()->attacks()[0].requirements().size() >
+//                 viewBench()[0].active()->attacks()[1].requirements().size())
+//         {
+//             std::cout<<"FIRST ATTACK HAS MORE ENERGY"<<std::endl;
+//         }
+//         else
+//         {
+//             std::cout<<"SECOND ATTACK HAS MORE ENERGY"<<std::endl;
+//             if(viewBench()[0].active()->attacks()[1].requirements().size() > viewBench()[0].numEnergy())
+//             {
+//                 std::cout<<"ATTACH ENERGY"<<std::endl;
+//             }
+//         }
+//    }
+    if(checkIfEnergyNeeded())
+        // check if the string is not empty , or has a +/x ]
+        // cast it to an int
+        //if(viewBench()[0].active()->hp() - viewBench(PTCG::PLAYER::ENEMY)[0].active()->attacks)
+        playEnergy();
 
     // required energies for attack 1
     // the number energy attached on card
-//    setTime(3000);
-//    if(viewBench()[0].active()->attacks()[1].requirements().size() <= viewBench()[0].numEnergy())
-//    {
-//        m_chooseAttack = 0;
-//        m_attack = true;
-//    }
+    setTime(3000);
+    if(viewBench()[0].active()->attacks()[1].requirements().size() <= viewBench()[0].numEnergy())
+    {
+        m_chooseAttack = 0;
+        m_attack = true;
+    }
 
     return std::pair<bool, unsigned> {m_attack, m_chooseAttack};
 
@@ -164,7 +177,7 @@ bool AIPlayerBT::checkIfEnergyNeeded()
     // if it is bigger the card needs energy
     if(viewBench()[0].active()->attacks()[0].requirements().size()
             + viewBench()[0].active()->attacks()[1].requirements().size()
-            > viewBench()[0].numEnergy())
+            > viewBench()[0].numEnergy() + 1)
     {
         std::cout<<"CARD NEEDS ENERGY"<<std::endl;
         return true;

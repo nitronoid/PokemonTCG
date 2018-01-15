@@ -22,7 +22,7 @@ int main()
 
   SimplePrinter drawer;
   HumanPlayer a(&test);
-  RandomAI b(&test);
+  AIPlayerBT b(&test);
   test.init(testPool, &a, &b);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";

@@ -148,52 +148,16 @@ void addVec(std::vector<std::string> &_lhs, const std::vector<std::string> &_rhs
   }
 }
 
-std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus) const
+std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus=nullptr) const
 {
   std::string ret = k_bigPokeSlot;
-  auto active = _slot->active();
-  str_replace_sent(ret, "$ID", std::to_string(active->getID()));
   str_replace_sent(ret, "$L", std::to_string(_slot->getRemainingHP()));
   str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
-
   std::string toolName = "---";
   if (auto tool = _slot->viewTool())
     toolName = tool->getName();
   str_replace_sent(ret, "$TOOL", toolName, true);
-
-  str_replace_sent(ret, "$HP", std::to_string(_slot->active()->hp()));
-  str_replace_sent(ret, "$NAME", _slot->active()->getName(), true);
-  str_replace_sent(ret, "$T", stringifyChar(charify(_slot->active()->type()),true));
-
   int i = 0;
-  for (const auto& attack : _slot->active()->attacks())
-  {
-    str_replace_sent(ret, "$A"  + std::to_string(i), attack.name(), false);
-    str_replace_sent(ret, "$D"  + std::to_string(i), attack.damageString());
-    std::string requirements;
-    for (const auto r : attack.requirements()) requirements += charify(r);
-    str_replace_sent(ret, "$AR" + std::to_string(i), requirements);
-    //ADD ATTACK DESCRIPTION PLACEMENT HERE <--
-    ++i;
-  }
-  for (; i < 3; ++i)
-  {
-    str_replace_sent(ret, "$A"  + std::to_string(i), "", false);
-    str_replace_sent(ret, "$D"  + std::to_string(i), "");
-    str_replace_sent(ret, "$AR" + std::to_string(i), "");
-  }
-
-  std::string tmpa = std::string{charify(_slot->active()->weakness())};
-  str_replace_sent(ret, "$W", tmpa);
-  if(tmpa.length()){str_replace_sent(ret, "$WA", "x2");}else{str_replace_sent(ret, "$WA", "");}
-  tmpa = std::string{charify(_slot->active()->resistance())};
-  str_replace_sent(ret, "$R", tmpa);
-  if(tmpa.length()){str_replace_sent(ret, "$RA", "-20");}else{str_replace_sent(ret, "$RA", "");}
-  str_replace_sent(ret, "$C", std::to_string(_slot->active()->retreatCost()));
-  str_replace_sent(ret, "$ST", std::to_string(_slot->active()->stage()));
-  str_replace_sent(ret, "$EVO", _slot->active()->preEvolution());
-
-  i=0;
   for (const auto& cond : _activeStatus->conditions())
   {
     str_replace_sent(ret, "$COND"+std::to_string(i), stringifyChar(charify(cond)));
@@ -203,7 +167,87 @@ std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _act
   {
     str_replace_sent(ret, "$COND"+std::to_string(i), "");
   }
+  ret = bigPCStr(_slot->active(), ret);
   return ret;
+}
+
+std::string SimplePrinter::bigCardStr(Card* const _card) const
+{
+    std::string ret;
+    ret = "------------\nYOUR AD HERE\n------------\n";
+    using crd = PTCG::CARD;
+    switch(_card->cardType())
+    {
+      case crd::POKEMON : { ret = bigPCStr(static_cast<PokemonCard*>(_card)); break; }
+      case crd::ENERGY :  { ret = bigECStr(static_cast<EnergyCard*>(_card)); break; }
+      case crd::ITEM :    { ret = bigTCStr(static_cast<TrainerCard*>(_card)); break; }
+      case crd::TOOL :    { ret = bigTCStr(static_cast<TrainerCard*>(_card)); break; }
+      case crd::SUPPORT : { ret = bigTCStr(static_cast<TrainerCard*>(_card)); break; }
+      case crd::STADIUM : { ret = bigTCStr(static_cast<TrainerCard*>(_card)); break; }
+      default:  ret = "ERROR: this card type has no implementation\n"; break;
+    }
+    return ret;
+}
+
+std::string SimplePrinter::bigPCStr(PokemonCard* const _card, std::string _ret) const
+{
+    if(_ret.empty())
+        _ret = k_bigPokeSlot;
+    str_replace_sent(_ret, "$ID", std::to_string(_card->getID()));
+    str_replace_sent(_ret, "$HP", std::to_string(_card->hp()));
+    str_replace_sent(_ret, "$NAME", _card->getName(), true);
+    str_replace_sent(_ret, "$T", stringifyChar(charify(_card->type()),true));
+    int i = 0;
+    for (const auto& attack : _card->attacks())
+    {
+      str_replace_sent(_ret, "$A"  + std::to_string(i), attack.name(), false);
+      str_replace_sent(_ret, "$D"  + std::to_string(i), attack.damageString());
+      std::string requirements;
+      for (const auto r : attack.requirements()) requirements += charify(r);
+      str_replace_sent(_ret, "$AR" + std::to_string(i), requirements);
+      //ADD ATTACK DESCRIPTION PLACEMENT HERE <--
+      ++i;
+    }
+    for (; i < 3; ++i)
+    {
+      str_replace_sent(_ret, "$A"  + std::to_string(i), "", false);
+      str_replace_sent(_ret, "$D"  + std::to_string(i), "");
+      str_replace_sent(_ret, "$AR" + std::to_string(i), "");
+    }
+    std::string tmpa = std::string{charify(_card->weakness())};
+    str_replace_sent(_ret, "$W", tmpa);
+    if(tmpa.length()){str_replace_sent(_ret, "$WA", "x2");}else{str_replace_sent(_ret, "$WA", "");}
+    tmpa = std::string{charify(_card->resistance())};
+    str_replace_sent(_ret, "$R", tmpa);
+    if(tmpa.length()){str_replace_sent(_ret, "$RA", "-20");}else{str_replace_sent(_ret, "$RA", "");}
+    str_replace_sent(_ret, "$C", std::to_string(_card->retreatCost()));
+    str_replace_sent(_ret, "$ST", std::to_string(_card->stage()));
+    str_replace_sent(_ret, "$EVO", _card->preEvolution());
+    return _ret;
+}
+
+std::string SimplePrinter::bigECStr(EnergyCard* const _card) const
+{
+    std::string ret;
+    using tp = PTCG::TYPE;
+    switch(_card->type())
+    {
+    case tp::WATER : {ret = k_bigWaterEnergy; break;}
+    case tp::FIRE : {ret = k_bigFireEnergy; break;}
+    case tp::LIGHTNING : {ret = k_bigElectricEnergy; break;}
+    case tp::GRASS : {ret = k_bigGrassEnergy; break;}
+    default : {ret = "ERROR: this energy type has no implementation\n"; break;}
+    }
+    return ret;
+}
+
+std::string SimplePrinter::bigTCStr(TrainerCard* const _card) const
+{
+    std::string ret = k_bigPokeSlot;
+    str_replace_sent(ret, "$TYPE", stringify(_card->cardType()));
+    str_replace_sent(ret, "$NAME", _card->getName());
+    //NEED TO ACCESS ABILITY
+    return ret;
 }
 
 std::string SimplePrinter::slotStr(BoardSlot* const _slot) const

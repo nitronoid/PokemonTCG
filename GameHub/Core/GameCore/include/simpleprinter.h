@@ -43,6 +43,30 @@ private:
   //----------------------------------------------------------------------------------------------------------------------
   std::string bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus) const;
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief substitute big sentinel card fields with information
+  /// @param [in] reference card
+  /// @return final card string for printout
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string bigCardStr(Card* const _card) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief substitute big sentinel PokemonCard fields with information
+  /// @param [in] reference card
+  /// @return final card string for printout
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string bigPCStr(PokemonCard* _card, std::string _ret="") const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief substitute big sentinel EnergyCard fields with information
+  /// @param [in] reference card
+  /// @return final card string for printout
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string bigECStr(EnergyCard* _card) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief substitute big sentinel TrainerCard fields with information
+  /// @param [in] reference card
+  /// @return final card string for printout
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string bigTCStr(TrainerCard* _card) const;
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief substitute sentinel slot fields with information
   /// @param [in] reference slot
   /// @return final slot string for printout

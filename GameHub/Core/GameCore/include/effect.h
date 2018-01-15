@@ -2,6 +2,7 @@
 #define EFFECT_H
 
 #include <functional>
+#include <string>
 #include "pokemonenums.h"
 
 class Game;

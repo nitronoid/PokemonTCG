@@ -2,6 +2,7 @@
 #define PRIZECARDS_H
 
 #include <vector>
+#include <array>
 #include "cardpile.h"
 
 class PrizeCards : public CardPile

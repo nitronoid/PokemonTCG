@@ -10,6 +10,17 @@
 #include <algorithm>
 
 
+/// TODO
+/// when to put a basic pokemon onto the bench, and which pokemon
+/// when to play trainer cards?
+/// when to retreat active card?
+/// when to use abilities?
+/// when to attack?
+/// when to evolve a pokemon?
+///
+/// need a function that returns an int for the enemy attack
+/// need a function that returns if attack is an int (not a x,+ or empty)
+
 class AIPlayerBT : public Player
 {
 public:
@@ -83,13 +94,29 @@ public:
   /// return a pair with bool (attack or not), unsigned (which attack)
   ///-----------------------------------------------------------------------------------
   virtual std::pair<bool, unsigned> turn() override;
-/// @build checks if there is energy in Hand
-void playEnergy();
-void putPokemonOnBench();
-bool checkTrainerinHand();
+
+
+    /// @build play energy function
+    void playEnergy();
+    /// @build puts a pokemon on the bench
+    void putPokemonOnBench();
+    /// @build returns the type of energy needed (temp) for attack 0 on the active card
+    PTCG::TYPE typeReturnofActiveCard();
+    /// @build checks is the card needs energy
+    bool checkIfEnergyNeeded();
+    /// @build checks if the card is an energy card
+    bool checkIfCardIsEnergy();
+    /// @build timer (think)
+    void setTime(int _amountMilliSeconds);
+
+
+bool temp();
 
 private:
+    /// @build this decides if you attack or not
     bool m_attack = false;
+    /// @build this decides which attack you are choosing first(0) or second(1)
+    int m_chooseAttack = 0;
 
 };
 

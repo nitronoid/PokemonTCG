@@ -24,7 +24,7 @@ QMAKE_LFLAGS+=$$system(python-config --ldflags)
 # Python redefines some qt keywords
 CONFIG += no_keywords
 
-linux {
+linux: {
     LIBS += -L /usr/local/lib/python2.7 -lpython2.7
     INCLUDEPATH += /usr/include/python2.7
     DEPENDPATH += /usr/include/python2.7
@@ -34,3 +34,7 @@ macx: {
     INCLUDEPATH += /Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
     DEPENDPATH += /Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
 }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 2f11f9b8d99db7eb9a468b1dde88e65e471c9c89

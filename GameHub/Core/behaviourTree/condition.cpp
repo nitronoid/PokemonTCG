@@ -1,20 +1,11 @@
 #include "condition.h"
 
-Condition::Condition() : Node()
-{}
+Condition::Condition(bool _function) : Node()
+{
+    m_function = _function;
+}
 
-energyCondition::energyCondition(bool function)
-{
-    m_function = function;
-}
-//--------------------------------------------------
 bool Condition::execute()
-{
-    return conditionFunction();
-}
-//--------------------------------------------------
-bool energyCondition::conditionFunction()
 {
     return m_function;
 }
-//--------------------------------------------------

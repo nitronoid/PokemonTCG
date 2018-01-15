@@ -7,7 +7,7 @@
 #include "cardfactory.h"
 #include "aiplayerbt.h"
 #include "randomai.h"
-#include "RoaringFluke.h"
+//#include "RoaringFluke.h"
 
 
 int main()
@@ -21,11 +21,9 @@ int main()
   testPool.init();
 
   SimplePrinter drawer;
-  HumanPlayer a(test);
-  AIPlayerBT c(test);
-  RandomAI b(test);
-  test.init(testPool, &a, &c);
-
+  HumanPlayer a(&test);
+  RandomAI b(&test);
+  test.init(testPool, &a, &b);
   test.registerGui(&drawer);
   std::cout<<"BEGIN\n";
   //  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(53)));

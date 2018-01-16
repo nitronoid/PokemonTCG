@@ -22,8 +22,8 @@ int main()
 
   GameLogger logger;
   SimplePrinter drawer;
-  RoaringFluke a(&test);
-  RoaringFluke b(&test);
+  HumanPlayer a(&test);
+  RandomAI b(&test);
   test.init(testPool, &a, &b);
   test.registerObserver(&drawer);
   test.registerObserver(&logger);

@@ -12,6 +12,7 @@ DiscardPile::DiscardPile (const DiscardPile &_original)
 
 DiscardPile& DiscardPile::operator=(const DiscardPile&_original)
 {
+  m_cards.clear();
   m_cards.reserve(_original.m_cards.size());
   for (const auto &card : _original.m_cards)
   {

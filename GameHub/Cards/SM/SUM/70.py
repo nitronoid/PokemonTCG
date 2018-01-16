@@ -1,4 +1,4 @@
-import p as poke
+import poke as p
 
 def headbutt(h):
     h.dealDamage(30)

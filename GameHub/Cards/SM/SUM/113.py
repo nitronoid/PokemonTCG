@@ -1,7 +1,7 @@
 import poke as p
 
 def instruct(h):
-    while len(h.viewHand()) < 3
+    while len(h.viewHand()) < 3:
         h.drawCard(p.PLAYER.SELF)
 
 def psychic(h):

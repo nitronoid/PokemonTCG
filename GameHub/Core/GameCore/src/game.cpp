@@ -4,16 +4,22 @@
 #include "blankcard.h"
 
 Game::Game(const Game &_original) :
+  m_observers(_original.m_observers),
+  m_boards(_original.m_boards),
+  m_damageHandler(_original.m_damageHandler),
   m_playableCards(_original.m_playableCards),
-  m_turnCount(_original.m_turnCount)
+  m_effectQueue(_original.m_effectQueue),
+  m_turnCount(_original.m_turnCount),
+  m_gameFinished(_original.m_gameFinished)
 {}
 
 void Game::init(const CardFactory &_factory, Player*const io_playerA, Player*const io_playerB)
 {
-  m_boards[0].deck()->init(_factory.loadDeck(io_playerA->deckName()));
-  m_boards[0].deck()->shuffle();
-  m_boards[1].deck()->init(_factory.loadDeck(io_playerB->deckName()));
-  m_boards[1].deck()->shuffle();
+  for (auto& board : m_boards)
+  {
+    board.deck()->init(_factory.loadDeck(io_playerA->deckName()));
+    board.deck()->shuffle();
+  }
   m_players[0] = io_playerA;
   m_players[1] = io_playerB;
 }
@@ -25,6 +31,13 @@ void Game::start()
   {
     nextTurn();
   }
+}
+
+
+void Game::registerPlayer(Player*const _newPlayer, size_t _index)
+{
+  _newPlayer->attachToGame(this);
+  m_players[_index] = _newPlayer;
 }
 
 void Game::registerObserver(GameObserver*const _observer)
@@ -966,7 +979,8 @@ std::vector<std::unique_ptr<Card>> blankCardVector(const size_t _len)
 
 Game Game::dummyClone() const
 {
-  Game copy = *this;
+  Game copy(*this);
+  copy.m_observers.clear();
   auto& copySelfBoard   = copy.m_boards[playerIndex(PTCG::PLAYER::SELF)];
   auto& copyEnemyBoard  = copy.m_boards[playerIndex(PTCG::PLAYER::ENEMY)];
   *copySelfBoard.deck()  = Deck(blankCardVector(copySelfBoard.deck()->numCards()));

@@ -1,6 +1,7 @@
 #include "board.h"
 
-Board::Board(const Board&_original)
+Board::Board(const Board&_original) :
+  m_bench(_original.m_bench)
 {
   *deck() = *_original.deck();
   *hand() = *_original.hand();
@@ -11,6 +12,7 @@ Board::Board(const Board&_original)
 
 Board& Board::operator=(const Board&_original)
 {
+  m_bench = _original.m_bench;
   *deck() = *_original.deck();
   *hand() = *_original.hand();
   *prizeCards() = *_original.prizeCards();

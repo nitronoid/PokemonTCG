@@ -215,7 +215,7 @@ public:
       );
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function that moves cards from a bench slot to a card pile, using a match function to filter. If the slot
-  /// index is zero, the player will be asked to choose a replacement pokemon.
+  /// index is zero, the caller should ask for a replacement after this call.
   /// @param [in] _owner is the player who owns the slot
   /// @param [in] _dest is the pile to move the cards to
   /// @param [in] _match is the function used to filter cards on the slot
@@ -227,35 +227,130 @@ public:
       std::function<bool(Card*const)> _match,
       const size_t &_index=0
       );
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function that moves cards from a pile to bench slots. There should be exactly one bench index for every card index.
+  /// @param [in] _owner is the player who owns the slots
+  /// @param [in] _origin is the pile to move the cards from
+  /// @param [in] _pileIndex a list of indices, each refers to a card in the _origin pile to move
+  /// @param [in] _benchIndex a list of indices, each refers to a slot to move a card into
+  //----------------------------------------------------------------------------------------------------------------------
   void pileToBench(
-      const PTCG::PLAYER &_player,
+      const PTCG::PLAYER &_owner,
       const PTCG::PILE &_origin,
       std::vector<size_t> _pileIndex,
       std::vector<size_t> _benchIndex
       );
-  void switchActive(const PTCG::PLAYER &_player, const size_t &_subIndex);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function that switches the active slot for a benched one and in doing so, clears status effects.
+  /// @param [in] _owner is the player who owns the slots
+  /// @param [in] _subIndex is the slot to swap with
+  //----------------------------------------------------------------------------------------------------------------------
+  void switchActive(const PTCG::PLAYER &_owner, const size_t &_subIndex);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function that returns the number of cards in a pile.
+  /// @param [in] _owner is the player who owns the pile
+  /// @param [in] _pile is the pile to check
+  /// @return the number of cards in the pile
+  //----------------------------------------------------------------------------------------------------------------------
   size_t numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
-  //Slots
-  std::vector<size_t> filterSlots(const PTCG::PLAYER _owner, std::function<bool(BoardSlot*const)>) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which filters slots with a match function.
+  /// @param [in] _owner is the player who owns the slots
+  /// @param [in] _match is the function to filter with
+  /// @return the indices of the slots that passed the filter.
+  //----------------------------------------------------------------------------------------------------------------------
+  std::vector<size_t> filterSlots(const PTCG::PLAYER _owner, const std::function<bool(BoardSlot*const)> _match) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which filters slots by checking whether that they don't contain a pokemon.
+  /// @param [in] _owner is the player who owns the slots
+  /// @return the indices of the slots that have no pokemon.
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<size_t> freeSlots(const PTCG::PLAYER _owner) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which filters slots by checking that they contain a pokemon.
+  /// @param [in] _owner is the player who owns the slots
+  /// @return the indices of the slots that have pokemon.
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<size_t> nonFreeSlots(const PTCG::PLAYER _owner) const;
-
-  //Card playing
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which notifies the observers that a player is inspecting a slot. Used mainly for GUI
+  /// @param [in] _owner is the player who owns the slot
+  /// @param [in] _index is the index of the slot on the _owners bench.
+  //----------------------------------------------------------------------------------------------------------------------
   void inspectSlot(const PTCG::PLAYER _owner, const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which notifies the observers that a player is inspecting a card. Used mainly for GUI
+  /// @param [in] _owner is the player who owns the card
+  /// @param [in] _pile is the card pile that contains the card.
+  /// @param [in] _index is the index of the card in the _owners pile.
+  //----------------------------------------------------------------------------------------------------------------------
   void inspectCard(const PTCG::PLAYER _owner, const PTCG::PILE _pile,  const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which plays a card from the current players hand
+  /// @param [in] _index is the index of the card in current players hand.
+  //----------------------------------------------------------------------------------------------------------------------
   void playCard(const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief tells us whether the card at _index in the current players hand can be played.
+  /// @param [in]  _index is the index of the card in current players hand.
+  /// @return whether the card can be played or not
+  //----------------------------------------------------------------------------------------------------------------------
   bool canPlay(const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief tells us whether the card at can be played. Assumes it is in the current players hand.
+  /// @param [in]  _card is the card to check.
+  /// @return whether the card can be played or not
+  //----------------------------------------------------------------------------------------------------------------------
   bool canPlay(Card*const _card);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief plays a pokemon card. Is public to allow the cards themselves to trigger this call.
+  /// @param [in]  _pokemon is the pokemon card to play.
+  /// @param [in] _index is the index of this pokemon in the current players hand.
+  //----------------------------------------------------------------------------------------------------------------------
   void playPokemon(PokemonCard* const _pokemon, const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief plays an item card. Is public to allow the cards themselves to trigger this call.
+  /// @param [in]  _item is the item card to play.
+  /// @param [in] _index is the index of this card in the current players hand.
+  //----------------------------------------------------------------------------------------------------------------------
   void playItem(TrainerCard* const _item, const size_t _index);
-  void playTool(TrainerCard* const, const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief plays a tool card. Is public to allow the cards themselves to trigger this call.
+  /// @param [in]  _tool is the tool card to play.
+  /// @param [in] _index is the index of this card in the current players hand.
+  //----------------------------------------------------------------------------------------------------------------------
+  void playTool(TrainerCard* const _tool, const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief plays a support card. Is public to allow the cards themselves to trigger this call.
+  /// @param [in]  _support is the support card to play.
+  /// @param [in] _index is the index of this card in the current players hand.
+  //----------------------------------------------------------------------------------------------------------------------
   void playSupport(TrainerCard* const _support, const size_t _index);
-  void playEnergy(EnergyCard* const, const size_t _index);
-  //actions
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief plays an energy card. Is public to allow the cards themselves to trigger this call.
+  /// @param [in]  _energy is the energy card to play.
+  /// @param [in] _index is the index of this card in the current players hand.
+  //----------------------------------------------------------------------------------------------------------------------
+  void playEnergy(EnergyCard* const _energy, const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief evolves a pokemon by playing another pokemon on top in the same slot.
+  /// @param [in]  _postEvo is the pokemon card to play, will be the result of the evolution.
+  /// @param [in] _handIndex is the index of this card in the current players hand.
+  /// @param [in] _index is the index of the slot to try evolve.
+  /// @return whether the pokemon could be evolved.
+  //----------------------------------------------------------------------------------------------------------------------
   bool evolve(PokemonCard * const _postEvo, const size_t &_handIndex, const size_t &_index);
-  bool devolve(const PTCG::PLAYER &_player, const unsigned &_index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief devolves a pokemon by moving the top level pokemon back to the owners hand.
+  /// @param [in]  _postEvo is the pokemon card to play, will be the result of the evolution.
+  /// @param [in] _index is the index of the slot to try devolve.
+  /// @return whether the pokemon could be devolved.
+  //----------------------------------------------------------------------------------------------------------------------
+  bool devolve(const PTCG::PLAYER &_owner, const unsigned &_index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief retreats the active pokemon by switching it for a benched one. The user will be prompted to pick a replacement
+  //----------------------------------------------------------------------------------------------------------------------
   void retreat();
-
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function called when a card wants to deal damage through an attack, which takes into account weakeness and
   /// resistance using the damage calculator.

@@ -99,7 +99,7 @@ void Game::playItem(TrainerCard* const _item, const size_t _index)
   _item->activateAbility(*this);
 }
 
-void Game::playTool(TrainerCard* const, const size_t _index)
+void Game::playTool(TrainerCard* const _tool, const size_t _index)
 {
   // Slots with a pokemon that has no tool attached
   static constexpr auto filter = [](BoardSlot*const _slot){ return _slot->active() && !_slot->viewTool();};
@@ -108,7 +108,7 @@ void Game::playTool(TrainerCard* const, const size_t _index)
     pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
 }
 
-void Game::playEnergy(EnergyCard* const, const size_t _index)
+void Game::playEnergy(EnergyCard* const _energy, const size_t _index)
 {
   // Choose from slots with pokemon
   static constexpr auto filter = [](BoardSlot*const _slot){return _slot->active();};
@@ -480,8 +480,7 @@ void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
   }
 }
 
-void Game::pileToBench(
-    const PTCG::PLAYER &_player,
+void Game::pileToBench(const PTCG::PLAYER &_owner,
     const PTCG::PILE &_origin,
     std::vector<size_t> _pileIndex,
     std::vector<size_t> _benchIndex
@@ -490,10 +489,10 @@ void Game::pileToBench(
   if ((_benchIndex.size() == _pileIndex.size()) && !_pileIndex.empty())
   {
     doubleVecSort(_pileIndex, _benchIndex);
-    auto& board = m_boards[playerIndex(_player)];
+    auto& board = m_boards[playerIndex(_owner)];
     for(size_t i = 0; i < _benchIndex.size(); ++i)
     {
-      board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
+      board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_owner, _origin, _pileIndex[i]));
     }
   }
   else
@@ -504,7 +503,7 @@ void Game::pileToBench(
   }
 }
 
-std::vector<size_t> Game::filterSlots(const PTCG::PLAYER _owner, std::function<bool(BoardSlot*const)> _match) const
+std::vector<size_t> Game::filterSlots(const PTCG::PLAYER _owner, const std::function<bool(BoardSlot* const)> _match) const
 {
   std::vector<size_t> ret;
   auto benchSlots = viewBench(_owner);
@@ -555,9 +554,9 @@ void Game::retreat()
   }
 }
 
-void Game::switchActive(const PTCG::PLAYER &_player, const size_t &_subIndex)
+void Game::switchActive(const PTCG::PLAYER &_owner, const size_t &_subIndex)
 {
-  auto& board = m_boards[playerIndex(_player)];
+  auto& board = m_boards[playerIndex(_owner)];
   board.m_bench.switchActive(_subIndex);
 }
 
@@ -787,15 +786,11 @@ bool Game::evolve(PokemonCard*const _postEvo, const size_t &_handIndex, const si
   std::cout<<"evolution failed."<<'\n';
   return false;
 }
-// Need to implement take single pokemon card from m_pokemon in Board Slot
-bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
+
+bool Game::devolve(const PTCG::PLAYER &_owner, const unsigned &_index)
 {
-  Board& board = m_boards[playerIndex(_player)];
-  if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
-  {
-    std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
-    return false;
-  }
+  Board& board = m_boards[playerIndex(_owner)];
+  if(board.m_bench.slotAt(_index)->numPokemon() < 2) return false;
   board.hand()->put(std::unique_ptr<Card>(board.m_bench.slotAt(_index)->devolvePokemon().release()));
   return true;
 }

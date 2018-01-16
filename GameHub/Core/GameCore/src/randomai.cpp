@@ -106,7 +106,7 @@ std::pair<bool, unsigned> RandomAI::turn()
   bool doAttack = randomBool();
 
   // Play random card from hand
-  unsigned attackNum = viewBench().at(0).active()->attackNum();
+  unsigned attackNum = viewBench()[0].active()->attackNum();
   std::uniform_int_distribution<unsigned> agen(0, attackNum - 1);
 
   // Return the decision

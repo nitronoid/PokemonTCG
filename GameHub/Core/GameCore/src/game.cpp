@@ -139,7 +139,6 @@ bool Game::canPlay(Card*const _card)
   return _card->canPlay(*this) && m_playableCards.count(_card->cardType());
 }
 
-
 bool Game::canAttack(const size_t _index)
 {
   auto slot = m_boards[playerIndex(PTCG::PLAYER::SELF)].m_bench.slotAt(0);

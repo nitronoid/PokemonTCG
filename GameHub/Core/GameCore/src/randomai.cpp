@@ -18,6 +18,15 @@ std::string RandomAI::deckName() const
   return "test_deck.json";
 }
 
+template<typename T>
+std::vector<size_t> pickFirst(const std::vector<T> &_options, const size_t _amount)
+{
+  size_t length = std::min(_options.size(), _amount);
+  std::vector<size_t> badChoice(length);
+  std::iota (std::begin(badChoice), std::end(badChoice), 0);
+  return badChoice;
+}
+
 std::vector<size_t> RandomAI::chooseCards(
     const PTCG::PLAYER,
     const PTCG::PILE,
@@ -26,10 +35,7 @@ std::vector<size_t> RandomAI::chooseCards(
     const unsigned _amount
     )
 {
-  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
-  std::vector<size_t> badChoice(length);
-  std::iota (std::begin(badChoice), std::end(badChoice), 0);
-  return badChoice;
+  return pickFirst(_options, _amount);
 }
 
 std::vector<size_t> RandomAI::chooseSlot(
@@ -39,10 +45,7 @@ std::vector<size_t> RandomAI::chooseSlot(
     const unsigned _amount
     )
 {
-  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
-  std::vector<size_t> badChoice(length);
-  std::iota (std::begin(badChoice), std::end(badChoice), 0);
-  return badChoice;
+  return pickFirst(_options, _amount);
 }
 
 void RandomAI::learnCards(
@@ -61,10 +64,7 @@ std::vector<size_t> RandomAI::chooseEnergy(
     const unsigned _amount
     )
 {
-  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
-  std::vector<size_t> badChoice(length);
-  std::iota (std::begin(badChoice), std::end(badChoice), 0);
-  return badChoice;
+  return pickFirst(_options, _amount);
 }
 
 bool randomBool()
@@ -90,31 +90,11 @@ std::vector<size_t> RandomAI::chooseConditions(
     const unsigned _amount
     )
 {
-  size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
-  std::vector<size_t> badChoice(length);
-  std::iota (std::begin(badChoice), std::end(badChoice), 0);
-  return badChoice;
+  return pickFirst(_options, _amount);
 }
 
 std::pair<bool, unsigned> RandomAI::turn()
 {
-  Game dummy = getDummyGame();
-  StrategyPlayer dummySelf(&dummy, this);
-  StrategyPlayer dummyEnemy(&dummy, this);
-  dummy.registerPlayer(&dummySelf, PTCG::PLAYER::SELF);
-  dummy.registerPlayer(&dummyEnemy, PTCG::PLAYER::ENEMY);
-  dummySelf.setTurn(
-        [](Player*_dummyPlayer)
-  {
-    auto hand = _dummyPlayer->viewHand();
-    if (hand.size() && _dummyPlayer->canPlay(0))
-      _dummyPlayer->playCard(0);
-    return std::pair<bool, unsigned> {false, 0};
-  }
-        );
-  dummyEnemy.setTurn([](Player*){ return std::pair<bool, unsigned> {false, 0}; });
-  dummy.nextTurn();
-  auto check = dummySelf.viewBench();
   // Random engine
   static std::mt19937_64 eng(std::random_device{}());
 

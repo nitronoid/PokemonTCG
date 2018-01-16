@@ -48,6 +48,11 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   void start();
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to progress the game to the next turn, public to allow simulations to run
+  /// @param [in] _observer is the observer to register for notifications
+  //----------------------------------------------------------------------------------------------------------------------
+  void nextTurn();
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief function that asks the player to choose card(s) from a set of options
   /// @param [in] _thinker is the player who must make the choice
   /// @param [in] _owner is the player who owns the options
@@ -182,6 +187,38 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief gives access to a players board
+  /// @param [in] _owner is the player who owns the board
+  /// @return a mutable pointer to the _owner's board
+  //----------------------------------------------------------------------------------------------------------------------
+  Board* getBoard(const PTCG::PLAYER _owner);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function that returns the number of cards in a pile.
+  /// @param [in] _owner is the player who owns the pile
+  /// @param [in] _pile is the pile to check
+  /// @return the number of cards in the pile
+  //----------------------------------------------------------------------------------------------------------------------
+  size_t numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which filters slots with a match function.
+  /// @param [in] _owner is the player who owns the slots
+  /// @param [in] _match is the function to filter with
+  /// @return the indices of the slots that passed the filter.
+  //----------------------------------------------------------------------------------------------------------------------
+  std::vector<size_t> filterSlots(const PTCG::PLAYER _owner, const std::function<bool(BoardSlot*const)> _match) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which filters slots by checking whether that they don't contain a pokemon.
+  /// @param [in] _owner is the player who owns the slots
+  /// @return the indices of the slots that have no pokemon.
+  //----------------------------------------------------------------------------------------------------------------------
+  std::vector<size_t> freeSlots(const PTCG::PLAYER _owner) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a function which filters slots by checking that they contain a pokemon.
+  /// @param [in] _owner is the player who owns the slots
+  /// @return the indices of the slots that have pokemon.
+  //----------------------------------------------------------------------------------------------------------------------
+  std::vector<size_t> nonFreeSlots(const PTCG::PLAYER _owner) const;
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief function that moves the top card of the players deck to their hand
   /// @param [in] _player is the player who will draw a card
   /// @return whether or not the player could draw a card
@@ -246,32 +283,6 @@ public:
   /// @param [in] _subIndex is the slot to swap with
   //----------------------------------------------------------------------------------------------------------------------
   void switchActive(const PTCG::PLAYER &_owner, const size_t &_subIndex);
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief a function that returns the number of cards in a pile.
-  /// @param [in] _owner is the player who owns the pile
-  /// @param [in] _pile is the pile to check
-  /// @return the number of cards in the pile
-  //----------------------------------------------------------------------------------------------------------------------
-  size_t numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief a function which filters slots with a match function.
-  /// @param [in] _owner is the player who owns the slots
-  /// @param [in] _match is the function to filter with
-  /// @return the indices of the slots that passed the filter.
-  //----------------------------------------------------------------------------------------------------------------------
-  std::vector<size_t> filterSlots(const PTCG::PLAYER _owner, const std::function<bool(BoardSlot*const)> _match) const;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief a function which filters slots by checking whether that they don't contain a pokemon.
-  /// @param [in] _owner is the player who owns the slots
-  /// @return the indices of the slots that have no pokemon.
-  //----------------------------------------------------------------------------------------------------------------------
-  std::vector<size_t> freeSlots(const PTCG::PLAYER _owner) const;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief a function which filters slots by checking that they contain a pokemon.
-  /// @param [in] _owner is the player who owns the slots
-  /// @return the indices of the slots that have pokemon.
-  //----------------------------------------------------------------------------------------------------------------------
-  std::vector<size_t> nonFreeSlots(const PTCG::PLAYER _owner) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief a function which notifies the observers that a player is inspecting a slot. Used mainly for GUI
   /// @param [in] _owner is the player who owns the slot
@@ -372,60 +383,152 @@ public:
   /// @param [in] _id is the index in the current players bench for the damage to removed from, 0 is the active pokemon
   //----------------------------------------------------------------------------------------------------------------------
   void healDamage(const int _heal, const unsigned _id = 0);
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief this function is used to add bonus damage to an attack that happens this turn. Is cleared upon end of turn.
+  /// @param [in] _value is the amount of damage to add to the attack.
+  /// @param [in] _order refers to whether or not the bonus should be applied before or after damage calculation
+  /// @param [in] _player is the player who's attack is given the bonus
+  //----------------------------------------------------------------------------------------------------------------------
   void addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief this function is used to lower the damage done by an attack this turn. Is cleared upon end of turn.
+  /// @param [in] _value is the amount of damage to lower the attack damage by.
+  /// @param [in] _order refers to whether or not the bonus should be applied before or after damage calculation
+  /// @param [in] _player is the player who's attack is lowered
+  //----------------------------------------------------------------------------------------------------------------------
   void addBonusDefense(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player = PTCG::PLAYER::SELF);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief checks whether the _player's active pokemon is affected by _condition
+  /// @param [in] _player is the player, who's active should be checked.
+  /// @param [in] _condition is the condition to check for
+  /// @return returns whether or not the pokemon is affected by _condtion
+  //----------------------------------------------------------------------------------------------------------------------
   bool hasCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief applies a condition to the _target's active pokemon
+  /// @param [in] _target is the player, who's active should be affected.
+  /// @param [in] _condition is the condition to apply
+  //----------------------------------------------------------------------------------------------------------------------
   void applyCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief removes a condition from the _target's active pokemon
+  /// @param [in] _target is the player, who's active should be now be unaffected by _condition
+  /// @param [in] _condition is the condition to remove
+  //----------------------------------------------------------------------------------------------------------------------
   void removeCondition(const PTCG::PLAYER &_target,const PTCG::CONDITION &_condition);
-  void removeAllCondition(const PTCG::PLAYER &_target);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief removes all conditions from _target's active pokemon
+  /// @param [in] _target is the player, who's active should be now be unaffected by any conditions
+  //----------------------------------------------------------------------------------------------------------------------
+  void removeAllConditions(const PTCG::PLAYER &_target);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief checks if the current players active pokemon can use the attack stored at _index
+  /// @param [in] _index is the index of the attack to check
+  /// @return whether or not the attack can be used
+  //----------------------------------------------------------------------------------------------------------------------
   bool canAttack(const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief checks if _player's active pokemon can retreat
+  /// @param [in] _player is the player who's active should be checked
+  /// @return whether or not the pokemon can retreat
+  //----------------------------------------------------------------------------------------------------------------------
   bool canRetreat(const PTCG::PLAYER &_player);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief sets the canRetreat value for _affected's active pokemon
+  /// @param [in] _affected is the player who's active should be set
+  /// @param [in] _val is the value to set
+  //----------------------------------------------------------------------------------------------------------------------
   void setCanRetreat(const PTCG::PLAYER &_affected, const bool _val = false);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief sets the isProtected value for _affected's active pokemon
+  /// @param [in] _affected is the player who's active should be set
+  /// @param [in] _val is the value to set
+  //----------------------------------------------------------------------------------------------------------------------
   void setProtected(const PTCG::PLAYER &_affected, const bool _val = true);
-  //Effectors
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief will add an effect to the effect queue so that it will be executed on a future turn.
+  /// @param [in] _affected is the player who's turn the effect will be executed on
+  /// @param [in] _wait is the ammount of _affected's turns to wait before execution
+  /// @param [in] _effect is the effect to be executed
+  //----------------------------------------------------------------------------------------------------------------------
   void addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect);
-
-  inline unsigned turnCount() const {return m_turnCount;}
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief gets the current tunr count
+  /// @return the current turn count
+  //----------------------------------------------------------------------------------------------------------------------
+  unsigned turnCount() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function used to simulate the outcome of flipping one or more coins
   /// @param [in] _num is the amount of coin flips to be simulated
   /// @return the amount of heads
   //----------------------------------------------------------------------------------------------------------------------
   unsigned flipCoin(const unsigned _num);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief shuffles _owner's deck
+  /// @param [in] _owner the player who's deck should be shuffled
+  //----------------------------------------------------------------------------------------------------------------------
   void shuffleDeck(const PTCG::PLAYER _owner);
-
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to register a new observer to the game
+  /// @param [in] _observer is the observer to register for notifications
+  //----------------------------------------------------------------------------------------------------------------------
+  void registerObserver(GameObserver*const _observer);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to register a new player to the game
+  /// @param [in] _newPlayer is the new player to register
+  /// @param [in] _who tells the game the role of the new player
+  //----------------------------------------------------------------------------------------------------------------------
   void registerPlayer(Player*const _newPlayer, const PTCG::PLAYER _who);
 
-  Board* getBoard(const PTCG::PLAYER _owner);
-  void registerObserver(GameObserver*const _observer);
-  void nextTurn();
-
-
 private:
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief private copy constructor to be used for cloning the game
+  /// @param [in] _original is the Game to copy
+  //----------------------------------------------------------------------------------------------------------------------
   Game(const Game &_original);
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to progress the game to the next turn, public to allow simulations to run
+  /// @param [k] k_event is the event flag used to decide the correct observer interface function to call
+  /// @param [...] args are the arguments that should be forwarded to the interface function call
+  //----------------------------------------------------------------------------------------------------------------------
   template<Game::Event k_event, typename... Args>
   void notify(Args&&... args);
-
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief resets the m_playable card member when a new turn starts
   //----------------------------------------------------------------------------------------------------------------------
   void resetPlayable();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief checks if any pokemon on the board are knocked out and handles this
+  //----------------------------------------------------------------------------------------------------------------------
   bool checkForKnockouts();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief makes _player choose an basic pokemon from _pile
+  /// @param [in] _player is the player who should choose
+  /// @param [in] _origin is the pile to choose from
+  /// @return a vector of indices, refering to the chosen positions in _origin
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<size_t> chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin = PTCG::PILE::HAND);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief makes _player choose a replacement for their active pokemon from their bench if possible
+  /// @param [in] _player is the player who should make the choice
+  /// @return is a list of at most one index holding the position of the replacement on the bench. If the return is empty,
+  /// then there were no available replacements.
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<size_t> chooseReplacement(const PTCG::PLAYER _player);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to execute all queued effects for the given trigger
+  /// @param [in] _trigger is the event that has just happened to trigger effects
+  //----------------------------------------------------------------------------------------------------------------------
   void executeTurnEffects(const PTCG::TRIGGER _trigger);
   std::vector<Ability> filterEffects(const PTCG::TRIGGER _trigger);
   void clearEffects();
-  void filterPile(std::vector<std::unique_ptr<Card>>& io_filtered,
-                  std::vector<size_t> &io_originalPositions,
-                  const PTCG::PLAYER _owner,
-                  const PTCG::PILE _pile,
-                  std::function<bool(Card*const)> _match
-                  ) const;
+  void filterPile(
+      std::vector<std::unique_ptr<Card>>& io_filtered,
+      std::vector<size_t> &io_originalPositions,
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _pile,
+      std::function<bool(Card*const)> _match
+      ) const;
   void filterCards(
       std::vector<std::unique_ptr<Card>>& io_unfiltered,
       std::vector<std::unique_ptr<Card>>& io_filtered,

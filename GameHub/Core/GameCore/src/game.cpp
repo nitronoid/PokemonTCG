@@ -942,9 +942,14 @@ void Game::removeCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_
   m_boards[playerIndex(_target)].m_bench.activeStatus()->removeCondition(_condition);
 }
 
-void Game::removeAllCondition(const PTCG::PLAYER &_target)
+void Game::removeAllConditions(const PTCG::PLAYER &_target)
 {
   m_boards[playerIndex(_target)].m_bench.activeStatus()->removeAllConditions();
+}
+
+unsigned Game::turnCount() const
+{
+  return m_turnCount;
 }
 
 unsigned Game::flipCoin(const unsigned _num)

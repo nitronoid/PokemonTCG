@@ -9,6 +9,7 @@ def canPlay(h):
     if h.turnCount() < 2:
         drawAmount += 2
     return (h.numCards(p.PLAYER.SELF, p.PILE.HAND)-1 < drawAmount) and (h.numCards(p.PLAYER.SELF, p.PILE.DECK) > 0)
+
 def lillie(h):
     # if first turn 
     amount = 6
@@ -17,4 +18,3 @@ def lillie(h):
         amount += 2
     for i in range(max(0, amount - handSize)):
         h.drawCard(p.PLAYER.SELF)
-

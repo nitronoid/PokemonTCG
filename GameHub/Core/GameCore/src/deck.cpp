@@ -12,6 +12,7 @@ Deck::Deck (const Deck &_original)
 
 Deck& Deck::operator=(const Deck&_original)
 {
+  m_cards.clear();
   m_cards.reserve(_original.m_cards.size());
   for (const auto &card : _original.m_cards)
   {

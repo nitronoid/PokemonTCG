@@ -23,8 +23,13 @@ int main()
 
   GameLogger logger;
   SimplePrinter drawer;
+<<<<<<< HEAD
   HumanPlayer a(&test);
   AIPlayerBT b(&test);
+=======
+  RoaringFluke a(&test);
+  RoaringFluke b(&test);
+>>>>>>> 85516955eb88b91ca5331cf6efaa64e354ebc415
   test.init(testPool, &a, &b);
   test.registerObserver(&drawer);
   test.registerObserver(&logger);

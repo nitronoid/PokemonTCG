@@ -10,12 +10,12 @@
     "Pre evolution" : "",
     "Attacks" : {
         "Punch" : {
-            "Eunc" : "punch",
+            "Func" : "punch",
             "BaseDamage" : "20",
             "Energy" : "CC"
         },
-        "crabhammer" : {
-            "Func" : "Crabhammer",
+        "Crabhammer" : {
+            "Func" : "crabhammer",
             "BaseDamage" : "40",
             "Energy" : "FCC"
         }

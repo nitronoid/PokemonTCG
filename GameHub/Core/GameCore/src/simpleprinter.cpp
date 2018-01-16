@@ -113,9 +113,15 @@ std::string stringifyChar(char _in, bool _isType=false)
 std::string stringify(PTCG::CARD _in)
 {
   std::string ret;
+  using crd = PTCG::CARD;
   switch(_in)
   {
-    case PTCG::CARD::POKEMON    : {ret="POKE"; break;}
+    case crd::POKEMON : {ret="POKE"; break;}
+    case crd::ENERGY : {ret="ENERGY"; break;}
+    case crd::ITEM : {ret="ITEM"; break;}
+    case crd::TOOL : {ret="TOOL"; break;}
+    case crd::SUPPORT : {ret="SUPPORT"; break;}
+    case crd::STADIUM : {ret="STADIUM"; break;}
     default : {ret="----"; break;}
   }
   return ret;
@@ -148,52 +154,26 @@ void addVec(std::vector<std::string> &_lhs, const std::vector<std::string> &_rhs
   }
 }
 
-std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus) const
+std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus=nullptr) const
 {
   std::string ret = k_bigPokeSlot;
-  auto active = _slot->active();
-  str_replace_sent(ret, "$ID", std::to_string(active->getID()));
   str_replace_sent(ret, "$L", std::to_string(_slot->getRemainingHP()));
-  str_replace_sent(ret, "$E", std::to_string(_slot->viewEnergy().size()));
+  std::string tmpen;
+  int i = 0;
+  auto mset = _slot->energyMSet();
+  size_t waterCount = mset.count(PTCG::TYPE::WATER);
+  size_t fireCount = mset.count(PTCG::TYPE::FIRE);
+  size_t electricCount = mset.count(PTCG::TYPE::LIGHTNING);
+  if(waterCount>0){tmpen.append("WATER: "+std::to_string(waterCount)+"; ");}
+  if(fireCount>0){tmpen.append("FIRE: "+std::to_string(fireCount)+"; ");}
+  if(electricCount>0){tmpen.append("ELECTRIC: "+std::to_string(electricCount)+";");}
+  str_replace_sent(ret, "$E", tmpen);
 
   std::string toolName = "---";
   if (auto tool = _slot->viewTool())
     toolName = tool->getName();
   str_replace_sent(ret, "$TOOL", toolName, true);
-
-  str_replace_sent(ret, "$HP", std::to_string(_slot->active()->hp()));
-  str_replace_sent(ret, "$NAME", _slot->active()->getName(), true);
-  str_replace_sent(ret, "$T", stringifyChar(charify(_slot->active()->type()),true));
-
-  int i = 0;
-  for (const auto& attack : _slot->active()->attacks())
-  {
-    str_replace_sent(ret, "$A"  + std::to_string(i), attack.name(), false);
-    str_replace_sent(ret, "$D"  + std::to_string(i), attack.damageString());
-    std::string requirements;
-    for (const auto r : attack.requirements()) requirements += charify(r);
-    str_replace_sent(ret, "$AR" + std::to_string(i), requirements);
-    //ADD ATTACK DESCRIPTION PLACEMENT HERE <--
-    ++i;
-  }
-  for (; i < 3; ++i)
-  {
-    str_replace_sent(ret, "$A"  + std::to_string(i), "", false);
-    str_replace_sent(ret, "$D"  + std::to_string(i), "");
-    str_replace_sent(ret, "$AR" + std::to_string(i), "");
-  }
-
-  std::string tmpa = std::string{charify(_slot->active()->weakness())};
-  str_replace_sent(ret, "$W", tmpa);
-  if(tmpa.length()){str_replace_sent(ret, "$WA", "x2");}else{str_replace_sent(ret, "$WA", "");}
-  tmpa = std::string{charify(_slot->active()->resistance())};
-  str_replace_sent(ret, "$R", tmpa);
-  if(tmpa.length()){str_replace_sent(ret, "$RA", "-20");}else{str_replace_sent(ret, "$RA", "");}
-  str_replace_sent(ret, "$C", std::to_string(_slot->active()->retreatCost()));
-  str_replace_sent(ret, "$ST", std::to_string(_slot->active()->stage()));
-  str_replace_sent(ret, "$EVO", _slot->active()->preEvolution());
-
-  i=0;
+  i = 0;
   for (const auto& cond : _activeStatus->conditions())
   {
     str_replace_sent(ret, "$COND"+std::to_string(i), stringifyChar(charify(cond)));
@@ -203,7 +183,87 @@ std::string SimplePrinter::bigSlotStr(BoardSlot* const _slot, Status *const _act
   {
     str_replace_sent(ret, "$COND"+std::to_string(i), "");
   }
+  ret = bigPCStr(_slot->active(), ret);
   return ret;
+}
+
+std::string SimplePrinter::bigCardStr(Card* const _card) const
+{
+    std::string ret;
+    ret = "------------\nYOUR AD HERE\n------------\n";
+    using crd = PTCG::CARD;
+    switch(_card->cardType())
+    {
+      case crd::POKEMON : { ret = bigPCStr(static_cast<PokemonCard*>(_card)); break; }
+      case crd::ENERGY :  { ret = bigECStr(static_cast<EnergyCard*>(_card)); break; }
+      case crd::ITEM :    { ret = bigTCStr(static_cast<TrainerCard*>(_card)); break; }
+      case crd::TOOL :    { ret = bigTCStr(static_cast<TrainerCard*>(_card)); break; }
+      case crd::SUPPORT : { ret = bigTCStr(static_cast<TrainerCard*>(_card)); break; }
+      case crd::STADIUM : { ret = bigTCStr(static_cast<TrainerCard*>(_card)); break; }
+      default:  ret = "ERROR: this card type has no implementation\n"; break;
+    }
+    return ret;
+}
+
+std::string SimplePrinter::bigPCStr(PokemonCard* const _card, std::string _ret) const
+{
+    if(_ret.empty())
+        _ret = k_bigPokeSlot;
+    str_replace_sent(_ret, "$ID", std::to_string(_card->getID()));
+    str_replace_sent(_ret, "$HP", std::to_string(_card->hp()));
+    str_replace_sent(_ret, "$NAME", _card->getName(), true);
+    str_replace_sent(_ret, "$T", stringifyChar(charify(_card->type()),true));
+    int i = 0;
+    for (const auto& attack : _card->attacks())
+    {
+      str_replace_sent(_ret, "$A"  + std::to_string(i), attack.name(), false);
+      str_replace_sent(_ret, "$D"  + std::to_string(i), attack.damageString());
+      std::string requirements;
+      for (const auto r : attack.requirements()) requirements += charify(r);
+      str_replace_sent(_ret, "$AR" + std::to_string(i), requirements);
+      //ADD ATTACK DESCRIPTION PLACEMENT HERE <--
+      ++i;
+    }
+    for (; i < 3; ++i)
+    {
+      str_replace_sent(_ret, "$A"  + std::to_string(i), "", false);
+      str_replace_sent(_ret, "$D"  + std::to_string(i), "");
+      str_replace_sent(_ret, "$AR" + std::to_string(i), "");
+    }
+    std::string tmpa = stringifyChar(charify(_card->weakness()),true);
+    str_replace_sent(_ret, "$W", tmpa, false);
+    if(!tmpa.empty() && tmpa.at(0)!='-'){str_replace_sent(_ret, "$WA", "x2");}else{str_replace_sent(_ret, "$WA", "-");}
+    tmpa = std::string{charify(_card->resistance())};
+    str_replace_sent(_ret, "$R", tmpa);
+    if(!tmpa.empty() && tmpa.at(0)!='-'){str_replace_sent(_ret, "$RA", "-20");}else{str_replace_sent(_ret, "$RA", "-");}
+    str_replace_sent(_ret, "$C", std::to_string(_card->retreatCost()));
+    str_replace_sent(_ret, "$ST", std::to_string(_card->stage()));
+    str_replace_sent(_ret, "$EVO", _card->preEvolution());
+    return _ret;
+}
+
+std::string SimplePrinter::bigECStr(EnergyCard* const _card) const
+{
+    std::string ret;
+    using tp = PTCG::TYPE;
+    switch(_card->type())
+    {
+    case tp::WATER : {ret = k_bigWaterEnergy; break;}
+    case tp::FIRE : {ret = k_bigFireEnergy; break;}
+    case tp::LIGHTNING : {ret = k_bigElectricEnergy; break;}
+    case tp::GRASS : {ret = k_bigGrassEnergy; break;}
+    default : {ret = "ERROR: this energy type has no implementation\n"; break;}
+    }
+    return ret;
+}
+
+std::string SimplePrinter::bigTCStr(TrainerCard* const _card) const
+{
+    std::string ret = k_bigTrainerCard;
+    str_replace_sent(ret, "$TYPE", stringify(_card->cardType()));
+    str_replace_sent(ret, "$NAME", _card->getName());
+    //NEED TO ACCESS ABILITY
+    return ret;
 }
 
 std::string SimplePrinter::slotStr(BoardSlot* const _slot) const
@@ -392,15 +452,56 @@ void SimplePrinter::drawSide(Board* _board, const bool _isOp)
   {
     std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
     std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
-    std::cout<<"HAND:\n"<<handStr(&_board->m_hand);
-    std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
+    std::cout<<"HAND:\n"<<handStr(_board->hand());
+    std::cout<<"PRIZE:\n"<<prizeStr(_board->prizeCards());
   }
   else
   {
-    std::cout<<"PRIZE:\n"<<prizeStr(&_board->m_prizeCards);
+    std::cout<<"PRIZE:\n"<<prizeStr(_board->prizeCards());
     std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
     std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
   }
+}
+
+void SimplePrinter::drawBoard()
+{
+  drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
+  drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
+}
+
+void SimplePrinter::startTurn()
+{
+  drawBoard();
+}
+
+void SimplePrinter::attackUsed(PokemonCard*const, const unsigned)
+{
+  drawBoard();
+}
+
+void SimplePrinter::effectUsed(const Ability * const, const PTCG::TRIGGER)
+{
+  drawBoard();
+}
+
+void SimplePrinter::playCard(const size_t, Card*const)
+{
+  drawBoard();
+}
+
+void SimplePrinter::moveCard(const PTCG::PLAYER, const PTCG::PILE, const PTCG::PILE, const size_t, Card * const)
+{
+  drawBoard();
+}
+
+void SimplePrinter::knockOut(const PTCG::PLAYER, const size_t)
+{
+  drawBoard();
+}
+
+void SimplePrinter::swapSlot(const PTCG::PLAYER, const size_t)
+{
+  drawBoard();
 }
 
 void SimplePrinter::inspectSlot(const PTCG::PLAYER _player, const size_t _index)
@@ -409,9 +510,10 @@ void SimplePrinter::inspectSlot(const PTCG::PLAYER _player, const size_t _index)
   std::cout<<bigSlotStr(bench.slotAt(_index), bench.activeStatus())<<'\n';
 }
 
-void SimplePrinter::drawBoard()
+void SimplePrinter::inspectCard(const PTCG::PLAYER _player, const PTCG::PILE _pile, const size_t _index)
 {
-  drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
-  drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
+  auto pile = m_subject->viewPile(_player, _pile);
+  std::cout<<bigCardStr(pile[_index].get())<<'\n';
 }
+
 

@@ -1,4 +1,5 @@
 #include "randomai.h"
+#include "game.h"
 #include "playercommand.h"
 #include <ctime>
 #include <cstdlib>

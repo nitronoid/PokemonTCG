@@ -80,4 +80,16 @@ struct InspectSlotCMD : public Command
   virtual void execute(HumanPlayer&_player) override;
 };
 
+struct InspectCardCMD : public Command
+{
+  InspectCardCMD() = default;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief default dtor
+  //----------------------------------------------------------------------------------------------------------------------
+  ~InspectCardCMD() = default;
+  virtual void execute(HumanPlayer&_player) override;
+};
+
+
+
 #endif // PLAYERCOMMAND_H

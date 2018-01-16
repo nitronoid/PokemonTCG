@@ -13,6 +13,11 @@ void Player::inspectSlot(const PTCG::PLAYER _owner, const size_t _index)
   m_subjectGame->inspectSlot(_owner, _index);
 }
 
+void Player::inspectCard(const PTCG::PLAYER _owner, const PTCG::PILE _pile, const size_t _index)
+{
+  m_subjectGame->inspectCard(_owner, _pile, _index);
+}
+
 void Player::retreat()
 {
   if(m_subjectGame->canRetreat(PTCG::PLAYER::SELF))
@@ -28,7 +33,7 @@ bool Player::canPlay(const size_t &_index)
 
 Game Player::getDummyGame() const
 {
-  return m_subjectGame->clone();
+  return m_subjectGame->dummyClone();
 }
 
 void Player::attachToGame(Game*const _newSubject)

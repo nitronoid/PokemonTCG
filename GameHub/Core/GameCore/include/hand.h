@@ -49,7 +49,7 @@ public:
   /// @brief getter method for viewing the hand
   /// @return vector of cards
   //----------------------------------------------------------------------------------------------------------------------
-  std::vector<std::unique_ptr<Card>> view() const;
+  virtual std::vector<std::unique_ptr<Card>> view() const override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief getter method for retrieving the number of cards contained in the hand
   /// @return the number of cards in the hand

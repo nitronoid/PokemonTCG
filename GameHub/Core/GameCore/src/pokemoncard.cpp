@@ -15,6 +15,11 @@ bool PokemonCard::canPlay(Game &io_game) const
     }).size();
 }
 
+void PokemonCard::playCard(Game&_game, const size_t _index)
+{
+  _game.playPokemon(static_cast<PokemonCard*>(this), _index);
+}
+
 void energySetAmount(std::unordered_multiset<PTCG::TYPE>&_energySet, const PTCG::TYPE _energyType, const size_t remainingAmount)
 {
   // Erase all of the type from the set

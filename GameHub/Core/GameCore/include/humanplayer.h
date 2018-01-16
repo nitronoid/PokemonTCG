@@ -138,7 +138,8 @@ private:
     SKIP,
     RESTART,
     EXIT,
-    INSPECT
+    INSPECT_SLOT,
+    INSPECT_CARD
   };
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for converting string input into enum

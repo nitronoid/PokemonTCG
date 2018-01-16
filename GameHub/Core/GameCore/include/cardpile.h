@@ -3,6 +3,7 @@
 
 #include "card.h"
 #include <memory>
+#include <vector>
 
 class CardPile
 {
@@ -22,6 +23,8 @@ public:
   /// @return the card to be taken
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::unique_ptr<Card> take(const size_t _index)=0;
+
+  virtual std::vector<std::unique_ptr<Card>> view() const = 0;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief returning a card info from a requested card index
   /// @param [in] _index requested card index to access

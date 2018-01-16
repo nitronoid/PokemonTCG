@@ -32,6 +32,8 @@ public:
   /// @return whether this card can be played
   //----------------------------------------------------------------------------------------------------------------------
   virtual bool canPlay(Game&) const override;
+
+  virtual void playCard(Game&_game, const size_t _index) override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for cloning the card
   /// @return a pointer to the cloned card

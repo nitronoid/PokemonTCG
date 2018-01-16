@@ -354,9 +354,9 @@ virtual std::pair<bool, unsigned> turn() = 0;
  ```
  ___
 ### **Example:**
-```
-Clone usually is the same for Ai codes
-```
+
+Clone usually is the same for Ai, make sure this is written like the one below if you wish to use turn simulation.
+
 ```cpp
 Player* SomeAi::clone() const
 {
@@ -364,11 +364,15 @@ Player* SomeAi::clone() const
 }
 ```
 ___
-```
+
 You can use these parameters passed from the Game Core to determine the selection of cards and slots in different situations.
 
 It's usually preferred to define another logs function outside of the overriden methods to keep this function clean.
-```
+
+The choice functions require you to return a ```std::vector<size_t>``` which contains a list of indices. These indices are your AI's pick from the options provided.
+
+For example a dumb AI might just choose the first options everytime:
+
 ```cpp
 std::vector<size_t> SomeAi::chooseCards(
     const PTCG::PLAYER _player, 
@@ -378,26 +382,57 @@ std::vector<size_t> SomeAi::chooseCards(
     const unsigned _amount
     )
 {
-  return yourImplementedLogics(...);
+  size_t length = std::min(_options.size(), _amount);
+  std::vector<size_t> badChoice(length);
+  std::iota (std::begin(badChoice), std::end(badChoice), 0);
+  return badChoice;
 }
 ```
+
+The turn function is what will be called when it is your AI's turn to play. You should do all of your card playing, retreating and evolving here.
+
+The function returns a pair of a ```bool``` and an ```unsigned```.
+
+The first is your decision to attack, true will tell the game that you do want to attack, and false will tell it that you don't. 
+
+If you decide to attack, the second value will be examined, this is the index of the attack you wish to use (zero based).
+
+Bellow is another example of a dumb AI, however this one gives you an example of how you can use the functions within player to achieve basic actions in your turn.
+
 ```cpp
 std::pair<bool, unsigned> SomeAi::turn()
 {
-  m_turnFinished = false;
-  m_doAttack = false;
-  while(!m_turnFinished)
-  {  
-    /*
-    Do all the thinking and actions in here and finish when your Ai thinks it's enough.
-    Remeber to implement the complex logics in other methods to keep this turn loop clean.
-    */
-    auto decision = think(...);
-    m_parentGame.playCard(...);
-    m_turnFinished = finished(...);
+  // Have a look at your hand
+  auto hand = viewHand();
+  // If it's not empty and you can play the first card
+  if (!hand.empty() && canPlay(0))
+    // Play the first card in your hand
+    playCard(0);
+
+  // View my bench and keep a reference to the active
+  auto bench = viewBench();
+  auto& activeSlot = bench[0];
+
+  // If my active has less than half it's hp left we'll try to retreat it
+  if (activeSlot.getRemainingHP() < (activeSlot.active()->hp() / 2))
+    retreat();
+
+  // See how many attacks I have
+  unsigned numAttacks = activeSlot.active()->attackNum();
+  // Variables to hold attack decision
+  unsigned attackToUse = 0;
+  bool doAttack = false;
+  // Loop over all attacks and find one that can be used
+  for (unsigned i = 0; i < numAttacks; ++i)
+  {
+    if (canAttack(i))
+    {
+      doAttack = true;
+      attackToUse = i;
+    }
   }
   // Return the decision
-  return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
+  return std::pair<bool, unsigned> {doAttack, attackToUse};
 }
 ```
  ___
@@ -464,9 +499,25 @@ Now you can call nextTurn as many times as you want and view the outcome.
 // Finally we call next turn, this can be called as many times as you'd like
 dummy.nextTurn();
 
-// You can then queery the current game state by calling the view functions on the dummy game
+// You can then query the current game state by calling the view functions on the dummy game
 auto checkBench = dummySelf.viewBench();
 ```
+
+If you're a fan of lambda expressions you can use them instead of writing free functions:
+```cpp
+// These are equivalent to the functions provided above
+dummySelf.setTurn(
+    [](Player*_dummyPlayer)
+    {
+      auto hand = _dummyPlayer->viewHand();
+      if (hand.size() && _dummyPlayer->canPlay(0))
+        _dummyPlayer->playCard(0);
+      return std::pair<bool, unsigned> {false, 0};
+    }
+);
+dummyEnemy.setTurn([](Player*){ return std::pair<bool, unsigned> {false, 0}; });
+```
+Lambdas with closure objects are also supported.
  ___
 
 **[Back To Top](#poketcg-user-guides)**

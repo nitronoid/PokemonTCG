@@ -113,9 +113,15 @@ std::string stringifyChar(char _in, bool _isType=false)
 std::string stringify(PTCG::CARD _in)
 {
   std::string ret;
+  using crd = PTCG::CARD;
   switch(_in)
   {
-    case PTCG::CARD::POKEMON    : {ret="POKE"; break;}
+    case crd::POKEMON : {ret="POKE"; break;}
+    case crd::ENERGY : {ret="ENERGY"; break;}
+    case crd::ITEM : {ret="ITEM"; break;}
+    case crd::TOOL : {ret="TOOL"; break;}
+    case crd::SUPPORT : {ret="SUPPORT"; break;}
+    case crd::STADIUM : {ret="STADIUM"; break;}
     default : {ret="----"; break;}
   }
   return ret;
@@ -253,7 +259,7 @@ std::string SimplePrinter::bigECStr(EnergyCard* const _card) const
 
 std::string SimplePrinter::bigTCStr(TrainerCard* const _card) const
 {
-    std::string ret = k_bigPokeSlot;
+    std::string ret = k_bigTrainerCard;
     str_replace_sent(ret, "$TYPE", stringify(_card->cardType()));
     str_replace_sent(ret, "$NAME", _card->getName());
     //NEED TO ACCESS ABILITY
@@ -468,17 +474,22 @@ void SimplePrinter::startTurn()
   drawBoard();
 }
 
-void SimplePrinter::effectUsed()
+void SimplePrinter::attackUsed(PokemonCard*const, const unsigned)
 {
   drawBoard();
 }
 
-void SimplePrinter::playCard(const PTCG::PILE, Card * const)
+void SimplePrinter::effectUsed(const Ability * const, const PTCG::TRIGGER)
 {
   drawBoard();
 }
 
-void SimplePrinter::moveCard(const PTCG::PILE, const PTCG::PILE, Card * const)
+void SimplePrinter::playCard(const size_t, Card*const)
+{
+  drawBoard();
+}
+
+void SimplePrinter::moveCard(const PTCG::PLAYER, const PTCG::PILE, const PTCG::PILE, const size_t, Card * const)
 {
   drawBoard();
 }
@@ -490,7 +501,7 @@ void SimplePrinter::knockOut(const PTCG::PLAYER, const size_t)
 
 void SimplePrinter::swapSlot(const PTCG::PLAYER, const size_t)
 {
-
+  drawBoard();
 }
 
 void SimplePrinter::inspectSlot(const PTCG::PLAYER _player, const size_t _index)

@@ -15,7 +15,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief Event enum to communicate what has happened to an observer
   //----------------------------------------------------------------------------------------------------------------------
-  enum class Event { START_TURN, EFFECT_USED, PLAY_CARD, SWAP_SLOT, MOVE_CARD, KNOCK_OUT, INSPECT_SLOT, INSPECT_CARD };
+  enum class Event { START_TURN, EFFECT_USED, ATTACK, PLAY_CARD, SWAP_SLOT, MOVE_CARD, KNOCK_OUT, INSPECT_SLOT, INSPECT_CARD };
 
 public:
   //----------------------------------------------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ public:
 
 
   Board* getBoard(const PTCG::PLAYER _owner);
-  void registerGui(GameObserver*const _gui);
+  void registerObserver(GameObserver*const _observer);
 
 
 

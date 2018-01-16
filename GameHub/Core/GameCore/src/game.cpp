@@ -27,10 +27,10 @@ void Game::start()
   }
 }
 
-void Game::registerGui(GameObserver*const _gui)
+void Game::registerObserver(GameObserver*const _observer)
 {
-  _gui->setGame(this);
-  m_observers.push_back(_gui);
+  _observer->setGame(this);
+  m_observers.push_back(_observer);
 }
 
 void Game::inspectSlot(const PTCG::PLAYER _owner, const size_t _index)
@@ -139,7 +139,7 @@ void Game::playCard(const size_t _index)
   if (canPlay(chosenCard))
   {
     chosenCard->playCard(*this, _index);
-    notify<Event::PLAY_CARD>(PTCG::PILE::HAND, chosenCard);
+    notify<Event::PLAY_CARD>(_index, chosenCard);
   }
 }
 
@@ -276,8 +276,11 @@ std::vector<Ability> Game::filterEffects(const PTCG::TRIGGER _trigger)
 
 void Game::executeTurnEffects(const PTCG::TRIGGER _trigger)
 {
-  for (const auto & effect : filterEffects(_trigger)) effect.use(*this);
-  notify<Event::EFFECT_USED>();
+  for (const auto & effect : filterEffects(_trigger))
+  {
+    effect.use(*this);
+    notify<Event::EFFECT_USED>(&effect, _trigger);
+  }
 }
 
 void Game::addEffect(const PTCG::PLAYER _affected, const unsigned _wait, const Ability &_effect)
@@ -372,9 +375,9 @@ bool Game::drawCard(const PTCG::PLAYER _player)
   auto deck = board.deck();
   if (deck->empty()) return false;
   auto topCard = deck->takeTop();
-  auto topRaw = topCard.get();
+  auto rawCard = topCard.get();
   board.hand()->put(std::move(topCard));
-  notify<Event::MOVE_CARD>(PTCG::PILE::DECK, PTCG::PILE::HAND, topRaw);
+  notify<Event::MOVE_CARD>(_player, PTCG::PILE::DECK, PTCG::PILE::HAND, deck->numCards(), rawCard);
   return true;
 }
 
@@ -559,9 +562,9 @@ void Game::moveCards(
   for(const auto i : _cardIndices)
   {
     auto taken = takeFromPile(_owner, _origin, i);
-    auto takenRaw = taken.get();
+    auto rawCard = taken.get();
     putToPile(_owner,_destination, std::move(taken));
-    notify<Event::MOVE_CARD>(_origin, _destination, takenRaw);
+    notify<Event::MOVE_CARD>(_owner, _origin, _destination, i, rawCard);
   }
 }
 
@@ -726,6 +729,7 @@ void Game::attack(PokemonCard* _pokemon, const unsigned _index)
   if(resolveAttackConditions(PTCG::PLAYER::SELF))
   {
     _pokemon->attack(_index, *this);
+    notify<Event::ATTACK>(_pokemon, _index);
   }
 }
 

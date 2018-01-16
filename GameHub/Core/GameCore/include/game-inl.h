@@ -28,6 +28,13 @@ void observerCase(GameObserver*io_observer, Args&&...args)
   io_observer->effectUsed(std::forward<Args>(args)...);
 }
 
+// This case is compiled when the passed Event was ATTACK
+template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::ATTACK>* = nullptr>
+void observerCase(GameObserver*io_observer, Args&&...args)
+{
+  io_observer->attackUsed(std::forward<Args>(args)...);
+}
+
 // This case is compiled when the passed Event was PLAY_CARD
 template<Game::Event k_event, typename... Args, MatchEvent<k_event, Game::Event::PLAY_CARD>* = nullptr>
 void observerCase(GameObserver*io_observer, Args&&...args)

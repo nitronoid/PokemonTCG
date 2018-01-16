@@ -41,6 +41,8 @@ public:
 
   virtual bool canPlay(Game&io_game) const override;
 
+  virtual void playCard(Game&_game, const size_t _index) override;
+
   bool canAttack(Game &_game, const size_t _attackID, std::unordered_multiset<PTCG::TYPE> _attachedEnergy);
 
   virtual Card* clone() override;

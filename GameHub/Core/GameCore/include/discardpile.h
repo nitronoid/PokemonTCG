@@ -44,7 +44,7 @@ public:
   /// @brief viewing all cards in discard pile
   /// @return all cards in this discard pile
   //----------------------------------------------------------------------------------------------------------------------
-  std::vector<std::unique_ptr<Card>> view() const;
+  virtual std::vector<std::unique_ptr<Card>> view() const override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief the number of cards in discard pile
   /// @return the number of cards in this discard pile

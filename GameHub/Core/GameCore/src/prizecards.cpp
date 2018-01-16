@@ -9,18 +9,30 @@ PrizeCards::PrizeCards (const PrizeCards &_original)
   }
 }
 
+PrizeCards& PrizeCards::operator=(const PrizeCards&_original)
+{
+  for (size_t i = 0; i < m_cards.size(); ++i)
+  {
+    m_cards[i].reset(_original.m_cards[i]->clone());
+  }
+  return *this;
+}
+
 Card* PrizeCards::cardAt(const size_t _index)
 {
   return m_cards[_index].get();
 }
 
-std::array<std::unique_ptr<Card>,6> PrizeCards::view() const
+std::vector<std::unique_ptr<Card>> PrizeCards::view() const
 {
-  decltype (m_cards) ret;
-  for (size_t i = 0; i < m_cards.size(); ++i)
+  std::vector<std::unique_ptr<Card>> ret;
+  ret.reserve(m_cards.size());
+  for (const auto& card : m_cards)
   {
-    if(m_cards[i])
-      ret[i].reset(m_cards[i]->clone());
+    if(card)
+      ret.emplace_back(card->clone());
+    else
+      ret.emplace_back(nullptr);
   }
   return ret;
 }

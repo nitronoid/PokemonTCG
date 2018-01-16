@@ -1,8 +1,8 @@
 #ifndef SIMPLEPRINTER_H
 #define SIMPLEPRINTER_H
-#include "guimodule.h"
+#include "gameobserver.h"
 
-class SimplePrinter : public GuiModule
+class SimplePrinter : public GameObserver
 {
 public :
   //----------------------------------------------------------------------------------------------------------------------
@@ -16,11 +16,49 @@ public :
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief main draw method, draws entire thing
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void drawBoard() override;
+  void drawBoard();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for executing at the start a turn
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void startTurn() override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for executing when an attack is used
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void attackUsed(PokemonCard*const, const unsigned) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for executing when an effect is used
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void effectUsed(const Ability*const, const PTCG::TRIGGER) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for executing when a card is played
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void playCard(const size_t, Card*const) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for executing when the active slot is swapped
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void swapSlot(const PTCG::PLAYER, const size_t) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for executing when a card is moved
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void moveCard(
+      const PTCG::PLAYER,
+      const PTCG::PILE,
+      const PTCG::PILE,
+      const size_t,
+      Card*const
+      ) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for executing when a pokemon is knocked out
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void knockOut(const PTCG::PLAYER, const size_t) override;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief interface for inspecting a board slot
   //----------------------------------------------------------------------------------------------------------------------
   virtual void inspectSlot(const PTCG::PLAYER _player, const size_t _index) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for inspecting a card
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void inspectCard(const PTCG::PLAYER _player, const PTCG::PILE _pile, const size_t _index) override;
 
 private:
   //----------------------------------------------------------------------------------------------------------------------
@@ -42,6 +80,30 @@ private:
   /// @return final slot string for printout
   //----------------------------------------------------------------------------------------------------------------------
   std::string bigSlotStr(BoardSlot* const _slot, Status *const _activeStatus) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief substitute big sentinel card fields with information
+  /// @param [in] reference card
+  /// @return final card string for printout
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string bigCardStr(Card* const _card) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief substitute big sentinel PokemonCard fields with information
+  /// @param [in] reference card
+  /// @return final card string for printout
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string bigPCStr(PokemonCard* _card, std::string _ret="") const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief substitute big sentinel EnergyCard fields with information
+  /// @param [in] reference card
+  /// @return final card string for printout
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string bigECStr(EnergyCard* _card) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief substitute big sentinel TrainerCard fields with information
+  /// @param [in] reference card
+  /// @return final card string for printout
+  //----------------------------------------------------------------------------------------------------------------------
+  std::string bigTCStr(TrainerCard* _card) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief substitute sentinel slot fields with information
   /// @param [in] reference slot

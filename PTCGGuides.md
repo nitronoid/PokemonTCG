@@ -6,13 +6,13 @@ ___
 ### 1. **[Introduction](#introduction)**
 ### 2. **[How do I make a card and a deck for PokeTCG?](#making-cards-and-decks)**
 ### 3. **[How do I make an AI for PokeTCG?](#making-ais)**
-### 4. **More to come in the future.**
+### 4. **[How to play our game?](#how-to-play)**
 ___
 
 ## **Introduction**
 ___
 
-- PokeTCG is a project for our assignment to create a platform for simulating Pokemon Trading Card Game. It is coded in C++, python script and bound with [pybind11](https://pybind11.readthedocs.io/en/stable/).
+- PokeTCG is a project for our assignment to create a platform for simulating Pokemon Trading Card Game. It is coded in C++ with [Qtcreator](https://www.qt.io/qt-features-libraries-apis-tools-and-ide/), python script and bound with [pybind11](https://pybind11.readthedocs.io/en/stable/).
 
 - The current version contains the SUM Starter Decks and is played in a terminal with ASCII-based GUI.
 
@@ -33,6 +33,8 @@ ___
 > **[Trainer Cards](#trainer-cards)**
 
 > **[Energy Cards](#energy-cards)**
+
+> **[Decklist](#decklist)**
 ___
 ### **Pokemon Cards:**
 > ### **Json File:**
@@ -164,6 +166,80 @@ Due to time constraints, we are only allowing Basic Energy Cards in this set.
 Function implementation for basic energy cards are not required.
 '''
 ```
+___
+### **Decklist**
+
+- **A decklist contains all cards' set ID including duplicates:**
+
+```json
+{
+    "Name" : "Bright Tide",
+    "Deck" : [
+       41,
+       41,
+       40,
+       40,
+       39,
+       39,
+       39,
+       29,
+       28,
+       28,
+       34,
+       37,
+       37,
+       36,
+       36,
+       33,
+       33,
+       50,
+       49,
+       49,
+       53,
+       53,
+       104,
+       104,
+       103,
+       103,
+       97,
+       97,
+       116,
+       120,
+       120,
+       122,
+       123,
+       123,
+       127,
+       127,
+       128,
+       134,
+       134,
+       135,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       166,
+       167,
+       167,
+       167,
+       167,
+       167,
+       167,
+       167,
+       167
+    ]
+}
+
+```
+
 **[Back To Top](#poketcg-user-guides)**
 ___
 
@@ -325,3 +401,172 @@ std::pair<bool, unsigned> SomeAi::turn()
 }
 ```
 **[Back To Top](#poketcg-user-guides)**
+___
+## **How to play**
+___
+- **[Board](#board-and-prompt-interface)**
+- **[Commands](#commands)**
+- **[Rules](#rules)**
+___
+-This game's UI is WIP and currently we recommend playing in a maximised terminal. 
+
+### **Board and Prompt Interface**
+___
+> **Example Board State:**
+```
+PRIZE:
+
+*---**---**---**---**---**---*
+| ? || ? || ? || ? || ? || ? |
+*---**---**---**---**---**---*
+Taking card from top of deck.
+Lightning Energy has been put into the hand.
+PRIZE:
+
+*---**---**---**---**---**---*
+| ? || ? || ? || ? || ? || ? |
+*---**---**---**---**---**---*
+BENCH:
+
+*--------------**-------------**--------------**------------**--------------*
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+*--------------**-------------**--------------**------------**--------------*
+
+ACTIVE:
+
+*[  39/149][ 70/  70hp]*
+| Popplio         [  W]|
+| Energy:   0x         |
+| Tool:          ---   |
+|----------------------|
+| Pound      10 (    W)|
+| Water Gu   20 (   WC)|
+|----------------------|
+| [  G]  [   -]  [  1] |
+| [                  ] |
+*----------------------*
+ACTIVE:
+
+*[  53/149][ 70/  70hp]*
+| Togedemaru      [  L]|
+| Energy:   0x         |
+| Tool:          ---   |
+|----------------------|
+| Defense       (    C)|
+| Discharg  30x (    L)|
+|----------------------|
+| [  F]  [   M]  [  1] |
+| [                  ] |
+*----------------------*
+BENCH:
+
+*--------------**-------------**--------------**------------**--------------*
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+|              ||             ||              ||            ||              |
+*--------------**-------------**--------------**-------------**-------------*
+
+HAND:
+
+*---[  ITEM]---**---[ENERG]----**---[ENERG]----**---[  POKE]---**--[  ITEM]--**--[ENERG]---*
+|Nest Ball   ||       ____   ||      /=====/ ||Primar  [ 150]||Nest Ball    ||      /=====/ |
+|            ||     **'`     ||     /====/   ||         [  W]||             ||     /====/   |
+|            ||   *'  |      ||    /===/     ||Disarming     ||             ||    /===/     |
+| ---------- ||  /     *_    ||      /====/  ||  30        WC||  ---------- ||      /====/  |
+|  |TRAINERS||| |        '.  ||     /===/    ||Sparkling     ||  |TRAINERS| ||     /===/    |
+|  ----------|| '  *``*   }  ||    /==/      || 100       WWC||  ---------- ||    /==/      |
+|            ||  \{    }  /  ||   /=/        ||[  G]    [  -]||             ||   /=/        |
+|            ||   '*__*_*'   ||  /           ||[  2]         ||             ||  /           |
+*------------**--------------**--------------**--------------**-------------**--------------*
+PRIZE:
+
+*---**---**---**---**---**---*
+| ? || ? || ? || ? || ? || ? |
+*---**---**---**---**---**---*
+What do you want to do?
+
+```
+
+___
+### **Commands**
+___
+
+> ### **These are all/most of what you need to know to traverse the current UI**
+
+
+> At the start of the game, a prompt:
+```
+Pick a card from 1 - n, to play from your hand
+
+```
+> This prompt asks you to play a basic Pokemon from your hand. 
+
+> 1-n is the index of the Basic Pokemon in hand from left to right.
+
+> **During:**
+
+```
+What do you want to do?
+```
+> **You have several commands available to type into the terminal:**
+``` 
+- play / play %cardIndexInHand% / play %cardIndexInHand% %optionIndex%
+
+Plays a card from hand, you can attach an index of the card in hand after play to say which card to play from hand. 
+
+If you type "play" with no extensions, the game will prompt you with the selections.
+
+Sometimes if you attach cards onto the bench. 
+
+You can also put an index for which bench to attach the card to 
+
+(%optionIndex%) AFTER %cardIndexInHand%. Remember that it's not necessarily bench index, it is the index of the playable slots.
+
+                                                  _________________
+
+- retreat
+
+Retreats a pokemon, the game prompts you to choose the substituting Pokemon, see below:
+
+What do you want to do?
+> retreat
+Pick a card from 1 - 1, to move from your bench
+> 1
+Pick a card from 1 - 1, to discard from your active pokemon
+> 1
+Lightning Energy has been discarded.
+ 
+                                                  _________________
+
+- attack / attack %attackIndex%
+
+You either end your turn with an attack or a "skip". 
+
+If you type "attack", the game prompts you to use which attack on your Active Pokemon or you can call attack with a decided attackIndex. 
+
+Index increases rom the top to the bottom.
+                                                  _________________
+
+- skip 
+
+If you type skip, you end your turn without attacking.
+
+```
+___
+### **Rules**
+___
+
+The rules are based on the current PTCG Ruling which you can find [here](https://www.pokemon.com/uk/pokemon-tcg/).
+
+**[Back To Top](#poketcg-user-guides)**
+___

@@ -10,7 +10,7 @@ class PokemonCard : public Card
 {
 public:
   PokemonCard(const PokemonCard&) = default;
-  PokemonCard& operator=(const PokemonCard&) = delete;
+  PokemonCard& operator=(const PokemonCard&) = default;
   PokemonCard(
       const unsigned _id,
       const std::string &_name,

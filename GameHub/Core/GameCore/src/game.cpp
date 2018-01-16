@@ -34,10 +34,10 @@ void Game::start()
 }
 
 
-void Game::registerPlayer(Player*const _newPlayer, size_t _index)
+void Game::registerPlayer(Player*const _newPlayer, const PTCG::PLAYER _who)
 {
   _newPlayer->attachToGame(this);
-  m_players[_index] = _newPlayer;
+  m_players[playerIndex(_who)] = _newPlayer;
 }
 
 void Game::registerObserver(GameObserver*const _observer)

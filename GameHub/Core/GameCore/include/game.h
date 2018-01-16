@@ -302,7 +302,7 @@ public:
   void shuffleDeck(const PTCG::PLAYER _owner);
 
 
-  void registerPlayer(Player*const _newPlayer, size_t _index);
+  void registerPlayer(Player*const _newPlayer, const PTCG::PLAYER _who);
 
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerObserver(GameObserver*const _observer);

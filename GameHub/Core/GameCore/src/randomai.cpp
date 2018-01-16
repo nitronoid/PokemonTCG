@@ -101,8 +101,8 @@ std::pair<bool, unsigned> RandomAI::turn()
   Game dummy = getDummyGame();
   StrategyPlayer dummySelf(&dummy, this);
   StrategyPlayer dummyEnemy(&dummy, this);
-  dummy.registerPlayer(&dummySelf, 1);
-  dummy.registerPlayer(&dummyEnemy, 0);
+  dummy.registerPlayer(&dummySelf, PTCG::PLAYER::SELF);
+  dummy.registerPlayer(&dummyEnemy, PTCG::PLAYER::ENEMY);
   dummySelf.setTurn(
         [](Player*_dummyPlayer)
   {

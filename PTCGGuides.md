@@ -400,6 +400,75 @@ std::pair<bool, unsigned> SomeAi::turn()
   return std::pair<bool, unsigned> {m_doAttack, m_attackID-1};
 }
 ```
+ ___
+### **Turn Simulation:**
+
+It is useful for an AI to be able to simulate a turn, and evaluate the outcome of their actions.
+
+We have a simple frame work in place to do this, however it is slightly more involved than writing a non-simulating AI.
+
+Within the core we have a class called ```StrategyPlayer```, you will need to include this as it is a key part of simulation.
+
+If you are familiar with the "Strategy Pattern" this may look familiar. We will also use the ```getDummyGame``` function provided by the player class,
+which your AI should already inherit from.
+
+The first thing you'll want to do is write the turn functions for self and enemy, which will be executed by the simulation.
+
+```cpp
+
+void selfTurnSim(Player* _dummySelf)
+{
+  // View our hand
+  auto hand = _dummySelf->viewHand();
+  // If we have any cards in the hand, and the first one is playable
+  if (hand.size() && _dummySelf->canPlay(0))
+    // Play the first card
+    _dummySelf->playCard(0);
+  // Don't attack
+  return std::pair<bool, unsigned> {false, 0};
+}
+
+void enemyTurnSim(Player* _dummyEnemy)
+{
+  // Essentially saying do nothing.
+  return std::pair<bool, unsigned> {false, 0};
+}
+```
+Then in your AI's turn function, you need to get a dummy game to run the simulations on.
+```cpp
+Game dummy = getDummyGame();
+```
+The next step is to create two Strategy Players, these will replace you and your opponent in the simulation.
+
+We need to pass the dummy Game to these players, to inform them that they are participants to that Game.
+
+We also pass a pointer to your AI, which will be cloned and used to fill in the other parts of the Player interface, such as choose cards, slots etc.
+```cpp
+StrategyPlayer dummySelf(&dummy, this);
+StrategyPlayer dummyEnemy(&dummy, this);
+```
+We then register the two players with the dummy game, and tell it which player is which.
+```cpp
+dummy.registerPlayer(&dummySelf, PTCG::PLAYER::SELF);
+dummy.registerPlayer(&dummyEnemy, PTCG::PLAYER::ENEMY);
+```
+Finally we need to call ```setTurn``` for both players and pass the functions you wrote earlier.
+
+This will set the turn function for those players to whatever you wish to simulate.
+```cpp
+dummySelf.setTurn(selfTurnSim);
+dummyEnemy.setTurn(enemyTurnSim);
+```
+Now you can call nextTurn as many times as you want and view the outcome.
+```cpp
+// Finally we call next turn, this can be called as many times as you'd like
+dummy.nextTurn();
+
+// You can then queery the current game state by calling the view functions on the dummy game
+auto checkBench = dummySelf.viewBench();
+```
+ ___
+
 **[Back To Top](#poketcg-user-guides)**
 ___
 ## **How to play**

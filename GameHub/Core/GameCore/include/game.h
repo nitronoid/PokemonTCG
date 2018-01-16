@@ -302,11 +302,11 @@ public:
   void shuffleDeck(const PTCG::PLAYER _owner);
 
 
-
+  void registerPlayer(Player*const _newPlayer, const PTCG::PLAYER _who);
 
   Board* getBoard(const PTCG::PLAYER _owner);
   void registerObserver(GameObserver*const _observer);
-
+  void nextTurn();
 
 
 private:
@@ -343,7 +343,7 @@ private:
   void doMulligans(std::vector<size_t> &io_mulligans);
   void drawHand(const PTCG::PLAYER _player);
   void setBoard(Board& io_board, const size_t _active);
-  void nextTurn();
+
   void setupGame();
   void attack(PokemonCard* _pokemon, const unsigned _index);
   bool handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);

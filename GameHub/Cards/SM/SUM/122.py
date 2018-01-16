@@ -12,7 +12,7 @@ def canPlay(h):
 def lillie(h):
     # if first turn 
     amount = 6
-    handSize = len(h.viewHand(p.PLAYER.SELF))-1
+    handSize = h.numCards(p.PLAYER.SELF, p.PILE.HAND)-1
     if h.turnCount() < 2:
         amount += 2
     for i in range(max(0, amount - handSize)):

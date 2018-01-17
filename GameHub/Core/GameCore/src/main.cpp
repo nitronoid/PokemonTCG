@@ -21,7 +21,7 @@ int main()
   // Logger, ascii-gui and a staller so we can watch AI play
   GameLogger logger;
   SimplePrinter drawer;
-  GameStaller staller(1500);
+  GameStaller staller(0);
   // Two players for the game
   RandomAI firstPlayer(&game);
   RandomAI secondPlayer(&game);

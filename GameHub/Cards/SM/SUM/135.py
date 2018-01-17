@@ -28,7 +28,7 @@ def ultraBall(h):
             pokeFilter,
             1)
         h.moveCards(pokeCard, p.PLAYER.SELF, p.PILE.DECK, p.PILE.HAND)
-        handSize = h.numCards(p.PLAYER.SELF,P.PILE.HAND)
+        handSize = h.numCards(p.PLAYER.SELF,p.PILE.HAND)
         # So this generates a list of indices, from where the cards have just been moved
         # handSize - len(pokeCard) is the length before the move
         locations = range(handSize - len(pokeCard), handSize)

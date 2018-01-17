@@ -1,7 +1,7 @@
 #ifndef SIMPLEPRINTER_H
 #define SIMPLEPRINTER_H
 
-#include "gameobserver.h"
+#include "observers/gameobserver.h"
 
 class SimplePrinter : public GameObserver
 {

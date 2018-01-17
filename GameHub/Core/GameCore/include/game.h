@@ -8,7 +8,7 @@
 #include "board/board.h"
 #include "player/player.h"
 #include "damagehandler.h"
-#include "gameobserver.h"
+#include "observers/gameobserver.h"
 
 class Game
 {

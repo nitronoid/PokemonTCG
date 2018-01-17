@@ -1,4 +1,4 @@
-#include "gamelogger.h"
+#include "observers/gamelogger.h"
 #include "game.h"
 #include <fstream>
 

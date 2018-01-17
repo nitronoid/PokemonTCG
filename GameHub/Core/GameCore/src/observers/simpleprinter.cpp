@@ -1,5 +1,5 @@
-#include "gui/simpleprinter.h"
-#include "gui/asciicards.h"
+#include "observers/simpleprinter.h"
+#include "observers/asciicards.h"
 #include "game.h"
 #include <string>
 #include <iostream>

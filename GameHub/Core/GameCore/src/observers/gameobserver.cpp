@@ -1,4 +1,4 @@
-#include "gameobserver.h"
+#include "observers/gameobserver.h"
 
 GameObserver::~GameObserver() = default;
 

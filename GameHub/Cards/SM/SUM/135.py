@@ -8,7 +8,7 @@ def discardFilter(card):
 # checks if the amount of cards in your hand is bigger than 2 and deck is not empty
 # return true if yes else return false 
 def canPlay(h):
-    return h.numCards(p.PLAYER.SELF,p.PILE.HAND) > 2 and h.numCards(p.PLAYER.SELF,p.PILE,DECK)
+    return h.numCards(p.PLAYER.SELF,p.PILE.HAND) > 2 and h.numCards(p.PLAYER.SELF,p.PILE.DECK)
 
 def ultraBall(h):
     discardChoice = h.playerCardChoice(

@@ -8,7 +8,7 @@ def canPlay(h):
 def bigMalasada(h):
     h.healDamage(20)
     conditions = h.viewStatus(p.PLAYER.SELF).conditions()
-    if not conditions:
+    if len(conditions):
         conditionChoice = h.playerConditionChoice(p.PLAYER.SELF,p.PLAYER.SELF,p.ACTION.HEAL,conditions,1)
         h.removeCondition(p.PLAYER.SELF,conditions[conditionChoice])
         print "remove a special condition from active pokemon"

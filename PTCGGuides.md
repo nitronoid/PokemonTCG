@@ -318,7 +318,7 @@ std::vector<std::unique_ptr<Card>>  viewPile(const PTCG::PLAYER _owner, const PT
   //------------------------------------------------------------------------
   unsigned turnCount() const;
 ```
-**[Back To Section](#details-of-implementations)**
+**[Back To Implementation Section](#details-of-implementations)**
 ___
 
 #### **Operations Affecting Game State**
@@ -463,7 +463,7 @@ ___
       const PTCG::PILE _destination
       );
 ```
-**[Back To Section](#details-of-implementations)**
+**[Back To Implementation Section](#details-of-implementations)**
 ___
 
 #### **Interactive Functions**
@@ -544,7 +544,7 @@ def filter(card):
 def canPlay(h):
     # checks if deck is not empty && checks if the type of pokemon is in the deck
     # if both return TRUE
-    return len(h.viewDeck(p.PLAYER.SELF)) > 0
+    return h.numCards(p.PLAYER.SELF,p.PILE.DECK)
 
 def nestBall(h):
     cards = h.playerCardChoice(
@@ -559,7 +559,7 @@ def nestBall(h):
     h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[:amount], freeSlots[:amount])
     h.shuffleDeck(p.PLAYER.SELF)
 ```
-**[Back To Section](#details-of-implementations)**
+**[Back To Implementation Section](#details-of-implementations)**
 ___
 #### **Delayed or Persistent Effects**
 
@@ -600,7 +600,7 @@ import poke as p
 
 def effect(h):
     print "cant retreat next turn"
-    h.setCanRetreat(p.SELF,False)
+    h.setCanRetreat(p.PLAYER.SELF,False)
 
 def roost(h):
     h.healDamage(30)
@@ -609,7 +609,7 @@ def roost(h):
     h.addEffect(p.PLAYER.SELF, 1, ability)
 
 ```
-**[Back To Section](#details-of-implementations)**
+**[Back To Implementation Section](#details-of-implementations)**
 
 #### **ASCII Printer**
 

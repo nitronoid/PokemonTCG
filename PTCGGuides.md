@@ -4,7 +4,7 @@ ___
 ## **Content**
 ___
 ### 1. **[Introduction](#introduction)**
-### 2. **[How do I make a card and a deck for PokeTCG?](#making-cards-and-decks)**
+### 2. **[How do I make a card and a deck for PokeTCG? Or anything Technical?](#making-cards-and-decks)**
 ### 3. **[How do I make an AI for PokeTCG?](#making-ais)**
 ### 4. **[How to play our game?](#how-to-play)**
 ___
@@ -312,6 +312,12 @@ std::vector<std::unique_ptr<Card>>  viewPile(const PTCG::PLAYER _owner, const PT
   /// @return a copy of all slots in the bench
   //------------------------------------------------------------------------
   std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
+  //-------------------------------------------------------------------------------------
+  /// @brief gets a copy of the active status
+  /// @param [in] _owner is the player who owns the status
+  /// @return a copy of the _owners active status
+  //-------------------------------------------------------------------------------------
+  Status viewStatus(const PTCG::PLAYER _owner) const;
   //------------------------------------------------------------------------
   /// @brief gets the current tunr count
   /// @return the current turn count
@@ -532,6 +538,22 @@ ___
       std::function<bool(Card*const)> _match,
       const unsigned _amount
       );
+  //-------------------------------------------------------------------------------------
+  /// @brief function that asks the player to choose condition(s) from their active pokemon
+  /// @param [in] _thinker is the player who must make the choice
+  /// @param [in] _owner is the player who owns the options
+  /// @param [in] _action is what will be done with the resulting choice
+  /// @param [in] _options are the conditions to choose from if they are on the active
+  /// @param [in] _amount is the amount of conditions that the _thinker should pick from the options
+  /// @return the indices of the picked conditons
+  //-------------------------------------------------------------------------------------
+  std::vector<size_t> playerConditionChoice(
+      const PTCG::PLAYER _thinker,
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> _options,
+      const unsigned _amount
+      );
 ```
 **Example:**
 ```python
@@ -750,6 +772,117 @@ std::string strPRes = stringifyChar(charify(pokemonCard->resistance());
 
 **stringifyChar** can be used for **Pokemon** **Type** and **Condition**
 
+
+**[Back To Top](#poketcg-user-guides)**
+___
+#### **Battle Damage Handling**
+**This class is internal to our core so cards cannot access these functionalities directly, Please go to the [Details of Implementations and call functions from the Game core.](#details-of-implementations)**
+- Handles Weakness and Resistance calculation during damage calculation.
+- Handles Bonus Damage/Damage Reduction before/after Weakness/Resistance calculation.
+- Handles Global Status Condition damage and card effect damage (adding damage counters).
+___
+
+**Functions called by Game**
+
+```cpp
+ //--------------------------------------------------------------------------------------
+  /// @brief removing damage taken by a healing a pokemon
+  /// @param [in] _slot pokemon on a bench slot, to be healed
+  /// @param [in] _value healing amount
+  /// @return whether the healing failed
+  //-------------------------------------------------------------------------------------
+  bool heal(BoardSlot* _slot, const int &_value);
+  //-------------------------------------------------------------------------------------
+  /// @brief dealing damage to a pokemon, factor in weakness, bonus damages for active, factoring only base for benched
+  /// @param [in] _attacker bench on the attacking pokemon's side
+  /// @param [in] _defender bench on the defending pokemon's side
+  /// @param [in] _defenderIndex index of the bench for the defending pokemon
+  /// @param [in] _damage base damage of the attack
+  /// @param [in] _applyWeak whether the damage needs to apply weakness and resistance
+  //-------------------------------------------------------------------------------------
+  void generalDamage(
+      Bench *_attacker,
+      Bench *_defender,
+      const size_t &_defenderIndex,
+      const int &_damage,
+      const bool &_applyWeak = true
+      );
+  //-------------------------------------------------------------------------------------
+  /// @brief dealing damage, factor only base damage, simulates "Put x Damage Counters onto xxxx Pokemon from special conditions, attacks effects."
+  /// @param [in] _defender the slot for the defending pokemon
+  /// @param [in] _damage base damage of the attack/effect
+  //-------------------------------------------------------------------------------------
+  void rawDamage(BoardSlot* _defender, const int &_damage);
+  //-------------------------------------------------------------------------------------
+  /// @brief increases poison damage
+  /// @param [in] _damage how much to increase the Poison damage
+  //-------------------------------------------------------------------------------------
+  void increasePoison(const int _damage);
+  //-------------------------------------------------------------------------------------
+  /// @brief increases poison damage
+  /// @param [in] _damage how much to increase the Burn damage
+  //-------------------------------------------------------------------------------------
+  void increaseBurn(const int _damage);
+  //-------------------------------------------------------------------------------------
+  /// @brief increases poison damage
+  /// @param [in] _damage how much to increase the Confusion damage
+  //-------------------------------------------------------------------------------------
+  void increaseConfuse(const int _damage);
+  //-------------------------------------------------------------------------------------
+  /// @brief accessing game poison damage
+  /// @return current poison damage per turn
+  //-------------------------------------------------------------------------------------
+  int getPoison() const;
+  //-------------------------------------------------------------------------------------
+  /// @brief accessing game burn damage
+  /// @return current burn damage per turn
+  //-------------------------------------------------------------------------------------
+  int getBurn() const;
+  //-------------------------------------------------------------------------------------
+  /// @brief accessing game confusion damage
+  /// @return current confusion damage per tail on coin flip when attacking
+  //-------------------------------------------------------------------------------------
+  int getConfuse() const;
+```
+___
+**Internal Methods and Attributes:**
+```cpp
+ //--------------------------------------------------------------------------------------
+  /// @brief applying and determining weakness or resisitance within damage calculation
+  /// @param [in] _defender slot of the defending pokemon
+  /// @param [in] _attacker slot of the attacking pokemon
+  /// @return damage reduction when resistant, damage multiplies when weak against attack
+  //-------------------------------------------------------------------------------------
+  int applyWeakRes(BoardSlot* _defender, BoardSlot* _attacker);
+  //-------------------------------------------------------------------------------------
+  /// @brief adding the net bonus damage for damage calculation
+  /// @param [in] _defender slot of the defending pokemon
+  /// @param [in] _attacker slot of the attacking pokemon
+  /// @param [in] _order whether you are calculating net bonus before/after weakness/resistance application
+  /// @return net bonus damage before/after weakness/resistance calculation
+  //-------------------------------------------------------------------------------------
+  int applyBonusDamage(Status *_defender, Status *_attacker, const PTCG::ORDER &_order);
+  //-------------------------------------------------------------------------------------
+  /// @brief weakness multiplier
+  //-------------------------------------------------------------------------------------
+  int m_weaknessMult = 2;
+  //-------------------------------------------------------------------------------------
+  /// @brief resistance damage reduction
+  //-------------------------------------------------------------------------------------
+  int m_resistance = - 20;
+  //-------------------------------------------------------------------------------------
+  /// @brief base poison damage
+  //-------------------------------------------------------------------------------------
+  int m_poisonDamage = 10;
+  //-------------------------------------------------------------------------------------
+  /// @brief base burn damage
+  //-------------------------------------------------------------------------------------
+  int m_burnDamage = 20;
+  //-------------------------------------------------------------------------------------
+  /// @brief base confusion damage
+  //-------------------------------------------------------------------------------------
+  int m_confuseDamage = 30;
+```
 **[Back To Top](#poketcg-user-guides)**
 ___
 

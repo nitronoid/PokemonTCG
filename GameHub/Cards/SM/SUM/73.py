@@ -1,4 +1,4 @@
-import poke
+import poke as p
 
 def filter(slot):
     return slot.active() is not None

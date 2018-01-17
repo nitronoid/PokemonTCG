@@ -2,6 +2,7 @@ import poke as p
 
 def effect(h):
     print "prevent all damage done"
+    h.setProtected(p.PLAYER.SELF)
 
 def canUse(h):
     return True

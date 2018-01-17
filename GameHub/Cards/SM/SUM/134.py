@@ -4,7 +4,7 @@ def filter(card):
     return card.cardType() == p.CARD.POKEMON and card.stage()
 
 def canPlay(h):
-    return len(h.viewDeck(p.PLAYER.SELF)) > 0 
+    return h.numCards(p.PLAYER.SELF,p.PILE.DECK)
 
 def timerBall(h):
     # flip coin twice

@@ -11,6 +11,7 @@ Hand::Hand (const Hand &_original)
 
 Hand& Hand::operator=(const Hand&_original)
 {
+  m_cards.clear();
   m_cards.reserve(_original.m_cards.size());
   for (const auto &card : _original.m_cards)
   {

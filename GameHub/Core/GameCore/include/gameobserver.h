@@ -1,84 +1,73 @@
-#ifndef CARD_H
-#define CARD_H
+#ifndef GUIMODULE_H
+#define GUIMODULE_H
+#include "board.h"
 
-#include "ability.h"
-#include <string>
-#include <iostream>
+class Game;
 
-class Card
+class GameObserver
 {
 public:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default copy ctor
+  /// @brief default ctor
   //----------------------------------------------------------------------------------------------------------------------
-  Card(const Card&) = default;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default assignement operator
-  //----------------------------------------------------------------------------------------------------------------------
-  Card& operator=(const Card&) = default;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief ctor to construct a Card
-  /// @param [in] _id Set ID of the card
-  /// @param [in] _name name of the card
-  /// @param [in] _ability effects of a card
-  //----------------------------------------------------------------------------------------------------------------------
-  Card(const unsigned _id, const std::string &_name, const Ability & _ability) :
-    m_ability(_ability),
-    m_name(_name),
-    m_id(_id)
-  {}
+  GameObserver() = default;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief default virtual dtor
   //----------------------------------------------------------------------------------------------------------------------
-  virtual ~Card();
+  virtual ~GameObserver();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief a check if the card can be played
-  /// @param [in] _game the game state to check for requirements
-  /// @return whether the card can be played
+  /// @brief interface for executing at the start a turn
   //----------------------------------------------------------------------------------------------------------------------
-  virtual bool canPlay(Game&_game) const = 0;
-
-  virtual void playCard(Game&_game, const size_t _index) = 0;
+  virtual void startTurn() = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief returns the clone of the card
-  /// @return this card's copy
+  /// @brief interface for executing when an attack is used
   //----------------------------------------------------------------------------------------------------------------------
-  virtual Card* clone() = 0;
+  virtual void attackUsed(PokemonCard*const _pokemon, const unsigned _index) = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief returns the type of card this card is
-  /// @return what type this card is (Pokemon Card, Energy Card etc)
+  /// @brief interface for executing when an effect is used
   //----------------------------------------------------------------------------------------------------------------------
-  virtual PTCG::CARD cardType() const = 0;
+  virtual void effectUsed(const Ability*const _ability, const PTCG::TRIGGER _trigger) = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief use the ability of the card
-  /// @param [in] _game the game state to affect
+  /// @brief interface for executing when a card is played
   //----------------------------------------------------------------------------------------------------------------------
-  void activateAbility(Game &_game) const;
+  virtual void playCard(const size_t _index, Card*const _card) = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief return name of a card
-  /// @return name of the card in text
-  //----------------------------------------------------------------------------------------------------------------------s
-  inline std::string getName() const{return m_name;}
+  /// @brief interface for executing when the active slot is swapped
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief returns set ID of a card
-  /// @return the set ID of this card
+  virtual void swapSlot(const PTCG::PLAYER _origin, const size_t _index) = 0;
   //----------------------------------------------------------------------------------------------------------------------
-  inline unsigned getID()const{return m_id;}
+  /// @brief interface for executing when a card is moved
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void moveCard(
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _origin,
+      const PTCG::PILE _destination,
+      const size_t _index,
+      Card*const _card
+      ) = 0;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for executing when a pokemon is knocked out
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void knockOut(const PTCG::PLAYER _owner, const size_t _index) = 0;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for inspecting a board slot
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void inspectSlot(const PTCG::PLAYER _player, const size_t _index) = 0;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief interface for inspecting a card
+  //----------------------------------------------------------------------------------------------------------------------
+  virtual void inspectCard(const PTCG::PLAYER _player, const PTCG::PILE _pile, const size_t _index) = 0;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief method for sourcing the game to be observed
+  /// @param [in] _subject source game to observe
+  //----------------------------------------------------------------------------------------------------------------------
+  void setGame(Game*const _subject);
 
 protected:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief effect object of the card
+  /// @brief pointer to the source game to observe
   //----------------------------------------------------------------------------------------------------------------------
-  Ability m_ability;
-private:
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief name of the card
-  //----------------------------------------------------------------------------------------------------------------------
-  std::string m_name;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief ID of the card in the card set
-  //----------------------------------------------------------------------------------------------------------------------
-  unsigned m_id;
+  Game* m_subject = nullptr;
 };
 
-#endif // CARD_H
+#endif // GUIMODULE_H

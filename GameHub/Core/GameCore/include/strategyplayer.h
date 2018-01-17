@@ -1,35 +1,32 @@
-#ifndef HUMANPLAYER_H
-#define HUMANPLAYER_H
+#ifndef STRATEGYPLAYER_H
+#define STRATEGYPLAYER_H
 
 #include "player.h"
-#include "playercommand.h"
 
-class HumanPlayer : public Player
+class StrategyPlayer : public Player
 {
 public:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default copy ctor for HumanPlayer
+  /// @brief copy ctor for Player
   //----------------------------------------------------------------------------------------------------------------------
-  HumanPlayer(const HumanPlayer&) = default;
+  StrategyPlayer(const StrategyPlayer& _original);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief ctor for HumanPlayer
-  /// @param [in] _parentGame the parentgame of the player
+  /// @brief ctor for Player
+  /// @param [in] _parentGame the parent game to the player
   //----------------------------------------------------------------------------------------------------------------------
-  HumanPlayer(Game* _subjectGame) :
-    Player(_subjectGame)
-  {}
+  StrategyPlayer(Game * const _dummyGame, Player* _user);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default dtor
+  /// @brief virtual default dtor for Player
   //----------------------------------------------------------------------------------------------------------------------
-  ~HumanPlayer() = default;
+  ~StrategyPlayer() = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief cloning method
-  /// @return a raw pointer to the dynamically allocated player clone
+  /// @brief object cloning method
+  /// @return a raw pointer to the dynamically allocated clone
   //----------------------------------------------------------------------------------------------------------------------
   virtual Player* clone() const override;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief getter method for retrieving the deck name
-  /// @return name string
+  /// @brief getter method for retrieving the name of the deck
+  /// @return the path to the deck
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::string deckName() const override;
   //----------------------------------------------------------------------------------------------------------------------
@@ -78,7 +75,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for choosing energy cards attached to a pokemon
   /// @param [in] _owner owner of the pokemon
-  /// @param [unused] unused param as the human player would know what card they are choosing from
+  /// @param [in] _destination  the card pile where the energy will be moved to
   /// @param [in] _action  the type of action that will be performed on the choice
   /// @param [in] _options cards to choose from
   /// @param [in] _amount amount of cards to choose (if possible)
@@ -86,7 +83,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::vector<size_t> chooseEnergy(
       const PTCG::PLAYER _owner,
-      const PTCG::PILE,
+      const PTCG::PILE _destination,
       const PTCG::ACTION _action,
       const std::vector<std::unique_ptr<Card>> &_options,
       const unsigned _amount
@@ -117,49 +114,16 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::pair<bool, unsigned> turn() override;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method that tells the class what attack to use
-  /// @param [in] _index an index of the requested attack
+  /// @brief method that allows the turn function to be replaced, for a new simulation
+  /// @param _newTurnFunc is the new turn to be executed by the virtual turn callback
   //----------------------------------------------------------------------------------------------------------------------
-  void setAttack(const unsigned _index);
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method for ending the turn from a command
-  //----------------------------------------------------------------------------------------------------------------------
-  void setTurnEnd();
+  void setTurn(const std::function<std::pair<bool, unsigned>(Player*)> _newTurnFunc);
 
 private:
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief Enum to be lexed from user input
-  //----------------------------------------------------------------------------------------------------------------------
-  enum CMD
-  {
-    PLAY,
-    ATTACK,
-    RETREAT,
-    SKIP,
-    RESTART,
-    EXIT,
-    INSPECT_SLOT,
-    INSPECT_CARD
-  };
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method for converting string input into enum
-  //----------------------------------------------------------------------------------------------------------------------
-  CMD enumifyInput(const std::string &_str);
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief an id of the attack to perform
-  //----------------------------------------------------------------------------------------------------------------------
-  unsigned m_attackID;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief switch for performing an attack, reset at the start of turn
-  //----------------------------------------------------------------------------------------------------------------------
-  bool m_doAttack = false;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief switch for ending the turn, reset at the start of turn
-  //----------------------------------------------------------------------------------------------------------------------
-  bool m_turnFinished = false;
-
-  static const std::unique_ptr<Command> m_commands[];
-
+  std::unique_ptr<Player> m_userClone;
+  std::function<std::pair<bool, unsigned>(Player*)> m_turn;
 };
 
-#endif // HUMANPLAYER_H
+
+
+#endif // STRATEGYPLAYER_H

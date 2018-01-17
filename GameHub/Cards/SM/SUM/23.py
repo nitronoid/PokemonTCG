@@ -6,5 +6,5 @@ def singe(h):
 
 def bodySlam(h): 
     h.dealDamage(50)
-    if h.flipCoin(1)
+    if h.flipCoin(1):
         h.applyCondition(h.PLAYER.ENEMY, h.CONDITION.PARALYZED )

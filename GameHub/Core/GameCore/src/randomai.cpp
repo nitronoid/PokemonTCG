@@ -1,5 +1,7 @@
 #include "randomai.h"
+#include "game.h"
 #include "playercommand.h"
+#include "strategyplayer.h"
 #include <ctime>
 #include <cstdlib>
 #include <random>
@@ -96,6 +98,23 @@ std::vector<size_t> RandomAI::chooseConditions(
 
 std::pair<bool, unsigned> RandomAI::turn()
 {
+  Game dummy = getDummyGame();
+  StrategyPlayer dummySelf(&dummy, this);
+  StrategyPlayer dummyEnemy(&dummy, this);
+  dummy.registerPlayer(&dummySelf, PTCG::PLAYER::SELF);
+  dummy.registerPlayer(&dummyEnemy, PTCG::PLAYER::ENEMY);
+  dummySelf.setTurn(
+        [](Player*_dummyPlayer)
+  {
+    auto hand = _dummyPlayer->viewHand();
+    if (hand.size() && _dummyPlayer->canPlay(0))
+      _dummyPlayer->playCard(0);
+    return std::pair<bool, unsigned> {false, 0};
+  }
+        );
+  dummyEnemy.setTurn([](Player*){ return std::pair<bool, unsigned> {false, 0}; });
+  dummy.nextTurn();
+  auto check = dummySelf.viewBench();
   // Random engine
   static std::mt19937_64 eng(std::random_device{}());
 

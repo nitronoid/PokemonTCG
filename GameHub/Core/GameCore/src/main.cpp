@@ -4,6 +4,7 @@
 #include <pybind11/embed.h>
 #include "game.h"
 #include "simpleprinter.h"
+#include "gamelogger.h"
 #include "cardfactory.h"
 #include "aiplayerbt.h"
 #include "randomai.h"
@@ -20,11 +21,14 @@ int main()
   CardFactory testPool("../../Cards/SM/SUM/", "../PythonBindings/");
   testPool.init();
 
+  GameLogger logger;
   SimplePrinter drawer;
   HumanPlayer a(&test);
   AIPlayerBT b(&test);
+
   test.init(testPool, &a, &b);
-  test.registerGui(&drawer);
+  test.registerObserver(&drawer);
+  test.registerObserver(&logger);
   std::cout<<"BEGIN\n";
   //  std::unique_ptr<PokemonCard> foo(static_cast<PokemonCard*>(testPool.loadCard(53)));
   //  foo->attack(1, test);

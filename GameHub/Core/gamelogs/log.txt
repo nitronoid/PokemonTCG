@@ -1,60 +1,225 @@
-
-
-Card No.59, name: Stufful, id: 111 in Player 0's deck has been moved to their hand.
+Card No.59, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
 Card No.58, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
-Card No.57, name: Sandygast, id: 74 in Player 0's deck has been moved to their hand.
-Card No.56, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
-Card No.55, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
-Card No.54, name: Sandygast, id: 74 in Player 0's deck has been moved to their hand.
-Card No.59, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
-Card No.58, name: Timer Ball, id: 134 in Player 1's deck has been moved to their hand.
-Card No.57, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
-Card No.56, name: Roggenrola, id: 69 in Player 1's deck has been moved to their hand.
-Card No.55, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+Card No.57, name: Roggenrola, id: 69 in Player 0's deck has been moved to their hand.
+Card No.56, name: Bewear, id: 112 in Player 0's deck has been moved to their hand.
+Card No.55, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.54, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.59, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.58, name: Lillie, id: 122 in Player 1's deck has been moved to their hand.
+Card No.57, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.56, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.55, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
 Card No.54, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.5, name: Fighting Energy, id: 169 in Player 1's hand has been moved to their deck.
+Card No.4, name: Fighting Energy, id: 169 in Player 1's hand has been moved to their deck.
+Card No.3, name: Fire Energy, id: 165 in Player 1's hand has been moved to their deck.
+Card No.2, name: Fire Energy, id: 165 in Player 1's hand has been moved to their deck.
+Card No.1, name: Lillie, id: 122 in Player 1's hand has been moved to their deck.
+Card No.0, name: Fighting Energy, id: 169 in Player 1's hand has been moved to their deck.
+Card No.59, name: Professor Kukui, id: 128 in Player 1's deck has been moved to their hand.
+Card No.58, name: Stufful, id: 111 in Player 1's deck has been moved to their hand.
+Card No.57, name: Roggenrola, id: 69 in Player 1's deck has been moved to their hand.
+Card No.56, name: Oranguru, id: 113 in Player 1's deck has been moved to their hand.
+Card No.55, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.54, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
 ----------
 Turn 0 start.
 ----------
-Card No.47, name: Roggenrola, id: 69 in Player 0's deck has been moved to their hand.
-Card No.4, name: Sandygast, id: 74 in Player 0's hand has been played.
+Card No.47, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.3, name: Fire Energy, id: 165 in Player 0's hand has been played.
+Player 0 used pokemon ID: 24, name: Litten's attack Bite.
 ----------
 Turn 1 start.
 ----------
-Card No.47, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
-Card No.2, name: Roggenrola, id: 69 in Player 1's hand has been played.
+Card No.47, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+Card No.3, name: Fighting Energy, id: 169 in Player 1's hand has been played.
 ----------
 Turn 2 start.
 ----------
-Card No.46, name: Ultra Ball, id: 135 in Player 0's deck has been moved to their hand.
-Card No.4, name: Roggenrola, id: 69 in Player 0's hand has been played.
+Card No.46, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.0, name: Fighting Energy, id: 169 in Player 0's hand has been played.
 ----------
 Turn 3 start.
 ----------
-Card No.46, name: Passimian, id: 73 in Player 1's deck has been moved to their hand.
-Card No.0, name: Fire Energy, id: 165 in Player 1's hand has been played.
+Card No.46, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.4, name: Litten, id: 24 in Player 1's hand has been played.
 ----------
 Turn 4 start.
 ----------
-Card No.45, name: Palossand, id: 75 in Player 0's deck has been moved to their hand.
-Card No.5, name: Palossand, id: 75 in Player 0's hand has been played.
+Card No.45, name: Timer Ball, id: 134 in Player 0's deck has been moved to their hand.
+Player 0 used pokemon ID: 24, name: Litten's attack Bite.
 ----------
 Turn 5 start.
 ----------
-Card No.45, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
-Card No.5, name: Fighting Energy, id: 169 in Player 1's hand has been played.
+Card No.45, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+Card No.44, name: Torkoal, id: 23 in Player 1's deck has been moved to their hand.
+Card No.43, name: Incineroar, id: 26 in Player 1's deck has been moved to their hand.
+Card No.0, name: Professor Kukui, id: 128 in Player 1's hand has been moved to their discard.
+Card No.0, name: Professor Kukui, id: 128 in Player 1's hand has been played.
 ----------
 Turn 6 start.
 ----------
-Card No.44, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
-Card No.5, name: Litten, id: 24 in Player 0's hand has been played.
+Card No.44, name: Sandygast, id: 74 in Player 0's deck has been moved to their hand.
+Card No.0, name: Roggenrola, id: 69 in Player 0's hand has been played.
 ----------
 Turn 7 start.
 ----------
-Card No.44, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
-Card No.5, name: Fire Energy, id: 165 in Player 1's hand has been played.
-Player 1 used pokemon ID: 24, name: Litten's attack Bite.
+Card No.42, name: Hau, id: 120 in Player 1's deck has been moved to their hand.
+Card No.1, name: Oranguru, id: 113 in Player 1's hand has been played.
 ----------
 Turn 8 start.
 ----------
-Card No.43, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
-
+Card No.43, name: Roggenrola, id: 69 in Player 0's deck has been moved to their hand.
+Card No.2, name: Fire Energy, id: 165 in Player 0's hand has been played.
+----------
+Turn 9 start.
+----------
+Card No.41, name: Roggenrola, id: 69 in Player 1's deck has been moved to their hand.
+Card No.4, name: Torkoal, id: 23 in Player 1's hand has been played.
+----------
+Turn 10 start.
+----------
+Card No.42, name: Torracat, id: 25 in Player 0's deck has been moved to their hand.
+Card No.1, name: Fire Energy, id: 165 in Player 0's hand has been played.
+----------
+Turn 11 start.
+----------
+Card No.40, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.39, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.38, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.37, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.5, name: Hau, id: 120 in Player 1's hand has been moved to their discard.
+Card No.5, name: Hau, id: 120 in Player 1's hand has been played.
+----------
+Turn 12 start.
+----------
+Card No.41, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.5, name: Torracat, id: 25 in Player 0's hand has been played.
+Player 0 used pokemon ID: 25, name: Torracat's attack Fury Swipes.
+----------
+Turn 13 start.
+----------
+Card No.36, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.6, name: Fighting Energy, id: 169 in Player 1's hand has been played.
+Player 1 used pokemon ID: 111, name: Stufful's attack Tackle.
+----------
+Turn 14 start.
+----------
+Card No.40, name: Hau, id: 120 in Player 0's deck has been moved to their hand.
+Card No.3, name: Sandygast, id: 74 in Player 0's hand has been played.
+----------
+Turn 15 start.
+----------
+Card No.35, name: Passimian, id: 73 in Player 1's deck has been moved to their hand.
+----------
+Turn 16 start.
+----------
+Card No.39, name: Makuhita, id: 67 in Player 0's deck has been moved to their hand.
+Card No.1, name: Fighting Energy, id: 169 in Player 0's hand has been played.
+----------
+Turn 17 start.
+----------
+Card No.34, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.1, name: Fire Energy, id: 165 in Player 1's hand has been played.
+----------
+Turn 18 start.
+----------
+Card No.38, name: Sandygast, id: 74 in Player 0's deck has been moved to their hand.
+Card No.6, name: Sandygast, id: 74 in Player 0's hand has been played.
+Player 0 used pokemon ID: 25, name: Torracat's attack Fury Swipes.
+----------
+Turn 19 start.
+----------
+Card No.33, name: Hau, id: 120 in Player 1's deck has been moved to their hand.
+Card No.4, name: Roggenrola, id: 69 in Player 1's hand has been played.
+Player 1 used pokemon ID: 111, name: Stufful's attack Tackle.
+----------
+Turn 20 start.
+----------
+Card No.37, name: Boldore, id: 70 in Player 0's deck has been moved to their hand.
+Card No.5, name: Makuhita, id: 67 in Player 0's hand has been played.
+----------
+Turn 21 start.
+----------
+Card No.32, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+Card No.4, name: Fire Energy, id: 165 in Player 1's hand has been played.
+Player 1 used pokemon ID: 111, name: Stufful's attack Tackle.
+The pokemon in slot 0 on Player 0's bench has been knocked out.
+Card No.0, name: Fire Energy, id: 165 in Player 1's prize has been moved to their hand.
+----------
+Turn 22 start.
+----------
+Card No.36, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.35, name: Oranguru, id: 113 in Player 0's deck has been moved to their hand.
+Card No.34, name: Incineroar, id: 26 in Player 0's deck has been moved to their hand.
+Card No.33, name: Crabrawler, id: 72 in Player 0's deck has been moved to their hand.
+Card No.4, name: Hau, id: 120 in Player 0's hand has been moved to their discard.
+Card No.4, name: Hau, id: 120 in Player 0's hand has been played.
+----------
+Turn 23 start.
+----------
+Card No.31, name: Big Malasada, id: 114 in Player 1's deck has been moved to their hand.
+Card No.0, name: Roggenrola, id: 69 in Player 1's hand has been played.
+Player 1 used pokemon ID: 111, name: Stufful's attack Tackle.
+----------
+Turn 24 start.
+----------
+Card No.32, name: Palossand, id: 75 in Player 0's deck has been moved to their hand.
+Card No.8, name: Crabrawler, id: 72 in Player 0's hand has been played.
+----------
+Turn 25 start.
+----------
+Card No.30, name: Sandygast, id: 74 in Player 1's deck has been moved to their hand.
+----------
+Turn 26 start.
+----------
+Card No.31, name: Boldore, id: 70 in Player 0's deck has been moved to their hand.
+Card No.3, name: Fighting Energy, id: 169 in Player 0's hand has been played.
+----------
+Turn 27 start.
+----------
+Card No.29, name: Torkoal, id: 23 in Player 1's deck has been moved to their hand.
+----------
+Turn 28 start.
+----------
+Card No.30, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.1, name: Timer Ball, id: 134 in Player 0's hand has been moved to their discard.
+Card No.11, name: Torracat, id: 25 in Player 0's deck has been moved to their hand.
+Card No.3, name: Torracat, id: 25 in Player 0's deck has been moved to their hand.
+Card No.1, name: Timer Ball, id: 134 in Player 0's hand has been played.
+----------
+Turn 29 start.
+----------
+Card No.28, name: Ultra Ball, id: 135 in Player 1's deck has been moved to their hand.
+Player 1 used pokemon ID: 111, name: Stufful's attack Tackle.
+----------
+Turn 30 start.
+----------
+Card No.27, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.1, name: Roggenrola, id: 69 in Player 0's hand has been played.
+----------
+Turn 31 start.
+----------
+Card No.27, name: Boldore, id: 70 in Player 1's deck has been moved to their hand.
+Player 1 used pokemon ID: 111, name: Stufful's attack Tackle.
+The pokemon in slot 0 on Player 0's bench has been knocked out.
+Card No.1, name: Torracat, id: 25 in Player 1's prize has been moved to their hand.
+----------
+Turn 32 start.
+----------
+Card No.26, name: Stufful, id: 111 in Player 0's deck has been moved to their hand.
+Card No.10, name: Fire Energy, id: 165 in Player 0's hand has been played.
+----------
+Turn 33 start.
+----------
+Card No.26, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Player 1 used pokemon ID: 111, name: Stufful's attack Tackle.
+----------
+Turn 34 start.
+----------
+Card No.25, name: Makuhita, id: 67 in Player 0's deck has been moved to their hand.
+----------
+Turn 35 start.
+----------
+Card No.25, name: Torracat, id: 25 in Player 1's deck has been moved to their hand.
+Card No.11, name: Big Malasada, id: 114 in Player 1's hand has been moved to their discard.

@@ -18,12 +18,13 @@ int main()
   // Set up a factory for this card set, needs the directory to the cards and to the python bindings
   CardFactory sumFactory("../../Cards/SM/SUM/", "../PythonBindings/");
   sumFactory.init();
-  // Logger, ascii-gui and a staller so we can watch AI play
+  //Logger, ascii-gui and a staller so we can watch AI play
   GameLogger logger;
   SimplePrinter drawer;
   GameStaller staller(1500);
   // Two players for the game
   RandomAI firstPlayer(&game);
+  //HumanPlayer firstPlayer(&game);
   RandomAI secondPlayer(&game);
   // Load the decks from the pool and attach players
   game.init(sumFactory, &firstPlayer, &secondPlayer);

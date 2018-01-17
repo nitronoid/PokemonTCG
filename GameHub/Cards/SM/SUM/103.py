@@ -1,7 +1,8 @@
 import poke as p 
 
 def effect(h):
-    h.addBonusDamage(20, p.ORDER.BEFORE, p.PLAYER.ENEMY)
+    # this is executed on this players next turn
+    h.addBonusDamage(20, p.ORDER.BEFORE, p.PLAYER.SELF)
 
 def canUse(h):
     return True

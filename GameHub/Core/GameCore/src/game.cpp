@@ -581,7 +581,7 @@ void Game::moveCards(
 
 void Game::filterCards(
     std::vector<std::unique_ptr<Card>>& io_unfiltered,
-    std::vector<std::unique_ptr<Card>>& io_filtered,
+    std::vector<std::unique_ptr<Card>>& o_filtered,
     std::vector<size_t>& io_originalPositions,
     std::function<bool(Card*const)> _match
     ) const
@@ -595,7 +595,7 @@ void Game::filterCards(
       if(_match(card.get()))
       {
         // Move to our filtered vec
-        io_filtered.push_back(std::move(card));
+        o_filtered.push_back(std::move(card));
         // Save its original position
         io_originalPositions.push_back(k);
       }
@@ -604,8 +604,8 @@ void Game::filterCards(
 }
 
 void Game::filterPile(
-    std::vector<std::unique_ptr<Card>>& io_filtered,
-    std::vector<size_t>& io_originalPositions,
+    std::vector<std::unique_ptr<Card>>& o_filtered,
+    std::vector<size_t>& o_originalPositions,
     const PTCG::PLAYER _owner,
     const PTCG::PILE _pile,
     std::function<bool(Card*const)> _match
@@ -613,7 +613,7 @@ void Game::filterPile(
 {
   // Retrieve the unfiltered cards
   auto unfiltered = viewPile(_owner, _pile);
-  filterCards(unfiltered, io_filtered, io_originalPositions, _match);
+  filterCards(unfiltered, o_filtered, o_originalPositions, _match);
 }
 
 std::vector<size_t> Game::playerConditionChoice(

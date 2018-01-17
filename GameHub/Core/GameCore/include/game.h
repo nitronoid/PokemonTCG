@@ -46,7 +46,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function called to begin the game.
   //----------------------------------------------------------------------------------------------------------------------
-  void start();
+  void playGame();
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function used to progress the game to the next turn, public to allow simulations to run
   /// @param [in] _observer is the observer to register for notifications

@@ -24,13 +24,14 @@ void Game::init(const CardFactory &_factory, Player*const io_playerA, Player*con
   m_players[1] = io_playerB;
 }
 
-void Game::start()
+void Game::playGame()
 {
   setupGame();
   while(!m_gameFinished)
   {
     nextTurn();
   }
+  std::cout<<"Player "<<turnCount()%2<<" wins!\n";
 }
 
 
@@ -868,7 +869,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
     //Taking a prize card in prize card.
     static constexpr auto prizes = [](Card* const card) -> bool {return card;};
-    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1);
+    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1, false);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!m_boards[opponentIndex].prizeCards()->numCards())
       gameOver = true;

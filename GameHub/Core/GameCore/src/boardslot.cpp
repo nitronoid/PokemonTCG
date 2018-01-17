@@ -166,6 +166,26 @@ BoardSlot::TypeMSet BoardSlot::energyMSet() const
   return ret;
 }
 
+size_t BoardSlot::numPokemon() const
+{
+  return m_pokemon.size();
+}
+
+size_t BoardSlot::numEnergy() const
+{
+  return m_energy.size();
+}
+
+size_t BoardSlot::numTool() const
+{
+  return m_tool ? 1 : 0;
+}
+
+size_t BoardSlot::numCards() const
+{
+  return numPokemon() + numEnergy() + numTool();
+}
+
 std::unordered_set<PTCG::TYPE> BoardSlot::energySet() const
 {
   std::unordered_set<PTCG::TYPE> ret;

@@ -11,6 +11,11 @@ Status* Bench::activeStatus()
   return &m_activeStatus;
 }
 
+const Status *Bench::activeStatus() const
+{
+  return &m_activeStatus;
+}
+
 PokemonCard* Bench::active()
 {
   return m_slots[0].active();

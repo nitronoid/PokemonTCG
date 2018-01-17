@@ -127,22 +127,22 @@ public:
   /// @brief returns number of pokemon cards in this slot
   /// @return the number of pokemon cards attached to this slot
   //----------------------------------------------------------------------------------------------------------------------
-  inline size_t numPokemon() const { return m_pokemon.size(); }
+  size_t numPokemon() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief returns number of energy cards in this slot
   /// @return the number of energy cards attached to this slot
   //----------------------------------------------------------------------------------------------------------------------
-  inline size_t numEnergy() const { return m_energy.size(); }
+  size_t numEnergy() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief returns number of tool cards in this slot
   /// @return the number of tool card(s) attached to this slot
   //----------------------------------------------------------------------------------------------------------------------
-  inline size_t numTool() const { return m_tool ? 1 : 0; }
+  size_t numTool() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief returns total number of cards in this slot
   /// @return the total number of cards attached to this slot
   //----------------------------------------------------------------------------------------------------------------------
-  inline size_t numCards() const { return numPokemon() + numEnergy() + numTool(); }
+  size_t numCards() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief check if the current pokemon can evolve from an incoming pokemon card
   /// @param [in] _pokemon the pokemon to check against the evolution conditions

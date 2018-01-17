@@ -14,7 +14,7 @@ Player* RoaringFluke::clone() const
 
 std::string RoaringFluke::deckName() const
 {
-    return "roaring_heat_deck.json";
+    return "bright_tide_deck.json";
 }
 
 std::vector<size_t> RoaringFluke::chooseCards(
@@ -241,6 +241,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
     {
         std::cout<<"Calculating Energy\n";
         currentPoke = viewBench()[0].active();
+        slot = viewBench()[0];
         signed target = 0;
         for (auto& attack : slot.active()->attacks())
         {
@@ -262,20 +263,21 @@ std::pair<bool, unsigned> RoaringFluke::turn()
                     EnergyCard* energy = static_cast<EnergyCard*>(curEnergyList[t].get().get());
                     if (requirements[j] == energy->type())
                     {
-
-                        playCard(currentEnergyIndexList[t]);
-
+                        bestPos = t;
                         played = true;
                     } else if  (requirements[j] == PTCG::TYPE::COLOURLESS)
                     {
-                        playCard(currentEnergyIndexList[t]);
-
+                        bestPos = t;
                         played = true;
                     }
                 }
 
             }
-
+            if (canPlay(currentEnergyIndexList[bestPos]))
+            {
+                playCard(currentEnergyIndexList[bestPos]);
+                std::cout<<"there is no Energy in your hand\n";
+            }
         }
 
     } else
@@ -288,7 +290,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
 
     } else
 
-    {
+    {/*15 feb 7.30 b32 */
         std::cout<<"there are no Trainers in your hand\n";
     }
 
@@ -303,15 +305,14 @@ std::pair<bool, unsigned> RoaringFluke::turn()
         std::cout<<"Attact no - "<<j;
         if (canAttack(j))
         {
-                 bestAttack = j;
-                 shouldAttack = true;
-                 std::cout<<" - SUCCESS\n";
+            bestAttack = j;
+            shouldAttack = true;
         }else
         {
             std::cout<<" - FAIL\n";
         }
     }
-    if (shouldAttack)std::cout<<"pokemon will attack with attack no "<<bestAttack<<".\n\n";
+    if (shouldAttack)std::cout<<" - SUCCESS\npokemon will attack with attack no "<<bestAttack<<".\n\n";
 
     return std::pair<bool, unsigned> {shouldAttack, bestAttack};
 }

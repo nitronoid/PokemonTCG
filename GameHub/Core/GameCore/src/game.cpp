@@ -24,13 +24,14 @@ void Game::init(const CardFactory &_factory, Player*const io_playerA, Player*con
   m_players[1] = io_playerB;
 }
 
-void Game::start()
+void Game::playGame()
 {
   setupGame();
   while(!m_gameFinished)
   {
     nextTurn();
   }
+  std::cout<<"Player "<<turnCount()%2<<" wins!\n";
 }
 
 
@@ -399,15 +400,15 @@ void Game::putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, std::unique_pt
   board.pile(_dest)->put(std::move(_card));
 }
 
-std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const size_t _index)
+std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _origin, const size_t _index)
 {
   auto& board = m_boards[playerIndex(_owner)];
-  return board.pile(_dest)->take(_index);
+  return board.pile(_origin)->take(_index);
 }
 void Game::benchToPile(
     const PTCG::PLAYER &_owner,
     const PTCG::PILE &_dest,
-    std::function<bool(Card*const)> _match,
+    const std::function<bool(Card * const)> _match,
     const size_t &_index
     )
 {
@@ -582,8 +583,8 @@ void Game::moveCards(
 void Game::filterCards(
     std::vector<std::unique_ptr<Card>>& io_unfiltered,
     std::vector<std::unique_ptr<Card>>& o_filtered,
-    std::vector<size_t>& io_originalPositions,
-    std::function<bool(Card*const)> _match
+    std::vector<size_t>& o_originalPositions,
+    const std::function<bool(Card*const)> _match
     ) const
 {
   if(!io_unfiltered.empty())
@@ -597,7 +598,7 @@ void Game::filterCards(
         // Move to our filtered vec
         o_filtered.push_back(std::move(card));
         // Save its original position
-        io_originalPositions.push_back(k);
+        o_originalPositions.push_back(k);
       }
     }
   }
@@ -608,7 +609,7 @@ void Game::filterPile(
     std::vector<size_t>& o_originalPositions,
     const PTCG::PLAYER _owner,
     const PTCG::PILE _pile,
-    std::function<bool(Card*const)> _match
+    const std::function<bool(Card*const)> _match
     ) const
 {
   // Retrieve the unfiltered cards
@@ -633,7 +634,7 @@ std::vector<size_t> Game::playerCardChoice(
     const PTCG::PLAYER _owner,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,
-    std::function<bool (Card * const)> _match,
+    const std::function<bool (Card * const)> _match,
     const unsigned _amount,
     const bool _known,
     const size_t _range
@@ -675,7 +676,7 @@ std::vector<size_t> Game::playerSlotChoice(
     const PTCG::PLAYER _owner,
     const PTCG::ACTION _action,
     const unsigned _amount,
-    std::function<bool(BoardSlot*const)> _match,
+    const std::function<bool(BoardSlot * const)> _match,
     const bool _filterActive
     )
 {
@@ -801,7 +802,7 @@ std::vector<size_t> Game::playerEnergyChoice(
     const PTCG::PILE _destination,
     const PTCG::ACTION _action,
     const size_t _slotIndex,
-    std::function<bool(Card*const)> _match,
+    const std::function<bool(Card * const)> _match,
     const unsigned _amount
     )
 {
@@ -868,7 +869,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
     //Taking a prize card in prize card.
     static constexpr auto prizes = [](Card* const card) -> bool {return card;};
-    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1);
+    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1, false);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!m_boards[opponentIndex].prizeCards()->numCards())
       gameOver = true;

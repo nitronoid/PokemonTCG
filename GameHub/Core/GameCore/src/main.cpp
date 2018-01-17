@@ -34,7 +34,7 @@ int main()
   //  std::unique_ptr<TrainerCard> goo(static_cast<TrainerCard*>(testPool.loadCard(122)));
   //  goo->activateAbility(test);
 
-  test.start();
+  test.playGame();
 
   return 0;
 }

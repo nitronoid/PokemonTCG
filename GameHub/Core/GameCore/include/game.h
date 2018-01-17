@@ -46,7 +46,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function called to begin the game.
   //----------------------------------------------------------------------------------------------------------------------
-  void start();
+  void playGame();
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function used to progress the game to the next turn, public to allow simulations to run
   /// @param [in] _observer is the observer to register for notifications
@@ -70,7 +70,7 @@ public:
       const PTCG::PLAYER _owner,
       const PTCG::PILE _origin,
       const PTCG::ACTION _action,
-      std::function<bool(Card*const)> _match,
+      const std::function<bool(Card*const)> _match,
       const unsigned _amount,
       const bool _known = true,
       const size_t _range = 0
@@ -90,7 +90,7 @@ public:
       const PTCG::PLAYER _owner,
       const PTCG::ACTION _action,
       const unsigned _amount,
-      std::function<bool(BoardSlot*const)> _match,
+      const std::function<bool(BoardSlot*const)> _match,
       const bool _skipActive = false
       );
   //----------------------------------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ public:
       const PTCG::PILE _destination,
       const PTCG::ACTION _action,
       const size_t _slotIndex,
-      std::function<bool(Card*const)> _match,
+      const std::function<bool(Card*const)> _match,
       const unsigned _amount
       );
   //----------------------------------------------------------------------------------------------------------------------
@@ -212,7 +212,7 @@ public:
       std::vector<size_t> &o_originalPositions,
       const PTCG::PLAYER _owner,
       const PTCG::PILE _pile,
-      std::function<bool(Card*const)> _match
+      const std::function<bool(Card*const)> _match
       ) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief function used to filter the card's
@@ -225,7 +225,7 @@ public:
       std::vector<std::unique_ptr<Card>>& io_unfiltered,
       std::vector<std::unique_ptr<Card>>& o_filtered,
       std::vector<size_t>& o_originalPositions,
-      std::function<bool(Card*const)> _match
+      const std::function<bool(Card*const)> _match
       ) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief a function which filters slots with a match function.
@@ -289,7 +289,7 @@ public:
   void benchToPile(
       const PTCG::PLAYER &_owner,
       const PTCG::PILE &_dest,
-      std::function<bool(Card*const)> _match,
+      const std::function<bool(Card*const)> _match,
       const size_t &_index=0
       );
   //----------------------------------------------------------------------------------------------------------------------

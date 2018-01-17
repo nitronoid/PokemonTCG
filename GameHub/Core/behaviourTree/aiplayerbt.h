@@ -7,7 +7,7 @@
 #include "action.h"
 #include "condition.h"
 #include "player.h"
-#include <set>
+#include <unordered_map>
 #include <algorithm>
 
 
@@ -101,34 +101,25 @@ public:
     void attachEnergy();
     /// @build sort energies of biggest attack
     std::vector<PTCG::TYPE> sortEnergies();
-    /// @build when to attack
-    bool attackPokemon();
     /// @build return the biggest attack
-    std::vector<PTCG::TYPE> biggestAttack();
-
-
-
+    std::vector<PTCG::TYPE> biggestAttack(int _index);
+    /// @build put pokemon on bench
     void putPokemonOnBench();
-
-
-
-
-
-
+    /// @build play the evolution pokemon card (pokemon evolve to the next stage)
+    void playEvolutionCard();
+    /// @build timer (think)
+    void setTime(int _amountMilliSeconds);
+    /// @build checks if the card is evolution pokemon card
+    bool checkIfCardIsEvolution();
+    /// @build when to retreat
+    void willRetreat();
+    /// @build play TRAINER cards
+    void playTrainerCard();
 
     /// @build checks is the card needs energy
     bool checkIfEnergyNeeded();
     /// @build checks if the card is an energy card
     bool checkIfCardIsEnergy();
-    /// @build checks if the card is evolution pokemon card
-    bool checkIfCardIsEvolution();
-    /// @build play the evolution pokemon card (pokemon evolve to the next stage)
-    void playEvolutionCard();
-
-    /// @build timer (think)
-    void setTime(int _amountMilliSeconds);
-
-
     /// @build tree
     /// @build condition fuction
     bool checkTwoAttacks();
@@ -143,15 +134,6 @@ public:
     bool playEnergies(int _index);
     /// @build check if energy in hand
     bool energyInHand();
-
-
-
-
-
-
-
-
-
 
 private:
     /// @build this decides if you attack or not

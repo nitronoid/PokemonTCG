@@ -249,6 +249,7 @@ ___
 - **[Activating Effects](#operations-affecting-game-state)**
 - **[Interactive and Choice Prompt](#interactive-functions)**
 - **[Delayed or Persistent Effects](#delayed-or-persistent-effects)**
+- **[ASCII Printer](#ascii-printer)**
 
 > These card implementations are not handled by the core, we simply call your functions when needed.
 
@@ -608,6 +609,147 @@ def roost(h):
     h.addEffect(p.PLAYER.SELF, 1, ability)
 
 ```
+**[Back To Section](#details-of-implementations)**
+
+#### **ASCII Printer**
+
+- **[General Usage](#general-usage)**
+- **[Printer Structure](#printer-structure)**
+- **[Type Name Conversion](#type-name-conversion)**
+
+### **General Usage**
+
+To draw the board, simply call **drawBoard();** and it will print out both players.
+
+Re-printing is done automatically whenever changes in the board occur, so you don't have to worry about that.
+
+The printer draws both boards at once, and it differentiates between how to draw each of them using a boolean switch that is passed to function.
+
+**Example**
+```c++
+//this will mark the board as enemy and draw it in reverse order
+drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
+
+//while this will use standard order marking it as self
+drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
+```
+
+To draw a pokemon card, for example, your template string should include tags such as **$TYPE** or **$NAME**. There is no list of tags because those are not strictly defined. You can freely use your own tags, but if you wish to use our tags, take a look at a card you want to draw in **asciicards.h**. As long as you use the same tag in the card template and in the replacement function the information will be replaced correctly.
+
+For further information see **[Printer Structure](#printer-structure)**
+
+The function that deals with information replacement is called **str_replace_sent** and you **must** provide valid tag and new information as a string. There is an option to pad the text to the front of the input field, or back. This is controlled by a boolean parameter at the end. By default it is set to true (front) and you **do** **not** have to **specify** it **unless** **necessary**.
+
+**Example**
+```c++
+str_replace_sent(_str, "$HP", std::to_string(_card->hp()));
+
+//this line will pad to back                       vvv
+str_replace_sent(_str, "$NAME", _card->getName(), false);
+
+str_replace_sent(_str, "$T", std::string{charify(_card->type())});
+```
+
+For function descriptions see **documentation**.
+
+**[Back To ASCII Printer Section](#ascii-printer)**
+
+### **Printer Structure**
+
+The basic idea of the printer is that it takes a manually predefined default template string for an object, scans it for tags and substitutes those tags with appropriate information.
+
+Used tags include: **$T**; **$TXT**; **$NAME**; **$HP**; **$E**; **$EVO**; **$A**; **$W**; **$R** and others.
+
+You can use a custom tag, just make sure to include it in the card template. 
+
+All predefined card string templates are stored in **asciicards.h** and there are 4 types of card templates:
+
+- Big Card (used for card inspection, more information, larger size (64x28))
+- Standard Slot aka Sentinel Slot (used as a standard draw type for bench, moderate amount of information, size: 25x11)
+- Card aka Sentinel Card (used as a standard draw type for hand, minimal information, size: 17x10)
+- Prize Card (no information, size: 5x3)
+
+**Example** **(standard slot)**
+```
+*[$ID$/149][$L$/$HP$hp]*
+| $NAME$$$$$$$$$$ [$T$]|
+| Energy: $E$x         |
+| Tool: $TOOL$$$$$$$   |
+|----------------------|
+| $A0$$$$$ $D0$ ($AR0$)|
+| $A1$$$$$ $D1$ ($AR1$)|
+|----------------------|
+| [$W$]  [$R$$]  [$C$] |
+| [$STATUS$$$$$$$$$$$] |
+*----------------------*
+```
+
+You may notice that sometimes the input fields are much larger than the actual input information. This is not the problem because everything marked with **$** will be replaced with empty spaces by **str_replace** after the information has been filled in.
+
+Based on the type of ownership, the boards are drawn differently. Board sections include:
+
+- Active (slot with active pokemon)
+- Bench (other slots)
+- Hand (all cards in hand, **IGNORED** **if** **owner** **is** **ENEMY**)
+- Prize (all prize cards)
+
+**Example**
+```
+order for SELF:
+ I     ACTIVE
+ II    BENCH
+ III   HAND
+ IV    PRIZE
+
+order for ENEMY:
+ I     PRIZE
+ II    BENCH
+ III   ACTIVE
+```
+
+Printer is split into specialized methods to draw specific card types. All inspection functions have a word "big" in their names and every specific type function is named with that type.
+
+So for inspection we have: **bigSlotStr** and **bigCardStr**. Where bigCardStr calls one of the following: **bigPCStr**, **bigECStr** or **bigTCStr**, based on the type of card.
+
+And for standard we have: **slotStr** and **cardStr**. Where cardStr calls one of the following: **pokemonCardStr**, **energyCardStr** or **trainerCardStr**, based on the type of card.
+
+**[Back To ASCII Printer Section](#ascii-printer)**
+
+### **Type Name Conversion**
+
+Whenever you need to put a pokemon type into your card, there are 2 ways of doing that:
+
+- Using a single character (when there is little space)
+- Using the whole type name
+
+For example, we have a water pokemon with resistance to fire:
+
+To get a character use **charify**
+
+**Example**
+```c++
+//this will give 'W'
+char pType = charify(pokemonCard->type());
+//this will give 'F'
+char pRes = charify(pokemonCard->resistance());
+```
+
+To get a full string use **stringifyChar**
+
+**Example**
+```c++
+//this will give "WATER"
+std::string strPType = stringifyChar(charify(pokemonCard->type());
+//this will give "FIRE"
+std::string strPRes = stringifyChar(charify(pokemonCard->resistance());
+```
+
+**charify** can be used for **Pokemon** **Type** and **Condition**
+
+**stringify** can be used for **Card** **Type**
+
+**stringifyChar** can be used for **Pokemon** **Type** and **Condition**
+
 **[Back To Top](#poketcg-user-guides)**
 ___
 

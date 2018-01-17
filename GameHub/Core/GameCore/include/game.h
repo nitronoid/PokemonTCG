@@ -2,10 +2,11 @@
 #define GAME_H
 #include <memory>
 #include <unordered_set>
-#include "pokemoncard.h"
-#include "humanplayer.h"
-#include "cardfactory.h"
-#include "board.h"
+#include <pybind11/embed.h>
+#include "card/pokemoncard.h"
+#include "card/cardfactory.h"
+#include "board/board.h"
+#include "player/player.h"
 #include "damagehandler.h"
 #include "gameobserver.h"
 
@@ -677,6 +678,7 @@ private:
   /// @brief has the game ended.
   //----------------------------------------------------------------------------------------------------------------------
   bool m_gameFinished  = false;
+  pybind11::scoped_interpreter m_python;
 
 };
 

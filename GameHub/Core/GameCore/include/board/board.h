@@ -1,118 +1,102 @@
-#ifndef DAMAGEHANDLER_H
-#define DAMAGEHANDLER_H
+#ifndef BOARD_H
+#define BOARD_H
 
+#include "board/deck.h"
+#include "board/hand.h"
+#include "board/prizecards.h"
+#include "board/discardpile.h"
 #include "board/bench.h"
 
-class DamageHandler
+class Board
 {
 public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief default ctor
   //----------------------------------------------------------------------------------------------------------------------
-  DamageHandler()=default;
+  Board() = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief assignment copy operator
+  /// @brief copy ctor
   //----------------------------------------------------------------------------------------------------------------------
-  DamageHandler& operator =(const DamageHandler &_original) = delete;
+  Board(const Board&_original);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default dtor for DamageHandler
+  /// @brief assignment operator
   //----------------------------------------------------------------------------------------------------------------------
-  ~DamageHandler() = default;
+  Board& operator=(const Board&);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief removing damage taken by a healing a pokemon
-  /// @param [in] _slot pokemon on a bench slot, to be healed
-  /// @param [in] _value healing amount
-  /// @return whether the healing failed
+  /// @brief default dtor for Board
   //----------------------------------------------------------------------------------------------------------------------
-  bool heal(BoardSlot* _slot, const int &_value);
+  ~Board() = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief dealing damage to a pokemon, factor in weakness, bonus damages for active, factoring only base for benched
-  /// @param [in] _attacker bench on the attacking pokemon's side
-  /// @param [in] _defender bench on the defending pokemon's side
-  /// @param [in] _defenderIndex index of the bench for the defending pokemon
-  /// @param [in] _damage base damage of the attack
-  /// @param [in] _applyWeak whether the damage needs to apply weakness and resistance
+  /// @brief returns a pointer to the requested pile
+  /// @param [in] _pile the pile to access
+  /// @return a CardPile pointer (not casted) to the pile
   //----------------------------------------------------------------------------------------------------------------------
-  void generalDamage(
-      Bench *_attacker,
-      Bench *_defender,
-      const size_t &_defenderIndex,
-      const int &_damage,
-      const bool &_applyWeak = true
-      );
+  CardPile* pile(const PTCG::PILE _pile);
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief dealing damage, factor only base damage, simulates "Put x Damage Counters onto xxxx Pokemon from special conditions, attacks effects."
-  /// @param [in] _defender the slot for the defending pokemon
-  /// @param [in] _damage base damage of the attack/effect
+  /// @brief returns a const pointer to the requested pile
+  /// @param [in] _pile the pile to access
+  /// @return a const CardPile pointer (not casted) to the pile
   //----------------------------------------------------------------------------------------------------------------------
-  void rawDamage(BoardSlot* _defender, const int &_damage);
+  const CardPile* pile(const PTCG::PILE _pile) const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief increases poison damage
-  /// @param [in] _damage how much to increase the Poison damage
+  /// @brief returns a pointer to the deck
+  /// @return a Deck pointer (casted).
   //----------------------------------------------------------------------------------------------------------------------
-  void increasePoison(const int _damage);
+  Deck* deck();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief increases poison damage
-  /// @param [in] _damage how much to increase the Burn damage
+  /// @brief returns a const pointer to the deck
+  /// @return a const Deck pointer (casted).
   //----------------------------------------------------------------------------------------------------------------------
-  void increaseBurn(const int _damage);
+  const Deck* deck() const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief increases poison damage
-  /// @param [in] _damage how much to increase the Confusion damage
+  /// @brief returns a pointer to the Hand
+  /// @return a Hand pointer (casted).
   //----------------------------------------------------------------------------------------------------------------------
-  void increaseConfuse(const int _damage);
+  Hand* hand();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief accessing game poison damage
-  /// @return current poison damage per turn
+  /// @brief returns a const pointer to the hand
+  /// @return a const Hand pointer (casted).
   //----------------------------------------------------------------------------------------------------------------------
-  int getPoison() const;
+  const Hand* hand() const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief accessing game burn damage
-  /// @return current burn damage per turn
+  /// @brief returns a pointer to the discard pile
+  /// @return a DiscardPile pointer (casted).
   //----------------------------------------------------------------------------------------------------------------------
-  int getBurn() const;
+  DiscardPile* discardPile();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief accessing game confusion damage
-  /// @return current confusion damage per tail on coin flip when attacking
+  /// @brief returns a const pointer to the discard pile
+  /// @return a const DiscardPile pointer (casted).
   //----------------------------------------------------------------------------------------------------------------------
-  int getConfuse() const;
+  const DiscardPile* discardPile() const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief returns a pointer to the prize cards
+  /// @return a PrizeCard pointer (casted).
+  //----------------------------------------------------------------------------------------------------------------------
+  PrizeCards* prizeCards();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief returns a const pointer to the prize cards
+  /// @return a const PrizeCard pointer (casted).
+  //----------------------------------------------------------------------------------------------------------------------
+  const PrizeCards* prizeCards() const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief bench on this player's board
+  //----------------------------------------------------------------------------------------------------------------------
+  Bench m_bench;
 
 private:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief applying and determining weakness or resisitance within damage calculation
-  /// @param [in] _defender slot of the defending pokemon
-  /// @param [in] _attacker slot of the attacking pokemon
-  /// @return damage reduction when resistant, damage multiplies when weak against attack
+  /// @brief Alias for ease
   //----------------------------------------------------------------------------------------------------------------------
-  int applyWeakRes(BoardSlot* _defender, BoardSlot* _attacker);
+  using pilePtr = std::unique_ptr<CardPile>;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief adding the net bonus damage for damage calculation
-  /// @param [in] _defender slot of the defending pokemon
-  /// @param [in] _attacker slot of the attacking pokemon
-  /// @param [in] _order whether you are calculating net bonus before/after weakness/resistance application
-  /// @return net bonus damage before/after weakness/resistance calculation
+  /// @brief Array of polymorphic card piles, same order as PTCG::PILE enum
   //----------------------------------------------------------------------------------------------------------------------
-  int applyBonusDamage(Status *_defender, Status *_attacker, const PTCG::ORDER &_order);
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief weakness multiplier
-  //----------------------------------------------------------------------------------------------------------------------
-  int m_weaknessMult = 2;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief resistance damage reduction
-  //----------------------------------------------------------------------------------------------------------------------
-  int m_resistance = - 20;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief base poison damage
-  //----------------------------------------------------------------------------------------------------------------------
-  int m_poisonDamage = 10;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief base burn damage
-  //----------------------------------------------------------------------------------------------------------------------
-  int m_burnDamage = 20;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief base confusion damage
-  //----------------------------------------------------------------------------------------------------------------------
-  int m_confuseDamage = 30;
+  std::array<pilePtr,4> m_piles{{
+    pilePtr{new Deck},
+    pilePtr{new Hand},
+    pilePtr{new DiscardPile},
+    pilePtr{new PrizeCards},
+  }};
 };
 
-#endif // DAMAGEHANDLER_H
+#endif // BOARD_H

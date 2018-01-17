@@ -1,74 +1,85 @@
-#ifndef GUIMODULE_H
-#define GUIMODULE_H
+#ifndef ATTACK_H
+#define ATTACK_H
 
-#include "board/board.h"
+#include <functional>
+#include <string>
+#include <vector>
+#include <pokemonenums.h>
+#include "effect/ability.h"
 
-class Game;
-
-class GameObserver
+class Attack : public Effect
 {
 public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief default ctor
   //----------------------------------------------------------------------------------------------------------------------
-  GameObserver() = default;
+  Attack() = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief default virtual dtor
+  /// @brief default copy ctor
   //----------------------------------------------------------------------------------------------------------------------
-  virtual ~GameObserver();
+  Attack(const Attack&) = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for executing at the start a turn
+  /// @brief default copy assignment operator
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void startTurn() = 0;
+  Attack& operator =(const Attack&) = default;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for executing when an attack is used
+  /// @brief specific assignment ctor for constructing an Attack
+  /// @param [in] _attack function to be executed/used, loaded from cards
+  /// @param [in] _name name of the attack, effect or ability
+  /// @param [in] _dmgString base damage to display
+  /// @param [in] _trigger when the effect is triggered
+  /// @param [in] _duration how does the effect wear off/number of use
+  /// @param [in] _requirement a vector containing the required energies for using this attack
+  /// @param [in] _canUse function to check if attack can be used
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void attackUsed(PokemonCard*const _pokemon, const unsigned _index) = 0;
+  Attack(
+      const EffectFunc _attack,
+      const std::string &_name,
+      const std::string &_dmgString,
+      const PTCG::TRIGGER _trigger,
+      const PTCG::DURATION _duration,
+      std::vector<PTCG::TYPE> &&_requirements,
+      const std::function<bool(Game*const)> _canUse = [](auto){return true;}
+  ) :
+    Effect (_attack, _name, _trigger, _duration, _canUse),
+    m_damageString(_dmgString),
+    m_requirements(_requirements)
+  {}
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for executing when an effect is used
+  /// @brief default virtual dtor for Attack
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void effectUsed(const Ability*const _ability, const PTCG::TRIGGER _trigger) = 0;
+  virtual ~Attack();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for executing when a card is played
+  /// @brief method to call the attack effect methods
+  /// @param [in] _game current game state to affect
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void playCard(const size_t _index, Card*const _card) = 0;
+  void attack(Game& _game) const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for executing when the active slot is swapped
+  /// @brief method to check for valid attack condition
+  /// @param [in] _game current game state to check
+  /// @return whether the attack can be used or not
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void swapSlot(const PTCG::PLAYER _origin, const size_t _index) = 0;
+  bool canAttack(Game& _game) const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for executing when a card is moved
+  /// @brief method to return energy requirements of the attacks
+  /// @return a list of energy cards needed to use the attack
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void moveCard(
-      const PTCG::PLAYER _owner,
-      const PTCG::PILE _origin,
-      const PTCG::PILE _destination,
-      const size_t _index,
-      Card*const _card
-      ) = 0;
+  std::vector<PTCG::TYPE> requirements() const;
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for executing when a pokemon is knocked out
+  /// @brief method to return base damage text
+  /// @return the base damage string of an attack
   //----------------------------------------------------------------------------------------------------------------------
-  virtual void knockOut(const PTCG::PLAYER _owner, const size_t _index) = 0;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for inspecting a board slot
-  //----------------------------------------------------------------------------------------------------------------------
-  virtual void inspectSlot(const PTCG::PLAYER _player, const size_t _index) = 0;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief interface for inspecting a card
-  //----------------------------------------------------------------------------------------------------------------------
-  virtual void inspectCard(const PTCG::PLAYER _player, const PTCG::PILE _pile, const size_t _index) = 0;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method for sourcing the game to be observed
-  /// @param [in] _subject source game to observe
-  //----------------------------------------------------------------------------------------------------------------------
-  void setGame(Game*const _subject);
+  std::string damageString() const;
 
-protected:
+private:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief pointer to the source game to observe
+  ///@brief base damage for the attack
   //----------------------------------------------------------------------------------------------------------------------
-  Game* m_subject = nullptr;
+  std::string m_damageString;
+  //----------------------------------------------------------------------------------------------------------------------
+  ///@brief energy requirements for the attack
+  //----------------------------------------------------------------------------------------------------------------------
+  std::vector<PTCG::TYPE> m_requirements;
 };
 
-#endif // GUIMODULE_H
+#endif // ATTACK_H

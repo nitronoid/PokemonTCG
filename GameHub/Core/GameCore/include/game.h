@@ -200,6 +200,34 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   size_t numCards(const PTCG::PLAYER _owner, const PTCG::PILE _pile) const;
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to filter the card's in a pile
+  /// @param [o] o_filtered is where the filtered cards are dumped
+  /// @param [o] o_originalPositions stores the indices of the dumped cards, in their pile
+  /// @param [in] _owner is the player that owns the pile
+  /// @param [in] _pile is the pile that contains the cards to filter
+  /// @param [in] _match is the match function which will be used to filter the cards
+  //----------------------------------------------------------------------------------------------------------------------
+  void filterPile(
+      std::vector<std::unique_ptr<Card>>& o_filtered,
+      std::vector<size_t> &o_originalPositions,
+      const PTCG::PLAYER _owner,
+      const PTCG::PILE _pile,
+      std::function<bool(Card*const)> _match
+      ) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to filter the card's
+  /// @param [io] io_unfiltered are the unfiltered cards, if a card passes the match function it is moved from here
+  /// @param [o] o_filtered is used to dump the filtered cards
+  /// @param [o] o_originalPositions stores the indices of the dumped cards
+  /// @param [in] _match is the match function which will be used to filter the cards
+  //----------------------------------------------------------------------------------------------------------------------
+  void filterCards(
+      std::vector<std::unique_ptr<Card>>& io_unfiltered,
+      std::vector<std::unique_ptr<Card>>& o_filtered,
+      std::vector<size_t>& o_originalPositions,
+      std::function<bool(Card*const)> _match
+      ) const;
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief a function which filters slots with a match function.
   /// @param [in] _owner is the player who owns the slots
   /// @param [in] _match is the function to filter with
@@ -520,44 +548,128 @@ private:
   /// @param [in] _trigger is the event that has just happened to trigger effects
   //----------------------------------------------------------------------------------------------------------------------
   void executeTurnEffects(const PTCG::TRIGGER _trigger);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to filter effects by their trigger, copying them from the queue
+  /// @param [in] _trigger is the trigger to filter by
+  /// @return the abilties in the queue that had the _trigger, and were set to execute on this turn
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<Ability> filterEffects(const PTCG::TRIGGER _trigger);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief function used to clear the effect queue, of this turns effects
+  //----------------------------------------------------------------------------------------------------------------------
   void clearEffects();
-  void filterPile(
-      std::vector<std::unique_ptr<Card>>& io_filtered,
-      std::vector<size_t> &io_originalPositions,
-      const PTCG::PLAYER _owner,
-      const PTCG::PILE _pile,
-      std::function<bool(Card*const)> _match
-      ) const;
-  void filterCards(
-      std::vector<std::unique_ptr<Card>>& io_unfiltered,
-      std::vector<std::unique_ptr<Card>>& io_filtered,
-      std::vector<size_t>& io_originalPositions,
-      std::function<bool(Card*const)> _match
-      ) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief internal function used put a card in a pile
+  /// @param [in] _owner is the owner of the pile
+  /// @param [in] _dest is the pile to put the card in
+  /// @param [in] _card is the card to put in the pile
+  //----------------------------------------------------------------------------------------------------------------------
   void putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest , std::unique_ptr<Card> &&_card);
-  std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief internal function used to take a card from a pile
+  /// @param [in] _owner is the owner of the pile
+  /// @param [in] _origin is the pile to take the card from
+  /// @param [in] _index is the position of the card to take, in the pile
+  /// @return the taken card
+  //----------------------------------------------------------------------------------------------------------------------
+  std::unique_ptr<Card> takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _origin, const size_t _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief internal function used convert a player enum into the index of the player
+  /// @param [in] _player is the enum to convert
+  /// @return the index of the player
+  //----------------------------------------------------------------------------------------------------------------------
   size_t playerIndex(const PTCG::PLAYER &_player) const;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief handle mulligans after hands are drawn
+  /// @param [io] io_mulligans holds the indices of the players to perform mulligans for
+  //----------------------------------------------------------------------------------------------------------------------
   void doMulligans(std::vector<size_t> &io_mulligans);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief draws 6 cards from the players deck and puts them in the hand
+  /// @param [in] _player is the player to draw a hand for
+  //----------------------------------------------------------------------------------------------------------------------
   void drawHand(const PTCG::PLAYER _player);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief plays the players active pokemon, and sets up their prize cards
+  /// @param [io] io_board is the board to set
+  /// @param [in] _active is the index in the boards hand, to play as the active pokemon
+  //----------------------------------------------------------------------------------------------------------------------
   void setBoard(Board& io_board, const size_t _active);
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief prepares the game for the start by setting up the boards, drawing hands, playing active and setting prize cards
+  //----------------------------------------------------------------------------------------------------------------------
   void setupGame();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief executes an attack sequence
+  /// @param [in] _pokemon is the pokemon thats attacking
+  /// @param [in] _index is the index of the attack on the _pokemon
+  //----------------------------------------------------------------------------------------------------------------------
   void attack(PokemonCard* _pokemon, const unsigned _index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief sequence that is executed when a pokemon is knocked out
+  /// @param [in] _player is the player who's pokemon has been knocked out
+  /// @param [in] _index is the position on the players bench of the pokemon that's been knocked out
+  //----------------------------------------------------------------------------------------------------------------------
   bool handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief execute effects of conditions such as burn and poison, that are triggered by the end of a turn
+  /// @param [in] _player is the player who's  conditions should be resolved
+  //----------------------------------------------------------------------------------------------------------------------
   void resolveAllEndConditions(const PTCG::PLAYER _player);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief execute effects of conditions such as sleep and paralysis which would interfere with the attack sequence
+  /// @param [in] _player is the player who's  conditions should be resolved
+  //----------------------------------------------------------------------------------------------------------------------
   bool resolveAttackConditions(const PTCG::PLAYER _player);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief execute effects of a single end condition
+  /// @param [in] _player is the player who's affected by the condtion
+  /// @param [in] _condition is the condition to resolve
+  //----------------------------------------------------------------------------------------------------------------------
   void resolveEndCondition(const PTCG::PLAYER _player, const PTCG::CONDITION _condition);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief takes an owner and thinker flag, and works out who the thinker is relative to the owner, for example if both
+  /// flags are ENEMY, then the player flag that should be passed to player choice is SELF, as they are choosing from their
+  /// owne pile.
+  /// @param [in] _thinker is the player who is going to make a choice
+  /// @param [in] _owner is the player who owns the options of the choice
+  /// @return the relative owner of the options
+  //----------------------------------------------------------------------------------------------------------------------
   PTCG::PLAYER relativeOwner(const PTCG::PLAYER _thinker, const PTCG::PLAYER _owner);
 
 private:
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief a vector of observers to be notified with events
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<GameObserver*> m_observers;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief an array of two player pointers, used as references to participants
+  //----------------------------------------------------------------------------------------------------------------------
   std::array<Player*, 2> m_players{{nullptr, nullptr}};
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief an array of two boards which hold all cards and slots
+  //----------------------------------------------------------------------------------------------------------------------
   std::array<Board, 2> m_boards;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief an internal damage handler to seperate out damage calculation for attacks
+  //----------------------------------------------------------------------------------------------------------------------
   DamageHandler m_damageHandler;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief set of playable cards for this turn, used to prevent multiple energies and supporters being played, but can
+  /// also be used for game effects that would prevent another type of card from being played
+  //----------------------------------------------------------------------------------------------------------------------
   std::unordered_set<PTCG::CARD> m_playableCards;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief the effect queue which holds pairs of turn to execute, and effect to execute
+  //----------------------------------------------------------------------------------------------------------------------
   std::vector<std::pair<unsigned, Ability>> m_effectQueue;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief the current turn of the game
+  //----------------------------------------------------------------------------------------------------------------------
   unsigned m_turnCount = 0;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief has the game ended.
+  //----------------------------------------------------------------------------------------------------------------------
   bool m_gameFinished  = false;
 
 };

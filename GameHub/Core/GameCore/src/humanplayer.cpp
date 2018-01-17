@@ -59,12 +59,28 @@ std::string pileStr(const PTCG::PILE _origin)
   return ret;
 }
 
+std::string conditionStr(PTCG::CONDITION _in)
+{
+  std::string ret;
+  switch(_in)
+  {
+    case PTCG::CONDITION::ASLEEP    : {ret="asleep"; break;}
+    case PTCG::CONDITION::BURNED    : {ret="burned"; break;}
+    case PTCG::CONDITION::CONFUSED  : {ret="confused"; break;}
+    case PTCG::CONDITION::PARALYZED : {ret="paralyzed"; break;}
+    case PTCG::CONDITION::POISONED  : {ret="poisoned"; break;}
+    default : {ret='-'; break;}
+  }
+  return ret;
+}
+
 template<typename T>
 std::vector<size_t> promptChoice(
     const PTCG::PLAYER _player,
     const std::string &_pile,
     const PTCG::ACTION _action,
     const std::vector<T> &_options,
+    const std::vector<std::string> &_optionNames,
     const unsigned _amount
     )
 {
@@ -78,17 +94,17 @@ std::vector<size_t> promptChoice(
     if (_player == PTCG::PLAYER::ENEMY) owner = "enemies ";
     do
     {
-      std::cout<<"Pick a card from 1 - "<<len<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<std::endl;
+      std::cout<<"Options:  ";
+      for (const auto& opt : _optionNames)
+        std::cout<<opt<<", ";
+      std::cout<<"\nPick a card from 1 - "<<len<<", to "<<actionStr(_action)<<" from your "<<owner<<_pile<<std::endl;
       if (std::cin.fail())
       {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       }
       else
-      {
         std::cin>>pick;
-
-      }
     }
     while(!std::cin.fail() && (picked.count(pick-1) || (pick > len)));
     --pick;
@@ -106,7 +122,11 @@ std::vector<size_t> HumanPlayer::chooseCards(
     const unsigned _amount
     )
 {
-  return promptChoice(_owner, pileStr(_origin), _action, _options, _amount);
+  std::vector<std::string> names;
+  names.reserve(_options.size());
+  for (const auto& opt : _options)
+    names.push_back(opt->getName());
+  return promptChoice(_owner, pileStr(_origin), _action, _options, names, _amount);
 }
 
 std::vector<size_t> HumanPlayer::chooseSlot(
@@ -116,7 +136,16 @@ std::vector<size_t> HumanPlayer::chooseSlot(
     const unsigned _amount
     )
 {
-  return promptChoice(_owner, "bench", _action, _options, _amount);
+  std::vector<std::string> names;
+  names.reserve(_options.size());
+  for (const auto& opt : _options)
+  {
+    if (opt.active())
+      names.push_back(opt.active()->getName());
+    else
+      names.push_back("empty");
+  }
+  return promptChoice(_owner, "bench", _action, _options, names, _amount);
 }
 
 void HumanPlayer::learnCards(
@@ -126,18 +155,39 @@ void HumanPlayer::learnCards(
     const std::vector<std::unique_ptr<Card>> &_revealed
     )
 {
-
+  std::string owner = "";
+  if (_owner == PTCG::PLAYER::ENEMY) owner = "enemies ";
+  for (size_t i = 0; i < _indices.size(); ++i)
+  {
+    auto& card = _revealed[i];
+    std::string msg =
+        "Card, ID: "
+        + std::to_string(card->getID())
+        + ", name: "
+        + card->getName()
+        + ", has been revealed in your "
+        + owner
+        + pileStr(_origin)
+        + ", at position: "
+        + std::to_string(_indices[i])
+        + ".\n";
+    std::cout<<msg;
+  }
 }
 
 std::vector<size_t> HumanPlayer::chooseEnergy(
     const PTCG::PLAYER _owner,
     const PTCG::PILE,
     const PTCG::ACTION _action,
-    const std::vector<std::unique_ptr<Card> > &_options,
+    const std::vector<std::unique_ptr<Card>> &_options,
     const unsigned _amount
     )
 {
-  return promptChoice(_owner, "active pokemon", _action, _options, _amount);
+  std::vector<std::string> names;
+  names.reserve(_options.size());
+  for (const auto& opt : _options)
+    names.push_back(opt->getName());
+  return promptChoice(_owner, "active pokemon", _action, _options, names, _amount);
 }
 
 std::vector<size_t> HumanPlayer::chooseConditions(
@@ -147,7 +197,11 @@ std::vector<size_t> HumanPlayer::chooseConditions(
     const unsigned _amount
     )
 {
-  return promptChoice(_owner,"energy cards",_action,_options,_amount);
+  std::vector<std::string> names;
+  names.reserve(_options.size());
+  for (const auto& opt : _options)
+    names.push_back(conditionStr(opt));
+  return promptChoice(_owner,"energy cards",_action,_options, names,_amount);
 }
 
 bool HumanPlayer::agree(const PTCG::ACTION _action)

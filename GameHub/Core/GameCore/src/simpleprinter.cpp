@@ -249,6 +249,7 @@ std::string SimplePrinter::bigECStr(EnergyCard* const _card) const
     switch(_card->type())
     {
     case tp::WATER : {ret = k_bigWaterEnergy; break;}
+    case tp::FIGHTING : {ret = k_bigFightEnergy; break;}
     case tp::FIRE : {ret = k_bigFireEnergy; break;}
     case tp::LIGHTNING : {ret = k_bigElectricEnergy; break;}
     case tp::GRASS : {ret = k_bigGrassEnergy; break;}
@@ -358,7 +359,7 @@ std::string SimplePrinter::energyCardStr(EnergyCard * const _card) const
     //    case PTCG::TYPE::DARKNESS :   {ret='D'; break;}
     //    case PTCG::TYPE::DRAGON :     {ret='N'; break;}
     //    case PTCG::TYPE::FAIRY :      {ret='Y'; break;}
-    //    case PTCG::TYPE::FIGHTING :   {ret='F'; break;}
+    case PTCG::TYPE::FIGHTING :   {ret=k_fightCard; break;}
     case PTCG::TYPE::FIRE :       {ret=k_fireCard; break;}
     case PTCG::TYPE::GRASS :      {ret=k_leafCard; break;}
     case PTCG::TYPE::LIGHTNING :  {ret=k_electricCard; break;}

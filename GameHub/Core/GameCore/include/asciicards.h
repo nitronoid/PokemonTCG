@@ -285,7 +285,7 @@ static constexpr auto k_emptyPrize = R"(
 -----)";
 
 static constexpr auto k_electricCard = R"(
-*---[ENERG]----*
+*---[ENERGY]---*
 |      /=====/ |
 |     /====/   |
 |    /===/     |
@@ -297,7 +297,7 @@ static constexpr auto k_electricCard = R"(
 *--------------*)";
 
 static constexpr auto k_fireCard = R"(
-*---[ENERG]----*
+*---[ENERGY]---*
 |     \.       |
 |     | "      |
 | .  *   }  ,  |
@@ -309,7 +309,7 @@ static constexpr auto k_fireCard = R"(
 *--------------*)";
 
 static constexpr auto k_leafCard = R"(
-*---[ENERG]----*
+*---[ENERGY]---*
 |     /||\     |
 |    / || \    |
 |   / \||/ \   |
@@ -321,7 +321,7 @@ static constexpr auto k_leafCard = R"(
 *--------------*)";
 
 static constexpr auto k_waterCard = R"(
-*---[ENERG]----*
+*---[ENERGY----*
 |       ____   |
 |     **'`     |
 |   *'  |      |
@@ -333,7 +333,7 @@ static constexpr auto k_waterCard = R"(
 *--------------*)";
 
 static constexpr auto k_fightCard = R"(
-*---[ENERG]----*
+*---[ENERGY]---*
 |     _  _     |
 |  _ | || | _  |
 | | || || || | |

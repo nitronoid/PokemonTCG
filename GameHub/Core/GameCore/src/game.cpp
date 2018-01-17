@@ -24,13 +24,14 @@ void Game::init(const CardFactory &_factory, Player*const io_playerA, Player*con
   m_players[1] = io_playerB;
 }
 
-void Game::start()
+void Game::playGame()
 {
   setupGame();
   while(!m_gameFinished)
   {
     nextTurn();
   }
+  std::cout<<"Player "<<turnCount()%2<<" wins!\n";
 }
 
 
@@ -99,7 +100,7 @@ void Game::playItem(TrainerCard* const _item, const size_t _index)
   _item->activateAbility(*this);
 }
 
-void Game::playTool(TrainerCard* const, const size_t _index)
+void Game::playTool(TrainerCard* const _tool, const size_t _index)
 {
   // Slots with a pokemon that has no tool attached
   static constexpr auto filter = [](BoardSlot*const _slot){ return _slot->active() && !_slot->viewTool();};
@@ -108,7 +109,7 @@ void Game::playTool(TrainerCard* const, const size_t _index)
     pileToBench(PTCG::PLAYER::SELF, PTCG::PILE::HAND, {_index}, slotChoice);
 }
 
-void Game::playEnergy(EnergyCard* const, const size_t _index)
+void Game::playEnergy(EnergyCard* const _energy, const size_t _index)
 {
   // Choose from slots with pokemon
   static constexpr auto filter = [](BoardSlot*const _slot){return _slot->active();};
@@ -138,7 +139,6 @@ bool Game::canPlay(Card*const _card)
 {
   return _card->canPlay(*this) && m_playableCards.count(_card->cardType());
 }
-
 
 bool Game::canAttack(const size_t _index)
 {
@@ -400,15 +400,15 @@ void Game::putToPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, std::unique_pt
   board.pile(_dest)->put(std::move(_card));
 }
 
-std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _dest, const size_t _index)
+std::unique_ptr<Card> Game::takeFromPile(const PTCG::PLAYER _owner, PTCG::PILE _origin, const size_t _index)
 {
   auto& board = m_boards[playerIndex(_owner)];
-  return board.pile(_dest)->take(_index);
+  return board.pile(_origin)->take(_index);
 }
 void Game::benchToPile(
     const PTCG::PLAYER &_owner,
     const PTCG::PILE &_dest,
-    std::function<bool(Card*const)> _match,
+    const std::function<bool(Card * const)> _match,
     const size_t &_index
     )
 {
@@ -481,8 +481,7 @@ void doubleVecSort(std::vector<T>&io_sorter, std::vector<T>&io_second)
   }
 }
 
-void Game::pileToBench(
-    const PTCG::PLAYER &_player,
+void Game::pileToBench(const PTCG::PLAYER &_owner,
     const PTCG::PILE &_origin,
     std::vector<size_t> _pileIndex,
     std::vector<size_t> _benchIndex
@@ -491,10 +490,10 @@ void Game::pileToBench(
   if ((_benchIndex.size() == _pileIndex.size()) && !_pileIndex.empty())
   {
     doubleVecSort(_pileIndex, _benchIndex);
-    auto& board = m_boards[playerIndex(_player)];
+    auto& board = m_boards[playerIndex(_owner)];
     for(size_t i = 0; i < _benchIndex.size(); ++i)
     {
-      board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_player, _origin, _pileIndex[i]));
+      board.m_bench.slotAt(_benchIndex[i])->attachCard(takeFromPile(_owner, _origin, _pileIndex[i]));
     }
   }
   else
@@ -505,7 +504,7 @@ void Game::pileToBench(
   }
 }
 
-std::vector<size_t> Game::filterSlots(const PTCG::PLAYER _owner, std::function<bool(BoardSlot*const)> _match) const
+std::vector<size_t> Game::filterSlots(const PTCG::PLAYER _owner, const std::function<bool(BoardSlot* const)> _match) const
 {
   std::vector<size_t> ret;
   auto benchSlots = viewBench(_owner);
@@ -556,9 +555,9 @@ void Game::retreat()
   }
 }
 
-void Game::switchActive(const PTCG::PLAYER &_player, const size_t &_subIndex)
+void Game::switchActive(const PTCG::PLAYER &_owner, const size_t &_subIndex)
 {
-  auto& board = m_boards[playerIndex(_player)];
+  auto& board = m_boards[playerIndex(_owner)];
   board.m_bench.switchActive(_subIndex);
 }
 
@@ -583,9 +582,9 @@ void Game::moveCards(
 
 void Game::filterCards(
     std::vector<std::unique_ptr<Card>>& io_unfiltered,
-    std::vector<std::unique_ptr<Card>>& io_filtered,
-    std::vector<size_t>& io_originalPositions,
-    std::function<bool(Card*const)> _match
+    std::vector<std::unique_ptr<Card>>& o_filtered,
+    std::vector<size_t>& o_originalPositions,
+    const std::function<bool(Card*const)> _match
     ) const
 {
   if(!io_unfiltered.empty())
@@ -597,25 +596,25 @@ void Game::filterCards(
       if(_match(card.get()))
       {
         // Move to our filtered vec
-        io_filtered.push_back(std::move(card));
+        o_filtered.push_back(std::move(card));
         // Save its original position
-        io_originalPositions.push_back(k);
+        o_originalPositions.push_back(k);
       }
     }
   }
 }
 
 void Game::filterPile(
-    std::vector<std::unique_ptr<Card>>& io_filtered,
-    std::vector<size_t>& io_originalPositions,
+    std::vector<std::unique_ptr<Card>>& o_filtered,
+    std::vector<size_t>& o_originalPositions,
     const PTCG::PLAYER _owner,
     const PTCG::PILE _pile,
-    std::function<bool(Card*const)> _match
+    const std::function<bool(Card*const)> _match
     ) const
 {
   // Retrieve the unfiltered cards
   auto unfiltered = viewPile(_owner, _pile);
-  filterCards(unfiltered, io_filtered, io_originalPositions, _match);
+  filterCards(unfiltered, o_filtered, o_originalPositions, _match);
 }
 
 std::vector<size_t> Game::playerConditionChoice(
@@ -635,7 +634,7 @@ std::vector<size_t> Game::playerCardChoice(
     const PTCG::PLAYER _owner,
     const PTCG::PILE _origin,
     const PTCG::ACTION _action,
-    std::function<bool (Card * const)> _match,
+    const std::function<bool (Card * const)> _match,
     const unsigned _amount,
     const bool _known,
     const size_t _range
@@ -677,7 +676,7 @@ std::vector<size_t> Game::playerSlotChoice(
     const PTCG::PLAYER _owner,
     const PTCG::ACTION _action,
     const unsigned _amount,
-    std::function<bool(BoardSlot*const)> _match,
+    const std::function<bool(BoardSlot * const)> _match,
     const bool _filterActive
     )
 {
@@ -788,15 +787,11 @@ bool Game::evolve(PokemonCard*const _postEvo, const size_t &_handIndex, const si
   std::cout<<"evolution failed."<<'\n';
   return false;
 }
-// Need to implement take single pokemon card from m_pokemon in Board Slot
-bool Game::devolve(const PTCG::PLAYER &_player, const unsigned &_index)
+
+bool Game::devolve(const PTCG::PLAYER &_owner, const unsigned &_index)
 {
-  Board& board = m_boards[playerIndex(_player)];
-  if(_index>5||board.m_bench.view().at(_index).numPokemon()==0)
-  {
-    std::cout<<"selected pokemon is out of bound or does not exist."<<'\n';
-    return false;
-  }
+  Board& board = m_boards[playerIndex(_owner)];
+  if(board.m_bench.slotAt(_index)->numPokemon() < 2) return false;
   board.hand()->put(std::unique_ptr<Card>(board.m_bench.slotAt(_index)->devolvePokemon().release()));
   return true;
 }
@@ -807,7 +802,7 @@ std::vector<size_t> Game::playerEnergyChoice(
     const PTCG::PILE _destination,
     const PTCG::ACTION _action,
     const size_t _slotIndex,
-    std::function<bool(Card*const)> _match,
+    const std::function<bool(Card * const)> _match,
     const unsigned _amount
     )
 {
@@ -874,7 +869,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
     //Taking a prize card in prize card.
     static constexpr auto prizes = [](Card* const card) -> bool {return card;};
-    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1);
+    auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1, false);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!m_boards[opponentIndex].prizeCards()->numCards())
       gameOver = true;
@@ -948,9 +943,14 @@ void Game::removeCondition(const PTCG::PLAYER &_target, const PTCG::CONDITION &_
   m_boards[playerIndex(_target)].m_bench.activeStatus()->removeCondition(_condition);
 }
 
-void Game::removeAllCondition(const PTCG::PLAYER &_target)
+void Game::removeAllConditions(const PTCG::PLAYER &_target)
 {
   m_boards[playerIndex(_target)].m_bench.activeStatus()->removeAllConditions();
+}
+
+unsigned Game::turnCount() const
+{
+  return m_turnCount;
 }
 
 unsigned Game::flipCoin(const unsigned _num)

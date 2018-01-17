@@ -31,6 +31,11 @@ bool Player::canPlay(const size_t &_index)
   return m_subjectGame->canPlay(_index);
 }
 
+bool Player::canAttack(const size_t &_index)
+{
+  return m_subjectGame->canAttack(_index);
+}
+
 Game Player::getDummyGame() const
 {
   return m_subjectGame->dummyClone();

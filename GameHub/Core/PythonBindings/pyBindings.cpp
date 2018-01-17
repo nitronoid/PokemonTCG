@@ -161,7 +161,7 @@ PYBIND11_MODULE(poke, m)
       .def("healDamage", &Game::healDamage, py::arg("_heal"), py::arg("_id") = 0u)
       .def("applyCondition", &Game::applyCondition)
       .def("removeCondition", &Game::removeCondition)
-      .def("removeAllCondition", &Game::removeAllCondition)
+      .def("removeAllCondition", &Game::removeAllConditions)
       .def("freeSlots", &Game::freeSlots)
       .def("playerCardChoice", &Game::playerCardChoice,
            py::arg("_thinker"),

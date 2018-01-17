@@ -17,7 +17,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief default copy assignment operator
   //----------------------------------------------------------------------------------------------------------------------
-  Ability& operator =(const Ability&) = default;
+  Ability& operator=(const Ability&) = default;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief specific assignment ctor for constructing an Ability
   /// @param [in] _ability effect function to be executed/used
@@ -40,7 +40,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   virtual ~Ability();
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief method for activing an ability to the current game state.
+  /// @brief method for activing an ability, requires a game for function calls.
   /// @param [in] _game current game state to affect.
   //----------------------------------------------------------------------------------------------------------------------
   void use(Game& _game) const;

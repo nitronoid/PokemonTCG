@@ -24,8 +24,12 @@ int main()
   GameLogger logger;
   SimplePrinter drawer;
   HumanPlayer a(&test);
+<<<<<<< HEAD
   AIPlayerBT b(&test);
 
+=======
+  RandomAI b(&test);
+>>>>>>> 5f8a9b5c254c312db75008e587730cfb3c6411f6
   test.init(testPool, &a, &b);
   test.registerObserver(&drawer);
   test.registerObserver(&logger);
@@ -36,7 +40,7 @@ int main()
   //  std::unique_ptr<TrainerCard> goo(static_cast<TrainerCard*>(testPool.loadCard(122)));
   //  goo->activateAbility(test);
 
-  test.start();
+  test.playGame();
 
 
 

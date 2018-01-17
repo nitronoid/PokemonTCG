@@ -14,7 +14,7 @@ std::string AIPlayerBT::deckName() const
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PTCG::PILE _origin, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
 {
-    setTime(m_time);
+    setTime(3000);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
@@ -23,7 +23,7 @@ std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PT
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseSlot(const PTCG::PLAYER _owner, const PTCG::ACTION _action, const std::vector<BoardSlot> &_options, const unsigned _amount)
 {
-    setTime(m_time);
+    setTime(3000);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
@@ -37,7 +37,7 @@ void AIPlayerBT::learnCards(const PTCG::PLAYER _owner, const PTCG::PILE _origin,
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseEnergy(const PTCG::PLAYER _owner, const PTCG::PILE _destination, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
 {
-    setTime(m_time);
+    setTime(3000);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
@@ -46,7 +46,7 @@ std::vector<size_t> AIPlayerBT::chooseEnergy(const PTCG::PLAYER _owner, const PT
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseConditions(const PTCG::PLAYER _owner, const PTCG::ACTION _action, const std::vector<PTCG::CONDITION> &_options, const unsigned _amount)
 {
-    setTime(m_time);
+    setTime(3000);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
@@ -64,19 +64,129 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
 //--------------------------------------------------------------------------
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
-    std::cout<<"SIZE OF COULOURLESS  "<<biggestAttack().size() - sortEnergies().size()<<std::endl;
     // variables
     m_attack = false;
     m_chooseAttack = 0;
 
-    setTime(m_time);
-    //play energy
-    attachEnergy();
+    // you can only play one energy at a time
+    setTime(3000);
+    // required energies for attack 1
+    // the number energy attached on card
+    setTime(3000);
+    playEvolutionCard();
 
-    // can only attack if you have the right energy thats why it cancels out
-    return std::pair<bool, unsigned> {false, 0};
+//    if(checkIfCardIsEvolution())
+//        playEvolutionCard();
+//    setTime(3000);
+
+
+    if(viewBench()[0].active()->attacks()[1].requirements().size() <= viewBench()[0].numEnergy())
+    {
+        m_chooseAttack = 0;
+        m_attack = true;
+    }
+
+
+        return std::pair<bool, unsigned> {m_attack, m_chooseAttack};
 
 }
+
+//--------------------------------------------------------------------------
+void AIPlayerBT::putPokemonOnBench()
+{
+    int positionOfHighestHP = 0;
+    auto hand = viewHand();
+    for(unsigned int i=0; i<hand.size(); ++i)
+    {
+        // checks if the card in your hand is an energy card
+        if(hand[i]->cardType() == PTCG::CARD::POKEMON)
+        {
+            auto pokemon = static_cast<PokemonCard*>(hand[i].get());
+            auto currentHighestPoke = static_cast<PokemonCard*>(hand[positionOfHighestHP].get());
+            if (pokemon->hp() > currentHighestPoke->hp())
+                positionOfHighestHP = i;
+        }
+    }
+    if(canPlay(positionOfHighestHP))
+        playCard(positionOfHighestHP);
+}
+
+//--------------------------------------------------------------------------
+bool AIPlayerBT::checkIfCardIsEnergy()
+{
+    // the iterator goes through the hand
+    for(unsigned int i=0; i<viewHand().size(); ++i)
+    {
+        // checks if the card in your hand is an energy card
+        if(viewHand()[i]->cardType() == PTCG::CARD::ENERGY)
+        {
+            std::cout<<"THERE IS ENERGY IN THE HAND"<<std::endl;
+            return true;
+        }
+        std::cout<<"THERE IS NO ENERGY IN HAND"<<std::endl;
+        return false;
+    }
+}
+//--------------------------------------------------------------------------
+void AIPlayerBT::playEvolutionCard()
+{
+    int evolved = 0;
+    auto hand = viewHand();
+    auto bench = viewBench();
+    for(unsigned int i=0; i<hand.size(); ++i)
+    {
+        if(hand[i]->cardType() == PTCG::CARD::POKEMON)
+        {
+
+            auto pokemon = static_cast<PokemonCard*>(hand[i].get());
+            //evolved = pokemon->preEvolution();
+            evolved = i;
+
+            for(unsigned int i=0; i<bench.size(); ++i)
+            {
+                if(bench[0].active()->getName() == pokemon->preEvolution())
+                {
+                    //evolved = pokemon->preEvolution();
+                    //evolved = i;
+                    if(canPlay(evolved))
+                        playCard(evolved);
+
+                }
+            }
+        }
+
+    }
+
+}
+//--------------------------------------------------------------------------
+/*bool AIPlayerBT::checkIfCardIsEvolution()
+{
+//DO WE NEED THIS FUNCTION?
+//probably not
+    auto hand = viewHand();
+    auto bench = viewBench();
+    for(unsigned int i=0; i<hand.size(); ++i)
+    {
+        if(hand[i]->cardType() == PTCG::CARD::POKEMON)
+        {
+            auto pokemon = static_cast<PokemonCard*>(hand[i].get());
+            if(bench[0].active()->getName() == pokemon->preEvolution())
+            {
+                std::cout<<"THERE IS EVOLUTION CARD IN THE HAND"<<std::endl;
+                return true;
+            }
+            std::cout<<"THERE IS NO EVOLUTION CARD IN THE HAND"<<std::endl;
+            return false;
+        }
+    }
+}*/
+
+//--------------------------------------------------------------------------
+void AIPlayerBT::setTime(int _amountMilliSeconds)
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(_amountMilliSeconds));
+}
+//--------------------------------------------------------------------------
 std::vector<PTCG::TYPE> AIPlayerBT::sortEnergies()
 {
     std::vector<PTCG::TYPE> _listOfSpecificEnergies;
@@ -207,11 +317,6 @@ bool AIPlayerBT::checkIfEnergyNeeded()
     return false;
 }
 //--------------------------------------------------------------------------
-void AIPlayerBT::setTime(int _amountMilliSeconds)
-{
-    std::this_thread::sleep_for(std::chrono::milliseconds(_amountMilliSeconds));
-}
-//--------------------------------------------------------------------------
 bool AIPlayerBT::checkTwoAttacks()
 {
     // iterate through the attacks
@@ -323,7 +428,6 @@ void AIPlayerBT::buildTree()
     selectsAttacks->addChild(new Condition(energyInHand()));
     selectsAttacks->addChild(ifTwoAttacks);
     selectsAttacks->addChild(ifOnlyOneAttack);
-    selectsAttacks->addChild(new Action(tempTrue("COULD NOT PUT ANY ENERGIES")));
     /// IF THERE IS TWO ATTACKS
     ifTwoAttacks->addChild(new Condition(checkTwoAttacks()));
     ifTwoAttacks->addChild(selectsWhichAttackBiggest);
@@ -344,10 +448,3 @@ void AIPlayerBT::buildTree()
     ifAttackTwoBigger->addChild(new Action(playEnergies(1)));
 
 }
-//--------------------------------------------------------------------------
-bool AIPlayerBT::tempTrue(std::__1::string _string)
-{
-    std::cout<<_string<<std::endl;
-    return true;
-}
-

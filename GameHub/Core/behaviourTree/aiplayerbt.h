@@ -108,6 +108,9 @@ public:
 
 
 
+    void putPokemonOnBench();
+
+
 
 
 
@@ -115,6 +118,13 @@ public:
 
     /// @build checks is the card needs energy
     bool checkIfEnergyNeeded();
+    /// @build checks if the card is an energy card
+    bool checkIfCardIsEnergy();
+    /// @build checks if the card is evolution pokemon card
+    bool checkIfCardIsEvolution();
+    /// @build play the evolution pokemon card (pokemon evolve to the next stage)
+    void playEvolutionCard();
+
     /// @build timer (think)
     void setTime(int _amountMilliSeconds);
 
@@ -133,8 +143,7 @@ public:
     bool playEnergies(int _index);
     /// @build check if energy in hand
     bool energyInHand();
-    /// @build temporary true
-    bool tempTrue(std::string _string);
+
 
 
 

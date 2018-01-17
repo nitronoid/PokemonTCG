@@ -25,6 +25,7 @@ int main()
   SimplePrinter drawer;
   HumanPlayer a(&test);
   AIPlayerBT b(&test);
+
   test.init(testPool, &a, &b);
   test.registerObserver(&drawer);
   test.registerObserver(&logger);

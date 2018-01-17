@@ -1,7 +1,15 @@
 import poke as p
 
+def canPlay(h):
+    # Check if active is damaged or in Special Conditions
+    return h.viewStatus(p.PLAYER.SELF).conditions() or h.viewBench(p.PLAYER.SELF)[0].getDamage()
+
+
 def bigMalasada(h):
     h.healDamage(20)
-    #conditionChoice = h.playerConditionChoice(p.PLAYER.SELF,p.PLAYER.SELF,p.ACTION.HEAL,h.,1)
-    print "should remove special condition from active pokemon"
+    conditions = h.viewStatus(p.PLAYER.SELF).conditions()
+    if not conditions:
+        conditionChoice = h.playerConditionChoice(p.PLAYER.SELF,p.PLAYER.SELF,p.ACTION.HEAL,conditions,1)
+        h.removeCondition(p.PLAYER.SELF,conditions[conditionChoice])
+        print "remove a special condition from active pokemon"
     

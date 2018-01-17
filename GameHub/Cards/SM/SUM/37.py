@@ -2,7 +2,7 @@ import poke as p
 
 def effect(h):
     print "cant retreat next turn"
-    h.setCanRetreat(p.SELF,False)
+    h.setCanRetreat(p.PLAYER.SELF,False)
 
 def canUse(h):
     return True

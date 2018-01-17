@@ -4,7 +4,7 @@ ___
 ## **Content**
 ___
 ### 1. **[Introduction](#introduction)**
-### 2. **[How do I make a card and a deck for PokeTCG?](#making-cards-and-decks)**
+### 2. **[How do I make a card and a deck for PokeTCG? Or anything Technical?](#making-cards-and-decks)**
 ### 3. **[How do I make an AI for PokeTCG?](#making-ais)**
 ### 4. **[How to play our game?](#how-to-play)**
 ___
@@ -249,6 +249,7 @@ ___
 - **[Activating Effects](#operations-affecting-game-state)**
 - **[Interactive and Choice Prompt](#interactive-functions)**
 - **[Delayed or Persistent Effects](#delayed-or-persistent-effects)**
+- **[ASCII Printer](#ascii-printer)**
 
 > These card implementations are not handled by the core, we simply call your functions when needed.
 
@@ -311,13 +312,19 @@ std::vector<std::unique_ptr<Card>>  viewPile(const PTCG::PLAYER _owner, const PT
   /// @return a copy of all slots in the bench
   //------------------------------------------------------------------------
   std::array<BoardSlot, 6>            viewBench(const PTCG::PLAYER &_player)   const;
+  //-------------------------------------------------------------------------------------
+  /// @brief gets a copy of the active status
+  /// @param [in] _owner is the player who owns the status
+  /// @return a copy of the _owners active status
+  //-------------------------------------------------------------------------------------
+  Status viewStatus(const PTCG::PLAYER _owner) const;
   //------------------------------------------------------------------------
   /// @brief gets the current tunr count
   /// @return the current turn count
   //------------------------------------------------------------------------
   unsigned turnCount() const;
 ```
-**[Back To Section](#details-of-implementations)**
+**[Back To Implementation Section](#details-of-implementations)**
 ___
 
 #### **Operations Affecting Game State**
@@ -462,7 +469,7 @@ ___
       const PTCG::PILE _destination
       );
 ```
-**[Back To Section](#details-of-implementations)**
+**[Back To Implementation Section](#details-of-implementations)**
 ___
 
 #### **Interactive Functions**
@@ -531,6 +538,22 @@ ___
       std::function<bool(Card*const)> _match,
       const unsigned _amount
       );
+  //-------------------------------------------------------------------------------------
+  /// @brief function that asks the player to choose condition(s) from their active pokemon
+  /// @param [in] _thinker is the player who must make the choice
+  /// @param [in] _owner is the player who owns the options
+  /// @param [in] _action is what will be done with the resulting choice
+  /// @param [in] _options are the conditions to choose from if they are on the active
+  /// @param [in] _amount is the amount of conditions that the _thinker should pick from the options
+  /// @return the indices of the picked conditons
+  //-------------------------------------------------------------------------------------
+  std::vector<size_t> playerConditionChoice(
+      const PTCG::PLAYER _thinker,
+      const PTCG::PLAYER _owner,
+      const PTCG::ACTION _action,
+      const std::vector<PTCG::CONDITION> _options,
+      const unsigned _amount
+      );
 ```
 **Example:**
 ```python
@@ -543,7 +566,7 @@ def filter(card):
 def canPlay(h):
     # checks if deck is not empty && checks if the type of pokemon is in the deck
     # if both return TRUE
-    return len(h.viewDeck(p.PLAYER.SELF)) > 0
+    return h.numCards(p.PLAYER.SELF,p.PILE.DECK)
 
 def nestBall(h):
     cards = h.playerCardChoice(
@@ -558,7 +581,7 @@ def nestBall(h):
     h.pileToBench(p.PLAYER.SELF, p.PILE.DECK, cards[:amount], freeSlots[:amount])
     h.shuffleDeck(p.PLAYER.SELF)
 ```
-**[Back To Section](#details-of-implementations)**
+**[Back To Implementation Section](#details-of-implementations)**
 ___
 #### **Delayed or Persistent Effects**
 
@@ -599,7 +622,7 @@ import poke as p
 
 def effect(h):
     print "cant retreat next turn"
-    h.setCanRetreat(p.SELF,False)
+    h.setCanRetreat(p.PLAYER.SELF,False)
 
 def roost(h):
     h.healDamage(30)
@@ -607,6 +630,258 @@ def roost(h):
     ability = p.Ability(effect, '', p.TRIGGER.START, p.DURATION.SINGLE)
     h.addEffect(p.PLAYER.SELF, 1, ability)
 
+```
+**[Back To Implementation Section](#details-of-implementations)**
+
+#### **ASCII Printer**
+
+- **[General Usage](#general-usage)**
+- **[Printer Structure](#printer-structure)**
+- **[Type Name Conversion](#type-name-conversion)**
+
+### **General Usage**
+
+To draw the board, simply call **drawBoard();** and it will print out both players.
+
+Re-printing is done automatically whenever changes in the board occur, so you don't have to worry about that.
+
+The printer draws both boards at once, and it differentiates between how to draw each of them using a boolean switch that is passed to function.
+
+**Example**
+```c++
+//this will mark the board as enemy and draw it in reverse order
+drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
+
+//while this will use standard order marking it as self
+drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
+```
+
+To draw a pokemon card, for example, your template string should include tags such as **$TYPE** or **$NAME**. There is no list of tags because those are not strictly defined. You can freely use your own tags, but if you wish to use our tags, take a look at a card you want to draw in **asciicards.h**. As long as you use the same tag in the card template and in the replacement function the information will be replaced correctly.
+
+For further information see **[Printer Structure](#printer-structure)**
+
+The function that deals with information replacement is called **str_replace_sent** and you **must** provide valid tag and new information as a string. There is an option to pad the text to the front of the input field, or back. This is controlled by a boolean parameter at the end. By default it is set to true (front) and you **do** **not** have to **specify** it **unless** **necessary**.
+
+**Example**
+```c++
+str_replace_sent(_str, "$HP", std::to_string(_card->hp()));
+
+//this line will pad to back                       vvv
+str_replace_sent(_str, "$NAME", _card->getName(), false);
+
+str_replace_sent(_str, "$T", std::string{charify(_card->type())});
+```
+
+For function descriptions see **documentation**.
+
+**[Back To ASCII Printer Section](#ascii-printer)**
+
+### **Printer Structure**
+
+The basic idea of the printer is that it takes a manually predefined default template string for an object, scans it for tags and substitutes those tags with appropriate information.
+
+Used tags include: **$T**; **$TXT**; **$NAME**; **$HP**; **$E**; **$EVO**; **$A**; **$W**; **$R** and others.
+
+You can use a custom tag, just make sure to include it in the card template. 
+
+All predefined card string templates are stored in **asciicards.h** and there are 4 types of card templates:
+
+- Big Card (used for card inspection, more information, larger size (64x28))
+- Standard Slot aka Sentinel Slot (used as a standard draw type for bench, moderate amount of information, size: 25x11)
+- Card aka Sentinel Card (used as a standard draw type for hand, minimal information, size: 17x10)
+- Prize Card (no information, size: 5x3)
+
+**Example** **(standard slot)**
+```
+*[$ID$/149][$L$/$HP$hp]*
+| $NAME$$$$$$$$$$ [$T$]|
+| Energy: $E$x         |
+| Tool: $TOOL$$$$$$$   |
+|----------------------|
+| $A0$$$$$ $D0$ ($AR0$)|
+| $A1$$$$$ $D1$ ($AR1$)|
+|----------------------|
+| [$W$]  [$R$$]  [$C$] |
+| [$STATUS$$$$$$$$$$$] |
+*----------------------*
+```
+
+You may notice that sometimes the input fields are much larger than the actual input information. This is not the problem because everything marked with **$** will be replaced with empty spaces by **str_replace** after the information has been filled in.
+
+Based on the type of ownership, the boards are drawn differently. Board sections include:
+
+- Active (slot with active pokemon)
+- Bench (other slots)
+- Hand (all cards in hand, **IGNORED** **if** **owner** **is** **ENEMY**)
+- Prize (all prize cards)
+
+**Example**
+```
+order for SELF:
+ I     ACTIVE
+ II    BENCH
+ III   HAND
+ IV    PRIZE
+
+order for ENEMY:
+ I     PRIZE
+ II    BENCH
+ III   ACTIVE
+```
+
+Printer is split into specialized methods to draw specific card types. All inspection functions have a word "big" in their names and every specific type function is named with that type.
+
+So for inspection we have: **bigSlotStr** and **bigCardStr**. Where bigCardStr calls one of the following: **bigPCStr**, **bigECStr** or **bigTCStr**, based on the type of card.
+
+And for standard we have: **slotStr** and **cardStr**. Where cardStr calls one of the following: **pokemonCardStr**, **energyCardStr** or **trainerCardStr**, based on the type of card.
+
+**[Back To ASCII Printer Section](#ascii-printer)**
+
+### **Type Name Conversion**
+
+Whenever you need to put a pokemon type into your card, there are 2 ways of doing that:
+
+- Using a single character (when there is little space)
+- Using the whole type name
+
+For example, we have a water pokemon with resistance to fire:
+
+To get a character use **charify**
+
+**Example**
+```c++
+//this will give 'W'
+char pType = charify(pokemonCard->type());
+//this will give 'F'
+char pRes = charify(pokemonCard->resistance());
+```
+
+To get a full string use **stringifyChar**
+
+**Example**
+```c++
+//this will give "WATER"
+std::string strPType = stringifyChar(charify(pokemonCard->type());
+//this will give "FIRE"
+std::string strPRes = stringifyChar(charify(pokemonCard->resistance());
+```
+
+**charify** can be used for **Pokemon** **Type** and **Condition**
+
+**stringify** can be used for **Card** **Type**
+
+**stringifyChar** can be used for **Pokemon** **Type** and **Condition**
+
+
+**[Back To Top](#poketcg-user-guides)**
+___
+#### **Battle Damage Handling**
+**This class is internal to our core so cards cannot access these functionalities directly, Please go to the [Details of Implementations and call functions from the Game core.](#details-of-implementations)**
+- Handles Weakness and Resistance calculation during damage calculation.
+- Handles Bonus Damage/Damage Reduction before/after Weakness/Resistance calculation.
+- Handles Global Status Condition damage and card effect damage (adding damage counters).
+___
+
+**Functions called by Game**
+
+```cpp
+ //--------------------------------------------------------------------------------------
+  /// @brief removing damage taken by a healing a pokemon
+  /// @param [in] _slot pokemon on a bench slot, to be healed
+  /// @param [in] _value healing amount
+  /// @return whether the healing failed
+  //-------------------------------------------------------------------------------------
+  bool heal(BoardSlot* _slot, const int &_value);
+  //-------------------------------------------------------------------------------------
+  /// @brief dealing damage to a pokemon, factor in weakness, bonus damages for active, factoring only base for benched
+  /// @param [in] _attacker bench on the attacking pokemon's side
+  /// @param [in] _defender bench on the defending pokemon's side
+  /// @param [in] _defenderIndex index of the bench for the defending pokemon
+  /// @param [in] _damage base damage of the attack
+  /// @param [in] _applyWeak whether the damage needs to apply weakness and resistance
+  //-------------------------------------------------------------------------------------
+  void generalDamage(
+      Bench *_attacker,
+      Bench *_defender,
+      const size_t &_defenderIndex,
+      const int &_damage,
+      const bool &_applyWeak = true
+      );
+  //-------------------------------------------------------------------------------------
+  /// @brief dealing damage, factor only base damage, simulates "Put x Damage Counters onto xxxx Pokemon from special conditions, attacks effects."
+  /// @param [in] _defender the slot for the defending pokemon
+  /// @param [in] _damage base damage of the attack/effect
+  //-------------------------------------------------------------------------------------
+  void rawDamage(BoardSlot* _defender, const int &_damage);
+  //-------------------------------------------------------------------------------------
+  /// @brief increases poison damage
+  /// @param [in] _damage how much to increase the Poison damage
+  //-------------------------------------------------------------------------------------
+  void increasePoison(const int _damage);
+  //-------------------------------------------------------------------------------------
+  /// @brief increases poison damage
+  /// @param [in] _damage how much to increase the Burn damage
+  //-------------------------------------------------------------------------------------
+  void increaseBurn(const int _damage);
+  //-------------------------------------------------------------------------------------
+  /// @brief increases poison damage
+  /// @param [in] _damage how much to increase the Confusion damage
+  //-------------------------------------------------------------------------------------
+  void increaseConfuse(const int _damage);
+  //-------------------------------------------------------------------------------------
+  /// @brief accessing game poison damage
+  /// @return current poison damage per turn
+  //-------------------------------------------------------------------------------------
+  int getPoison() const;
+  //-------------------------------------------------------------------------------------
+  /// @brief accessing game burn damage
+  /// @return current burn damage per turn
+  //-------------------------------------------------------------------------------------
+  int getBurn() const;
+  //-------------------------------------------------------------------------------------
+  /// @brief accessing game confusion damage
+  /// @return current confusion damage per tail on coin flip when attacking
+  //-------------------------------------------------------------------------------------
+  int getConfuse() const;
+```
+___
+**Internal Methods and Attributes:**
+```cpp
+ //--------------------------------------------------------------------------------------
+  /// @brief applying and determining weakness or resisitance within damage calculation
+  /// @param [in] _defender slot of the defending pokemon
+  /// @param [in] _attacker slot of the attacking pokemon
+  /// @return damage reduction when resistant, damage multiplies when weak against attack
+  //-------------------------------------------------------------------------------------
+  int applyWeakRes(BoardSlot* _defender, BoardSlot* _attacker);
+  //-------------------------------------------------------------------------------------
+  /// @brief adding the net bonus damage for damage calculation
+  /// @param [in] _defender slot of the defending pokemon
+  /// @param [in] _attacker slot of the attacking pokemon
+  /// @param [in] _order whether you are calculating net bonus before/after weakness/resistance application
+  /// @return net bonus damage before/after weakness/resistance calculation
+  //-------------------------------------------------------------------------------------
+  int applyBonusDamage(Status *_defender, Status *_attacker, const PTCG::ORDER &_order);
+  //-------------------------------------------------------------------------------------
+  /// @brief weakness multiplier
+  //-------------------------------------------------------------------------------------
+  int m_weaknessMult = 2;
+  //-------------------------------------------------------------------------------------
+  /// @brief resistance damage reduction
+  //-------------------------------------------------------------------------------------
+  int m_resistance = - 20;
+  //-------------------------------------------------------------------------------------
+  /// @brief base poison damage
+  //-------------------------------------------------------------------------------------
+  int m_poisonDamage = 10;
+  //-------------------------------------------------------------------------------------
+  /// @brief base burn damage
+  //-------------------------------------------------------------------------------------
+  int m_burnDamage = 20;
+  //-------------------------------------------------------------------------------------
+  /// @brief base confusion damage
+  //-------------------------------------------------------------------------------------
+  int m_confuseDamage = 30;
 ```
 **[Back To Top](#poketcg-user-guides)**
 ___

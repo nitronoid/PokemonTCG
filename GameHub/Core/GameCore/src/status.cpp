@@ -1,5 +1,51 @@
 #include "status.h"
 
+int  Status::getBonus(const PTCG::ORDER _order) const
+{
+  return m_bonusDamage[static_cast<size_t>(_order)];
+}
+
+int  Status::getReduction(const PTCG::ORDER _order) const
+{
+  return m_damageReduction[static_cast<size_t>(_order)];
+}
+
+bool Status::isProtected() const
+{
+  return m_protected;
+}
+
+bool Status::canRetreat() const
+{
+  return m_canRetreat;
+}
+
+void Status::resetAll()
+{
+  resetForNextTurn();
+  removeAllConditions();
+}
+
+void Status::resetForNextTurn()
+{
+  resetAllDamageBonuses();
+  resetAllDefenseBonuses();
+  m_protected = false;
+  m_canRetreat = true;
+}
+
+void Status::resetAllDamageBonuses()
+{
+  resetDamageBonus(PTCG::ORDER::AFTER);
+  resetDamageBonus(PTCG::ORDER::BEFORE);
+}
+
+void Status::resetAllDefenseBonuses()
+{
+  resetDefenseBonus(PTCG::ORDER::AFTER);
+  resetDefenseBonus(PTCG::ORDER::BEFORE);
+}
+
 void Status::resetDamageBonus(const PTCG::ORDER &_order)
 {
   m_bonusDamage[static_cast<size_t>(_order)] = 0;

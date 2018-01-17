@@ -123,6 +123,14 @@ PYBIND11_MODULE(poke, m)
       .def("retreatCost", &PokemonCard::retreatCost)
       .def("stage", &PokemonCard::stage);
 
+  py::class_<Status>(m, "Status")
+      .def(py::init<>())
+      .def("getBonus", &Status::getBonus)
+      .def("getReduction", &Status::getReduction)
+      .def("isProtected", &Status::isProtected)
+      .def("canRetreat", &Status::canRetreat)
+      .def("conditions", &Status::conditions);
+
   py::class_<BoardSlot>(m, "BoardSlot")
       .def(py::init<>())
       .def("getRemainingHP", &BoardSlot::getRemainingHP)
@@ -180,6 +188,7 @@ PYBIND11_MODULE(poke, m)
            py::arg("_match"),
            py::arg("_skipActive") = false)
       .def("playerEnergyChoice", &Game::playerEnergyChoice)
+      .def("playerConditionChoice", &Game::playerConditionChoice)
       .def("viewDeck", &Game::viewDeck)
       .def("viewDiscard", &Game::viewDiscard)
       .def("viewHand", &Game::viewHand)
@@ -199,7 +208,8 @@ PYBIND11_MODULE(poke, m)
            py::arg("_affected"),
            py::arg("_val") = true)
       .def("numCards", &Game::numCards)
-      .def("removeEnergy", &Game::removeEnergy);
+      .def("removeEnergy", &Game::removeEnergy)
+      .def("viewStatus", &Game::viewStatus);
 
 
 }

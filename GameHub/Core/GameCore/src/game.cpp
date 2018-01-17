@@ -57,6 +57,11 @@ void Game::inspectCard(const PTCG::PLAYER _owner, const PTCG::PILE _pile,  const
   notify<Event::INSPECT_CARD>(_owner, _pile, _index);
 }
 
+Status Game::viewStatus(const PTCG::PLAYER _owner) const
+{
+  return *m_boards[playerIndex(_owner)].m_bench.activeStatus();
+}
+
 Board* Game::getBoard(const PTCG::PLAYER _owner)
 {
   return &m_boards[playerIndex(_owner)];

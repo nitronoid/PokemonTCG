@@ -64,17 +64,17 @@ public:
   /// @brief accessing game poison damage
   /// @return current poison damage per turn
   //----------------------------------------------------------------------------------------------------------------------
-  inline int getPoison() const { return m_poisonDamage; }
+  int getPoison() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief accessing game burn damage
   /// @return current burn damage per turn
   //----------------------------------------------------------------------------------------------------------------------
-  inline int getBurn() const { return m_burnDamage; }
+  int getBurn() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief accessing game confusion damage
   /// @return current confusion damage per tail on coin flip when attacking
   //----------------------------------------------------------------------------------------------------------------------
-  inline int getConfuse() const { return m_confuseDamage; }
+  int getConfuse() const;
 
 private:
   //----------------------------------------------------------------------------------------------------------------------

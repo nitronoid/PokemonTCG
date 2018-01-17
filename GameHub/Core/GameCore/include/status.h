@@ -22,49 +22,35 @@ public:
   /// @param [in] apllication order
   /// @return bonus damage value
   //----------------------------------------------------------------------------------------------------------------------
-  inline int getBonus(const PTCG::ORDER _order) const { return m_bonusDamage[static_cast<size_t>(_order)]; }
+  int getBonus(const PTCG::ORDER _order) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief get resistance (damage reduction)
   /// @param [in] application order
   /// @return damage reduction value
   //----------------------------------------------------------------------------------------------------------------------
-  inline int getReduction(const PTCG::ORDER _order) const { return m_damageReduction[static_cast<size_t>(_order)]; }
+  int getReduction(const PTCG::ORDER _order) const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief get protection value
   /// @return true/false
   //----------------------------------------------------------------------------------------------------------------------
-  inline bool isProtected() const { return m_protected; }
+  bool isProtected() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief get retreat switch value
   /// @return true/false
   //----------------------------------------------------------------------------------------------------------------------
-  inline bool canRetreat() const { return m_canRetreat; }
+  bool canRetreat() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief method for resetting the Status
   //----------------------------------------------------------------------------------------------------------------------
-  void resetAll()
-  {
-    resetForNextTurn();
-    removeAllConditions();
-  }
+  void resetAll();
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief reset bonuses and switches
   //----------------------------------------------------------------------------------------------------------------------
-  void resetForNextTurn()
-  {
-    resetAllDamageBonuses();
-    resetAllDefenseBonuses();
-    m_protected = false;
-    m_canRetreat = true;
-  }
+  void resetForNextTurn();
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief reset damage bonuses
   //----------------------------------------------------------------------------------------------------------------------
-  void resetAllDamageBonuses()
-  {
-    resetDamageBonus(PTCG::ORDER::AFTER);
-    resetDamageBonus(PTCG::ORDER::BEFORE);
-  }
+  void resetAllDamageBonuses();
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief reset a single damage bonus
   /// @param [in] application order
@@ -73,11 +59,7 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief reset defense bonuses
   //----------------------------------------------------------------------------------------------------------------------
-  void resetAllDefenseBonuses()
-  {
-    resetDefenseBonus(PTCG::ORDER::AFTER);
-    resetDefenseBonus(PTCG::ORDER::BEFORE);
-  }
+  void resetAllDefenseBonuses();
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief reset single defense bonus
   /// @param [in] application order

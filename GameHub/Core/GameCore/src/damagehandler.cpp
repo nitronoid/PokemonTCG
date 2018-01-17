@@ -102,3 +102,19 @@ void DamageHandler::increasePoison(const int _damage)
   m_poisonDamage+=_damage;
 }
 
+int DamageHandler::getPoison() const
+{
+  return m_poisonDamage;
+}
+
+int DamageHandler::getBurn() const
+{
+  return m_burnDamage;
+}
+
+int DamageHandler::getConfuse() const
+{
+  return m_confuseDamage;
+}
+
+

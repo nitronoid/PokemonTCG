@@ -23,7 +23,7 @@ Player* HumanPlayer::clone() const
 
 std::string HumanPlayer::deckName() const
 {
-  return "test_deck.json";
+  return "roaring_heat_deck.json";
 }
 
 std::string actionStr(const PTCG::ACTION _action)

@@ -194,6 +194,12 @@ public:
   //----------------------------------------------------------------------------------------------------------------------
   Board* getBoard(const PTCG::PLAYER _owner);
   //----------------------------------------------------------------------------------------------------------------------
+  /// @brief gets a copy of the active status
+  /// @param [in] _owner is the player who owns the status
+  /// @return a copy of the _owners active status
+  //----------------------------------------------------------------------------------------------------------------------
+  Status viewStatus(const PTCG::PLAYER _owner) const;
+  //----------------------------------------------------------------------------------------------------------------------
   /// @brief a function that returns the number of cards in a pile.
   /// @param [in] _owner is the player who owns the pile
   /// @param [in] _pile is the pile to check

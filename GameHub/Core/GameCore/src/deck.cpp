@@ -47,6 +47,11 @@ std::vector<std::unique_ptr<Card>> Deck::view() const
   return ret;
 }
 
+bool Deck::empty() const
+{
+  return m_cards.empty();
+}
+
 void Deck::shuffle()
 {
   static std::random_device seed;

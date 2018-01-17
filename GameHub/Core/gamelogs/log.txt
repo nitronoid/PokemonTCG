@@ -1,0 +1,60 @@
+
+
+Card No.59, name: Stufful, id: 111 in Player 0's deck has been moved to their hand.
+Card No.58, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.57, name: Sandygast, id: 74 in Player 0's deck has been moved to their hand.
+Card No.56, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
+Card No.55, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
+Card No.54, name: Sandygast, id: 74 in Player 0's deck has been moved to their hand.
+Card No.59, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.58, name: Timer Ball, id: 134 in Player 1's deck has been moved to their hand.
+Card No.57, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+Card No.56, name: Roggenrola, id: 69 in Player 1's deck has been moved to their hand.
+Card No.55, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+Card No.54, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+----------
+Turn 0 start.
+----------
+Card No.47, name: Roggenrola, id: 69 in Player 0's deck has been moved to their hand.
+Card No.4, name: Sandygast, id: 74 in Player 0's hand has been played.
+----------
+Turn 1 start.
+----------
+Card No.47, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.2, name: Roggenrola, id: 69 in Player 1's hand has been played.
+----------
+Turn 2 start.
+----------
+Card No.46, name: Ultra Ball, id: 135 in Player 0's deck has been moved to their hand.
+Card No.4, name: Roggenrola, id: 69 in Player 0's hand has been played.
+----------
+Turn 3 start.
+----------
+Card No.46, name: Passimian, id: 73 in Player 1's deck has been moved to their hand.
+Card No.0, name: Fire Energy, id: 165 in Player 1's hand has been played.
+----------
+Turn 4 start.
+----------
+Card No.45, name: Palossand, id: 75 in Player 0's deck has been moved to their hand.
+Card No.5, name: Palossand, id: 75 in Player 0's hand has been played.
+----------
+Turn 5 start.
+----------
+Card No.45, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.5, name: Fighting Energy, id: 169 in Player 1's hand has been played.
+----------
+Turn 6 start.
+----------
+Card No.44, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
+Card No.5, name: Litten, id: 24 in Player 0's hand has been played.
+----------
+Turn 7 start.
+----------
+Card No.44, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.5, name: Fire Energy, id: 165 in Player 1's hand has been played.
+Player 1 used pokemon ID: 24, name: Litten's attack Bite.
+----------
+Turn 8 start.
+----------
+Card No.43, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+

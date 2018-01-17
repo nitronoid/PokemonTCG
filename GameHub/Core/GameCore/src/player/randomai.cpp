@@ -14,7 +14,7 @@ Player* RandomAI::clone() const
 
 std::string RandomAI::deckName() const
 {
-  return "test_deck.json";
+  return "roaring_heat_deck.json";
 }
 
 template<typename T>

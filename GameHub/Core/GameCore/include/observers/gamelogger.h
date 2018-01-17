@@ -1,7 +1,7 @@
 #ifndef GAMELOGGER_H
 #define GAMELOGGER_H
 
-#include "gameobserver.h"
+#include "observers/gameobserver.h"
 
 class GameLogger : public GameObserver
 {

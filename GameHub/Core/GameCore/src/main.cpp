@@ -2,8 +2,9 @@
 #include <memory>
 #include <typeinfo>
 #include "game.h"
-#include "gui/simpleprinter.h"
-#include "gamelogger.h"
+#include "observers/simpleprinter.h"
+#include "observers/gamelogger.h"
+#include "observers/gamestaller.h"
 #include "card/cardfactory.h"
 #include "player/randomai.h"
 #include "player/humanplayer.h"
@@ -17,17 +18,19 @@ int main()
   // Set up a factory for this card set, needs the directory to the cards and to the python bindings
   CardFactory sumFactory("../../Cards/SM/SUM/", "../PythonBindings/");
   sumFactory.init();
-  // Logger and ascii-gui
+  // Logger, ascii-gui and a staller so we can watch AI play
   GameLogger logger;
   SimplePrinter drawer;
+  GameStaller staller(1500);
   // Two players for the game
-  HumanPlayer firstPlayer(&game);
+  RandomAI firstPlayer(&game);
   RandomAI secondPlayer(&game);
   // Load the decks from the pool and attach players
   game.init(sumFactory, &firstPlayer, &secondPlayer);
-  // Attach both the log and the gui
-  game.registerObserver(&drawer);
+  // Attach our observers
   game.registerObserver(&logger);
+  game.registerObserver(&staller);
+  game.registerObserver(&drawer);
   // Play the game
   game.playGame();
   return EXIT_SUCCESS;

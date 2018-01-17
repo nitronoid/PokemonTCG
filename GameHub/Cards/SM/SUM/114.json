@@ -3,7 +3,7 @@
     "Name" : "Big Malasada",
     "Trainer" : "I",
     "Ability" : {
-        "Func" : "healDamage",
+        "Func" : "bigMalasada",
         "Duration" : "S",
         "Trigger" : "N"
     }

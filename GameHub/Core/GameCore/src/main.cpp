@@ -22,7 +22,7 @@ int main()
 
   GameLogger logger;
   SimplePrinter drawer;
-  HumanPlayer a(&test);
+  RoaringFluke a(&test);
   RandomAI b(&test);
   test.init(testPool, &a, &b);
   test.registerObserver(&drawer);

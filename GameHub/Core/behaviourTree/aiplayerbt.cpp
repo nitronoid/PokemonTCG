@@ -100,6 +100,7 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     // required energies for attack 1
     // the number energy attached on card
     setTime(3000);
+    playEvolutionCard();
 
 //    if(checkIfCardIsEvolution())
 //        playEvolutionCard();
@@ -209,19 +210,26 @@ bool AIPlayerBT::playEvolutionCard()
     {
         if(hand[i]->cardType() == PTCG::CARD::POKEMON)
         {
-            auto pokemon = static_cast<PokemonCard*>(hand[i].get());
-            if(bench[0].active()->getName() == pokemon->preEvolution())
-            {
-                // put evolution on basic pokemon
-                //pokemon->preEvolution() = pokemon->stage();
-                //pokemon->stage() = pokemon->preEvolution();
-                evolved = i;
 
+            auto pokemon = static_cast<PokemonCard*>(hand[i].get());
+            //evolved = pokemon->preEvolution();
+            evolved = i;
+
+            for(unsigned int i=0; i<bench.size(); ++i)
+            {
+                if(bench[0].active()->getName() == pokemon->preEvolution())
+                {
+                    //evolved = pokemon->preEvolution();
+                    //evolved = i;
+                    if(canPlay(evolved))
+                        playCard(evolved);
+
+                }
             }
         }
-        if(canPlay(evolved))
-            playCard(evolved);
+
     }
+
 }
 //--------------------------------------------------------------------------
 /*bool AIPlayerBT::checkIfCardIsEvolution()

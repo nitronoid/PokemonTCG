@@ -7,6 +7,7 @@
 #include "action.h"
 #include "condition.h"
 #include "player.h"
+#include <set>
 #include <algorithm>
 
 
@@ -96,28 +97,61 @@ public:
   virtual std::pair<bool, unsigned> turn() override;
 
 
-    /// @build play energy function
-    void playEnergy();
-    /// @build puts a pokemon on the bench
-    void putPokemonOnBench();
-    /// @build returns the type of energy needed (temp) for attack 0 on the active card
-    PTCG::TYPE typeReturnofActiveCard();
+    /// @build attach an energy
+    void attachEnergy();
+    /// @build sort energies of biggest attack
+    std::vector<PTCG::TYPE> sortEnergies();
+    /// @build when to attack
+    bool attackPokemon();
+    /// @build return the biggest attack
+    std::vector<PTCG::TYPE> biggestAttack();
+
+
+
+
+
+
+
+
     /// @build checks is the card needs energy
     bool checkIfEnergyNeeded();
-    /// @build checks if the card is an energy card
-    bool checkIfCardIsEnergy();
     /// @build timer (think)
     void setTime(int _amountMilliSeconds);
 
 
-bool temp();
+    /// @build tree
+    /// @build condition fuction
+    bool checkTwoAttacks();
+    /// @build check if attack one is bigger
+    bool checkAttackBigger();
+    /// @build check vector size of requirement attack
+    bool checkVectorSize(int _i);
+    /// @build check if energy needed
+    bool needEnergy(int _index);
+    void buildTree();
+    /// @build play Energy
+    bool playEnergies(int _index);
+    /// @build check if energy in hand
+    bool energyInHand();
+    /// @build temporary true
+    bool tempTrue(std::string _string);
+
+
+
+
+
+
+
+
 
 private:
     /// @build this decides if you attack or not
     bool m_attack = false;
     /// @build this decides which attack you are choosing first(0) or second(1)
     int m_chooseAttack = 0;
-
+    /// @build time in milliseconds
+    int m_time = 1000;
 };
+
 
 #endif // AIPLAYERBT_H

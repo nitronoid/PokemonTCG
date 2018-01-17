@@ -1,14 +1,11 @@
 #include "action.h"
-Action::Action() : Node()
-{}
+Action::Action(bool _action)
+{
+    m_action = _action;
+}
 //-------------------------------------------------------
 bool Action::execute()
 {
-    std::cout<<"ACTION"<<'\n';
-    return true;
+    return m_action;
 }
 //-------------------------------------------------------
-bool testAction::execute()
-{
-
-}

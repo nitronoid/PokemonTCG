@@ -10,20 +10,14 @@ public:
     ///------------------------------------------------------------------------------
     /// @build default constructor
     ///------------------------------------------------------------------------------
-    Action();
+    Action(bool _action);
     ///------------------------------------------------------------------------------
     /// @build execution node override
     ///------------------------------------------------------------------------------
     virtual bool execute() override;
-
-};
-
-class testAction : public Action
-{
-public:
-    testAction(){;}
-    virtual bool execute() override;
 private:
+    bool m_action;
+
 };
 
 

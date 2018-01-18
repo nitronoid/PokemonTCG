@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Card No.59, name: Professor Kukui, id: 128 in Player 0's deck has been moved to their hand.
 Card No.58, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
 Card No.57, name: Torracat, id: 25 in Player 0's deck has been moved to their hand.
@@ -359,3 +360,41 @@ Card No.7, name: Fighting Energy, id: 169 in Player 0's deck has been moved to t
 Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
 The pokemon in slot 0 on Player 1's bench has been knocked out.
 Card No.5, name: Fire Energy, id: 165 in Player 0's prize has been moved to their hand.
+=======
+Card No.59, name: Chinchou, id: 49 in Player 0's deck has been moved to their hand.
+Card No.58, name: Timer Ball, id: 134 in Player 0's deck has been moved to their hand.
+Card No.57, name: Lightning Energy, id: 167 in Player 0's deck has been moved to their hand.
+Card No.56, name: Psyduck, id: 28 in Player 0's deck has been moved to their hand.
+Card No.55, name: Lightning Energy, id: 167 in Player 0's deck has been moved to their hand.
+Card No.54, name: Energy Retrieval, id: 116 in Player 0's deck has been moved to their hand.
+Card No.59, name: Cloyster, id: 34 in Player 1's deck has been moved to their hand.
+Card No.58, name: Lightning Energy, id: 167 in Player 1's deck has been moved to their hand.
+Card No.57, name: Potion, id: 127 in Player 1's deck has been moved to their hand.
+Card No.56, name: Lightning Energy, id: 167 in Player 1's deck has been moved to their hand.
+Card No.55, name: Lillie, id: 122 in Player 1's deck has been moved to their hand.
+Card No.54, name: Ultra Ball, id: 135 in Player 1's deck has been moved to their hand.
+Card No.5, name: Ultra Ball, id: 135 in Player 1's hand has been moved to their deck.
+Card No.4, name: Lillie, id: 122 in Player 1's hand has been moved to their deck.
+Card No.3, name: Lightning Energy, id: 167 in Player 1's hand has been moved to their deck.
+Card No.2, name: Potion, id: 127 in Player 1's hand has been moved to their deck.
+Card No.1, name: Lightning Energy, id: 167 in Player 1's hand has been moved to their deck.
+Card No.0, name: Cloyster, id: 34 in Player 1's hand has been moved to their deck.
+Card No.59, name: Togedemaru, id: 53 in Player 1's deck has been moved to their hand.
+Card No.58, name: Timer Ball, id: 134 in Player 1's deck has been moved to their hand.
+Card No.57, name: Water Energy, id: 166 in Player 1's deck has been moved to their hand.
+Card No.56, name: Water Energy, id: 166 in Player 1's deck has been moved to their hand.
+Card No.55, name: Shellder, id: 33 in Player 1's deck has been moved to their hand.
+Card No.54, name: Professor Kukui, id: 128 in Player 1's deck has been moved to their hand.
+----------
+Turn 0 start.
+----------
+Card No.47, name: Corsola, id: 36 in Player 0's deck has been moved to their hand.
+Card No.5, name: Corsola, id: 36 in Player 0's hand has been played.
+Card No.1, name: Lightning Energy, id: 167 in Player 0's hand has been played.
+Player 0 used pokemon ID: 49, name: Chinchou's attack Searching Light.
+----------
+Turn 1 start.
+----------
+Card No.47, name: Cloyster, id: 34 in Player 1's deck has been moved to their hand.
+Card No.3, name: Shellder, id: 33 in Player 1's hand has been played.
+>>>>>>> 0f5bd581ded29dabe90d9f3929b6ed500653b876

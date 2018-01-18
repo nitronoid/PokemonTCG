@@ -5,7 +5,7 @@
 #include <random>
 #include <algorithm>
 #include <functional>
-
+unsigned found;
 Player* RoaringFluke::clone() const
 {
     return new RoaringFluke(*this);
@@ -38,10 +38,16 @@ std::vector<size_t> RoaringFluke::chooseSlot(
         const unsigned _amount
         )
 {
+    for (auto& opt : _options)
+    {
+
+    }
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
+
     return badChoice;
+
 }
 
 void RoaringFluke::learnCards(
@@ -101,13 +107,17 @@ std::pair<bool, unsigned> RoaringFluke::turn()
     cardRefList curEnergyList, curPokemonList, curTrainerList;
     std::cout<<"\nRoaring flukes Pokemon:\n\n";
 
+    //------------------------------------------------we create lists based on card type in our deck to simplify AI access to cards---------------------------------------------
     std::vector<int>currentPokeIndexList;
     std::vector<int>currentEnergyIndexList;
     std::vector<int>currentTrainerIndexList;
+
+
     for (int i = 0 ; i < initHand.size(); ++i)
     {
         auto& currentCard = initHand[i];
         std::cout<<i+1<<" "<<currentCard->getName()<<" - "<<currentCard->getID()<<"\n";
+
         if (currentCard->cardType() == PTCG::CARD::ENERGY)
         {
             curEnergyList.push_back(currentCard);
@@ -116,32 +126,37 @@ std::pair<bool, unsigned> RoaringFluke::turn()
         {
             curPokemonList.push_back(currentCard);
             currentPokeIndexList.push_back(i);
-        }else
+        }else if(currentCard->cardType() == PTCG::CARD::ITEM || currentCard->cardType() == PTCG::CARD::SUPPORT)
         {
             curTrainerList.push_back(currentCard);
             currentTrainerIndexList.push_back(i);
         }
     }
-
+    //**************************************************************************************************************************************************************************
 
     std::cout<<"\nNumber of Pokemon - "<<curPokemonList.size()<<".\n";
     std::cout<<"Number of Energy - "<<curEnergyList.size()<<".\n";
     std::cout<<"Number of Trainers - "<<curTrainerList.size()<<".\n\n";
-    //gets our & enemys current active pokemon and stores them
-    //[
-    PokemonCard* currentPoke = viewBench()[0].active();
+
+    //------------------------------------------------gets our's & enemy's current active pokemon and stores them---------------------------------------------------------------
+    auto bench = viewBench();
+    PokemonCard* currentPoke = bench[0].active();
     PokemonCard* enCurrentPoke = viewBench(PTCG::PLAYER::ENEMY)[0].active();
     auto slot = viewBench()[0];
     auto enslot  = viewBench(PTCG::PLAYER::ENEMY)[0];
-    //]
+    //**************************************************************************************************************************************************************************
+
     std::cout<<"Current Active: "<<currentPoke->getName()<<" - "<<currentPoke->hp()<<"hp.\n\n";
     bool needswitch = false;
     bool switchfound = false;
     size_t bestPos = 0;
+    unsigned evoPoke = 0;
+
     int i = 0;
 
+    //------------------------------------------------pokemon brain really starts here------------------------------------------------------------------------------------------
 
-    //pokemon brain really starts here
+    //------------------------------------------------pokemon card managment starts here------------------------------------------------------------------------------------
     if (curPokemonList.size())
     {
         for (auto& card : curPokemonList)
@@ -149,172 +164,257 @@ std::pair<bool, unsigned> RoaringFluke::turn()
             PokemonCard* pokemon = static_cast<PokemonCard*>(card.get().get());
             PokemonCard* currentBest = static_cast<PokemonCard*>(curPokemonList[bestPos].get().get());
             if (pokemon->hp() > currentBest->hp())
-            {
                 bestPos = i;
+            std::string preEv = pokemon->preEvolution();
+            if (preEv.empty() != true)
+            {
+                std::cout<<pokemon->getName()<<" Has pre evoltion: '"<<preEv<<"'.\n";
+
+                for (auto& card : curPokemonList)
+                {
+                    PokemonCard* currentEv = static_cast<PokemonCard*>(card.get().get());
+                    if (preEv == currentEv->getName())
+                    {
+                        std::cout<<preEv<<" is in your hand.\n";
+
+
+                        for (int k = 0 ; k < 6; ++k)
+                        {
+                            if(bench[k].active() && bench[k].active()->getName() == currentEv->getName())
+                            {
+                                std::cout<<"OH DAMN "<<currentEv->getName()<<" is on your bench E.\n";
+                                found = k;
+                            }else if (bench[k].active())
+                            {
+                                std::cout<<bench[k].active()->getName()<<" is on your bench NE.\n";
+                            }
+                        }
+
+                        if (found)
+                        {
+                            playCard(currentPokeIndexList[i]);
+                            std::cout<<"Playing "<<pokemon->getName()<<".\n";
+                            found = 0;
+                        } else
+                        {
+                            if (evoPoke = 0)
+                            {
+
+                            }
+                            playCard(currentPokeIndexList[evoPoke]);
+                            playCard(currentPokeIndexList[i]);
+                            std::cout<<"Playing "<<currentEv->getName()<<" and its evoltion "<<pokemon->getName()<<".\n";
+
+                        }
+
+
+                    }else
+                    {
+
+                        std::cout<<preEv<<" is NOT in ph"<<evoPoke<<".\n";
+                    }
+                    ++evoPoke;
+                }
             }
             ++i;
         }
 
-        PokemonCard* bestHealth = static_cast<PokemonCard*>(curPokemonList[bestPos].get().get());
 
-        if (slot.getRemainingHP() <= 30) needswitch = true;
-        if (canPlay(currentPokeIndexList[bestPos]))
+    PokemonCard* bestHealth = static_cast<PokemonCard*>(curPokemonList[bestPos].get().get());
+
+    if (slot.getRemainingHP() <= 30) needswitch = true;
+    if (canPlay(currentPokeIndexList[bestPos]))
+    {
+        std::cout<<"\n\nBest Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - Playable.\n\n";
+
+        if (currentPoke->hp() < bestHealth->hp())
         {
-            std::cout<<"Best Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - Playable.\n\n";
+            //if active has energy we need to hold horses
+            playCard(currentPokeIndexList[bestPos]);
+            std::cout<<"Switched out active for best Health\n";
 
-            if (currentPoke->hp() < bestHealth->hp())
-            {
-
-                playCard(currentPokeIndexList[bestPos]);
-                std::cout<<"Switched out active for best Health\n";
-
-            }else
-            {
-                std::cout<<"can't switch due to active pokemon having better health\n";
-            }
+        }else
+        {
+            std::cout<<"can't switch due to active pokemon having better health\n";
         }
-        else
+    }
+    else
+    {
+        std::cout<<"Best Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - NOT Playable.\n\n";
+        if (needswitch)
         {
-            std::cout<<"Best Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - NOT Playable.\n\n";
-            if (needswitch)
+
+            for (int j = 0 ; j < curPokemonList.size(); ++j)
             {
+                PokemonCard* pokemon = static_cast<PokemonCard*>(curPokemonList[j].get().get());
 
-                for (int j = 0 ; j < curPokemonList.size(); ++j)
+                if (canPlay(j))
                 {
-                    PokemonCard* pokemon = static_cast<PokemonCard*>(curPokemonList[j].get().get());
-
-                    if (canPlay(j))
+                    if (pokemon->weakness() != enCurrentPoke->type())
                     {
-                        if (pokemon->weakness() != enCurrentPoke->type())
+                        if (bestHealth->weakness() == enCurrentPoke->type())
                         {
-                            if (bestHealth->weakness() == enCurrentPoke->type())
-                            {
-                                bestPos = j;
-                                if (pokemon->hp() > enCurrentPoke->hp())
-                                {
-                                    if (pokemon->hp() > bestHealth->hp())
-                                    {
-                                        bestPos = j;
-                                    }
-                                }
-                            }else
+                            bestPos = j;
+                            if (pokemon->hp() > enCurrentPoke->hp())
                             {
                                 if (pokemon->hp() > bestHealth->hp())
                                 {
                                     bestPos = j;
                                 }
-                                if (pokemon->hp() > enCurrentPoke->hp())
-                                {
-                                    bestPos = j;
-                                }
                             }
-
-
-                        }
-
-                    } else
-                    {
-                        curPokemonList.erase(curPokemonList.begin() + j);
-                        --j;
-                        if (curPokemonList.size() == 0)
+                        }else
                         {
-                            std::cout<<"No Playable Pokemon\n";
-                            needswitch = false;
+                            if (pokemon->hp() > bestHealth->hp())
+                            {
+                                bestPos = j;
+                            }
+                            if (pokemon->hp() > enCurrentPoke->hp())
+                            {
+                                bestPos = j;
+                            }
                         }
                     }
-                }
-                if (needswitch)playCard(bestPos);
-            }
-            needswitch = false;
-        }
 
-    } else
-    {
-        std::cout<<"there were no pokemon in your hand\n";
-    }
-
-
-
-
-    //energy
-    if (curEnergyList.size())
-    {
-        std::cout<<"Calculating Energy\n";
-        currentPoke = viewBench()[0].active();
-        slot = viewBench()[0];
-        signed target = 0;
-        for (auto& attack : slot.active()->attacks())
-        {
-            int curr = attack.requirements().size();
-            if (curr > target)
-                target = curr;
-        }
-        std::cout<<"number of energy on main - "<<slot.numEnergy()<<"\nnumber of energy needed for best attack - "<<target<<".\n";
-        if (slot.numEnergy() <= target)
-        {
-            std::vector<Attack> attacks = currentPoke->attacks();
-            auto requirements = attacks[attacks.size() - 1].requirements();
-            bool played = false;
-            std::cout<<"about to match energy\n";
-            for (int j = 0 ; j < requirements.size(); ++j)
-            {
-                for (int t = 0 ; (t < curEnergyList.size()) && !played; ++t)
+                } else
                 {
-                    EnergyCard* energy = static_cast<EnergyCard*>(curEnergyList[t].get().get());
-                    if (requirements[j] == energy->type())
+                    curPokemonList.erase(curPokemonList.begin() + j);
+                    --j;
+                    if (curPokemonList.size() == 0)
                     {
-                        bestPos = t;
-                        played = true;
-                    } else if  (requirements[j] == PTCG::TYPE::COLOURLESS)
-                    {
-                        bestPos = t;
-                        played = true;
+                        std::cout<<"No Playable Pokemon\n";
+                        needswitch = false;
                     }
                 }
-
             }
-            if (canPlay(currentEnergyIndexList[bestPos]))
+            if (needswitch)playCard(bestPos);
+        }
+        needswitch = false;
+    }
+
+} else
+{
+std::cout<<"there were no pokemon in your hand\n";
+}
+
+//**************************************************************************************************************************************************************************
+
+//------------------------------------------------energy card managment starts here-----------------------------------------------------------------------------------------
+if (curEnergyList.size())
+{
+
+    std::cout<<"Calculating Energy\n";
+    currentPoke = bench[0].active();
+    slot = viewBench()[0];
+    signed target = 0;
+    for (auto& attack : slot.active()->attacks())
+    {
+        int curr = attack.requirements().size();
+        if (curr > target)
+        {
+            target = curr;
+        }
+    }
+    std::cout<<"number of energy on main - "<<slot.numEnergy()<<"\nnumber of energy needed for best attack - "<<target<<".\n";
+    if (slot.numEnergy() <= target)
+    {
+        std::vector<Attack> attacks = currentPoke->attacks();
+        auto requirements = attacks[attacks.size() - 1].requirements();
+        bool played = false;
+        unsigned bestAtt;
+        std::cout<<"about to match energy\n";
+        for (int j = 0 ; j < requirements.size(); ++j)
+        {
+            for (int t = 0 ; (t < curEnergyList.size()) && !played; ++t)
             {
-                playCard(currentEnergyIndexList[bestPos]);
-                std::cout<<"there is no Energy in your hand\n";
+                EnergyCard* energy = static_cast<EnergyCard*>(curEnergyList[t].get().get());
+                if (requirements[j] == energy->type())
+                {
+                    bestAtt = t;
+                    played = true;
+                } else if  (requirements[j] == PTCG::TYPE::COLOURLESS)
+                {
+                    bestAtt = t;
+                    played = true;
+                }
             }
+
         }
-
-    } else
-    {
-        std::cout<<"there is no Energy in your hand\n";
-    }
-
-    if (curTrainerList.size())
-    {
-
-    } else
-
-    {/*15 feb 7.30 b32 */
-        std::cout<<"there are no Trainers in your hand\n";
-    }
-
-
-    //START ATTACKING
-    std::cout<<"\n\nCalculating Attack\n";
-    currentPoke = viewBench()[0].active();
-    unsigned bestAttack;
-    bool shouldAttack = false;
-    for (int j = 0 ; j < slot.active()->attacks().size(); ++j)
-    {
-        std::cout<<"Attact no - "<<j;
-        if (canAttack(j))
+        if (canPlay(currentEnergyIndexList[bestAtt]))
         {
-            bestAttack = j;
-            shouldAttack = true;
-        }else
-        {
-            std::cout<<" - FAIL\n";
+            playCard(currentEnergyIndexList[bestAtt]);
+            std::cout<<"pe\n";
         }
     }
-    if (shouldAttack)std::cout<<" - SUCCESS\npokemon will attack with attack no "<<bestAttack<<".\n\n";
 
-    return std::pair<bool, unsigned> {shouldAttack, bestAttack};
+} else
+{
+std::cout<<"there is no Energy in your hand\n";
+}
+
+//**************************************************************************************************************************************************************************
+
+//------------------------------------------------trainer cards managment starts here---------------------------------------------------------------------------------------
+
+if (curTrainerList.size())
+{
+    /*int i;
+        TrainerCard* curtrainer = static_cast<TrainerCard*>(curTrainerList[i].get().get());
+        for(i; i < currentTrainerIndexList.size()-1; i++ )
+        {
+            if(canPlay(currentTrainerIndexList[i]))
+            {
+                int healthLost=currentPoke->hp()-slot.getRemainingHP();
+                //if(healthLost >= 20 && healthLost <30 )
+                //{
+                if(curtrainer->getName()=="Big Malasada")
+                {
+                    playCard(currentTrainerIndexList[i]);
+                    std::cout<<"\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+                }
+                //                }else if(healthLost >=30)
+                //                {
+                if(curtrainer->getName()=="Potion")
+                {
+                    playCard(currentTrainerIndexList[i]);
+                    std::cout<<"\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+
+                }
+            }
+            //playCard(currentTrainerIndexList[i]);
+        }*/
+
+} else
+
+{/*15 feb 7.30 b32 */
+std::cout<<"there are no Trainers in your hand\n";
+}
+//**************************************************************************************************************************************************************************
+
+//START ATTACKING
+std::cout<<"\n\nCalculating Attack\n";
+currentPoke = bench[0].active();
+unsigned bestAttack;
+bool shouldAttack = false;
+for (int j = 0 ; j < slot.active()->attacks().size(); ++j)
+{
+    std::cout<<"Attact no - "<<j;
+    if (canAttack(j))
+    {
+        bestAttack = j;
+        shouldAttack = true;
+    }else
+    {
+        std::cout<<" - FAIL\n";
+    }
+}
+if (shouldAttack)
+{
+    std::cout<<" - SUCCESS\n";
+    std::cout<<"pokemon will attack with attack no "<<bestAttack<<".\n\n";
+}
+
+return std::pair<bool, unsigned> {shouldAttack, bestAttack};
+//******************************************************************************************************************************************************************************
 }
 
 

@@ -1,4 +1,4 @@
-#ifndef BENCH_H
+ #ifndef BENCH_H
 #define BENCH_H
 
 #include "board/boardslot.h"

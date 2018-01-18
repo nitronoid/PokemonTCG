@@ -6,7 +6,7 @@ can be played. You must implement a canPlay function to make sure these constrai
 '''
 def canPlay(h):
     # if deck has at least two cards 
-    return h.numCards(p.PLAYER.SELF, p.PILE.DECK) > 0
+    return h.numCards(p.PLAYER.SELF, p.PILE.DECK) >= 2
 
 def professorKukui(h):
     # draw two cards

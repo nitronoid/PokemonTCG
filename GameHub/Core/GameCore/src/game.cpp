@@ -15,13 +15,15 @@ Game::Game(const Game &_original) :
 
 void Game::init(const CardFactory &_factory, Player*const io_playerA, Player*const io_playerB)
 {
-  for (auto& board : m_boards)
-  {
-    board.deck()->init(_factory.loadDeck(io_playerA->deckName()));
-    board.deck()->shuffle();
-  }
   m_players[0] = io_playerA;
   m_players[1] = io_playerB;
+  for (size_t i = 0; i < m_boards.size(); ++i)
+  {
+    auto& board = m_boards[i];
+    auto& player = m_players[i];
+    board.deck()->init(_factory.loadDeck(player->deckName()));
+    board.deck()->shuffle();
+  }
 }
 
 void Game::playGame()
@@ -371,8 +373,8 @@ void Game::nextTurn()
       checkForKnockouts();
       // Remove all the effects for this turn from the queue, now that we executed them all
       clearEffects();
+      ++m_turnCount;
     }
-    ++m_turnCount;
   }
   // Draw failed
   else m_gameFinished = true;

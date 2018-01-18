@@ -1034,6 +1034,90 @@ std::vector<size_t> SomeAi::chooseCards(
 }
 ```
 
+A smarter AI might use some method to prioritise certain cards for it's choice, below is an example of priortising energy choice for your own pokemon's requirements.
+
+```cpp
+std::vector<size_t> SomeAi::chooseEnergy(
+    const PTCG::PLAYER _player,
+    const PTCG::PILE _pile,
+    const PTCG::ACTION _action,
+    const std::vector<std::unique_ptr<Card> > &_options,
+    const unsigned _amount
+    )
+{
+  // view the bench and get the attacks
+  auto bench = viewBench();
+  auto attacks = bench[0].active()->attacks();
+  // Create a set of specific required energy types
+  std::unordered_set<PTCG::TYPE> importantRequirements;
+  for (const auto& attack : attacks)
+  {
+    for (const auto& req : attack.requirements())
+      importantRequirements.insert(req);
+  }
+  // Colourless can go because its a wild card
+  importantRequirements.erase(PTCG::TYPE::COLOURLESS);
+
+  std::vector<size_t> choice;
+  std::unordered_set<size_t> pickedIndices;
+  for (size_t i = 0; i < _options.size(); ++i)
+  {
+    // Access the energy type
+    auto energy = static_cast<EnergyCard*>(_options[i].get());
+    // add all the non-important energies to our choice
+    if (!importantRequirements.count(energy->type()))
+    {
+      choice.push_back(i);
+      // Store this so we don't pick the same one in the next stage
+      pickedIndices.insert(i);
+    }
+  }
+  // Now we have no option other than to pick important energies to make up the numbers
+  size_t len = std::min(static_cast<size_t>(_amount), _options.size());
+  for (size_t i = 0; choice.size() < len; ++i)
+  {
+    // Don't pick it if we have already
+    if (!pickedIndices.count(i))
+      choice.push_back(i);
+  }
+  // Slice the vector down if it was bigger than the amount
+  return std::vector<size_t>(choice.begin(), choice.begin() + len);
+}
+```
+
+You could use a ranking for something like conditions to get you started:
+
+```cpp
+std::vector<size_t> ExampleAI::chooseConditions(
+    const PTCG::PLAYER,
+    const PTCG::ACTION,
+    const std::vector<PTCG::CONDITION> &_options,
+    const unsigned _amount
+    )
+{
+  using cnd = PTCG::CONDITION;
+  std::unordered_map<cnd, size_t> priorityMap {
+    {cnd::ASLEEP, 1},
+    {cnd::BURNED, 2},
+    {cnd::CONFUSED, 3},
+    {cnd::PARALYZED, 4},
+    {cnd::POISONED, 5}
+  };
+  // Create a set of consecutive indices representing the current order of _options
+  std::vector<size_t> consecutive(_options.size());
+  std::iota (std::begin(consecutive), std::end(consecutive), 0);
+  // We then sort the indices using our priority map
+  std::sort(consecutive.begin(), consecutive.end(), [&priorityMap, &_options](const size_t a, const size_t b)
+  {
+    return priorityMap[_options[a]] > priorityMap[_options[b]];
+  }
+  );
+  size_t slicedLen = std::min(static_cast<size_t>(_amount), consecutive.size());
+  return std::vector<size_t>(consecutive.begin(), consecutive.begin() + slicedLen);
+}
+
+```
+
 The turn function is what will be called when it is your AI's turn to play. You should do all of your card playing, retreating and evolving here.
 
 The function returns a pair of a ```bool``` and an ```unsigned```.

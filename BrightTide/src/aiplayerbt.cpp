@@ -127,9 +127,9 @@ void AIPlayerBT::playEvolutionCard()
 
     /// CHECK IF IT IS FIRST TURN
     auto bench = viewBench();
-    std::vector<std::string> _listOfPokemons;
     auto hand = viewHand();
     int _indexHand = -1;
+    std::vector<std::string> _listOfPokemons;
     // iterate through your bench and store all the pokemons into a list
     for(unsigned int i = 0 ; i < bench.size(); ++i)
     {
@@ -166,7 +166,7 @@ std::vector<PTCG::TYPE> AIPlayerBT::biggestAttack(int _index)
 {
     auto bench = viewBench();
     std::vector<PTCG::TYPE> _biggestAttack;
-    for(int i = 0 ; i < bench[_index].active()->attacks().size(); ++i)
+    for(unsigned int i = 0 ; i < bench[_index].active()->attacks().size(); ++i)
     {
         std::vector<PTCG::TYPE> _currentAttack = bench[_index].active()->attacks()[i].requirements();
         if(_biggestAttack.size() <= _currentAttack.size())
@@ -185,7 +185,7 @@ int AIPlayerBT::indexHandEnergy()
     auto bench = viewBench();
     int _posHand = -1;
     // iterates through bench
-    for(int i = 0 ; i < bench.size(); ++i)
+    for(unsigned int i = 0 ; i < bench.size(); ++i)
     {   // checks if there is a pokemon
         if(bench[i].numPokemon() != 0)
         {   // checks if the requirements are bugger than the number energy attached to that slot
@@ -216,15 +216,14 @@ int AIPlayerBT::indexHandEnergy()
         }
     return _posHand;
 }
+//--------------------------------------------------------------------------
 int AIPlayerBT::indexBenchEnergy()
 {
-    /// make function that returns the _posHand and _posBench
-    /// WHY NOT ACTIVE CARD IN THE BEGINNING
     auto hand = viewHand();
     auto bench = viewBench();
     int _posBench = -1;
     // iterates through bench
-    for(int i = 0 ; i < bench.size(); ++i)
+    for(unsigned int i = 0 ; i < bench.size(); ++i)
     {   // checks if there is a pokemon
         if(bench[i].numPokemon() != 0)
         {   // checks if the requirements are bugger than the number energy attached to that slot
@@ -274,9 +273,8 @@ void AIPlayerBT::attachEnergy()
 //--------------------------------------------------------------------------
 void AIPlayerBT::playTrainerCard()
 {
-    // PROFESSOR KUKUI DOES NOT WORK
-    // this works
     auto hand = viewHand();
+    auto bench = viewBench();
     int _indexCard = -1;
     for(unsigned int i = 0 ; i < hand.size(); ++i)
     {
@@ -290,13 +288,34 @@ void AIPlayerBT::playTrainerCard()
         }
         case PTCG::CARD::ITEM:
         {
+            auto bench = viewBench();
             // 116: 2 basic energy cards from discard to hand
             // 123 search for basic pokemon (put in bench)
-            // 127 heal 30
+            // 127 heal 30 WORKS
             // 134 search for evolution card
             // 135 discard 2 cards from your hand
             TrainerCard* itemCard = static_cast<TrainerCard*>(hand[i].get());
-            std::cout<<"ITEM CARD FIND"<<std::endl;
+            // checks if the hp is less than it's full Hp and checks if you have a item card that equals to 127
+            if(bench[0].active()->hp() < bench[0].active()->hp() - 30 && itemCard->getID() == 127)
+            {
+                _indexCard = i;
+                break;
+            }
+            // iterates through the bench
+            for(unsigned int j = 0; j < bench.size(); ++j)
+            {
+                // if there is a pokemon on the bench
+                if(bench[j].numPokemon() != 0)
+                {
+                    // if there is no basic pokemon and you have an item card that equals to 116
+                    if(bench[j].active()->stage() == 0 && itemCard->getID() == 116)
+                    {
+                        _indexCard = i;
+                        break;
+                    }
+
+                }
+            }
             _indexCard = i;
             break;
         }
@@ -312,7 +331,6 @@ void AIPlayerBT::playTrainerCard()
     }
     if(_indexCard != -1 && canPlay(_indexCard))
     {
-        std::cout<<"PLAYED A SUPPORT CARD"<<std::endl;
         playCard(_indexCard);
     }
 }
@@ -322,7 +340,7 @@ int AIPlayerBT::whichAttack()
     // return which attack
     int _index = -1;
     auto bench = viewBench();
-    for(int i=0; i < bench[0].active()->attacks().size(); ++i)
+    for(unsigned int i=0; i < bench[0].active()->attacks().size(); ++i)
     {
         if(canAttack(i))
             _index=i;
@@ -332,9 +350,8 @@ int AIPlayerBT::whichAttack()
 //--------------------------------------------------------------------------
 void AIPlayerBT::retreatPokemon()
 {
-
     auto bench = viewBench();
-    int lowHP=bench[0].active()->hp()/2;
+    int lowHP = bench[0].active()->hp()/2;
     if (bench[0].getRemainingHP() <= lowHP)
         retreat();
 }
@@ -342,30 +359,6 @@ void AIPlayerBT::retreatPokemon()
 void AIPlayerBT::setTime(int _amountMilliSeconds)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(_amountMilliSeconds));
-}
-
-
-
-
-
-
-
-
-
-
-//--------------------------------------------------------------------------
-std::vector<PTCG::TYPE> AIPlayerBT::sortEnergies()
-{
-//    // biggestAttack - listOfSpecificEnergies = colourless
-//    std::vector<PTCG::TYPE> _listOfSpecificEnergies;
-//    for(int i = 0 ; i < biggestAttack().size(); ++i)
-//    {
-//        if(biggestAttack()[i] != PTCG::TYPE::COLOURLESS)
-//        {
-//            _listOfSpecificEnergies.push_back(biggestAttack()[i]);
-//        }
-//    }
-//    return _listOfSpecificEnergies;
 }
 
 

@@ -446,28 +446,36 @@ std::string SimplePrinter::prizeStr(PrizeCards * const _prize) const
   return ret;
 }
 
-void SimplePrinter::drawSide(Board* _board, const bool _isOp)
+void SimplePrinter::drawSelf(Board* _board)
 {
   Bench& bench = _board->m_bench;
-  if(_isOp)
-  {
-    std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
-    std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
-    std::cout<<"HAND:\n"<<handStr(_board->hand());
-    std::cout<<"PRIZE:\n"<<prizeStr(_board->prizeCards());
-  }
-  else
-  {
-    std::cout<<"PRIZE:\n"<<prizeStr(_board->prizeCards());
-    std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
-    std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
-  }
+  std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
+  std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
+  std::cout<<"HAND:\n"<<handStr(_board->hand());
+  std::cout<<"PRIZE:\n"<<prizeStr(_board->prizeCards());
+}
+
+void SimplePrinter::drawEnemy(Board* _board)
+{
+  Bench& bench = _board->m_bench;
+  std::cout<<"PRIZE:\n"<<prizeStr(_board->prizeCards());
+  std::cout<<"BENCH:\n"<<benchStr(&bench)<<'\n';
+  std::cout<<"ACTIVE:\n"<<activeStr(bench.slotAt(0), bench.activeStatus())<<'\n';
 }
 
 void SimplePrinter::drawBoard()
 {
-  drawSide(m_subject->getBoard(PTCG::PLAYER::ENEMY), false);
-  drawSide(m_subject->getBoard(PTCG::PLAYER::SELF), true);
+  // For handling first turn setup
+  if (!m_subject->turnCount())
+  {
+    static size_t setupPlayer = 0;
+    drawEnemy(m_subject->getBoard(static_cast<PTCG::PLAYER>((setupPlayer + 1) % 2)));
+    drawSelf(m_subject->getBoard(static_cast<PTCG::PLAYER>(setupPlayer%2)));
+    ++setupPlayer;
+  }
+  // Branch-prediction helps here
+  drawEnemy(m_subject->getBoard(PTCG::PLAYER::ENEMY));
+  drawSelf(m_subject->getBoard(PTCG::PLAYER::SELF));
 }
 
 void SimplePrinter::startTurn()

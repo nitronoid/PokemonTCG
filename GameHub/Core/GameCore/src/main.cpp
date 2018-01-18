@@ -20,20 +20,23 @@ int main()
   CardFactory sumFactory("../../Cards/SM/SUM/", "../PythonBindings/");
   sumFactory.init();
   //Logger, ascii-gui and a staller so we can watch AI play
-  GameLogger logger;
+  //GameLogger logger;
   SimplePrinter drawer;
-  GameStaller staller(0);
+  GameStaller staller(500);
   // Two players for the game
   RandomAI firstPlayer(&game);
   AIPlayerBT secondPlayer(&game);
+  //HumanPlayer firstPlayer(&game);
+
   // Load the decks from the pool and attach players
   game.init(sumFactory, &firstPlayer, &secondPlayer);
   // Attach our observers
-  game.registerObserver(&logger);
+  //game.registerObserver(&logger);
   game.registerObserver(&staller);
   game.registerObserver(&drawer);
   // Play the game
   game.playGame();
+
   return EXIT_SUCCESS;
 
 }

@@ -168,11 +168,14 @@ void Game::drawHand(const PTCG::PLAYER _player)
   for (int j = 0; j < 6; ++j) drawCard(_player);
 }
 
-void Game::setBoard(Board& io_board, const size_t _active)
+void Game::setBoard(const PTCG::PLAYER _player, const size_t _active)
 {
-  io_board.m_bench.put(io_board.hand()->take(_active), 0);
+  size_t playerId = playerIndex(_player);
+  auto& board = m_boards[playerId];
+  board.m_bench.put(board.hand()->take(_active), 0);
+  board.m_bench.slotAt(0)->setTurnPlayed(static_cast<unsigned>(playerId));
   for (int i = 0; i < 6; ++i)
-    io_board.prizeCards()->put(io_board.deck()->takeTop());
+    board.prizeCards()->put(board.deck()->takeTop());
 }
 
 std::vector<size_t> Game::chooseActive(const PTCG::PLAYER _player, const PTCG::PILE _origin)
@@ -218,11 +221,12 @@ void Game::setupGame()
   std::vector<size_t> mulligans;
   for (const auto p : {PTCG::PLAYER::SELF, PTCG::PLAYER::ENEMY})
   {
-    Board& board = m_boards[playerIndex(p)];
     drawHand(p);
     auto active = chooseActive(p);
-    if (!active.empty()) setBoard(board, active[0]);
-    else mulligans.push_back(playerIndex(p));
+    if (!active.empty())
+      setBoard(p, active[0]);
+    else
+      mulligans.push_back(playerIndex(p));
   }
   doMulligans(mulligans);
 }
@@ -253,7 +257,7 @@ void Game::doMulligans(std::vector<size_t> &io_mulligans)
     auto active = chooseActive(currentPlayer);
     // If they were able to we set the board up
     if (!active.empty())
-      setBoard(currentPlayerBoard, active[0]);
+      setBoard(currentPlayer, active[0]);
     // Otherwise they will need to mulligan again
     else
     {

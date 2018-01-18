@@ -15,7 +15,7 @@ std::string AIPlayerBT::deckName() const
 std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PTCG::PILE _origin, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
 {
     // when play card, choose the pokemon with the biggest hp
-    setTime(m_time);
+    //setTime(m_time);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
@@ -27,9 +27,9 @@ std::vector<size_t> AIPlayerBT::chooseSlot(const PTCG::PLAYER _owner, const PTCG
     /// ChooseSLOT Implementation
     if(m_card && m_card->cardType()==PTCG::CARD::ENERGY)
     {
-        return std::vector<size_t>{m_energySlot};
+        return std::vector<size_t>{static_cast<size_t>(m_energySlot)};
     }
-    setTime(m_time);
+    //setTime(m_time);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
@@ -43,7 +43,7 @@ void AIPlayerBT::learnCards(const PTCG::PLAYER _owner, const PTCG::PILE _origin,
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseEnergy(const PTCG::PLAYER _owner, const PTCG::PILE _destination, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
 {
-    setTime(m_time);
+    //setTime(m_time);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
@@ -52,7 +52,7 @@ std::vector<size_t> AIPlayerBT::chooseEnergy(const PTCG::PLAYER _owner, const PT
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseConditions(const PTCG::PLAYER _owner, const PTCG::ACTION _action, const std::vector<PTCG::CONDITION> &_options, const unsigned _amount)
 {
-    setTime(m_time);
+    //setTime(m_time);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
     std::iota (std::begin(badChoice), std::end(badChoice), 0);
@@ -72,24 +72,25 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
 {
     m_card = nullptr;
     // play trainer card first (so you can have more cards in your hand)
-    setTime(m_time);
+    //setTime(m_time);
     playTrainerCard();
 
     // play baic pokemon on bench
-    setTime(m_time);
+    //setTime(m_time);
     playBasicPokemonOnBench();
 
     // play evolution card on bench
-    setTime(m_time);
+    //setTime(m_time);
     playEvolutionCard();
 
     // attach energy (should be last thing)
-    setTime(m_time);
+    //setTime(m_time);
     attachEnergy();
 
     // should we atttack or not ?
     // and which attack?
     bool doAttack = whichAttack() != -1;
+    m_card = nullptr;
     return std::pair<bool, unsigned> {doAttack,whichAttack()};
 
 }

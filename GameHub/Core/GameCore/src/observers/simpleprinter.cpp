@@ -465,15 +465,6 @@ void SimplePrinter::drawEnemy(Board* _board)
 
 void SimplePrinter::drawBoard()
 {
-  // For handling first turn setup
-  if (!m_subject->turnCount())
-  {
-    static size_t setupPlayer = 0;
-    drawEnemy(m_subject->getBoard(static_cast<PTCG::PLAYER>((setupPlayer + 1) % 2)));
-    drawSelf(m_subject->getBoard(static_cast<PTCG::PLAYER>(setupPlayer%2)));
-    ++setupPlayer;
-  }
-  // Branch-prediction helps here
   drawEnemy(m_subject->getBoard(PTCG::PLAYER::ENEMY));
   drawSelf(m_subject->getBoard(PTCG::PLAYER::SELF));
 }

@@ -9,7 +9,7 @@ StrategyPlayer::StrategyPlayer(const StrategyPlayer& _original):
 
 StrategyPlayer::StrategyPlayer(Game*const _dummyGame, Player* _user) :
   Player(_dummyGame),
-  m_userClone(_user)
+  m_userClone(_user->clone())
 {
   m_userClone->attachToGame(_dummyGame);
 }

@@ -2,7 +2,6 @@
 #define GAME_H
 #include <memory>
 #include <unordered_set>
-#include <pybind11/embed.h>
 #include "card/pokemoncard.h"
 #include "card/cardfactory.h"
 #include "board/board.h"
@@ -32,6 +31,11 @@ public:
   /// @param [in] _original is the game to move
   //----------------------------------------------------------------------------------------------------------------------
   Game(Game&&_original) = default;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief copy constructor to be used for cloning the game
+  /// @param [in] _original is the Game to copy
+  //----------------------------------------------------------------------------------------------------------------------
+  Game(const Game &_original);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief game cloner, used to make a copy of the game that ommits information that the current player doesn't know.
   /// @return A redacted game
@@ -517,11 +521,6 @@ public:
 
 private:
   //----------------------------------------------------------------------------------------------------------------------
-  /// @brief private copy constructor to be used for cloning the game
-  /// @param [in] _original is the Game to copy
-  //----------------------------------------------------------------------------------------------------------------------
-  Game(const Game &_original);
-  //----------------------------------------------------------------------------------------------------------------------
   /// @brief function used to progress the game to the next turn, public to allow simulations to run
   /// @param [k] k_event is the event flag used to decide the correct observer interface function to call
   /// @param [...] args are the arguments that should be forwarded to the interface function call
@@ -678,10 +677,6 @@ private:
   /// @brief has the game ended.
   //----------------------------------------------------------------------------------------------------------------------
   bool m_gameFinished  = false;
-  //----------------------------------------------------------------------------------------------------------------------
-  /// @brief python interpreter used to execute card functions written in python.
-  //----------------------------------------------------------------------------------------------------------------------
-  pybind11::scoped_interpreter m_python;
 
 };
 

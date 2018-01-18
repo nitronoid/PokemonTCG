@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <typeinfo>
+#include <pybind11/embed.h>
 #include "game.h"
 #include "observers/simpleprinter.h"
 #include "observers/gamelogger.h"
@@ -8,12 +9,14 @@
 #include "card/cardfactory.h"
 #include "player/randomai.h"
 #include "player/humanplayer.h"
-//#include "RoaringFluke.h"
+#include "RoaringFluke.h"
 #include "aiplayerbt.h"
+#include "player/exampleai.h"
 
 
 int main()
 {
+  pybind11::scoped_interpreter guard;
   // Create a game
   Game game;
   // Set up a factory for this card set, needs the directory to the cards and to the python bindings
@@ -22,9 +25,9 @@ int main()
   //Logger, ascii-gui and a staller so we can watch AI play
   GameLogger logger;
   SimplePrinter drawer;
-  GameStaller staller(500);
+  GameStaller staller(0);
   // Two players for the game
-  RandomAI firstPlayer(&game);
+  ExampleAI firstPlayer(&game);
   RandomAI secondPlayer(&game);
   // Load the decks from the pool and attach players
   game.init(sumFactory, &firstPlayer, &secondPlayer);

@@ -5,7 +5,9 @@ PrizeCards::PrizeCards (const PrizeCards &_original)
 {
   for (size_t i = 0; i < m_cards.size(); ++i)
   {
-    m_cards[i].reset(_original.m_cards[i]->clone());
+    auto& originalCard = _original.m_cards[i];
+    if (originalCard)
+      m_cards[i].reset(originalCard->clone());
   }
 }
 
@@ -13,7 +15,9 @@ PrizeCards& PrizeCards::operator=(const PrizeCards&_original)
 {
   for (size_t i = 0; i < m_cards.size(); ++i)
   {
-    m_cards[i].reset(_original.m_cards[i]->clone());
+    auto& originalCard = _original.m_cards[i];
+    if (originalCard)
+      m_cards[i].reset(originalCard->clone());
   }
   return *this;
 }

@@ -12,15 +12,14 @@
 
 
 /// TODO
-/// when to put a pokemon onto the bench, and which pokemon
+/// when to put a pokemon onto the bench, and which pokemon v
+/// play energy cards ~
 /// when to play trainer cards?
 /// when to retreat active card?
 /// when to use abilities?
 /// when to attack?
-/// when to evolve a pokemon?
-///
-/// need a function that returns an int for the enemy attack
-/// need a function that returns if attack is an int (not a x,+ or empty)
+/// when to evolve a pokemon? v
+
 
 class AIPlayerBT : public Player
 {
@@ -98,11 +97,15 @@ public:
 
 
     /// @build put pokemon on bench
-    void putBasicPokemonOnBench();
+    void playBasicPokemonOnBench();
     /// @build play the evolution pokemon card (pokemon evolve to the next stage)
     void playEvolutionCard();
-    /// @build attach an energy
+    /// @build attach an energy (NEED TO WORK ON THIS IF WE HAVE TIME)
     void attachEnergy();
+    /// @build attack function
+    bool doAttack();
+    /// @build return which attack
+    int whichAttack();
     /// @build timer (think)
     void setTime(int _amountMilliSeconds);
 
@@ -116,30 +119,26 @@ public:
     /// @build play TRAINER cards
     void playTrainerCard();
 
-    /// @build checks is the card needs energy
-    bool checkIfEnergyNeeded();
-    /// @build checks if the card is an energy card
-    bool checkIfCardIsEnergy();
-    /// @build tree
-    /// @build condition fuction
-    bool checkTwoAttacks();
-    /// @build check if attack one is bigger
-    bool checkAttackBigger();
-    /// @build check vector size of requirement attack
-    bool checkVectorSize(int _i);
-    /// @build check if energy needed
-    bool needEnergy(int _index);
-    void buildTree();
-    /// @build play Energy
-    bool playEnergies(int _index);
-    /// @build check if energy in hand
-    bool energyInHand();
+//    /// @build checks is the card needs energy
+//    bool checkIfEnergyNeeded();
+//    /// @build checks if the card is an energy card
+//    bool checkIfCardIsEnergy();
+//    /// @build tree
+//    /// @build condition fuction
+//    bool checkTwoAttacks();
+//    /// @build check if attack one is bigger
+//    bool checkAttackBigger();
+//    /// @build check vector size of requirement attack
+//    bool checkVectorSize(int _i);
+//    /// @build check if energy needed
+//    bool needEnergy(int _index);
+//    void buildTree();
+//    /// @build play Energy
+//    bool playEnergies(int _index);
+//    /// @build check if energy in hand
+//    bool energyInHand();
 
 private:
-    /// @build this decides if you attack or not
-    bool m_attack = false;
-    /// @build this decides which attack you are choosing first(0) or second(1)
-    int m_chooseAttack = 0;
     /// @build time in milliseconds
     int m_time = 1000;
 };

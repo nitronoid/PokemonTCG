@@ -14,6 +14,7 @@ std::string AIPlayerBT::deckName() const
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PTCG::PILE _origin, const PTCG::ACTION _action, const std::vector<std::unique_ptr<Card> > &_options, const unsigned _amount)
 {
+    // when play card, choose the pokemon with the biggest hp
     setTime(m_time);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
@@ -64,32 +65,24 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
 //--------------------------------------------------------------------------
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
-    // variables
-    m_attack = false;
-    m_chooseAttack = 0;
-    // retreat function (ATTACK DOES NOT WORK)
+    // play baic pokemon on bench
 //    setTime(m_time);
-//    willRetreat();
-    // play trainer cards
+//    playBasicPokemonOnBench();
+    // play evolution card on bench
     //setTime(m_time);
-    //playTrainerCard();
-    // play pokemon on bench
+    //playEvolutionCard();
+    // attach energy (should be last thing)
     setTime(m_time);
-    putPokemonOnBench();
-    setTime(m_time);
-    playEvolutionCard();
-    // attach energy
-    //setTime(m_time);
-    //attachEnergy();
-//    setTime(m_time);
-
+    attachEnergy();
+    // should we atttack or not ?
+    // and which attack?
 
     return std::pair<bool, unsigned> {false,0};
 
 }
 
 //--------------------------------------------------------------------------
-void AIPlayerBT::putBasicPokemonOnBench()
+void AIPlayerBT::playBasicPokemonOnBench()
 {
     // basic pokemon
     auto hand = viewHand();
@@ -149,15 +142,15 @@ void AIPlayerBT::playEvolutionCard()
 void AIPlayerBT::attachEnergy()
 {
 
+    /// need help for this, because this wont work while there are multiple cards
     auto hand = viewHand();
     auto bench = viewBench();
     int _pos;
-    for(int i = 0 ; i < viewBench().size(); ++i)
+    for(int i = 0 ; i < bench.size(); ++i)
     {
-
-        if(viewBench()[i].numPokemon() != 0)
+        if(bench[i].numPokemon() != 0)
         {
-            if(biggestAttack(i).size() > viewBench()[i].numEnergy())
+            if(biggestAttack(i).size() > bench[i].numEnergy())
             {
                 std::cout<<"NEED ENERGY"<<std::endl;
                 for(size_t z = 0 ; z < biggestAttack(i).size(); ++z)
@@ -185,10 +178,24 @@ void AIPlayerBT::attachEnergy()
     }
 }
 //--------------------------------------------------------------------------
+bool AIPlayerBT::doAttack()
+{
+    // return if i want to attack or not
+}
+//--------------------------------------------------------------------------
+int AIPlayerBT::whichAttack()
+{
+    // return which attack
+}
+//--------------------------------------------------------------------------
 void AIPlayerBT::setTime(int _amountMilliSeconds)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(_amountMilliSeconds));
 }
+
+
+
+
 //--------------------------------------------------------------------------
 std::vector<PTCG::TYPE> AIPlayerBT::sortEnergies()
 {
@@ -250,13 +257,6 @@ void AIPlayerBT::playTrainerCard()
         }
     }
 }
-
-
-
-
-
-
-
 
 
 

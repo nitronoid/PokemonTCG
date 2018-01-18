@@ -82,7 +82,7 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     // should we atttack or not ?
     // and which attack?
 
-    return std::pair<bool, unsigned> {false,0};
+    return std::pair<bool, unsigned> {doAttack(),whichAttack()};
 
 }
 //--------------------------------------------------------------------------
@@ -200,11 +200,25 @@ void AIPlayerBT::attachEnergy()
 bool AIPlayerBT::doAttack()
 {
     // return if i want to attack or not
+    bool attack = false;
+    for(int i=0; i<viewBench()[0].active()->attacks().size(); ++i)
+    {
+        if(canAttack(i))
+            attack = true;
+    }
+    return attack;
 }
 //--------------------------------------------------------------------------
 int AIPlayerBT::whichAttack()
 {
     // return which attack
+    int _index = 0;
+    for(int i=0; i<=viewBench()[0].active()->attacks().size(); ++i)
+    {
+        if(canAttack(i))
+            _index=i;
+    }
+    return _index;
 }
 //--------------------------------------------------------------------------
 void AIPlayerBT::setTime(int _amountMilliSeconds)

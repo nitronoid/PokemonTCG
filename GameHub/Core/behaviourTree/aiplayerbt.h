@@ -100,10 +100,12 @@ public:
     void playBasicPokemonOnBench();
     /// @build play the evolution pokemon card (pokemon evolve to the next stage)
     void playEvolutionCard();
+    /// @build return the biggest attack
+    std::vector<PTCG::TYPE> biggestAttack(int _index);
     /// @build attach an energy (NEED TO WORK ON THIS IF WE HAVE TIME)
     void attachEnergy();
-    /// @build attack function
-    bool doAttack();
+    /// @build play TRAINER cards
+    void playTrainerCard();
     /// @build return which attack
     int whichAttack();
     /// @build timer (think)
@@ -112,13 +114,8 @@ public:
 
     /// @build sort energies of biggest attack
     std::vector<PTCG::TYPE> sortEnergies();
-    /// @build return the biggest attack
-    std::vector<PTCG::TYPE> biggestAttack(int _index);
     /// @build when to retreat
     void willRetreat();
-    /// @build play TRAINER cards
-    void playTrainerCard();
-
 //    /// @build checks is the card needs energy
 //    bool checkIfEnergyNeeded();
 //    /// @build checks if the card is an energy card

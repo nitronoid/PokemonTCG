@@ -373,8 +373,8 @@ void Game::nextTurn()
       checkForKnockouts();
       // Remove all the effects for this turn from the queue, now that we executed them all
       clearEffects();
+      ++m_turnCount;
     }
-    ++m_turnCount;
   }
   // Draw failed
   else m_gameFinished = true;

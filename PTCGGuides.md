@@ -7,6 +7,7 @@ ___
 ### 2. **[How do I make a card and a deck for PokeTCG? Or anything Technical?](#making-cards-and-decks)**
 ### 3. **[How do I make an AI for PokeTCG?](#making-ais)**
 ### 4. **[How to play our game?](#how-to-play)**
+### 5. **[Known Issues](#known-issues)**
 ___
 
 ## **Introduction**
@@ -1416,6 +1417,15 @@ ___
 ___
 
 The rules are based on the current PTCG Ruling which you can find [here](https://www.pokemon.com/uk/pokemon-tcg/).
+___
+### **Known Issues**
+___
+
+This section lists some bugs or issues found in test sessions but are less important to fix as well as the reason of time constraints.
+
+- Golduck's Double Jet and other OPTIONAL selection (*Timer Ball, Nest Ball, Ultra Ball etc*) interface for Human Player forces you to select maximum number of cards available.
+- Syntax Validation for console inputs in Human Player is not completely managed so it will crash the game with overloaded invalid inputs.
+- OpenGL GUI implementation for the game. 
 
 **[Back To Top](#poketcg-user-guides)**
 ___

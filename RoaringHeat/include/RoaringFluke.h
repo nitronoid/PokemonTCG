@@ -1,7 +1,7 @@
 #ifndef ROARINGFLUKE_H
 #define ROARINGFLUKE_H
 
-#include "player.h"
+#include "player/player.h"
 
 class RoaringFluke : public Player
 {

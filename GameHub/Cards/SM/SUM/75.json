@@ -6,8 +6,8 @@
     "Weakness" : "G",
     "Resistance" : "",
     "Retreat" : 4,
-    "Stage" : 0,
-    "Pre evolution" : "",
+    "Stage" : 1,
+    "Pre evolution" : "Sandygast",
     "Abilty" : {
         "Wall of Sand" : {
             "Func" : "wallofSand",

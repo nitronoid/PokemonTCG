@@ -1,5 +1,5 @@
 #include "RoaringFluke.h"
-#include "playercommand.h"
+#include "player/playercommand.h"
 #include <ctime>
 #include <cstdlib>
 #include <random>

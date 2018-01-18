@@ -16,6 +16,11 @@ HEADERS += $$files(../../../RoaringHeat/include/*.h, true)
 SOURCES += $$files(../../../RoaringHeat/src/*.cpp, true)
 INCLUDEPATH += ../../../RoaringHeat/include
 
+# Bright Tide AI
+HEADERS += $$files(../../../BrightTide/include/*.h, true)
+SOURCES += $$files(../../../BrightTide/src/*.cpp, true)
+INCLUDEPATH += ../../../BrightTide/include
+
 INCLUDEPATH += $$PWD/include
 INCLUDEPATH += ../pybind11/include
 # Reasons why this is neccessary explained on the pybind faq

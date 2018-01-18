@@ -197,6 +197,10 @@ std::pair<bool, unsigned> RoaringFluke::turn()
                             found = 0;
                         } else
                         {
+                            if (evoPoke = 0)
+                            {
+
+                            }
                             playCard(currentPokeIndexList[evoPoke]);
                             playCard(currentPokeIndexList[i]);
                             std::cout<<"Playing "<<currentEv->getName()<<" and its evoltion "<<pokemon->getName()<<".\n";

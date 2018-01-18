@@ -1,97 +1,36 @@
-Card No.59, name: Potion, id: 127 in Player 0's deck has been moved to their hand.
-Card No.58, name: Nest Ball, id: 123 in Player 0's deck has been moved to their hand.
-Card No.57, name: Golduck, id: 29 in Player 0's deck has been moved to their hand.
+Card No.59, name: Chinchou, id: 49 in Player 0's deck has been moved to their hand.
+Card No.58, name: Timer Ball, id: 134 in Player 0's deck has been moved to their hand.
+Card No.57, name: Lightning Energy, id: 167 in Player 0's deck has been moved to their hand.
 Card No.56, name: Psyduck, id: 28 in Player 0's deck has been moved to their hand.
-Card No.55, name: Psyduck, id: 28 in Player 0's deck has been moved to their hand.
-Card No.54, name: Water Energy, id: 166 in Player 0's deck has been moved to their hand.
-Card No.59, name: Lightning Energy, id: 167 in Player 1's deck has been moved to their hand.
-Card No.58, name: Lillie, id: 122 in Player 1's deck has been moved to their hand.
-Card No.57, name: Lightning Energy, id: 167 in Player 1's deck has been moved to their hand.
-Card No.56, name: Togedemaru, id: 53 in Player 1's deck has been moved to their hand.
-Card No.55, name: Herdier, id: 104 in Player 1's deck has been moved to their hand.
+Card No.55, name: Lightning Energy, id: 167 in Player 0's deck has been moved to their hand.
+Card No.54, name: Energy Retrieval, id: 116 in Player 0's deck has been moved to their hand.
+Card No.59, name: Cloyster, id: 34 in Player 1's deck has been moved to their hand.
+Card No.58, name: Lightning Energy, id: 167 in Player 1's deck has been moved to their hand.
+Card No.57, name: Potion, id: 127 in Player 1's deck has been moved to their hand.
+Card No.56, name: Lightning Energy, id: 167 in Player 1's deck has been moved to their hand.
+Card No.55, name: Lillie, id: 122 in Player 1's deck has been moved to their hand.
+Card No.54, name: Ultra Ball, id: 135 in Player 1's deck has been moved to their hand.
+Card No.5, name: Ultra Ball, id: 135 in Player 1's hand has been moved to their deck.
+Card No.4, name: Lillie, id: 122 in Player 1's hand has been moved to their deck.
+Card No.3, name: Lightning Energy, id: 167 in Player 1's hand has been moved to their deck.
+Card No.2, name: Potion, id: 127 in Player 1's hand has been moved to their deck.
+Card No.1, name: Lightning Energy, id: 167 in Player 1's hand has been moved to their deck.
+Card No.0, name: Cloyster, id: 34 in Player 1's hand has been moved to their deck.
+Card No.59, name: Togedemaru, id: 53 in Player 1's deck has been moved to their hand.
+Card No.58, name: Timer Ball, id: 134 in Player 1's deck has been moved to their hand.
+Card No.57, name: Water Energy, id: 166 in Player 1's deck has been moved to their hand.
+Card No.56, name: Water Energy, id: 166 in Player 1's deck has been moved to their hand.
+Card No.55, name: Shellder, id: 33 in Player 1's deck has been moved to their hand.
 Card No.54, name: Professor Kukui, id: 128 in Player 1's deck has been moved to their hand.
 ----------
 Turn 0 start.
 ----------
-Card No.47, name: Popplio, id: 39 in Player 0's deck has been moved to their hand.
-Card No.3, name: Psyduck, id: 28 in Player 0's hand has been played.
-Card No.2, name: Golduck, id: 29 in Player 0's hand has been played.
-Card No.2, name: Golduck, id: 29 in Player 0's hand has been played.
-Card No.4, name: Popplio, id: 39 in Player 0's hand has been played.
+Card No.47, name: Corsola, id: 36 in Player 0's deck has been moved to their hand.
+Card No.5, name: Corsola, id: 36 in Player 0's hand has been played.
+Card No.1, name: Lightning Energy, id: 167 in Player 0's hand has been played.
+Player 0 used pokemon ID: 49, name: Chinchou's attack Searching Light.
 ----------
 Turn 1 start.
 ----------
-Card No.47, name: Lightning Energy, id: 167 in Player 1's deck has been moved to their hand.
-Card No.0, name: Lightning Energy, id: 167 in Player 1's hand has been played.
-Player 1 used pokemon ID: 53, name: Togedemaru's attack Discharge.
-----------
-Turn 2 start.
-----------
-Card No.46, name: Brionne, id: 40 in Player 0's deck has been moved to their hand.
-Card No.2, name: Golduck, id: 29 in Player 0's hand has been played.
-Card No.3, name: Brionne, id: 40 in Player 0's hand has been played.
-----------
-Turn 3 start.
-----------
-Card No.46, name: Water Energy, id: 166 in Player 1's deck has been moved to their hand.
-Card No.1, name: Lightning Energy, id: 167 in Player 1's hand has been played.
-Player 1 used pokemon ID: 53, name: Togedemaru's attack Discharge.
-----------
-Turn 4 start.
-----------
-Card No.45, name: Lanturn, id: 50 in Player 0's deck has been moved to their hand.
-Card No.0, name: Potion, id: 127 in Player 0's hand has been moved to their discard.
-Card No.0, name: Potion, id: 127 in Player 0's hand has been played.
-----------
-Turn 5 start.
-----------
-Card No.45, name: Energy Retrieval, id: 116 in Player 1's deck has been moved to their hand.
-Card No.3, name: Lightning Energy, id: 167 in Player 1's hand has been played.
-Player 1 used pokemon ID: 53, name: Togedemaru's attack Discharge.
-----------
-Turn 6 start.
-----------
-Card No.44, name: Primarina, id: 41 in Player 0's deck has been moved to their hand.
-Card No.3, name: Primarina, id: 41 in Player 0's hand has been played.
-Card No.1, name: Water Energy, id: 166 in Player 0's hand has been played.
-Player 0 used pokemon ID: 29, name: Golduck's attack Scratch.
-----------
-Turn 7 start.
-----------
-Card No.44, name: Timer Ball, id: 134 in Player 1's deck has been moved to their hand.
-Card No.3, name: Water Energy, id: 166 in Player 1's hand has been played.
-Player 1 used pokemon ID: 53, name: Togedemaru's attack Defense Curl.
-----------
-Turn 8 start.
-----------
-Card No.43, name: Water Energy, id: 166 in Player 0's deck has been moved to their hand.
-Card No.0, name: Nest Ball, id: 123 in Player 0's hand has been moved to their discard.
-Card No.0, name: Nest Ball, id: 123 in Player 0's hand has been played.
-Ability , triggered on attack and activated.
-Player 0 used pokemon ID: 29, name: Golduck's attack Scratch.
-----------
-Turn 9 start.
-----------
-Card No.43, name: Popplio, id: 39 in Player 1's deck has been moved to their hand.
-Card No.42, name: Lightning Energy, id: 167 in Player 1's deck has been moved to their hand.
-Card No.0, name: Lillie, id: 122 in Player 1's hand has been moved to their discard.
-Card No.0, name: Lillie, id: 122 in Player 1's hand has been played.
-Player 1 used pokemon ID: 53, name: Togedemaru's attack Defense Curl.
-----------
-Turn 10 start.
-----------
-Card No.41, name: Timer Ball, id: 134 in Player 0's deck has been moved to their hand.
-Ability , triggered on attack and activated.
-Player 0 used pokemon ID: 29, name: Golduck's attack Scratch.
-----------
-Turn 11 start.
-----------
-Card No.41, name: Water Energy, id: 166 in Player 1's deck has been moved to their hand.
-Player 1 used pokemon ID: 53, name: Togedemaru's attack Defense Curl.
-----------
-Turn 12 start.
-----------
-Card No.40, name: Togedemaru, id: 53 in Player 0's deck has been moved to their hand.
-Player 0 used pokemon ID: 29, name: Golduck's attack Scratch.
-The pokemon in slot 0 on Player 1's bench has been knocked out.
-Card No.0, name: Lillipup, id: 103 in Player 0's prize has been moved to their hand.
+Card No.47, name: Cloyster, id: 34 in Player 1's deck has been moved to their hand.
+Card No.3, name: Shellder, id: 33 in Player 1's hand has been played.

@@ -55,6 +55,9 @@ public:
   virtual bool agree(const PTCG::ACTION _action) override;
   virtual std::pair<bool, unsigned> turn() override;
 
+private:
+  unsigned m_found;
+
 };
 
 

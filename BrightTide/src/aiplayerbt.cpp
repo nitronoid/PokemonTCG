@@ -71,6 +71,7 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
     m_card = nullptr;
+
     // play trainer card first (so you can have more cards in your hand)
     //setTime(m_time);
     playTrainerCard();
@@ -87,10 +88,12 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     //setTime(m_time);
     attachEnergy();
 
-    // should we atttack or not ?
-    // and which attack?
+    // retreat card when it is lower or equal to half his health
+    retreatPokemon();
+
+    //function that attacks
     bool doAttack = whichAttack() != -1;
-    m_card = nullptr;
+
     return std::pair<bool, unsigned> {doAttack,whichAttack()};
 
 }
@@ -174,14 +177,13 @@ std::vector<PTCG::TYPE> AIPlayerBT::biggestAttack(int _index)
     return _biggestAttack;
 }
 //--------------------------------------------------------------------------
-void AIPlayerBT::attachEnergy()
+int AIPlayerBT::indexHandEnergy()
 {
     /// make function that returns the _posHand and _posBench
     /// WHY NOT ACTIVE CARD IN THE BEGINNING
     auto hand = viewHand();
     auto bench = viewBench();
     int _posHand = -1;
-    int _posBench = -1;
     // iterates through bench
     for(int i = 0 ; i < bench.size(); ++i)
     {   // checks if there is a pokemon
@@ -203,7 +205,8 @@ void AIPlayerBT::attachEnergy()
                             {
                                 std::cout<<"IT MATCHES OR IS COLOURLESS"<<std::endl;
                                 _posHand = q;
-                                _posBench = i;
+                                //_posBench = i;
+                                return _posHand;
                              }
                          }
                       }
@@ -211,16 +214,63 @@ void AIPlayerBT::attachEnergy()
                 }
             }
         }
+    return _posHand;
+}
+int AIPlayerBT::indexBenchEnergy()
+{
+    /// make function that returns the _posHand and _posBench
+    /// WHY NOT ACTIVE CARD IN THE BEGINNING
+    auto hand = viewHand();
+    auto bench = viewBench();
+    int _posBench = -1;
+    // iterates through bench
+    for(int i = 0 ; i < bench.size(); ++i)
+    {   // checks if there is a pokemon
+        if(bench[i].numPokemon() != 0)
+        {   // checks if the requirements are bugger than the number energy attached to that slot
+            if(biggestAttack(i).size() > bench[i].numEnergy())
+            {
+                std::cout<<"NEED ENERGY"<<std::endl;
+                for(size_t z = 0 ; z < biggestAttack(i).size(); ++z)
+                {
+                    for(size_t q = 0 ; q < hand.size(); ++q)
+                    {   // checks if there is an energy card in the hand
+                        if(hand[q]->cardType() == PTCG::CARD::ENERGY)
+                        {
+                            EnergyCard* energyCard = static_cast<EnergyCard*>(hand[q].get());
+                            std::cout<<"FIND ENERGY CARD"<<std::endl;
+                            // check if it matches
+                            if(energyCard->type() == biggestAttack(i)[z] || biggestAttack(i)[z] == PTCG::TYPE::COLOURLESS)
+                            {
+                                std::cout<<"IT MATCHES OR IS COLOURLESS"<<std::endl;
+                                //_posBench = q;
+                                _posBench = i;
+                                return _posBench;
+                             }
+                         }
+                      }
+                   }
+                }
+            }
+        }
+    return _posBench;
+}
+//--------------------------------------------------------------------------
+void AIPlayerBT::attachEnergy()
+{
+    /// make function that returns the _posHand and _posBench
+    /// WHY NOT ACTIVE CARD IN THE BEGINNING
+    auto hand = viewHand();
     // is _posHand is playable
-    if(_posHand != -1 && _posBench != -1 && canPlay(_posHand))
+    if(indexHandEnergy() != -1 && indexBenchEnergy() != -1 && canPlay(indexHandEnergy()))
     {
         // set the energy slot to the index of the bench
-        m_energySlot = _posBench;
-        m_card = hand[_posHand].get();
-        playCard(_posHand);
+        m_energySlot = indexBenchEnergy();
+        m_card = hand[indexHandEnergy()].get();
+        playCard(indexHandEnergy());
     }
+    m_card = nullptr;
 }
-
 //--------------------------------------------------------------------------
 void AIPlayerBT::playTrainerCard()
 {
@@ -280,16 +330,13 @@ int AIPlayerBT::whichAttack()
     return _index;
 }
 //--------------------------------------------------------------------------
-void AIPlayerBT::willRetreat()
+void AIPlayerBT::retreatPokemon()
 {
-    auto bench = viewBench()[0].active();
-    int _healthLimit = bench->hp() / 2;
-    if(bench->hp() <= _healthLimit)
-    {
-        std::cout<<"WILL RETREAT"<<std::endl;
+
+    auto bench = viewBench();
+    int lowHP=bench[0].active()->hp()/2;
+    if (bench[0].getRemainingHP() <= lowHP)
         retreat();
-    }
-    std::cout<<"WILL NOT RETREAT"<<std::endl;
 }
 //--------------------------------------------------------------------------
 void AIPlayerBT::setTime(int _amountMilliSeconds)

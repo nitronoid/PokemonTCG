@@ -24,7 +24,7 @@ int main()
   SimplePrinter drawer;
   GameStaller staller(0);
   // Two players for the game
-  RandomAI firstPlayer(&game);
+  HumanPlayer firstPlayer(&game);
   AIPlayerBT secondPlayer(&game);
   // Load the decks from the pool and attach players
   game.init(sumFactory, &firstPlayer, &secondPlayer);

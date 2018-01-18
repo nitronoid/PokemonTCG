@@ -99,15 +99,15 @@ public:
     /// @build return the biggest attack
     std::vector<PTCG::TYPE> biggestAttack(int _index);
     /// @build attach an energy (NEED TO WORK ON THIS IF WE HAVE TIME)
-    void attachEnergy();
     int indexHandEnergy();
     int indexBenchEnergy();
+    void attachEnergy();
     /// @build play TRAINER cards
     void playTrainerCard();
     /// @build return which attack
     int whichAttack();
-    /// @build when to retreat
-    void willRetreat();
+    /// @build retreat pokemon
+    void retreatPokemon();
     /// @build timer (think)
     void setTime(int _amountMilliSeconds);
 

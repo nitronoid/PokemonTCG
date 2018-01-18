@@ -90,6 +90,7 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     // should we atttack or not ?
     // and which attack?
     bool doAttack = whichAttack() != -1;
+    m_card = nullptr;
     return std::pair<bool, unsigned> {doAttack,whichAttack()};
 
 }

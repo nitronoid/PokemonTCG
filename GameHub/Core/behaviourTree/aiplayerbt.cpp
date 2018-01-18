@@ -24,6 +24,7 @@ std::vector<size_t> AIPlayerBT::chooseCards(const PTCG::PLAYER _player, const PT
 //--------------------------------------------------------------------------
 std::vector<size_t> AIPlayerBT::chooseSlot(const PTCG::PLAYER _owner, const PTCG::ACTION _action, const std::vector<BoardSlot> &_options, const unsigned _amount)
 {
+    /// ChooseSLOT Implementation
     setTime(m_time);
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
@@ -69,9 +70,9 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     setTime(m_time);
     playBasicPokemonOnBench();
     // play evolution card on bench
-    //setTime(m_time);
-    //playEvolutionCard();
-    // attach energy (should be last thing)
+    setTime(m_time);
+    playEvolutionCard();
+    // attach energy (should be last thing
     setTime(m_time);
     attachEnergy();
     // should we atttack or not ?
@@ -80,20 +81,20 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     return std::pair<bool, unsigned> {false,0};
 
 }
-
 //--------------------------------------------------------------------------
 void AIPlayerBT::playBasicPokemonOnBench()
 {
+    // check if you have that card in your bench already if you do, go to the next card
     // basic pokemon
     auto hand = viewHand();
-    for(int i = 0 ; i < hand.size(); ++i)
+    for(unsigned int i = 0 ; i < hand.size(); ++i)
     {
         // check if the card is a pokemon
         if(hand[i]->cardType() == PTCG::CARD::POKEMON)
         {   // check if it is stage 0
             PokemonCard* pokemonCard = static_cast<PokemonCard*>(hand[i].get());
             if(pokemonCard->stage() == 0)
-            {
+            {   // checks if you can play it if you can play
                 if(canPlay(i))
                 {
                     playCard(i);
@@ -105,11 +106,13 @@ void AIPlayerBT::playBasicPokemonOnBench()
 //--------------------------------------------------------------------------
 void AIPlayerBT::playEvolutionCard()
 {
+
+    /// CHECK IF IT IS FIRST TURN
     auto bench = viewBench();
     std::vector<std::string> _listOfPokemons;
     auto hand = viewHand();
     // iterate through your bench and store all the pokemons into a list
-    for(int i = 0 ; i < bench.size(); ++i)
+    for(unsigned int i = 0 ; i < bench.size(); ++i)
     {
         if(bench[i].numPokemon()!=0)
         {
@@ -118,13 +121,13 @@ void AIPlayerBT::playEvolutionCard()
     }
 
     // iterate through your hand and check if there is a evolution card
-    for(int j = 0; j < hand.size(); ++j)
+    for(unsigned int j = 0; j < hand.size(); ++j)
     {   // check if your card is a pokemon
         if(hand[j]->cardType() == PTCG::CARD::POKEMON)
         {
             PokemonCard* evolveCard = static_cast<PokemonCard*>(hand[j].get());
             // iterate through the list of pokemon names
-            for(int card = 0 ; card < _listOfPokemons.size(); ++card)
+            for(unsigned int card = 0 ; card < _listOfPokemons.size(); ++card)
             {   // check if the card is equal to the pre-evolution name if it is play card
                 if(_listOfPokemons[card] == evolveCard->preEvolution())
                 {
@@ -143,10 +146,11 @@ void AIPlayerBT::attachEnergy()
 {
 
     /// need help for this, because this wont work while there are multiple cards
+    /// when multiple cards, it will not add on the benched card but on the active card
     auto hand = viewHand();
     auto bench = viewBench();
     int _pos;
-    for(int i = 0 ; i < bench.size(); ++i)
+    for(unsigned int i = 0 ; i < bench.size(); ++i)
     {
         if(bench[i].numPokemon() != 0)
         {
@@ -215,7 +219,7 @@ std::vector<PTCG::TYPE> AIPlayerBT::biggestAttack(int _index)
 {
     auto bench = viewBench();
     std::vector<PTCG::TYPE> _biggestAttack;
-    for(int i = 0 ; i < bench[_index].active()->attacks().size(); ++i)
+    for(unsigned int i = 0 ; i < bench[_index].active()->attacks().size(); ++i)
     {
         std::vector<PTCG::TYPE> _currentAttack = bench[_index].active()->attacks()[i].requirements();
         if(_biggestAttack.size() <= _currentAttack.size())
@@ -241,7 +245,7 @@ void AIPlayerBT::willRetreat()
 void AIPlayerBT::playTrainerCard()
 {
     auto hand = viewHand();
-    for(int i = 0 ; i < hand.size(); ++i)
+    for(unsigned int i = 0 ; i < hand.size(); ++i)
     {
         if(hand[i]->cardType() == PTCG::CARD::SUPPORT)
         {

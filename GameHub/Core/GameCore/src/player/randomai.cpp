@@ -17,15 +17,6 @@ std::string RandomAI::deckName() const
   return "roaring_heat_deck.json";
 }
 
-template<typename T>
-std::vector<size_t> pickFirst(const std::vector<T> &_options, const size_t _amount)
-{
-  size_t length = std::min(_options.size(), _amount);
-  std::vector<size_t> badChoice(length);
-  std::iota (std::begin(badChoice), std::end(badChoice), 0);
-  return badChoice;
-}
-
 std::vector<size_t> RandomAI::chooseCards(
     const PTCG::PLAYER,
     const PTCG::PILE,
@@ -66,7 +57,7 @@ std::vector<size_t> RandomAI::chooseEnergy(
   return pickFirst(_options, _amount);
 }
 
-bool randomBool()
+bool RandomAI::randomBool()
 {
   // Random bool generator
   static auto gen = std::bind(

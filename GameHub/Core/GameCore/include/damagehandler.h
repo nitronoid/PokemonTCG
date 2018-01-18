@@ -1,6 +1,7 @@
 #ifndef DAMAGEHANDLER_H
 #define DAMAGEHANDLER_H
-#include "bench.h"
+
+#include "board/bench.h"
 
 class DamageHandler
 {

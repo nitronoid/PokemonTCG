@@ -22,11 +22,14 @@ int main()
   //Logger, ascii-gui and a staller so we can watch AI play
   //GameLogger logger;
   SimplePrinter drawer;
-  GameStaller staller(0);
+  GameStaller staller(500);
   // Two players for the game
-  //RandomAI firstPlayer(&game);
-  HumanPlayer firstPlayer(&game);
-  AIPlayerBT secondPlayer(&game);
+  //HumanPlayer firstPlayer(&game);
+  //AIPlayerBT secondPlayer(&game);
+
+  RandomAI firstPlayer(&game);
+  RandomAI secondPlayer(&game);
+
   // Load the decks from the pool and attach players
   game.init(sumFactory, &firstPlayer, &secondPlayer);
   // Attach our observers
@@ -35,6 +38,7 @@ int main()
   game.registerObserver(&drawer);
   // Play the game
   game.playGame();
+
   return EXIT_SUCCESS;
 
 }

@@ -1,8 +1,9 @@
 #include "board/bench.h"
+#include <cassert>
 
 BoardSlot* Bench::slotAt(const size_t _index)
 {
-  if(_index>5) return nullptr;
+  assert(_index < m_slots.size());
   return &m_slots[_index];
 }
 
@@ -23,8 +24,8 @@ PokemonCard* Bench::active()
 
 std::array<BoardSlot, 6> Bench::view() const
 {
-  std::array<BoardSlot,6> ret;
-  for (size_t i =0 ; i < 6 ; ++i)
+  decltype (m_slots) ret;
+  for (size_t i =0 ; i < m_slots.size() ; ++i)
   {
     ret[i]=m_slots[i];
   }
@@ -33,27 +34,21 @@ std::array<BoardSlot, 6> Bench::view() const
 
 void Bench::switchActive(const size_t &_sub)
 {
-  //using rend to simplify index finding for the substitute
-  std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';
-  /*auto temp = m_slots[0];
-  m_slots[0] = std::move(m_slots[_sub]);
-  m_slots[_sub] = std::move(temp);*/
+//  std::cout<<"Switching to : "<<m_slots.at(_sub).active()->getName()<<'\n';
   m_slots[0].swap(m_slots[_sub]);
   m_activeStatus.removeAllConditions();
 }
 
 void Bench::put(std::unique_ptr<Card> &&_card, const size_t _index)
 {
-  if(_index<5)
-  {
-    m_slots[_index].attachCard(std::move(_card));
-  }
+  assert(_index < m_slots.size());
+  m_slots[_index].attachCard(std::move(_card));
 }
 
 std::vector<std::unique_ptr<Card>> Bench::take(const size_t _index)
 {
+  assert(_index < m_slots.size());
   std::vector<std::unique_ptr<Card>> ret;
-  if(_index>5) return ret;
   auto& slot = m_slots[_index];
   ret.reserve(slot.numCards());
   for(auto& pokemon : slot.detachPokemon())

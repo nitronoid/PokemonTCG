@@ -65,9 +65,13 @@ private:
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief draw one side of board, self and opponent are handled differently
   /// @param [in] board to draw
-  /// @param [in] a switch for self/opponent
   //----------------------------------------------------------------------------------------------------------------------
-  void drawSide(Board* _board, const bool _isOp);
+  void drawSelf(Board* _board);
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief draw one side of board, self and opponent are handled differently
+  /// @param [in] board to draw
+  //----------------------------------------------------------------------------------------------------------------------
+  void drawEnemy(Board* _board);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief substitute pokemon card string fields with information
   /// @param [io] the card string

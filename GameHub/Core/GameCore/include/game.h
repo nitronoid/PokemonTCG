@@ -598,10 +598,10 @@ private:
   void drawHand(const PTCG::PLAYER _player);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief plays the players active pokemon, and sets up their prize cards
-  /// @param [io] io_board is the board to set
+  /// @param [in] _player is the player who's board should be set
   /// @param [in] _active is the index in the boards hand, to play as the active pokemon
   //----------------------------------------------------------------------------------------------------------------------
-  void setBoard(Board& io_board, const size_t _active);
+  void setBoard(const PTCG::PLAYER _player, const size_t _active);
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief prepares the game for the start by setting up the boards, drawing hands, playing active and setting prize cards
   //----------------------------------------------------------------------------------------------------------------------
@@ -678,6 +678,9 @@ private:
   /// @brief has the game ended.
   //----------------------------------------------------------------------------------------------------------------------
   bool m_gameFinished  = false;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief python interpreter used to execute card functions written in python.
+  //----------------------------------------------------------------------------------------------------------------------
   pybind11::scoped_interpreter m_python;
 
 };

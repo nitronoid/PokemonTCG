@@ -74,10 +74,10 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     setTime(m_time);
     playBasicPokemonOnBench();
     // play evolution card on bench
-    //setTime(m_time);
+//    setTime(m_time);
 //    playEvolutionCard();
-    // attach energy (should be last thing
-    //setTime(m_time);
+//    // attach energy (should be last thing
+    setTime(m_time);
     attachEnergy();
     // should we atttack or not ?
     // and which attack?
@@ -91,7 +91,7 @@ void AIPlayerBT::playBasicPokemonOnBench()
     // check if you have that card in your bench already if you do, go to the next card
     // basic pokemon
     auto hand = viewHand();
-    int _indexHand;
+    int _indexHand = -1;
     for(unsigned int i = 0 ; i < hand.size(); ++i)
     {
         // check if the card is a pokemon
@@ -104,7 +104,7 @@ void AIPlayerBT::playBasicPokemonOnBench()
             }
         }
     }
-    if(canPlay(_indexHand))
+    if(_indexHand != -1 && canPlay(_indexHand))
     {
         playCard(_indexHand);
     }
@@ -117,7 +117,7 @@ void AIPlayerBT::playEvolutionCard()
     auto bench = viewBench();
     std::vector<std::string> _listOfPokemons;
     auto hand = viewHand();
-    int _indexHand;
+    int _indexHand = -1;
     // iterate through your bench and store all the pokemons into a list
     for(unsigned int i = 0 ; i < bench.size(); ++i)
     {
@@ -144,7 +144,7 @@ void AIPlayerBT::playEvolutionCard()
         }
     }
 
-    if(canPlay(_indexHand))
+    if(_indexHand != -1 && canPlay(_indexHand))
     {
         playCard(_indexHand);
     }
@@ -153,24 +153,23 @@ void AIPlayerBT::playEvolutionCard()
 //--------------------------------------------------------------------------
 void AIPlayerBT::attachEnergy()
 {
-
-    /// need help for this, because this wont work while there are multiple cards
-    /// when multiple cards, it will not add on the benched card but on the active card
+    /// WHY NOT ACTIVE CARD
     auto hand = viewHand();
     auto bench = viewBench();
-    int _posHand;
-    int _posBench;
+    int _posHand = -1;
+    int _posBench = -1;
+    // iterates through bench
     for(unsigned int i = 0 ; i < bench.size(); ++i)
-    {
+    {   // checks if there is a pokemon
         if(bench[i].numPokemon() != 0)
-        {
+        {   // checks if the requirements are bugger than the number energy attached to that slot
             if(biggestAttack(i).size() > bench[i].numEnergy())
             {
                 std::cout<<"NEED ENERGY"<<std::endl;
                 for(size_t z = 0 ; z < biggestAttack(i).size(); ++z)
                 {
                     for(size_t q = 0 ; q < hand.size(); ++q)
-                    {
+                    {   // checks if there is an energy card in the hand
                         if(hand[q]->cardType() == PTCG::CARD::ENERGY)
                         {
                             EnergyCard* energyCard = static_cast<EnergyCard*>(hand[q].get());
@@ -181,7 +180,6 @@ void AIPlayerBT::attachEnergy()
                                 std::cout<<"IT MATCHES OR IS COLOURLESS"<<std::endl;
                                 _posHand = q;
                                 _posBench = i;
-
                              }
                          }
                       }
@@ -189,8 +187,10 @@ void AIPlayerBT::attachEnergy()
                 }
             }
         }
-    if(canPlay(_posHand))
+    // is _posHand is playable
+    if(_posHand != -1 && _posBench != -1 && canPlay(_posHand))
     {
+        // set the energy slot to the index of the bench
         m_energySlot = _posBench;
         m_card = hand[_posHand].get();
         playCard(_posHand);

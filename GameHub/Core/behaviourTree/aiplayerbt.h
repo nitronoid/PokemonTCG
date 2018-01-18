@@ -142,7 +142,8 @@ private:
     /// @build time in milliseconds
     int m_time = 1000;
     Card* m_card = nullptr;
-    int m_energySlot = 0 ;
+    int m_energySlot = 0;
+
 };
 
 

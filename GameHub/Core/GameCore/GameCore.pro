@@ -8,21 +8,20 @@ CONFIG += console c++14
 CONFIG -= app_bundle
 
 # Core
-HEADERS += $$files(../GameCore/include/*.h)
-SOURCES += $$files(../GameCore/src/*.cpp)
+HEADERS += $$files(../GameCore/include/*.h, true)
+SOURCES += $$files(../GameCore/src/*.cpp, true)
 
 # Roaring Heat AI
-HEADERS += $$files(../../../RoaringHeat/include/*.h)
-SOURCES += $$files(../../../RoaringHeat/src/*.cpp)
+HEADERS += $$files(../../../RoaringHeat/include/*.h, true)
+SOURCES += $$files(../../../RoaringHeat/src/*.cpp, true)
 INCLUDEPATH += ../../../RoaringHeat/include
 
 INCLUDEPATH += $$PWD/include
 INCLUDEPATH += ../pybind11/include
+# Reasons why this is neccessary explained on the pybind faq
+# github.com/pybind/pybind11/blob/master/docs/faq.rst#someclass-declared-with-greater-visibility-than-the-type-of-its-field-someclassmember--wattributes
+QMAKE_CXXFLAGS += -fvisibility=hidden
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 2f11f9b8d99db7eb9a468b1dde88e65e471c9c89
 linux: {
     LIBS += -L /usr/local/lib/python2.7 -lpython2.7
     INCLUDEPATH += /usr/include/python2.7

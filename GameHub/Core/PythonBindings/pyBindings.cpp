@@ -3,7 +3,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
-#include "pokemoncard.h"
+#include "card/pokemoncard.h"
 #include "game.h"
 
 namespace py = pybind11;
@@ -189,6 +189,7 @@ PYBIND11_MODULE(poke, m)
            py::arg("_skipActive") = false)
       .def("playerEnergyChoice", &Game::playerEnergyChoice)
       .def("playerConditionChoice", &Game::playerConditionChoice)
+      .def("playerAgree", &Game::playerAgree)
       .def("viewDeck", &Game::viewDeck)
       .def("viewDiscard", &Game::viewDiscard)
       .def("viewHand", &Game::viewHand)

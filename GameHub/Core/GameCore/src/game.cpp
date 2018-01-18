@@ -1,7 +1,7 @@
 #include "game.h"
 #include <iostream>
 #include <algorithm>
-#include "blankcard.h"
+#include "card/blankcard.h"
 
 Game::Game(const Game &_original) :
   m_observers(_original.m_observers),

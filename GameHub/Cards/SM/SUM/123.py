@@ -4,8 +4,8 @@ def filter(card):
     return card.cardType() == p.CARD.POKEMON and not card.stage()
 
 def canPlay(h):
-    # checks if deck is not empty for deck searching
-    return h.numCards(p.PLAYER.SELF, p.PILE.DECK) > 0
+    # checks if deck is not empty for deck searching and bench is not full
+    return h.numCards(p.PLAYER.SELF, p.PILE.DECK) > 0 and len(h.freeSlots(p.PLAYER.SELF))
 
 def nestBall(h):
     cards = h.playerCardChoice(

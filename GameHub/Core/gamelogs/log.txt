@@ -1,1 +1,361 @@
-
+Card No.59, name: Professor Kukui, id: 128 in Player 0's deck has been moved to their hand.
+Card No.58, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.57, name: Torracat, id: 25 in Player 0's deck has been moved to their hand.
+Card No.56, name: Torracat, id: 25 in Player 0's deck has been moved to their hand.
+Card No.55, name: Passimian, id: 73 in Player 0's deck has been moved to their hand.
+Card No.54, name: Crabrawler, id: 72 in Player 0's deck has been moved to their hand.
+Card No.59, name: Incineroar, id: 26 in Player 1's deck has been moved to their hand.
+Card No.58, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.57, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.56, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.55, name: Potion, id: 127 in Player 1's deck has been moved to their hand.
+Card No.54, name: Professor Kukui, id: 128 in Player 1's deck has been moved to their hand.
+Card No.5, name: Professor Kukui, id: 128 in Player 1's hand has been moved to their deck.
+Card No.4, name: Potion, id: 127 in Player 1's hand has been moved to their deck.
+Card No.3, name: Fighting Energy, id: 169 in Player 1's hand has been moved to their deck.
+Card No.2, name: Fire Energy, id: 165 in Player 1's hand has been moved to their deck.
+Card No.1, name: Fighting Energy, id: 169 in Player 1's hand has been moved to their deck.
+Card No.0, name: Incineroar, id: 26 in Player 1's hand has been moved to their deck.
+Card No.59, name: Sandygast, id: 74 in Player 1's deck has been moved to their hand.
+Card No.58, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.57, name: Makuhita, id: 67 in Player 1's deck has been moved to their hand.
+Card No.56, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.55, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.54, name: Torracat, id: 25 in Player 1's deck has been moved to their hand.
+----------
+Turn 0 start.
+----------
+Card No.47, name: Hau, id: 120 in Player 0's deck has been moved to their hand.
+Card No.1, name: Fighting Energy, id: 169 in Player 0's hand has been played.
+----------
+Turn 1 start.
+----------
+Card No.47, name: Hau, id: 120 in Player 1's deck has been moved to their hand.
+----------
+Turn 2 start.
+----------
+Card No.46, name: Energy Retrieval, id: 116 in Player 0's deck has been moved to their hand.
+----------
+Turn 3 start.
+----------
+Card No.46, name: Palossand, id: 75 in Player 1's deck has been moved to their hand.
+----------
+Turn 4 start.
+----------
+Card No.45, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+----------
+Turn 5 start.
+----------
+Card No.45, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.44, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.43, name: Professor Kukui, id: 128 in Player 1's deck has been moved to their hand.
+Card No.42, name: Stufful, id: 111 in Player 1's deck has been moved to their hand.
+Card No.5, name: Hau, id: 120 in Player 1's hand has been moved to their discard.
+Card No.5, name: Hau, id: 120 in Player 1's hand has been played.
+----------
+Turn 6 start.
+----------
+Card No.44, name: Incineroar, id: 26 in Player 0's deck has been moved to their hand.
+----------
+Turn 7 start.
+----------
+Card No.41, name: Timer Ball, id: 134 in Player 1's deck has been moved to their hand.
+Card No.5, name: Palossand, id: 75 in Player 1's hand has been played.
+----------
+Turn 8 start.
+----------
+Card No.43, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.42, name: Roggenrola, id: 69 in Player 0's deck has been moved to their hand.
+Card No.41, name: Crabrawler, id: 72 in Player 0's deck has been moved to their hand.
+Card No.0, name: Professor Kukui, id: 128 in Player 0's hand has been moved to their discard.
+Card No.0, name: Professor Kukui, id: 128 in Player 0's hand has been played.
+----------
+Turn 9 start.
+----------
+Card No.40, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.9, name: Timer Ball, id: 134 in Player 1's hand has been moved to their discard.
+Card No.9, name: Timer Ball, id: 134 in Player 1's hand has been played.
+----------
+Turn 10 start.
+----------
+Card No.40, name: Timer Ball, id: 134 in Player 0's deck has been moved to their hand.
+----------
+Turn 11 start.
+----------
+Card No.39, name: Timer Ball, id: 134 in Player 1's deck has been moved to their hand.
+----------
+Turn 12 start.
+----------
+Card No.39, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+----------
+Turn 13 start.
+----------
+Card No.38, name: Incineroar, id: 26 in Player 1's deck has been moved to their hand.
+Card No.5, name: Fighting Energy, id: 169 in Player 1's hand has been played.
+----------
+Turn 14 start.
+----------
+Card No.38, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.9, name: Crabrawler, id: 72 in Player 0's hand has been played.
+----------
+Turn 15 start.
+----------
+Card No.37, name: Makuhita, id: 67 in Player 1's deck has been moved to their hand.
+Card No.3, name: Fighting Energy, id: 169 in Player 1's hand has been played.
+----------
+Turn 16 start.
+----------
+Card No.37, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.5, name: Fighting Energy, id: 169 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Fling.
+----------
+Turn 17 start.
+----------
+Card No.36, name: Energy Retrieval, id: 116 in Player 1's deck has been moved to their hand.
+----------
+Turn 18 start.
+----------
+Card No.36, name: Bewear, id: 112 in Player 0's deck has been moved to their hand.
+Card No.7, name: Roggenrola, id: 69 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+----------
+Turn 19 start.
+----------
+Card No.35, name: Crabrawler, id: 72 in Player 1's deck has been moved to their hand.
+Card No.0, name: Fire Energy, id: 165 in Player 1's hand has been played.
+----------
+Turn 20 start.
+----------
+Card No.35, name: Torkoal, id: 23 in Player 0's deck has been moved to their hand.
+Card No.12, name: Torkoal, id: 23 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Fling.
+----------
+Turn 21 start.
+----------
+Card No.34, name: Roggenrola, id: 69 in Player 1's deck has been moved to their hand.
+Card No.11, name: Crabrawler, id: 72 in Player 1's hand has been played.
+----------
+Turn 22 start.
+----------
+Card No.34, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+The pokemon in slot 0 on Player 1's bench has been knocked out.
+Card No.0, name: Makuhita, id: 67 in Player 0's prize has been moved to their hand.
+----------
+Turn 23 start.
+----------
+Card No.33, name: Oranguru, id: 113 in Player 1's deck has been moved to their hand.
+Card No.9, name: Makuhita, id: 67 in Player 1's hand has been played.
+----------
+Turn 24 start.
+----------
+Card No.33, name: Lillie, id: 122 in Player 0's deck has been moved to their hand.
+Card No.13, name: Makuhita, id: 67 in Player 0's hand has been played.
+----------
+Turn 25 start.
+----------
+Card No.32, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.31, name: Fighting Energy, id: 169 in Player 1's deck has been moved to their hand.
+Card No.30, name: Nest Ball, id: 123 in Player 1's deck has been moved to their hand.
+Card No.4, name: Professor Kukui, id: 128 in Player 1's hand has been moved to their discard.
+Card No.4, name: Professor Kukui, id: 128 in Player 1's hand has been played.
+----------
+Turn 26 start.
+----------
+Card No.32, name: Potion, id: 127 in Player 0's deck has been moved to their hand.
+----------
+Turn 27 start.
+----------
+Card No.29, name: Roggenrola, id: 69 in Player 1's deck has been moved to their hand.
+Card No.8, name: Energy Retrieval, id: 116 in Player 1's hand has been moved to their discard.
+Card No.5, name: Fighting Energy, id: 169 in Player 1's discard has been moved to their hand.
+Card No.4, name: Fire Energy, id: 165 in Player 1's discard has been moved to their hand.
+Card No.8, name: Energy Retrieval, id: 116 in Player 1's hand has been played.
+----------
+Turn 28 start.
+----------
+Card No.31, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+----------
+Turn 29 start.
+----------
+Card No.28, name: Stufful, id: 111 in Player 1's deck has been moved to their hand.
+Card No.14, name: Fighting Energy, id: 169 in Player 1's hand has been played.
+----------
+Turn 30 start.
+----------
+Card No.30, name: Torkoal, id: 23 in Player 0's deck has been moved to their hand.
+----------
+Turn 31 start.
+----------
+Card No.27, name: Torracat, id: 25 in Player 1's deck has been moved to their hand.
+Card No.6, name: Timer Ball, id: 134 in Player 1's hand has been moved to their discard.
+Card No.6, name: Torracat, id: 25 in Player 1's deck has been moved to their hand.
+Card No.6, name: Timer Ball, id: 134 in Player 1's hand has been played.
+----------
+Turn 32 start.
+----------
+Card No.29, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
+Card No.9, name: Fire Energy, id: 165 in Player 0's hand has been played.
+----------
+Turn 33 start.
+----------
+Card No.25, name: Boldore, id: 70 in Player 1's deck has been moved to their hand.
+----------
+Turn 34 start.
+----------
+Card No.28, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+The pokemon in slot 0 on Player 1's bench has been knocked out.
+Card No.1, name: Big Malasada, id: 114 in Player 0's prize has been moved to their hand.
+----------
+Turn 35 start.
+----------
+Card No.24, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+----------
+Turn 36 start.
+----------
+Card No.27, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.26, name: Boldore, id: 70 in Player 0's deck has been moved to their hand.
+Card No.25, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.24, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
+Card No.3, name: Hau, id: 120 in Player 0's hand has been moved to their discard.
+Card No.3, name: Hau, id: 120 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Fling.
+----------
+Turn 37 start.
+----------
+Card No.23, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+Card No.19, name: Litten, id: 24 in Player 1's hand has been played.
+----------
+Turn 38 start.
+----------
+Card No.23, name: Nest Ball, id: 123 in Player 0's deck has been moved to their hand.
+Card No.19, name: Boldore, id: 70 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+----------
+Turn 39 start.
+----------
+Card No.22, name: Sandygast, id: 74 in Player 1's deck has been moved to their hand.
+Card No.1, name: Fire Energy, id: 165 in Player 1's hand has been played.
+----------
+Turn 40 start.
+----------
+Card No.22, name: Incineroar, id: 26 in Player 0's deck has been moved to their hand.
+----------
+Turn 41 start.
+----------
+Card No.21, name: Litten, id: 24 in Player 1's deck has been moved to their hand.
+----------
+Turn 42 start.
+----------
+Card No.21, name: Torracat, id: 25 in Player 0's deck has been moved to their hand.
+Card No.7, name: Fire Energy, id: 165 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Fling.
+The pokemon in slot 0 on Player 1's bench has been knocked out.
+Card No.2, name: Fire Energy, id: 165 in Player 0's prize has been moved to their hand.
+----------
+Turn 43 start.
+----------
+Card No.20, name: Potion, id: 127 in Player 1's deck has been moved to their hand.
+Card No.6, name: Roggenrola, id: 69 in Player 1's hand has been played.
+----------
+Turn 44 start.
+----------
+Card No.20, name: Roggenrola, id: 69 in Player 0's deck has been moved to their hand.
+Card No.6, name: Timer Ball, id: 134 in Player 0's hand has been moved to their discard.
+Card No.3, name: Palossand, id: 75 in Player 0's deck has been moved to their hand.
+Card No.2, name: Boldore, id: 70 in Player 0's deck has been moved to their hand.
+Card No.6, name: Timer Ball, id: 134 in Player 0's hand has been played.
+----------
+Turn 45 start.
+----------
+Card No.19, name: Nest Ball, id: 123 in Player 1's deck has been moved to their hand.
+Card No.10, name: Roggenrola, id: 69 in Player 1's hand has been played.
+----------
+Turn 46 start.
+----------
+Card No.17, name: Makuhita, id: 67 in Player 0's deck has been moved to their hand.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+----------
+Turn 47 start.
+----------
+Card No.18, name: Lillie, id: 122 in Player 1's deck has been moved to their hand.
+Card No.0, name: Makuhita, id: 67 in Player 1's hand has been played.
+----------
+Turn 48 start.
+----------
+Card No.16, name: Oranguru, id: 113 in Player 0's deck has been moved to their hand.
+Player 0 used pokemon ID: 73, name: Passimian's attack Fling.
+The pokemon in slot 0 on Player 1's bench has been knocked out.
+Card No.3, name: Fire Energy, id: 165 in Player 0's prize has been moved to their hand.
+----------
+Turn 49 start.
+----------
+Card No.17, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+----------
+Turn 50 start.
+----------
+Card No.15, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+----------
+Turn 51 start.
+----------
+Card No.16, name: Torkoal, id: 23 in Player 1's deck has been moved to their hand.
+----------
+Turn 52 start.
+----------
+Card No.14, name: Sandygast, id: 74 in Player 0's deck has been moved to their hand.
+Card No.11, name: Fighting Energy, id: 169 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Fling.
+The pokemon in slot 0 on Player 1's bench has been knocked out.
+Card No.4, name: Hau, id: 120 in Player 0's prize has been moved to their hand.
+----------
+Turn 53 start.
+----------
+Card No.15, name: Boldore, id: 70 in Player 1's deck has been moved to their hand.
+Card No.13, name: Boldore, id: 70 in Player 1's hand has been played.
+----------
+Turn 54 start.
+----------
+Card No.13, name: Stufful, id: 111 in Player 0's deck has been moved to their hand.
+Card No.12, name: Litten, id: 24 in Player 0's hand has been played.
+----------
+Turn 55 start.
+----------
+Card No.14, name: Crabrawler, id: 72 in Player 1's deck has been moved to their hand.
+Card No.9, name: Fire Energy, id: 165 in Player 1's hand has been played.
+----------
+Turn 56 start.
+----------
+Card No.12, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.12, name: Fighting Energy, id: 169 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+----------
+Turn 57 start.
+----------
+Card No.13, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.18, name: Fire Energy, id: 165 in Player 1's hand has been played.
+----------
+Turn 58 start.
+----------
+Card No.11, name: Timer Ball, id: 134 in Player 0's deck has been moved to their hand.
+Card No.10, name: Fire Energy, id: 165 in Player 0's deck has been moved to their hand.
+Card No.9, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Card No.8, name: Litten, id: 24 in Player 0's deck has been moved to their hand.
+Card No.28, name: Hau, id: 120 in Player 0's hand has been moved to their discard.
+Card No.28, name: Hau, id: 120 in Player 0's hand has been played.
+Player 0 used pokemon ID: 73, name: Passimian's attack Fling.
+----------
+Turn 59 start.
+----------
+Card No.12, name: Fire Energy, id: 165 in Player 1's deck has been moved to their hand.
+Card No.8, name: Nest Ball, id: 123 in Player 1's hand has been moved to their discard.
+Card No.8, name: Nest Ball, id: 123 in Player 1's hand has been played.
+----------
+Turn 60 start.
+----------
+Card No.7, name: Fighting Energy, id: 169 in Player 0's deck has been moved to their hand.
+Player 0 used pokemon ID: 73, name: Passimian's attack Team Play.
+The pokemon in slot 0 on Player 1's bench has been knocked out.
+Card No.5, name: Fire Energy, id: 165 in Player 0's prize has been moved to their hand.

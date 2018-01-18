@@ -114,6 +114,25 @@ public:
   /// @return a pair of a bool(attack or not) and a card id
   //----------------------------------------------------------------------------------------------------------------------
   virtual std::pair<bool, unsigned> turn() override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief generates a random bool value
+  /// @return a random bool
+  //----------------------------------------------------------------------------------------------------------------------
+  bool randomBool();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief picks the first options
+  /// @param _options is a vector of some type of options
+  /// @param _amount is the amount of options to pick
+  /// @return the indices to the first options
+  //----------------------------------------------------------------------------------------------------------------------
+  template<typename T>
+  std::vector<size_t> pickFirst(const std::vector<T> &_options, const size_t _amount)
+  {
+    size_t length = std::min(_options.size(), _amount);
+    std::vector<size_t> badChoice(length);
+    std::iota (std::begin(badChoice), std::end(badChoice), 0);
+    return badChoice;
+  }
 };
 
 

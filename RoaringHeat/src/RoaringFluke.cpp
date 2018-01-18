@@ -6,6 +6,10 @@
 #include <algorithm>
 #include <functional>
 unsigned found;
+bool unplayedevo = false;
+bool unplayeddevo = false;
+unsigned evoloc;
+unsigned devoloc;
 Player* RoaringFluke::clone() const
 {
     return new RoaringFluke(*this);
@@ -14,7 +18,7 @@ Player* RoaringFluke::clone() const
 
 std::string RoaringFluke::deckName() const
 {
-    return "bright_tide_deck.json";
+    return "roaring_heat_deck.json";
 }
 
 std::vector<size_t> RoaringFluke::chooseCards(
@@ -87,8 +91,8 @@ std::vector<size_t> RoaringFluke::chooseConditions(
         const PTCG::PLAYER _owner,
         const PTCG::ACTION _action,
         const std::vector<PTCG::CONDITION> &_options,
-        const unsigned _amount
-        )
+        const unsigned _amount)
+
 {
     size_t length = std::min(static_cast<unsigned>(_options.size()), _amount);
     std::vector<size_t> badChoice(length);
@@ -148,7 +152,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
 
     std::cout<<"Current Active: "<<currentPoke->getName()<<" - "<<currentPoke->hp()<<"hp.\n\n";
     bool needswitch = false;
-    bool switchfound = false;
+    bool change = false;
     size_t bestPos = 0;
     unsigned evoPoke = 0;
 
@@ -164,12 +168,15 @@ std::pair<bool, unsigned> RoaringFluke::turn()
             PokemonCard* pokemon = static_cast<PokemonCard*>(card.get().get());
             PokemonCard* currentBest = static_cast<PokemonCard*>(curPokemonList[bestPos].get().get());
             if (pokemon->hp() > currentBest->hp())
+            {
                 bestPos = i;
+                change = true;
+            }
             std::string preEv = pokemon->preEvolution();
             if (preEv.empty() != true)
             {
                 std::cout<<pokemon->getName()<<" Has pre evoltion: '"<<preEv<<"'.\n";
-
+                evoPoke = 0;
                 for (auto& card : curPokemonList)
                 {
                     PokemonCard* currentEv = static_cast<PokemonCard*>(card.get().get());
@@ -192,18 +199,17 @@ std::pair<bool, unsigned> RoaringFluke::turn()
 
                         if (found)
                         {
-                            playCard(currentPokeIndexList[i]);
+                            unplayedevo = true;
+                            evoloc = i;
+
                             std::cout<<"Playing "<<pokemon->getName()<<".\n";
                             found = 0;
                         } else
                         {
-                            if (evoPoke = 0)
-                            {
+                            unplayeddevo = true;
+                            devoloc = evoPoke;
 
-                            }
-                            playCard(currentPokeIndexList[evoPoke]);
-                            playCard(currentPokeIndexList[i]);
-                            std::cout<<"Playing "<<currentEv->getName()<<" and its evoltion "<<pokemon->getName()<<".\n";
+                            std::cout<<"Playing "<<currentEv->getName()<<" and its evoltion "<<pokemon->getName()<<" next turn.\n";
 
                         }
 
@@ -213,15 +219,27 @@ std::pair<bool, unsigned> RoaringFluke::turn()
 
                         std::cout<<preEv<<" is NOT in ph"<<evoPoke<<".\n";
                     }
-                    ++evoPoke;
+                ++evoPoke;
                 }
             }
             ++i;
         }
+       if (unplayedevo)
+       {
+           if (evoloc)playCard(currentPokeIndexList[evoloc]);
+           unplayedevo = false;
+           initHand = viewHand();
+       }
+       if (unplayeddevo)
+       {
+           if (devoloc)playCard(currentPokeIndexList[devoloc]);
+           unplayeddevo = false;
+           initHand = viewHand();
+       }
 
 
     PokemonCard* bestHealth = static_cast<PokemonCard*>(curPokemonList[bestPos].get().get());
-
+    initHand = viewHand();
     if (slot.getRemainingHP() <= 30) needswitch = true;
     if (canPlay(currentPokeIndexList[bestPos]))
     {
@@ -324,7 +342,7 @@ if (curEnergyList.size())
         std::cout<<"about to match energy\n";
         for (int j = 0 ; j < requirements.size(); ++j)
         {
-            for (int t = 0 ; (t < curEnergyList.size()) && !played; ++t)
+            for (int t = 0 ; (t < curEnergyList.size()-1) && !played; ++t)
             {
                 EnergyCard* energy = static_cast<EnergyCard*>(curEnergyList[t].get().get());
                 if (requirements[j] == energy->type())

@@ -70,9 +70,10 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
 //--------------------------------------------------------------------------
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
+    m_card = nullptr;
     // play baic pokemon on bench
-    setTime(m_time);
-    playBasicPokemonOnBench();
+   // setTime(m_time);
+   // playBasicPokemonOnBench();
     // play evolution card on bench
 //    setTime(m_time);
 //    playEvolutionCard();
@@ -81,8 +82,8 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
     attachEnergy();
     // should we atttack or not ?
     // and which attack?
-
-    return std::pair<bool, unsigned> {doAttack(),whichAttack()};
+    bool doAttack = whichAttack() != -1;
+    return std::pair<bool, unsigned> {doAttack,whichAttack()};
 
 }
 //--------------------------------------------------------------------------
@@ -196,24 +197,14 @@ void AIPlayerBT::attachEnergy()
         playCard(_posHand);
     }
 }
-//--------------------------------------------------------------------------
-bool AIPlayerBT::doAttack()
-{
-    // return if i want to attack or not
-    bool attack = false;
-    for(int i=0; i<viewBench()[0].active()->attacks().size(); ++i)
-    {
-        if(canAttack(i))
-            attack = true;
-    }
-    return attack;
-}
+
 //--------------------------------------------------------------------------
 int AIPlayerBT::whichAttack()
 {
     // return which attack
-    int _index = 0;
-    for(int i=0; i<=viewBench()[0].active()->attacks().size(); ++i)
+    int _index = -1;
+    auto bench = viewBench();
+    for(int i=0; i < bench[0].active()->attacks().size(); ++i)
     {
         if(canAttack(i))
             _index=i;

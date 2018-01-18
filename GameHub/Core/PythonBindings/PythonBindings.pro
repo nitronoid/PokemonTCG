@@ -38,7 +38,3 @@ macx: {
     INCLUDEPATH += /Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
     DEPENDPATH += /Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 2f11f9b8d99db7eb9a468b1dde88e65e471c9c89

@@ -66,8 +66,8 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
     // play baic pokemon on bench
-//    setTime(m_time);
-//    playBasicPokemonOnBench();
+    setTime(m_time);
+    playBasicPokemonOnBench();
     // play evolution card on bench
     //setTime(m_time);
     //playEvolutionCard();

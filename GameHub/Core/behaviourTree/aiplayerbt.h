@@ -6,7 +6,7 @@
 #include "selector.h"
 #include "action.h"
 #include "condition.h"
-#include "player.h"
+#include "player/player.h"
 #include <unordered_map>
 #include <algorithm>
 

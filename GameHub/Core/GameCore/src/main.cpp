@@ -8,8 +8,8 @@
 #include "card/cardfactory.h"
 #include "player/randomai.h"
 #include "player/humanplayer.h"
-#include "RoaringFluke.h"
-
+//#include "RoaringFluke.h"
+#include "aiplayerbt.h"
 
 
 int main()
@@ -26,7 +26,7 @@ int main()
   // Two players for the game
   //RandomAI firstPlayer(&game);
   HumanPlayer firstPlayer(&game);
-  RandomAI secondPlayer(&game);
+  AIPlayerBT secondPlayer(&game);
   // Load the decks from the pool and attach players
   game.init(sumFactory, &firstPlayer, &secondPlayer);
   // Attach our observers

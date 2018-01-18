@@ -72,17 +72,16 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
 {
     m_card = nullptr;
     // play trainer card first (so you can have more cards in your hand)
-//    setTime(m_time+1500);
-//    Card();
-//    setTime(m_time+1500);
+    setTime(m_time);
+    playTrainerCard();
 
     // play baic pokemon on bench
-//    setTime(m_time);
-//    playBasicPokemonOnBench();
+    setTime(m_time);
+    playBasicPokemonOnBench();
 
     // play evolution card on bench
-    //setTime(m_time);
-    //playEvolutionCard();
+    setTime(m_time);
+    playEvolutionCard();
 
     // attach energy (should be last thing)
     setTime(m_time);
@@ -90,7 +89,6 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
 
     // should we atttack or not ?
     // and which attack?
-
     bool doAttack = whichAttack() != -1;
     return std::pair<bool, unsigned> {doAttack,whichAttack()};
 
@@ -177,6 +175,7 @@ std::vector<PTCG::TYPE> AIPlayerBT::biggestAttack(int _index)
 //--------------------------------------------------------------------------
 void AIPlayerBT::attachEnergy()
 {
+    /// make function that returns the _posHand and _posBench
     /// WHY NOT ACTIVE CARD IN THE BEGINNING
     auto hand = viewHand();
     auto bench = viewBench();
@@ -220,6 +219,7 @@ void AIPlayerBT::attachEnergy()
         playCard(_posHand);
     }
 }
+
 //--------------------------------------------------------------------------
 void AIPlayerBT::playTrainerCard()
 {
@@ -279,10 +279,28 @@ int AIPlayerBT::whichAttack()
     return _index;
 }
 //--------------------------------------------------------------------------
+void AIPlayerBT::willRetreat()
+{
+    auto bench = viewBench()[0].active();
+    int _healthLimit = bench->hp() / 2;
+    if(bench->hp() <= _healthLimit)
+    {
+        std::cout<<"WILL RETREAT"<<std::endl;
+        retreat();
+    }
+    std::cout<<"WILL NOT RETREAT"<<std::endl;
+}
+//--------------------------------------------------------------------------
 void AIPlayerBT::setTime(int _amountMilliSeconds)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(_amountMilliSeconds));
 }
+
+
+
+
+
+
 
 
 
@@ -301,18 +319,7 @@ std::vector<PTCG::TYPE> AIPlayerBT::sortEnergies()
 //    }
 //    return _listOfSpecificEnergies;
 }
-//--------------------------------------------------------------------------
-void AIPlayerBT::willRetreat()
-{
-    auto bench = viewBench()[0].active();
-    int _healthLimit = bench->hp() / 2;
-    if(bench->hp() <= _healthLimit)
-    {
-        std::cout<<"WILL RETREAT"<<std::endl;
-        retreat();
-    }
-    std::cout<<"WILL NOT RETREAT"<<std::endl;
-}
+
 
 
 ////--------------------------------------------------------------------------

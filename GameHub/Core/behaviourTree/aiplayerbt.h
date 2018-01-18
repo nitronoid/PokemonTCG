@@ -104,18 +104,20 @@ public:
     std::vector<PTCG::TYPE> biggestAttack(int _index);
     /// @build attach an energy (NEED TO WORK ON THIS IF WE HAVE TIME)
     void attachEnergy();
+    int indexHandEnergy();
+    int indexBenchEnergy();
     /// @build play TRAINER cards
     void playTrainerCard();
     /// @build return which attack
     int whichAttack();
+    /// @build when to retreat
+    void willRetreat();
     /// @build timer (think)
     void setTime(int _amountMilliSeconds);
 
 
     /// @build sort energies of biggest attack
     std::vector<PTCG::TYPE> sortEnergies();
-    /// @build when to retreat
-    void willRetreat();
 //    /// @build checks is the card needs energy
 //    bool checkIfEnergyNeeded();
 //    /// @build checks if the card is an energy card

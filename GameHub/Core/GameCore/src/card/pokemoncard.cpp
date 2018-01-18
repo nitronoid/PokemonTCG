@@ -127,7 +127,7 @@ unsigned PokemonCard::stage() const
 }
 
 
-const std::vector<Attack>& PokemonCard::attacks() const
+std::vector<Attack> PokemonCard::attacks() const
 {
   return m_attacks;
 }

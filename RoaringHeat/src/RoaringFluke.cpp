@@ -14,7 +14,7 @@ Player* RoaringFluke::clone() const
 
 std::string RoaringFluke::deckName() const
 {
-    return "bright_tide_deck.json";
+    return "roaring_heat_deck.json";
 }
 
 std::vector<size_t> RoaringFluke::chooseCards(
@@ -101,9 +101,12 @@ std::pair<bool, unsigned> RoaringFluke::turn()
     cardRefList curEnergyList, curPokemonList, curTrainerList;
     std::cout<<"\nRoaring flukes Pokemon:\n\n";
 
+    //------------------------------------------------we create lists based on card type in our deck to simplify AI access to cards---------------------------------------------
     std::vector<int>currentPokeIndexList;
     std::vector<int>currentEnergyIndexList;
     std::vector<int>currentTrainerIndexList;
+
+
     for (int i = 0 ; i < initHand.size(); ++i)
     {
         auto& currentCard = initHand[i];
@@ -116,32 +119,34 @@ std::pair<bool, unsigned> RoaringFluke::turn()
         {
             curPokemonList.push_back(currentCard);
             currentPokeIndexList.push_back(i);
-        }else
+        }else if(currentCard->cardType() == PTCG::CARD::ITEM || currentCard->cardType() == PTCG::CARD::SUPPORT)
         {
             curTrainerList.push_back(currentCard);
             currentTrainerIndexList.push_back(i);
         }
     }
-
+    //**************************************************************************************************************************************************************************
 
     std::cout<<"\nNumber of Pokemon - "<<curPokemonList.size()<<".\n";
     std::cout<<"Number of Energy - "<<curEnergyList.size()<<".\n";
     std::cout<<"Number of Trainers - "<<curTrainerList.size()<<".\n\n";
-    //gets our & enemys current active pokemon and stores them
-    //[
+
+    //------------------------------------------------gets our's & enemy's current active pokemon and stores them---------------------------------------------------------------
     PokemonCard* currentPoke = viewBench()[0].active();
     PokemonCard* enCurrentPoke = viewBench(PTCG::PLAYER::ENEMY)[0].active();
     auto slot = viewBench()[0];
     auto enslot  = viewBench(PTCG::PLAYER::ENEMY)[0];
-    //]
+    //**************************************************************************************************************************************************************************
+
     std::cout<<"Current Active: "<<currentPoke->getName()<<" - "<<currentPoke->hp()<<"hp.\n\n";
     bool needswitch = false;
     bool switchfound = false;
     size_t bestPos = 0;
     int i = 0;
 
+    //------------------------------------------------pokemon brain really starts here------------------------------------------------------------------------------------------
 
-    //pokemon brain really starts here
+    //------------------------------------------------pokemon card managment starts here------------------------------------------------------------------------------------
     if (curPokemonList.size())
     {
         for (auto& card : curPokemonList)
@@ -149,9 +154,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
             PokemonCard* pokemon = static_cast<PokemonCard*>(card.get().get());
             PokemonCard* currentBest = static_cast<PokemonCard*>(curPokemonList[bestPos].get().get());
             if (pokemon->hp() > currentBest->hp())
-            {
                 bestPos = i;
-            }
             ++i;
         }
 
@@ -208,8 +211,6 @@ std::pair<bool, unsigned> RoaringFluke::turn()
                                     bestPos = j;
                                 }
                             }
-
-
                         }
 
                     } else
@@ -233,10 +234,9 @@ std::pair<bool, unsigned> RoaringFluke::turn()
         std::cout<<"there were no pokemon in your hand\n";
     }
 
+    //**************************************************************************************************************************************************************************
 
-
-
-    //energy
+    //------------------------------------------------energy card managment starts here-----------------------------------------------------------------------------------------
     if (curEnergyList.size())
     {
         std::cout<<"Calculating Energy\n";
@@ -247,7 +247,9 @@ std::pair<bool, unsigned> RoaringFluke::turn()
         {
             int curr = attack.requirements().size();
             if (curr > target)
+            {
                 target = curr;
+            }
         }
         std::cout<<"number of energy on main - "<<slot.numEnergy()<<"\nnumber of energy needed for best attack - "<<target<<".\n";
         if (slot.numEnergy() <= target)
@@ -285,15 +287,44 @@ std::pair<bool, unsigned> RoaringFluke::turn()
         std::cout<<"there is no Energy in your hand\n";
     }
 
+    //**************************************************************************************************************************************************************************
+
+    //------------------------------------------------trainer cards managment starts here---------------------------------------------------------------------------------------
+
     if (curTrainerList.size())
     {
+        int i;
+        TrainerCard* curtrainer = static_cast<TrainerCard*>(curTrainerList[i].get().get());
+        for(i; i < currentTrainerIndexList.size()-1; i++ )
+        {
+            if(canPlay(currentTrainerIndexList[i]))
+            {
+                int healthLost=currentPoke->hp()-slot.getRemainingHP();
+                //if(healthLost >= 20 && healthLost <30 )
+                //{
+                if(curtrainer->getName()=="Big Malasada")
+                {
+                    playCard(currentTrainerIndexList[i]);
+                    std::cout<<"\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+                }
+                //                }else if(healthLost >=30)
+                //                {
+                if(curtrainer->getName()=="Potion")
+                {
+                    playCard(currentTrainerIndexList[i]);
+                    std::cout<<"\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+
+                }
+            }
+            //playCard(currentTrainerIndexList[i]);
+        }
 
     } else
 
     {/*15 feb 7.30 b32 */
         std::cout<<"there are no Trainers in your hand\n";
     }
-
+    //**************************************************************************************************************************************************************************
 
     //START ATTACKING
     std::cout<<"\n\nCalculating Attack\n";
@@ -315,6 +346,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
     if (shouldAttack)std::cout<<" - SUCCESS\npokemon will attack with attack no "<<bestAttack<<".\n\n";
 
     return std::pair<bool, unsigned> {shouldAttack, bestAttack};
+    //******************************************************************************************************************************************************************************
 }
 
 

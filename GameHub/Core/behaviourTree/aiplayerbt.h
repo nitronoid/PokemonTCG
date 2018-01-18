@@ -97,20 +97,20 @@ public:
   virtual std::pair<bool, unsigned> turn() override;
 
 
+    /// @build put pokemon on bench
+    void putBasicPokemonOnBench();
+    /// @build play the evolution pokemon card (pokemon evolve to the next stage)
+    void playEvolutionCard();
     /// @build attach an energy
     void attachEnergy();
+    /// @build timer (think)
+    void setTime(int _amountMilliSeconds);
+
+
     /// @build sort energies of biggest attack
     std::vector<PTCG::TYPE> sortEnergies();
     /// @build return the biggest attack
     std::vector<PTCG::TYPE> biggestAttack(int _index);
-    /// @build put pokemon on bench
-    void putPokemonOnBench();
-    /// @build play the evolution pokemon card (pokemon evolve to the next stage)
-    void playEvolutionCard();
-    /// @build timer (think)
-    void setTime(int _amountMilliSeconds);
-    /// @build checks if the card is evolution pokemon card
-    bool checkIfCardIsEvolution();
     /// @build when to retreat
     void willRetreat();
     /// @build play TRAINER cards

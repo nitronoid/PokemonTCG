@@ -89,16 +89,15 @@ std::pair<bool, unsigned> AIPlayerBT::turn()
 }
 
 //--------------------------------------------------------------------------
-void AIPlayerBT::putPokemonOnBench()
+void AIPlayerBT::putBasicPokemonOnBench()
 {
-   // if first turn, cant evolve, thats why you have an ERROR
-   // evolution and basic pokemon
+    // basic pokemon
     auto hand = viewHand();
     for(int i = 0 ; i < hand.size(); ++i)
     {
         // check if the card is a pokemon
         if(hand[i]->cardType() == PTCG::CARD::POKEMON)
-        {
+        {   // check if it is stage 0
             PokemonCard* pokemonCard = static_cast<PokemonCard*>(hand[i].get());
             if(pokemonCard->stage() == 0)
             {
@@ -113,108 +112,38 @@ void AIPlayerBT::putPokemonOnBench()
 //--------------------------------------------------------------------------
 void AIPlayerBT::playEvolutionCard()
 {
-//    int evolved = 0;
-//    auto hand = viewHand();
-//    auto bench = viewBench();
-//    for(unsigned int i=0; i<hand.size(); ++i)
-//    {
-//        if(hand[i]->cardType() == PTCG::CARD::POKEMON)
-//        {
-
-//            auto pokemon = static_cast<PokemonCard*>(hand[i].get());
-//            //evolved = pokemon->preEvolution();
-//            evolved = i;
-
-//            for(unsigned int i=0; i<bench.size(); ++i)
-//            {
-//                if(bench[0].active()->getName() == pokemon->preEvolution())
-//                {
-//                    //evolved = pokemon->preEvolution();
-//                    //evolved = i;
-//                    if(canPlay(evolved))
-//                        playCard(evolved);
-
-//                }
-//            }
-//        }
-
-//    }
-    // if first turn, cant evolve, thats why you have an ERROR
-    // evolution and basic pokemon
-     auto hand = viewHand();
-     for(int i = 0 ; i < hand.size(); ++i)
-     {
-         // check if the card is a pokemon
-         if(hand[i]->cardType() == PTCG::CARD::POKEMON)
-         {
-             PokemonCard* pokemonCard = static_cast<PokemonCard*>(hand[i].get());
-             if(pokemonCard->stage() != 0)
-             {
-                 if(canPlay(i))
-                 {
-                     playCard(i);
-                 }
-             }
-         }
-     }
-
-}
-//--------------------------------------------------------------------------
-/*bool AIPlayerBT::checkIfCardIsEvolution()
-{
-//DO WE NEED THIS FUNCTION?
-//probably not
+    auto bench = viewBench();
+    std::vector<std::string> _listOfPokemons;
     auto hand = viewHand();
-    auto bench = viewBench();
-    for(unsigned int i=0; i<hand.size(); ++i)
+    // iterate through your bench and store all the pokemons into a list
+    for(int i = 0 ; i < bench.size(); ++i)
     {
-        if(hand[i]->cardType() == PTCG::CARD::POKEMON)
+        if(bench[i].numPokemon()!=0)
         {
-            auto pokemon = static_cast<PokemonCard*>(hand[i].get());
-            if(bench[0].active()->getName() == pokemon->preEvolution())
-            {
-                std::cout<<"THERE IS EVOLUTION CARD IN THE HAND"<<std::endl;
-                return true;
-            }
-            std::cout<<"THERE IS NO EVOLUTION CARD IN THE HAND"<<std::endl;
-            return false;
+            _listOfPokemons.push_back(bench[i].active()->getName());
         }
     }
-}*/
 
-//--------------------------------------------------------------------------
-void AIPlayerBT::setTime(int _amountMilliSeconds)
-{
-    std::this_thread::sleep_for(std::chrono::milliseconds(_amountMilliSeconds));
-}
-//--------------------------------------------------------------------------
-std::vector<PTCG::TYPE> AIPlayerBT::sortEnergies()
-{
-//    // biggestAttack - listOfSpecificEnergies = colourless
-//    std::vector<PTCG::TYPE> _listOfSpecificEnergies;
-//    for(int i = 0 ; i < biggestAttack().size(); ++i)
-//    {
-//        if(biggestAttack()[i] != PTCG::TYPE::COLOURLESS)
-//        {
-//            _listOfSpecificEnergies.push_back(biggestAttack()[i]);
-//        }
-//    }
-//    return _listOfSpecificEnergies;
-}
-//--------------------------------------------------------------------------
-std::vector<PTCG::TYPE> AIPlayerBT::biggestAttack(int _index)
-{
-    auto bench = viewBench();
-    std::vector<PTCG::TYPE> _biggestAttack;
-    for(int i = 0 ; i < bench[_index].active()->attacks().size(); ++i)
-    {
-        std::vector<PTCG::TYPE> _currentAttack = bench[_index].active()->attacks()[i].requirements();
-        if(_biggestAttack.size() <= _currentAttack.size())
+    // iterate through your hand and check if there is a evolution card
+    for(int j = 0; j < hand.size(); ++j)
+    {   // check if your card is a pokemon
+        if(hand[j]->cardType() == PTCG::CARD::POKEMON)
         {
-            _biggestAttack = _currentAttack;
+            PokemonCard* evolveCard = static_cast<PokemonCard*>(hand[j].get());
+            // iterate through the list of pokemon names
+            for(int card = 0 ; card < _listOfPokemons.size(); ++card)
+            {   // check if the card is equal to the pre-evolution name if it is play card
+                if(_listOfPokemons[card] == evolveCard->preEvolution())
+                {
+                    if(canPlay(j))
+                    {
+                        playCard(j);
+                    }
+                }
+            }
         }
     }
-    return _biggestAttack;
+
 }
 //--------------------------------------------------------------------------
 void AIPlayerBT::attachEnergy()
@@ -254,7 +183,40 @@ void AIPlayerBT::attachEnergy()
             }
         }
     }
-
+}
+//--------------------------------------------------------------------------
+void AIPlayerBT::setTime(int _amountMilliSeconds)
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(_amountMilliSeconds));
+}
+//--------------------------------------------------------------------------
+std::vector<PTCG::TYPE> AIPlayerBT::sortEnergies()
+{
+//    // biggestAttack - listOfSpecificEnergies = colourless
+//    std::vector<PTCG::TYPE> _listOfSpecificEnergies;
+//    for(int i = 0 ; i < biggestAttack().size(); ++i)
+//    {
+//        if(biggestAttack()[i] != PTCG::TYPE::COLOURLESS)
+//        {
+//            _listOfSpecificEnergies.push_back(biggestAttack()[i]);
+//        }
+//    }
+//    return _listOfSpecificEnergies;
+}
+//--------------------------------------------------------------------------
+std::vector<PTCG::TYPE> AIPlayerBT::biggestAttack(int _index)
+{
+    auto bench = viewBench();
+    std::vector<PTCG::TYPE> _biggestAttack;
+    for(int i = 0 ; i < bench[_index].active()->attacks().size(); ++i)
+    {
+        std::vector<PTCG::TYPE> _currentAttack = bench[_index].active()->attacks()[i].requirements();
+        if(_biggestAttack.size() <= _currentAttack.size())
+        {
+            _biggestAttack = _currentAttack;
+        }
+    }
+    return _biggestAttack;
 }
 //--------------------------------------------------------------------------
 void AIPlayerBT::willRetreat()

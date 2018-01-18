@@ -70,29 +70,19 @@ bool AIPlayerBT::agree(const PTCG::ACTION _action)
 //--------------------------------------------------------------------------
 std::pair<bool, unsigned> AIPlayerBT::turn()
 {
-    m_card = nullptr;
-    // play trainer card first (so you can have more cards in your hand)
-//    setTime(m_time+1500);
-//    Card();
-//    setTime(m_time+1500);
-
     // play baic pokemon on bench
-//    setTime(m_time);
-//    playBasicPokemonOnBench();
-
+    setTime(m_time);
+    playBasicPokemonOnBench();
     // play evolution card on bench
-    //setTime(m_time);
-    //playEvolutionCard();
-
-    // attach energy (should be last thing)
+//    setTime(m_time);
+//    playEvolutionCard();
+//    // attach energy (should be last thing
     setTime(m_time);
     attachEnergy();
-
     // should we atttack or not ?
     // and which attack?
 
-    bool doAttack = whichAttack() != -1;
-    return std::pair<bool, unsigned> {doAttack,whichAttack()};
+    return std::pair<bool, unsigned> {false,0};
 
 }
 //--------------------------------------------------------------------------
@@ -158,32 +148,18 @@ void AIPlayerBT::playEvolutionCard()
     {
         playCard(_indexHand);
     }
-}
-//--------------------------------------------------------------------------
-std::vector<PTCG::TYPE> AIPlayerBT::biggestAttack(int _index)
-{
-    auto bench = viewBench();
-    std::vector<PTCG::TYPE> _biggestAttack;
-    for(int i = 0 ; i < bench[_index].active()->attacks().size(); ++i)
-    {
-        std::vector<PTCG::TYPE> _currentAttack = bench[_index].active()->attacks()[i].requirements();
-        if(_biggestAttack.size() <= _currentAttack.size())
-        {
-            _biggestAttack = _currentAttack;
-        }
-    }
-    return _biggestAttack;
+
 }
 //--------------------------------------------------------------------------
 void AIPlayerBT::attachEnergy()
 {
-    /// WHY NOT ACTIVE CARD IN THE BEGINNING
+    /// WHY NOT ACTIVE CARD
     auto hand = viewHand();
     auto bench = viewBench();
     int _posHand = -1;
     int _posBench = -1;
     // iterates through bench
-    for(int i = 0 ; i < bench.size(); ++i)
+    for(unsigned int i = 0 ; i < bench.size(); ++i)
     {   // checks if there is a pokemon
         if(bench[i].numPokemon() != 0)
         {   // checks if the requirements are bugger than the number energy attached to that slot
@@ -221,62 +197,14 @@ void AIPlayerBT::attachEnergy()
     }
 }
 //--------------------------------------------------------------------------
-void AIPlayerBT::playTrainerCard()
+bool AIPlayerBT::doAttack()
 {
-    // PROFESSOR KUKUI DOES NOT WORK
-    // this works
-    auto hand = viewHand();
-    int _indexCard = -1;
-    for(unsigned int i = 0 ; i < hand.size(); ++i)
-    {
-        switch (hand[i]->cardType()) {
-        case PTCG::CARD::SUPPORT:
-        {
-            // Always play support cards because they draw cards
-            std::cout<<"SUPPORT CARD FIND"<<std::endl;
-            _indexCard = i;
-            break;
-        }
-        case PTCG::CARD::ITEM:
-        {
-            // 116: 2 basic energy cards from discard to hand
-            // 123 search for basic pokemon (put in bench)
-            // 127 heal 30
-            // 134 search for evolution card
-            // 135 discard 2 cards from your hand
-            TrainerCard* itemCard = static_cast<TrainerCard*>(hand[i].get());
-            std::cout<<"ITEM CARD FIND"<<std::endl;
-            _indexCard = i;
-            break;
-        }
-        case PTCG::CARD::STADIUM:
-        {
-            std::cout<<"STADIUM CARD FIND"<<std::endl;
-            _indexCard = i;
-            break;
-        }
-        default:
-            break;
-        }
-    }
-    if(_indexCard != -1 && canPlay(_indexCard))
-    {
-        std::cout<<"PLAYED A SUPPORT CARD"<<std::endl;
-        playCard(_indexCard);
-    }
+    // return if i want to attack or not
 }
 //--------------------------------------------------------------------------
 int AIPlayerBT::whichAttack()
 {
     // return which attack
-    int _index = -1;
-    auto bench = viewBench();
-    for(int i=0; i < bench[0].active()->attacks().size(); ++i)
-    {
-        if(canAttack(i))
-            _index=i;
-    }
-    return _index;
 }
 //--------------------------------------------------------------------------
 void AIPlayerBT::setTime(int _amountMilliSeconds)
@@ -302,6 +230,21 @@ std::vector<PTCG::TYPE> AIPlayerBT::sortEnergies()
 //    return _listOfSpecificEnergies;
 }
 //--------------------------------------------------------------------------
+std::vector<PTCG::TYPE> AIPlayerBT::biggestAttack(int _index)
+{
+    auto bench = viewBench();
+    std::vector<PTCG::TYPE> _biggestAttack;
+    for(unsigned int i = 0 ; i < bench[_index].active()->attacks().size(); ++i)
+    {
+        std::vector<PTCG::TYPE> _currentAttack = bench[_index].active()->attacks()[i].requirements();
+        if(_biggestAttack.size() <= _currentAttack.size())
+        {
+            _biggestAttack = _currentAttack;
+        }
+    }
+    return _biggestAttack;
+}
+//--------------------------------------------------------------------------
 void AIPlayerBT::willRetreat()
 {
     auto bench = viewBench()[0].active();
@@ -313,6 +256,29 @@ void AIPlayerBT::willRetreat()
     }
     std::cout<<"WILL NOT RETREAT"<<std::endl;
 }
+//--------------------------------------------------------------------------
+void AIPlayerBT::playTrainerCard()
+{
+    auto hand = viewHand();
+    for(unsigned int i = 0 ; i < hand.size(); ++i)
+    {
+        if(hand[i]->cardType() == PTCG::CARD::SUPPORT)
+        {
+            std::cout<<"SUPPORT CARD FIND"<<std::endl;
+        }
+        if(hand[i]->cardType() == PTCG::CARD::ITEM)
+        {
+            std::cout<<"ITEM CARD FIND"<<std::endl;
+        }
+        if(hand[i]->cardType() == PTCG::CARD::STADIUM)
+        {
+            std::cout<<"STADIUM CARD FIND"<<std::endl;
+        }
+    }
+}
+
+
+
 
 
 ////--------------------------------------------------------------------------

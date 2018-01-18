@@ -122,7 +122,7 @@ public:
   /// @brief get attacks of this pokemon
   /// @return vector of attacks
   //----------------------------------------------------------------------------------------------------------------------
-  const std::vector<Attack>& attacks() const;
+  std::vector<Attack> attacks() const;
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief get the number of attacks
   /// @return the number of attacks

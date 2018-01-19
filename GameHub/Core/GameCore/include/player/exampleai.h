@@ -120,15 +120,15 @@ public:
 
 private:
 
-  class turnRAII
+  class TurnGuard
   {
   public:
-    turnRAII(bool*_turn) : raii_turn(_turn)
-    {*raii_turn = true;}
-    ~turnRAII()
-    {*raii_turn = false;}
+    TurnGuard(bool*_turn) : guard(_turn)
+    {*guard = true;}
+    ~TurnGuard()
+    {*guard = false;}
   private:
-    bool* raii_turn;
+    bool* guard;
   };
 
   size_t findSlotMostEnergy();

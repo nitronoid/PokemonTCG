@@ -351,7 +351,7 @@ unsigned ExampleAI::findBestAttack()
 std::pair<bool, unsigned> ExampleAI::turn()
 {
   // use raii to set the turn member variable
-  turnRAII raiiturn (&m_myTurn);
+  TurnGuard raiiturn (&m_myTurn);
   playEnergy();
   playBasic();
   playEvo();

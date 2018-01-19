@@ -891,6 +891,7 @@ ___
 ___
 
 - **[Examples](#example)**
+- **[Turn Simulation](#turn-simulation)**
 ___
 
 ### **Ai Concepts**
@@ -1002,6 +1003,10 @@ virtual std::pair<bool, unsigned> turn() = 0;
 ### **Example:**
 
 Clone usually is the same for Ai, make sure this is written like the one below if you wish to use turn simulation.
+
+- **If you wish a more detailed example, please check out:**
+  - [Header for Example AI](https://github.com/nitronoid/PokemonTCG/blob/master/GameHub/Core/GameCore/include/player/exampleai.h/)
+  - [Implementation for Example AI](https://github.com/nitronoid/PokemonTCG/blob/master/GameHub/Core/GameCore/src/player/exampleai.cpp/)
 
 ```cpp
 Player* SomeAi::clone() const
@@ -1248,7 +1253,6 @@ dummySelf.setTurn(
 dummyEnemy.setTurn([](Player*){ return std::pair<bool, unsigned> {false, 0}; });
 ```
 Lambdas with closure objects are also supported.
- ___
 
 **[Back To Top](#poketcg-user-guides)**
 ___

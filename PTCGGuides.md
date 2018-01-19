@@ -1005,8 +1005,8 @@ virtual std::pair<bool, unsigned> turn() = 0;
 Clone usually is the same for Ai, make sure this is written like the one below if you wish to use turn simulation.
 
 - **If you wish a more detailed example, please check out:**
-  - [Header for Example AI](#https://github.com/nitronoid/PokemonTCG/blob/master/GameHub/Core/GameCore/include/player/exampleai.h/)
-  - [Implementation for Example AI](#https://github.com/nitronoid/PokemonTCG/blob/master/GameHub/Core/GameCore/src/player/exampleai.cpp/)
+  - [Header for Example AI](https://github.com/nitronoid/PokemonTCG/blob/master/GameHub/Core/GameCore/include/player/exampleai.h/)
+  - [Implementation for Example AI](https://github.com/nitronoid/PokemonTCG/blob/master/GameHub/Core/GameCore/src/player/exampleai.cpp/)
 
 ```cpp
 Player* SomeAi::clone() const

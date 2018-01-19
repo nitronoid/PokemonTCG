@@ -58,7 +58,7 @@ std::vector<size_t> ExampleAI::energyPriority(const size_t _len)
   );
   // Find the first card without enough energy
   auto pos = std::find_if(indices.begin(), indices.end(),
-                          [&bench, this](const auto& i){ return !hasEnoughEnergy(bench[i]); }
+                          [this, &bench](const auto& i){ return !this->hasEnoughEnergy(bench[i]); }
   );
   if (pos == indices.end()) pos = indices.begin();
   std::vector<size_t> ret(pos, pos + std::min(_len, static_cast<size_t>(indices.end() - pos)));

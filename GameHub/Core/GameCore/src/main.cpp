@@ -24,9 +24,9 @@ int main()
   //Logger, ascii-gui and a staller so we can watch AI play
   GameLogger logger;
   SimplePrinter drawer;
-  GameStaller staller(0);
+  GameStaller staller(1000);
   // Two players for the game
-  AIPlayerBT firstPlayer(&game);
+  RoaringFluke firstPlayer(&game);
   ExampleAI secondPlayer(&game);
   //HumanPlayer firstPlayer(&game);
 

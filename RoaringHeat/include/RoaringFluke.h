@@ -56,6 +56,15 @@ public:
   virtual std::pair<bool, unsigned> turn() override;
 
 private:
+  using cardRefList = std::vector<Card*>;
+  void refreshFilteredHand(
+          std::vector<std::unique_ptr<Card>>& io_hand,
+          cardRefList& io_pokeList,
+          cardRefList& io_energyList,
+          cardRefList& io_trainerList,
+          std::vector<int>& io_pokeIndexList,
+          std::vector<int>& io_energyIndexList,
+          std::vector<int>& io_trainerIndexList);
   unsigned m_found;
 
 };

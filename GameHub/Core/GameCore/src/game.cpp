@@ -871,7 +871,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
     slot->setDamage(0);
     size_t opponentIndex = (playerID + 1) % 2;
-    auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
+    auto opponent = static_cast<PTCG::PLAYER>((static_cast<size_t>(_player) + 1) % 2);
     // If it was the active we need to reset the active condition
     if(!_index)
     {

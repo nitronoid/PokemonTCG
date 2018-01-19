@@ -328,7 +328,7 @@ int ExampleAI::getDamageSim(const size_t _attackID)
   // Finally we call next turn, this can be called as many times as you'd like
   dummy.nextTurn();
   // You can then query the current game state by calling the view functions on the dummy game
-  auto afterBench = dummySelf.viewBench();
+  auto afterBench = dummyEnemy.viewBench();
   return afterBench[0].getRemainingHP();
 }
 

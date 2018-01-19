@@ -858,7 +858,8 @@ void Game::removeEnergy(
 bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
 {
   bool gameOver = false;
-  auto & board = m_boards[playerIndex(_player)];
+  size_t playerID = playerIndex(_player);
+  auto & board = m_boards[playerID];
   auto& bench = board.m_bench;
   auto slot = bench.slotAt(_index);
   if(slot->active() && slot->isDefeated())
@@ -869,7 +870,7 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     // Discard and reset all state on that slot
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
     slot->setDamage(0);
-    size_t opponentIndex = (static_cast<unsigned>(_player) + 1) % 2;
+    size_t opponentIndex = (playerID + 1) % 2;
     auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
     // If it was the active we need to reset the active condition
     if(!_index)

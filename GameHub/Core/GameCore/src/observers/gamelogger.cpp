@@ -13,6 +13,13 @@ void GameLogger::startTurn()
   std::string dividor(10,'-');
   std::string body = "Turn " + std::to_string(m_subject->turnCount()) + " start.";
   logToFile(dividor + '\n' + body + '\n' + dividor);
+  static constexpr auto self = PTCG::PLAYER::SELF;
+  logToFile("Player "+playerStr(self)+", has "+
+            std::to_string(m_subject->numCards(self, PTCG::PILE::DECK))
+            +" cards in their deck.");
+  logToFile("Player "+playerStr(self)+", has "+
+            std::to_string(m_subject->numCards(self, PTCG::PILE::PRIZE))
+            +" cards in their prize.");
 }
 
 void GameLogger::attackUsed(PokemonCard*const _pokemon, const unsigned _index)

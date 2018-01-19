@@ -678,6 +678,8 @@ private:
   //----------------------------------------------------------------------------------------------------------------------
   bool m_gameFinished  = false;
 
+  size_t m_winner = 2;
+
 };
 
 #include "game-inl.h" //Template implementations

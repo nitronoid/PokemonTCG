@@ -33,7 +33,7 @@ void Game::playGame()
   {
     nextTurn();
   }
-  std::cout<<"Player "<<turnCount()%2<<" wins!\n";
+  std::cout<<"Player "<<m_winner<<" wins!\n";
 }
 
 
@@ -381,7 +381,11 @@ void Game::nextTurn()
     }
   }
   // Draw failed
-  else m_gameFinished = true;
+  else
+  {
+    m_winner = playerIndex(PTCG::PLAYER::ENEMY);
+    m_gameFinished = true;
+  }
 }
 
 void Game::addBonusDamage(const unsigned &_value, const PTCG::ORDER &_order, const PTCG::PLAYER &_player)
@@ -865,6 +869,8 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
     // Discard and reset all state on that slot
     benchToPile(_player,PTCG::PILE::DISCARD,match,_index);
     slot->setDamage(0);
+    size_t opponentIndex = (static_cast<unsigned>(_player) + 1) % 2;
+    auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
     // If it was the active we need to reset the active condition
     if(!_index)
     {
@@ -874,16 +880,20 @@ bool Game::handleKnockOut(const PTCG::PLAYER &_player, const size_t &_index)
       if (!active.empty())
         switchActive(_player, active[0]);
       else
+      {
+        m_winner = opponentIndex;
         gameOver = true;
+      }
     }
-    size_t opponentIndex = (static_cast<unsigned>(_player) + 1) % 2;
-    auto opponent = static_cast<PTCG::PLAYER>(opponentIndex);
     //Taking a prize card in prize card.
     static constexpr auto prizes = [](Card* const card) -> bool {return card;};
     auto choice = playerCardChoice(opponent, opponent, PTCG::PILE::PRIZE, PTCG::ACTION::DRAW, prizes, 1, false);
     moveCards(choice, opponent, PTCG::PILE::PRIZE, PTCG::PILE::HAND);
     if (!m_boards[opponentIndex].prizeCards()->numCards())
+    {
+      m_winner = opponentIndex;
       gameOver = true;
+    }
   }
   return gameOver;
 }

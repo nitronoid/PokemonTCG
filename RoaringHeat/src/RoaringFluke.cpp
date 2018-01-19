@@ -102,7 +102,7 @@ std::vector<size_t> RoaringFluke::chooseConditions(
 
 
 
-void RoaringFluke::refreshFilteredHand(
+void RoaringFluke::refreshFilteredHand( //this function filters all the cards into 3 lists based on type, pokemon, energy and support and can be called to refresh the indexes
         std::vector<std::unique_ptr<Card>>& io_hand,
         cardRefList& io_pokeList,
         cardRefList& io_energyList,
@@ -121,7 +121,7 @@ void RoaringFluke::refreshFilteredHand(
     for (int i = 0 ; i < io_hand.size(); ++i)
     {
         auto& currentCard = io_hand[i];
-        std::cout<<i+1<<" "<<currentCard->getName()<<" - "<<currentCard->getID()<<"\n";
+        //std::cout<<i+1<<" "<<currentCard->getName()<<" - "<<currentCard->getID()<<"\n";
 
         if (currentCard->cardType() == PTCG::CARD::ENERGY)
         {
@@ -139,18 +139,16 @@ void RoaringFluke::refreshFilteredHand(
     }
 }
 
-std::pair<bool, unsigned> RoaringFluke::turn()
+std::pair<bool, unsigned> RoaringFluke::turn() //main turn function
 {
     auto initHand = viewHand();
     // Random engine
     static std::random_device seed;
     static std::mt19937_64 eng(seed());
 
-
-    cardRefList curEnergyList, curPokemonList, curTrainerList;
-    std::cout<<"\nRoaring flukes Pokemon:\n\n";
-
     //------------------------------------------------we create lists based on card type in our deck to simplify AI access to cards---------------------------------------------
+    cardRefList curEnergyList, curPokemonList, curTrainerList;
+    //std::cout<<"\nRoaring flukes Pokemon:\n\n";
     std::vector<int>currentPokeIndexList;
     std::vector<int>currentEnergyIndexList;
     std::vector<int>currentTrainerIndexList;
@@ -159,9 +157,9 @@ std::pair<bool, unsigned> RoaringFluke::turn()
 
     //**************************************************************************************************************************************************************************
 
-    std::cout<<"\nNumber of Pokemon - "<<curPokemonList.size()<<".\n";
-    std::cout<<"Number of Energy - "<<curEnergyList.size()<<".\n";
-    std::cout<<"Number of Trainers - "<<curTrainerList.size()<<".\n\n";
+    //std::cout<<"\nNumber of Pokemon - "<<curPokemonList.size()<<".\n";
+    //std::cout<<"Number of Energy - "<<curEnergyList.size()<<".\n";
+    //std::cout<<"Number of Trainers - "<<curTrainerList.size()<<".\n\n";
 
     //------------------------------------------------gets our's & enemy's current active pokemon and stores them---------------------------------------------------------------
     auto bench = viewBench();
@@ -171,8 +169,8 @@ std::pair<bool, unsigned> RoaringFluke::turn()
     auto enslot  = viewBench(PTCG::PLAYER::ENEMY)[0];
     //**************************************************************************************************************************************************************************
 
-    std::cout<<"Current Active: "<<currentPoke->getName()<<" - "<<currentPoke->hp()<<"hp.\n\n";
-    bool needswitch = false;
+    //std::cout<<"Current Active: "<<currentPoke->getName()<<" - "<<currentPoke->hp()<<"hp.\n\n";
+    bool needswitch = false; //variable to determine whether the main pokemon should be swtiched out with a pokemon with better stats
     size_t bestPos = 0;
     unsigned evoPoke = 0;
 
@@ -188,27 +186,30 @@ std::pair<bool, unsigned> RoaringFluke::turn()
             PokemonCard* pokemon = static_cast<PokemonCard*>(card);
             PokemonCard* currentBest = static_cast<PokemonCard*>(curPokemonList[bestPos]);
             std::string preEv = pokemon->preEvolution();
+
+            //evolution function, has to be fleshed out in future iterations of the AI
+
             if (preEv.empty() != true)
             {
-                std::cout<<pokemon->getName()<<" Has pre evoltion: '"<<preEv<<"'.\n";
+                //std::cout<<pokemon->getName()<<" Has pre evoltion: '"<<preEv<<"'.\n";
                 evoPoke = 0;
                 for (auto& card : curPokemonList)
                 {
                     PokemonCard* currentEv = static_cast<PokemonCard*>(card);
                     if (preEv == currentEv->getName())
                     {
-                        std::cout<<preEv<<" is in your hand.\n";
+                        //std::cout<<preEv<<" is in your hand.\n";
 
 
                         for (int k = 0 ; k < 6; ++k)
                         {
                             if(bench[k].active() && bench[k].active()->getName() == currentEv->getName())
                             {
-                                std::cout<<"OH DAMN "<<currentEv->getName()<<" is on your bench E.\n";
+                                //std::cout<<"OH DAMN "<<currentEv->getName()<<" is on your bench E.\n";
                                 found = k;
                             }else if (bench[k].active())
                             {
-                                std::cout<<bench[k].active()->getName()<<" is on your bench NE.\n";
+                                //std::cout<<bench[k].active()->getName()<<" is on your bench NE.\n";
                             }
                         }
 
@@ -217,14 +218,14 @@ std::pair<bool, unsigned> RoaringFluke::turn()
                             unplayedevo = true;
                             evoloc = w;
 
-                            std::cout<<"Playing "<<pokemon->getName()<<".\n";
+                            ////std::cout<<"Playing "<<pokemon->getName()<<".\n";
                             found = 0;
                         } else
                         {
                             unplayeddevo = true;
                             devoloc = evoPoke;
 
-                            std::cout<<"Playing "<<currentEv->getName()<<" and its evoltion "<<pokemon->getName()<<" next turn.\n";
+                            //std::cout<<"Playing "<<currentEv->getName()<<" and its evoltion "<<pokemon->getName()<<" next turn.\n";
 
                         }
 
@@ -232,7 +233,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
                     }else
                     {
 
-                        std::cout<<preEv<<" is NOT in ph"<<evoPoke<<".\n";
+                        //std::cout<<preEv<<" is NOT in ph"<<evoPoke<<".\n";
                     }
                     ++evoPoke;
                 }
@@ -253,7 +254,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
         }
 
 
-
+        //here we choose whether we should switch out the active pokemon for a pokemon with more health
         refreshFilteredHand(initHand, curPokemonList, curEnergyList, curTrainerList,currentPokeIndexList, currentEnergyIndexList, currentTrainerIndexList);
         int i = 0;
         for (auto& card : curPokemonList)
@@ -270,23 +271,20 @@ std::pair<bool, unsigned> RoaringFluke::turn()
         if (slot.getRemainingHP() <= 30) needswitch = true;
         if (canPlay(currentPokeIndexList[bestPos]))
         {
-            std::cout<<"\n\nBest Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - Playable.\n\n";
+            //std::cout<<"\n\nBest Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - Playable.\n\n";
 
             if (currentPoke->hp() < bestHealth->hp())
             {
                 //if active has energy we need to hold horses
                 playCard(currentPokeIndexList[bestPos]);
                 refreshFilteredHand(initHand, curPokemonList, curEnergyList, curTrainerList,currentPokeIndexList, currentEnergyIndexList, currentTrainerIndexList);
-                std::cout<<"Switched out active for best Health\n";
+                //std::cout<<"Switched out active for best Health\n";
 
-            }else
-            {
-                std::cout<<"can't switch due to active pokemon having better health\n";
             }
         }
         else
         {
-            std::cout<<"Best Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - NOT Playable.\n\n";
+            //std::cout<<"Best Health on Pokemon:\n"<<bestHealth->getName()<<" - "<<bestHealth->hp()<<"hp - NOT Playable.\n\n";
             if (needswitch)
             {
 
@@ -327,7 +325,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
                         --j;
                         if (curPokemonList.size() == 0)
                         {
-                            std::cout<<"No Playable Pokemon\n";
+                            //std::cout<<"No Playable Pokemon\n";
                             needswitch = false;
                         }
                     }
@@ -340,10 +338,6 @@ std::pair<bool, unsigned> RoaringFluke::turn()
             }
             needswitch = false;
         }
-
-    } else
-    {
-        std::cout<<"there were no pokemon in your hand\n";
     }
 
     //**************************************************************************************************************************************************************************
@@ -352,7 +346,7 @@ std::pair<bool, unsigned> RoaringFluke::turn()
     if (curEnergyList.size())
     {
 
-        std::cout<<"Calculating Energy\n";
+        //std::cout<<"Calculating Energy\n";
         currentPoke = bench[0].active();
         slot = viewBench()[0];
         signed target = 0;
@@ -364,14 +358,14 @@ std::pair<bool, unsigned> RoaringFluke::turn()
                 target = curr;
             }
         }
-        std::cout<<"number of energy on main - "<<slot.numEnergy()<<"\nnumber of energy needed for best attack - "<<target<<".\n";
+        //std::cout<<"number of energy on main - "<<slot.numEnergy()<<"\nnumber of energy needed for best attack - "<<target<<".\n";
         if (slot.numEnergy() <= target)
         {
             std::vector<Attack> attacks = currentPoke->attacks();
             auto requirements = attacks[attacks.size() - 1].requirements();
             bool played = false;
             unsigned bestToAttach = 0;
-            std::cout<<"about to match energy\n";
+            //std::cout<<"about to match energy\n";
             for (int j = 0 ; j < requirements.size(); ++j)
             {
                 for (int t = 0 ; (t < curEnergyList.size()) && !played; ++t)
@@ -389,20 +383,20 @@ std::pair<bool, unsigned> RoaringFluke::turn()
             {
                 playCard(currentEnergyIndexList[bestToAttach]);
                 refreshFilteredHand(initHand, curPokemonList, curEnergyList, curTrainerList,currentPokeIndexList, currentEnergyIndexList, currentTrainerIndexList);
-                std::cout<<"pe\n";
+                //std::cout<<"pe\n";
             }
         }
 
     } else
     {
-        std::cout<<"there is no Energy in your hand\n";
+        //std::cout<<"there is no Energy in your hand\n";
     }
 
     //**************************************************************************************************************************************************************************
 
     //------------------------------------------------trainer cards managment starts here---------------------------------------------------------------------------------------
 
-    if (curTrainerList.size())
+    if (curTrainerList.size()) //trainer card behaviour was not fully implemented
     {
         /*int i;
         TrainerCard* curtrainer = static_cast<TrainerCard*>(curTrainerList[i].get().get());
@@ -416,14 +410,14 @@ std::pair<bool, unsigned> RoaringFluke::turn()
                 if(curtrainer->getName()=="Big Malasada")
                 {
                     playCard(currentTrainerIndexList[i]);
-                    std::cout<<"\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+                    //std::cout<<"\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
                 }
                 //                }else if(healthLost >=30)
                 //                {
                 if(curtrainer->getName()=="Potion")
                 {
                     playCard(currentTrainerIndexList[i]);
-                    std::cout<<"\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+                    //std::cout<<"\n\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
 
                 }
             }
@@ -433,31 +427,31 @@ std::pair<bool, unsigned> RoaringFluke::turn()
     } else
 
     {/*15 feb 7.30 b32 */
-        std::cout<<"there are no Trainers in your hand\n";
+        //std::cout<<"there are no Trainers in your hand\n";
     }
     //**************************************************************************************************************************************************************************
 
     //START ATTACKING
-    std::cout<<"\n\nCalculating Attack\n";
+    //std::cout<<"\n\nCalculating Attack\n";
     currentPoke = bench[0].active();
     unsigned bestAttack;
     bool shouldAttack = false;
     for (int j = 0 ; j < slot.active()->attacks().size(); ++j)
     {
-        std::cout<<"Attact no - "<<j;
+        //std::cout<<"Attact no - "<<j;
         if (canAttack(j))
         {
             bestAttack = j;
             shouldAttack = true;
         }else
         {
-            std::cout<<" - FAIL\n";
+            //std::cout<<" - FAIL\n";
         }
     }
     if (shouldAttack)
     {
-        std::cout<<" - SUCCESS\n";
-        std::cout<<"pokemon will attack with attack no "<<bestAttack<<".\n\n";
+        //std::cout<<" - SUCCESS\n";
+        //std::cout<<"pokemon will attack with attack no "<<bestAttack<<".\n\n";
     }
 
     return std::pair<bool, unsigned> {shouldAttack, bestAttack};
